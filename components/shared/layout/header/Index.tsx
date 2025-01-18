@@ -1,0 +1,31 @@
+import Menu from "@/components/icons/Menu";
+import Image from "next/image";
+import Link from "next/link";
+
+const Header = () => {
+    return (
+        <header className="flex justify-between p-3">
+            <Link href="/" className="flex gap-4">
+                <Image src="/logo.svg" alt="irangamecenter" width={50} height={50} />
+                <div>
+                    <strong className="block text-xl font-bold">
+                        ایران گیم سنتر
+                    </strong>
+                    <span className="text-xs">
+                        فروشگاه آنلاین اکانت بازی
+                    </span>
+                </div>
+            </Link>
+
+            <button
+                type="button"
+                className="outline-none border-none"
+            >
+                <Menu height={40} width={40} />
+            </button>
+
+        </header>
+    )
+}
+
+export default Header;
