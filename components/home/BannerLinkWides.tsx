@@ -36,6 +36,7 @@ const BannerLinkWides = () => {
         <div className="p-3">
             {items.map(item => (
                 <BannerLinkWideItem 
+                    key={item.title}
                     {...item}
                     wrapperClassName="mb-4"
                 />
