@@ -34,19 +34,19 @@ const CircleLinks = () => {
         ]
 
     return (
-        <section className="hidden-scrollbar overflow-x-auto overflow-y-clip py-5">
+        <section className="hidden-scrollbar overflow-x-auto overflow-y-clip py-3">
             <div className="flex items-start gap-3 px-3">
                 {items.map(item => (
-                    <Link href="#" key={item.lable} className="inline-block shrink-0">
+                    <Link href="#" key={item.lable} className="inline-block text-center shrink-0">
                         <div
-                            className="inline-block mb-3 p-1 mx-auto bg-gradient-to-tr from-violet-600 from-10%  via-green-300 via-50% to-red-500 to-90% rounded-full"
+                            className="inline-block mb-3 p-1 mx-auto bg-gradient-to-tr from-violet-600 from-10% via-green-300 via-50% to-red-500 to-90% rounded-full"
                         >
                             <Image
                                 src={item.image}
                                 alt={item.lable}
                                 width={80}
                                 height={80}
-                                className="rounded-full block w-20 h-20"
+                                className="rounded-full block w-16 h-16"
                             />
                         </div>
                         <div className="text-xs text-center w-20">
