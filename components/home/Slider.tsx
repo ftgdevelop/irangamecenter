@@ -42,10 +42,10 @@ const Slider = () => {
                         </div>
 
                         <div
-                            className="absolute -bottom-px -left-px h-17 w-17 bg-[#011425] rounded-tr-large"
+                            className="absolute -bottom-px -left-px h-16 w-16 bg-[#011425] rounded-tr-large"
                         >
-                            <ClipRadius className="absolute bottom-full left-0 fill-[#011425] w-[32] h-[32]" />
-                            <ClipRadius className="absolute bottom-0 left-full fill-[#011425] w-[32] h-[32]" />
+                            <ClipRadius className="absolute bottom-full left-0 fill-[#011425] w-8 h-8" />
+                            <ClipRadius className="absolute bottom-0 left-full fill-[#011425] w-8 h-8" />
 
                             <Link href="#" className="w-12 h-12 bg-[#1b2c3b] cursor-pointer select-none rounded-full absolute bottom-1 left-1 flex items-center justify-center">
                                 <ArrowTopLeft className="fill-white w-5 h-5" />

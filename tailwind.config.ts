@@ -9,7 +9,7 @@ export default {
   theme: {
     extend: {
       borderRadius: {
-        'large': '32px',
+        'large': '2rem',
       },
       spacing: {
         '18': '4.5rem',
