@@ -34,7 +34,7 @@ const CircleLinks = () => {
         ]
 
     return (
-        <section className="hidden-scrollbar overflow-x-auto overflow-y-clip py-3">
+        <section className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip py-3">
             <div className="flex items-start gap-3 px-3">
                 {items.map(item => (
                     <Link href="#" key={item.lable} className="inline-block text-center shrink-0">

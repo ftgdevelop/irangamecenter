@@ -43,6 +43,27 @@ body {
   }
 }
 
+.styled-scrollbar {
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  &::-webkit-scrollbar-track {
+    border-radius: 5px;
+    margin: 0 15px;
+    background: #fff;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #fe1940;
+    border-radius: 5px;
+
+    &:hover {
+      background: #fe4d6b;
+    }
+  }
+}
+
 @layer utilities {
   .writing-tb {
     writing-mode: tb;
@@ -50,6 +71,36 @@ body {
   .clip-radius{
     clip-path: path('M0,0.5V90h89.5C40.1,90,0,49.9,0,0.5z');
   }
+
+  .hidden-scrollbar {
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+  }
+  
+  .styled-scrollbar {
+    &::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    &::-webkit-scrollbar-track {
+      border-radius: 5px;
+      margin: 0 15px;
+      background: #fff;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background: #fe1940;
+      border-radius: 5px;
+  
+      &:hover {
+        background: #fe4d6b;
+      }
+    }
+  }
+
+  
 }
 
 .slick-slider .slick-dots {  

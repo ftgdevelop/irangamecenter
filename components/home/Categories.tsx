@@ -48,7 +48,7 @@ const Categories = () => {
                 <Image src="/images/icons/squares.svg" alt="categories" width={60} height={60} className="w-7 h-7" />
                 دسته بندی ها
             </div>
-            <div className="hidden-scrollbar overflow-x-auto overflow-y-clip">
+            <div className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 lg:-mb-3 overflow-x-auto overflow-y-clip">
                 <div className="grid grid-rows-2 grid-flow-col gap-y-2">
                     {items.map(item => (
                         <div key={item.image} className="pl-2">

@@ -4,6 +4,8 @@ import Categories from "@/components/home/Categories";
 import Search from "@/components/shared/Search";
 import Slider from "@/components/home/Slider";
 import BannerLinkWides from "@/components/home/BannerLinkWides";
+import Promotion from "@/components/home/Promotion";
+import ColorBannerLinkWides from "@/components/home/ColorBannerLinkWides";
 
 
 export default function Home() {
@@ -22,6 +24,10 @@ export default function Home() {
         <Slider />
 
         <BannerLinkWides />
+
+        <Promotion />
+
+        <ColorBannerLinkWides />
 
       </main>
 
