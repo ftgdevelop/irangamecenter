@@ -1,4 +1,3 @@
-import Header from "@/components/shared/layout/header/Index";
 import CircleLinks from "@/components/home/CircleLinks";
 import Categories from "@/components/home/Categories";
 import Search from "@/components/shared/Search";
@@ -7,36 +6,30 @@ import BannerLinkWides from "@/components/home/BannerLinkWides";
 import Promotion from "@/components/home/Promotion";
 import ColorBannerLinkWides from "@/components/home/ColorBannerLinkWides";
 import BestSellers from "@/components/home/BestSellers";
+import Blog from "@/components/home/Blog";
 
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#011425] text-white max-w-lg mx-auto">
-      <Header />
+    <>
+      <Search />
 
-      <main className="min-h-screen">
+      <CircleLinks />
 
-        <Search />
+      <Categories />
 
-        <CircleLinks />
+      <Slider />
 
-        <Categories />
+      <BannerLinkWides />
 
-        <Slider />
+      <Promotion />
 
-        <BannerLinkWides />
+      <ColorBannerLinkWides />
 
-        <Promotion />
+      <BestSellers />
 
-        <ColorBannerLinkWides />
+      <Blog />
 
-        <BestSellers />
-
-      </main>
-
-      <footer>
-        footer
-      </footer>
-    </div>
+    </>
   );
 }

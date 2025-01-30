@@ -1,3 +1,4 @@
+import Layout from "@/components/shared/layout/Layout";
 import "@/styles/globals.scss";
 import type { AppProps } from "next/app";
 import Head from "next/head";
@@ -20,7 +21,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="robots" content="noindex,nofollow" />
       </Head >
 
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
 
     </>
   )
