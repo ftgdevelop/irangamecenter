@@ -3,7 +3,7 @@ import Header from "./header/Index";
 import Footer from "./footer/Index";
 
 type Props = {
-
+    className?: string;
 }
 
 const Layout: React.FC<PropsWithChildren<Props>> = props => {
