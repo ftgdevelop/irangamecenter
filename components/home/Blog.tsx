@@ -62,8 +62,8 @@ const Blog = () => {
 
             <SlickSlider {...settings}>
                 {items.map(item => (
-                    <div className="px-3">
-                        <div className="bg-[#011425] rounded-large" key={item.title} dir="rtl">
+                    <div className="px-3" key={item.title} dir="rtl">
+                        <div className="bg-[#011425] rounded-large">
                             <Image
                                 src={item.image || "default-game.png"}
                                 alt={item.imageAlt || item.title}
