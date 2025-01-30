@@ -6,6 +6,7 @@ import Slider from "@/components/home/Slider";
 import BannerLinkWides from "@/components/home/BannerLinkWides";
 import Promotion from "@/components/home/Promotion";
 import ColorBannerLinkWides from "@/components/home/ColorBannerLinkWides";
+import BestSellers from "@/components/home/BestSellers";
 
 
 export default function Home() {
@@ -28,6 +29,8 @@ export default function Home() {
         <Promotion />
 
         <ColorBannerLinkWides />
+
+        <BestSellers />
 
       </main>
 
