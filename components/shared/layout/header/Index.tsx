@@ -1,6 +1,6 @@
-import Menu from "@/components/icons/Menu";
 import Image from "next/image";
 import Link from "next/link";
+import MainMenu from './MinMenu';
 
 const Header = () => {
     return (
@@ -17,12 +17,8 @@ const Header = () => {
                 </div>
             </Link>
 
-            <button
-                type="button"
-                className="outline-none border-none"
-            >
-                <Menu height={40} width={40} />
-            </button>
+            <MainMenu />
+            
 
         </header>
     )

@@ -6,6 +6,7 @@ export default function Document() {
       <Head />
       <body className="antialiased font-iranyekan" >
         <Main />
+        <div id="menu_portal" className="fixed top-0 left-0 right-0" />
         <NextScript />
       </body>
     </Html>
