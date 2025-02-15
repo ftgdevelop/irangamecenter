@@ -7,6 +7,8 @@ import Promotion from "@/components/home/Promotion";
 import ColorBannerLinkWides from "@/components/home/ColorBannerLinkWides";
 import BestSellers from "@/components/home/BestSellers";
 import Blog from "@/components/home/Blog";
+import About from "@/components/home/About";
+import FAQ from "@/components/home/FAQ";
 
 
 export default function Home() {
@@ -29,6 +31,10 @@ export default function Home() {
       <BestSellers />
 
       <Blog />
+
+      <About />
+
+      <FAQ />
 
     </>
   );
