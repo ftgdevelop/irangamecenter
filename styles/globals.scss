@@ -71,7 +71,19 @@ body {
   }
 }
 
+@keyframes spinReverse {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
 @layer utilities {
+  .animate-spin-reverse{
+    animation: spinReverse 1s linear infinite;
+  }	
+
   .writing-tb {
     writing-mode: tb;
   }
@@ -130,6 +142,30 @@ body {
     &.slick-active button {
       background-color: #fe1940;
       width: 25px;
+    }
+  }
+}
+
+.otp-pin{
+  justify-content: center;
+  gap: 5px;
+  .mantine-PinInput-pinInput{
+    width: 55px;
+  }
+  .mantine-PinInput-input {
+    height: 55px;
+    border-radius: 100%;
+    background-color: #192b39;
+    border-color: #192b39;
+    color: #fff;
+    &::placeholder{
+      color: transparent;
+    }
+    &:focus{
+      border-color: #fff;
+    }
+    &::selection{
+      background: transparent;
     }
   }
 }
