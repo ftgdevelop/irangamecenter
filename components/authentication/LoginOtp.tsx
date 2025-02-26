@@ -15,6 +15,8 @@ import { PinInput } from "@mantine/core";
 import { setReduxUser } from "@/redux/authenticationSlice";
 import { setReduxNotification } from "@/redux/notificationSlice";
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 type Props = {
     toggleLoginType: () => void;
     onCloseLogin: () => void;
@@ -36,9 +38,10 @@ const LoginOtp: React.FC<Props> = props => {
 
     useEffect(() => {
 
-        let countDownTimer: any;
+        let countDownTimer: NodeJS.Timeout;
 
         if (sendCodeMoment) {
+            
             countDownTimer = setInterval(() => {
                 setRemaindSeconds((prevState) => {
                     if (prevState > 1) {
@@ -149,7 +152,7 @@ const LoginOtp: React.FC<Props> = props => {
                 getUserLoading: true
             }));
 
-            const response: any = await registerOrLogin({ code: code, emailOrPhoneNumber: savedPhoneNumber });
+            const response: any = await registerOrLogin({ code: code, emailOrPhoneNumber: "+98" + (savedPhoneNumber.slice(1)) });
 
             setRegisterLoading(false);
             if (response.status == 200) {
@@ -216,6 +219,7 @@ const LoginOtp: React.FC<Props> = props => {
                 <div className="px-5 text-center">
 
                     <PinInput
+                        autoFocus
                         size="lg"
                         length={6}
                         className={`otp-pin`}
@@ -282,7 +286,7 @@ const LoginOtp: React.FC<Props> = props => {
                 initialValues={{ phoneNumber: "" }}
                 onSubmit={submitHandler}
             >
-                {({ errors, touched, setFieldValue, values }) => {
+                {({ errors, touched, setFieldValue }) => {
                     return (
 
                         <Form className='p-5 text-sm flex flex-col items-center justify-center gap-5 leading-6' autoComplete='off' >

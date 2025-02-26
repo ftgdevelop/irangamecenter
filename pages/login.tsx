@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 
 
-export default function login() {
+export default function Login() {
 
   const [loginType, setLoginType] = useState<"otp" | "password">("otp");
 

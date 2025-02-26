@@ -3,6 +3,7 @@ import Header from "./header/Index";
 import Footer from "./footer/Index";
 import { useRouter } from "next/router";
 import Error from "../Error";
+import Notification from "../Notification";
 
 type Props = {
     className?: string;
@@ -24,6 +25,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     return (
         <>
             <Error />
+            <Notification />
             <div className="bg-[#011425] text-white max-w-lg mx-auto">
                 {showHeader && <Header />}
                 <main className="min-h-screen">

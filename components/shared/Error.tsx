@@ -18,7 +18,7 @@ const Error: React.FC = () => {
         }else{
             dispatch(setBodyScrollable(true));
         }
-    },[storedError?.isVisible]);
+    },[storedError?.isVisible, dispatch]);
 
     const closeHandler = () => {
         dispatch(setReduxError({
