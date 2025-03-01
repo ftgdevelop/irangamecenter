@@ -3,6 +3,7 @@ import ArrowRight from "@/components/icons/ArrowRight";
 import LoginOtp from "@/components/authentication/LoginOtp";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import LoginWithPassword from "@/components/authentication/LoginWithPassword";
 
 
 export default function Login() {
@@ -12,7 +13,7 @@ export default function Login() {
   const router = useRouter();
 
   const closeLoginHandle = () => {
-    router.push("/");  
+    router.push("/");
   }
 
   return (
@@ -30,14 +31,15 @@ export default function Login() {
       </header>
 
       {loginType === "otp" ? (
-        <LoginOtp 
-          toggleLoginType={() =>{setLoginType("password")}}
+        <LoginOtp
+          toggleLoginType={() => { setLoginType("password") }}
           onCloseLogin={closeLoginHandle}
         />
       ) : (
-        <div>
-          login with password
-        </div>
+        <LoginWithPassword
+          toggleLoginType={() => { setLoginType("otp") }}
+          onCloseLogin={closeLoginHandle}
+        />
       )}
 
     </>
