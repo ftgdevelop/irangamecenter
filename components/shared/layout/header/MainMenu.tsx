@@ -5,12 +5,13 @@ import { Fragment, useEffect, useState } from "react";
 import ModalPortal from "../ModalPortal";
 import Close from "@/components/icons/Close";
 
-const MinMenu: React.FC = () => {
+const MainMenu: React.FC = () => {
 
     const items: {
         label: string;
         url: string;
     }[] = [
+            { label:"ورود", url : "/login"},
             { label: "دسته بندی ها", url: "#" },
             { label: "پیگیری سفارش", url: "#" },
             { label: "راهنمای ثبت سفارش", url: "#" },
@@ -98,4 +99,4 @@ const MinMenu: React.FC = () => {
         </Fragment>
     )
 }
-export default MinMenu;
+export default MainMenu;

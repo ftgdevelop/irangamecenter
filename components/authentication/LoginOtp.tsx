@@ -1,19 +1,16 @@
 import { toPersianDigits } from "@/helpers";
 import { validateMobileNumberId } from "@/helpers/formik-validation"
 import { Field, Form, Formik } from "formik"
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ArrowTopLeft from "../icons/ArrowTopLeft";
 import Link from "next/link";
-import { registerOrLogin, sendOtp } from "@/actions/identity";
+import { sendOtp } from "@/actions/identity";
 import Loading from "../icons/Loading";
 import { setReduxError } from "@/redux/errorSlice";
 import { useAppDispatch } from "@/hooks/use-store";
-import Skeleton from "../shared/Skeleton";
-import CountDown from "../shared/CountDown";
-import Refresh from "../icons/Refresh";
-import { PinInput } from "@mantine/core";
 import { setReduxUser } from "@/redux/authenticationSlice";
 import { setReduxNotification } from "@/redux/notificationSlice";
+import OtpVerification from "./OtpVerification";
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
@@ -26,38 +23,20 @@ const LoginOtp: React.FC<Props> = props => {
 
     const dispatch = useAppDispatch();
 
+    const phoneInputRef = useRef<HTMLInputElement>(null);
+
     const [typedPhoneNumber, setTypedPhoneNumber] = useState<string>("");
     const [savedPhoneNumber, setSavedPhoneNumber] = useState<string>("");
     const [verificationMode, setverificationMode] = useState<boolean>(false);
-    const [verificationCode, setVerificationCode] = useState<string>("");
 
     const [sendCodeMoment, setSendCodeMoment] = useState<number>();
-    const [remaindSeconds, setRemaindSeconds] = useState<number>(80);
 
     const [loading, setLoading] = useState<boolean>(false);
 
+
     useEffect(() => {
-
-        let countDownTimer: NodeJS.Timeout;
-
-        if (sendCodeMoment) {
-            
-            countDownTimer = setInterval(() => {
-                setRemaindSeconds((prevState) => {
-                    if (prevState > 1) {
-                        return (prevState - 1);
-                    } else {
-                        clearInterval(countDownTimer);
-                        return 0
-                    }
-                })
-            }, 1000);
-        }
-
-        return (() => { clearInterval(countDownTimer); })
-
-    }, [sendCodeMoment]);
-
+        phoneInputRef.current?.focus();
+    }, []);
 
     function isNumeric(input: string) {
         const regex = /^[\u0660-\u0669\u06F0-\u06F9\u0030-\u0039]+$/;
@@ -81,7 +60,6 @@ const LoginOtp: React.FC<Props> = props => {
             setLoading(false);
 
             if (response.status == 200) {
-                setRemaindSeconds(80);
                 if (callBack) {
                     callBack();
                 }
@@ -140,43 +118,6 @@ const LoginOtp: React.FC<Props> = props => {
         }
     }
 
-    const [registerLoading, setRegisterLoading] = useState<boolean>(false);
-
-    const registerOtp = async (code: string) => {
-        if (code && savedPhoneNumber && code.length === 6) {
-            setRegisterLoading(true);
-
-            dispatch(setReduxUser({
-                isAuthenticated: false,
-                user: {},
-                getUserLoading: true
-            }));
-
-            const response: any = await registerOrLogin({ code: code, emailOrPhoneNumber: "+98" + (savedPhoneNumber.slice(1)) });
-
-            setRegisterLoading(false);
-            if (response.status == 200) {
-                onSuccessLogin(response);
-            } else {
-                let message = "";
-                if (response?.response?.data?.error?.message) {
-                    message = response.response.data.error.message;
-                }
-                dispatch(setReduxNotification({
-                    status: 'error',
-                    message: message,
-                    isVisible: true
-                }));
-                dispatch(setReduxUser({
-                    isAuthenticated: false,
-                    user: {},
-                    getUserLoading: false
-                }));
-
-            }
-        }
-    }
-
     const submitHandler = async (values: {
         phoneNumber: string;
     }) => {
@@ -187,93 +128,21 @@ const LoginOtp: React.FC<Props> = props => {
         });
     }
 
-    let codeIsEntered = false;
-    if (verificationCode && verificationCode.length === 6) {
-        codeIsEntered = true;
-    }
 
     if (verificationMode) {
         return (
-            <>
-                <h3 className="font-semibold text-[#ca54ff] text-sm text-center mb-10"> کد تایید برای شماره موبایل شما ارسال گردید.</h3>
-
-                <div className="flex justify-between px-4 text-xs mb-12">
-                    <div>
-                        شماره موبایل دریافت کد
-                        <div className="mt-2 text-lg font-semibold tracking-widest" dir="ltr"> {toPersianDigits(savedPhoneNumber)} </div>
-                    </div>
-                    <button
-                        type="button"
-                        onClick={() => {
-                            setverificationMode(false);
-                            setSavedPhoneNumber("");
-                            setTypedPhoneNumber("");
-                        }}
-                        className="text-[#2ac99f]"
-                    >
-                        ویرایش شماره موبایل
-                    </button>
-                </div>
-
-
-                <div className="px-5 text-center">
-
-                    <PinInput
-                        autoFocus
-                        size="lg"
-                        length={6}
-                        className={`otp-pin`}
-                        onChange={code => {
-                            if (code.length === 6) {
-                                setVerificationCode(code);
-                                if (!verificationCode) {
-                                    registerOtp(code);
-                                }
-                            }
-                        }
-                        }
-                    />
-
-                    {savedPhoneNumber && remaindSeconds === 0 ? (
-                        <button
-                            type='button'
-                            className='my-10 text-sm flex justify-center gap-2 items-center mx-auto'
-                            onClick={() => { sendOtpCode("+98" + (savedPhoneNumber.slice(1))) }}
-                        >
-                            <Refresh className={`fill-current w-5 h-5 ${loading ? "animate-spin-reverse" : ""}`} />
-                            ارسال مجدد کد
-                        </button>
-                    ) : loading ? (
-
-                        <Skeleton className='w-24 text-center my-10' />
-
-                    ) : (
-                        <div className='text-sm text-center my-10'>
-                            <CountDown
-                                seconds={remaindSeconds}
-                                simple
-                            />
-                            <span className='rtl:mr-3 ltr:ml-3'> تا دریافت مجدد کد </span>
-                        </div>
-                    )}
-
-                    <button
-                        onClick={() => {
-                            if (codeIsEntered && !registerLoading) {
-                                registerOtp(verificationCode);
-                            }
-                        }}
-                        disabled={!codeIsEntered || registerLoading}
-                        type="button"
-                        className={`flex gap-4 items-center justify-center mb-5 h-14 w-full text-center rounded-full text-sm ${codeIsEntered ? "bg-[#aa3aff]" : "bg-[#231c50]"}`}
-                    >
-                        تایید
-
-                        <ArrowTopLeft className="fill-current w-5 h-5" />
-                    </button>
-                </div>
-
-            </>
+            <OtpVerification
+                loading={loading}
+                sendOtpCode={sendOtpCode}
+                savedPhoneNumber={savedPhoneNumber}
+                editMobileNumber={() => {
+                    setverificationMode(false);
+                    setSavedPhoneNumber("");
+                    setTypedPhoneNumber("");
+                }}
+                onSuccessLogin={onSuccessLogin}
+                sendCodeMoment={sendCodeMoment}
+            />
         )
     }
 
@@ -310,6 +179,7 @@ const LoginOtp: React.FC<Props> = props => {
 
 
                                 <input
+                                    ref={phoneInputRef}
                                     type='text'
                                     autoComplete="off"
                                     onChange={(e: any) => {

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import MainMenu from './MinMenu';
+import MainMenu from './MainMenu';
 
 const Header = () => {
     return (
