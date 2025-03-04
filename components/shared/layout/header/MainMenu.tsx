@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
 import ModalPortal from "../ModalPortal";
 import Close from "@/components/icons/Close";
+import { useAppSelector } from "@/hooks/use-store";
+import Logout from "@/components/authentication/Logout";
 
 const MainMenu: React.FC = () => {
 
@@ -11,7 +13,6 @@ const MainMenu: React.FC = () => {
         label: string;
         url: string;
     }[] = [
-            { label:"ورود", url : "/login"},
             { label: "دسته بندی ها", url: "#" },
             { label: "پیگیری سفارش", url: "#" },
             { label: "راهنمای ثبت سفارش", url: "#" },
@@ -20,6 +21,12 @@ const MainMenu: React.FC = () => {
             { label: "درباره ما", url: "#" },
             { label: "تماس با ما", url: "#" }
         ];
+
+    const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
+
+    if(!isAuthenticated){
+        items.unshift({ label:"ورود", url : "/login"})
+    }
 
     const [open, setOpen] = useState<boolean>(false);
 
@@ -88,6 +95,9 @@ const MainMenu: React.FC = () => {
                                         {item.label}
                                     </Link>
                                 ))}
+                                {isAuthenticated && (<div className="block py-5 border-white/15 text-sm border-t">
+                                    <Logout />
+                                </div>)}
                             </nav>
 
                         </div>

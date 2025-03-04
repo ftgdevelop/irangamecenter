@@ -39,3 +39,20 @@ export const registerOrLogin = async (param: { emailOrPhoneNumber: string, code:
         return error
     }
 }
+
+export const getCurrentUserProfile = async (token:string) => {
+
+    try {
+        let response = await axios.get(
+            `${ServerAddress.Type}${ServerAddress.Identity}${Identity.GetCurrentUserProfileForEdit}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+            },
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}
