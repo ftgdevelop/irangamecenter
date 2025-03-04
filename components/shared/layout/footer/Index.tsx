@@ -2,6 +2,7 @@ import Image from "next/image";
 import Accordion from "../../Accordion";
 import Link from "next/link";
 import { toPersianDigits } from "@/helpers";
+import FooterNavigation from "./FooterNavigation";
 
 const Footer = () => {
 
@@ -33,7 +34,7 @@ const Footer = () => {
         ];
 
     return (
-        <footer className="p-3">
+        <footer className="p-3 pb-20">
 
             <Link
                 href="#"
@@ -112,6 +113,8 @@ const Footer = () => {
 
                 © ۱۴۰۳ - تمام حقوق مربوط به وب سایت ایران گیم سنتر می باشد.
             </div>
+
+            <FooterNavigation />
 
         </footer>
     )
