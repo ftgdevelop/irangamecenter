@@ -26,7 +26,7 @@ const FooterNavigation = () => {
             },
             {
                 label: "سفارش های من",
-                href: "/cart",
+                href: isAuthenticated ? "/cart" : "/login",
                 imageUrl: "/images/icons/cart.svg",
                 active: false
             },
@@ -39,6 +39,8 @@ const FooterNavigation = () => {
         ];
 
     return (
+        <>
+        <div className="pb-20" />
         <div className="fixed bottom-0 left-0 right-0">
             <nav
                 className="max-w-lg mx-auto flex bg-[#192b39]"
@@ -59,6 +61,7 @@ const FooterNavigation = () => {
 
             </nav>
         </div>
+        </>
     )
 }
 

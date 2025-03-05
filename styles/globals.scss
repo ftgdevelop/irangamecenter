@@ -119,6 +119,9 @@ body {
     }
   }
 
+  .min-h-screen-nav{
+    min-height: calc(100vh - 80px);
+  }
   
 }
 

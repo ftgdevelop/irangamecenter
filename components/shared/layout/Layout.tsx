@@ -7,6 +7,7 @@ import Notification from "../Notification";
 import { setReduxUser } from "@/redux/authenticationSlice";
 import { getCurrentUserProfile } from "@/actions/identity";
 import { useAppDispatch } from "@/hooks/use-store";
+import FooterNavigation from "./footer/FooterNavigation";
 
 type Props = {
     className?: string;
@@ -20,10 +21,16 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
     let showHeader = true;
     let showFooter = true;
+    let showFixedNav = true;
 
     if (router.pathname === "/login") {
         showFooter = false;
         showHeader = false;
+        showFixedNav = false;
+    }
+    if (router.pathname === "/profile" || router.pathname === "/profile/edit" ){
+        showHeader = false;
+        showFooter = false;
     }
 
     useEffect(() => {
@@ -64,10 +71,11 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             <Notification />
             <div className="bg-[#011425] text-white max-w-lg mx-auto">
                 {showHeader && <Header />}
-                <main className="min-h-screen">
+                <main className={showFixedNav ? "min-h-screen-nav" : "min-h-screen"}>
                     {props.children}
                 </main>
                 {showFooter && <Footer />}
+                {showFixedNav && <FooterNavigation />}
             </div>
         </>
 

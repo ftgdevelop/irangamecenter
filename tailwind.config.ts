@@ -15,6 +15,26 @@ export default {
         '18': '4.5rem',
         '17': '4.25rem',
       },
+      fontSize: {
+        '4xs': '9px',
+        '3xs': '10px',
+        '2xs': '11px',
+      },
+      keyframes: {
+        skeleton: {
+          '0% ': { transform: 'translateX(100%)' },
+          '100%': { transform: 'translateX(-100%)' },
+        },
+        left2right : {
+          '0% ': { left: '0' },
+          '100%': { left: '100%' },
+        }
+      },
+      animation: {
+        skeleton: 'skeleton 1s linear infinite',
+        left2right: 'left2right 1.2s cubic-bezier(0.52, 0.22, 0.45, 0.74) infinite alternate',
+        
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
@@ -31,7 +51,7 @@ export default {
         }
       },
       fontFamily: {
-        'iranyekan' : ['iranyekan', 'sans-serif']
+        'iranyekan': ['iranyekan', 'sans-serif']
       },
     },
   },
