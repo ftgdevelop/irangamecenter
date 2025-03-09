@@ -41,7 +41,7 @@ const FooterNavigation = () => {
     return (
         <>
         <div className="pb-20" />
-        <div className="fixed bottom-0 left-0 right-0">
+        <div className="fixed bottom-0 left-0 right-0 z-10">
             <nav
                 className="max-w-lg mx-auto flex bg-[#192b39]"
             >

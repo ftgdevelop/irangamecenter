@@ -1,12 +1,9 @@
 import Image from "next/image";
-import ArrowRight from "@/components/icons/ArrowRight";
-import LoginOtp from "@/components/authentication/LoginOtp";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
 import { useRouter } from "next/router";
-import LoginWithPassword from "@/components/authentication/LoginWithPassword";
 import { useAppSelector } from "@/hooks/use-store";
 import Skeleton from "@/components/shared/Skeleton";
-import { toPersianDigits } from "@/helpers";
+import { dateDiplayFormat, toPersianDigits } from "@/helpers";
 import Link from "next/link";
 import ArrowTopLeft from "@/components/icons/ArrowTopLeft";
 import Logout from "@/components/authentication/Logout";
@@ -20,18 +17,30 @@ export default function Profile() {
   const userLoading = useAppSelector(state => state.authentication.getUserLoading);
 
   useEffect(() => {
+    let redirectTimout : undefined | NodeJS.Timeout;
+    
+    console.error("Effect in .... ", dateDiplayFormat({
+      date: new Date().toISOString(),
+      format: "HH:mm:ss",
+      locale: "fa"
+    }) );
+
     if (!isAuthenticated && !userLoading) {
-      router.push("/login");
-      //to do: fix bug in redirect
+      redirectTimout = setTimeout(()=>{
+        router.push("/login");
+      }, 1000);
     }
+
+    return(()=>{
+      console.error("clean up in .... ", dateDiplayFormat({
+        date: new Date().toISOString(),
+        format: "HH:mm:ss",
+        locale: "fa"
+      }) );
+      clearTimeout(redirectTimout);
+    })
+
   }, [isAuthenticated, userLoading]);
-
-  const [loginType, setLoginType] = useState<"otp" | "password">("otp");
-
-  const closeLoginHandle = () => {
-    router.push("/");
-  }
-
 
 
   if (!userInfo && !userLoading) {

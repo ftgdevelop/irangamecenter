@@ -2,7 +2,7 @@ export const toPersianDigits = (x: string) => {
     if (x) {
         const persianNumbers = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
 
-        for (var i = 0; i < 10; i++) {
+        for (let i = 0; i < 10; i++) {
             x = x.replaceAll(i.toString(), persianNumbers[i]);
         }
     }
@@ -19,7 +19,7 @@ export const numberWithCommas = (x: number) => {
     }
 }
 
-export const dateDiplayFormat = ({ date, format, locale }: { date: string; format?: "weekDayNumber" | "m" | "d" | "HH:mm"| "dd mm"| "ddd dd mm"| "ddd dd mm yyyy" | "dd mm yyyy" | "yyyy/mm/dd" | "YYYY-MM-DD" | "yyyy/mm/dd h:m" , locale?: string }): string => {
+export const dateDiplayFormat = ({ date, format, locale }: { date: string; format?: "weekDayNumber" | "m" | "d" | "HH:mm"|"HH:mm:ss"| "dd mm"| "ddd dd mm"| "ddd dd mm yyyy" | "dd mm yyyy" | "yyyy/mm/dd" | "YYYY-MM-DD" | "yyyy/mm/dd h:m" , locale?: string }): string => {
 
     if (!date) return "";
 
@@ -32,13 +32,19 @@ export const dateDiplayFormat = ({ date, format, locale }: { date: string; forma
     const month2digit = dateObject.toLocaleString(locale, { month: "2-digit" });
     const year = dateObject.toLocaleString(locale, { year: "numeric" });
 
-    let h = dateObject.getHours().toString().padStart(2, '0');
-    let m = dateObject.getMinutes().toString().padStart(2, '0');
+    const h = dateObject.getHours().toString().padStart(2, '0');
+    const m = dateObject.getMinutes().toString().padStart(2, '0');
 
     if (format === "HH:mm"){
-        const h = dateObject.toLocaleString(locale, { hour: "2-digit" }).padStart(2, '0');
-        const m = dateObject.toLocaleString(locale, { minute: "2-digit" }).padStart(2, '0');
-        return(h+":"+m);
+        const h1 = dateObject.toLocaleString(locale, { hour: "2-digit" }).padStart(2, '0');
+        const m1 = dateObject.toLocaleString(locale, { minute: "2-digit" }).padStart(2, '0');
+        return(h1+":"+m1);
+    }
+    if (format === "HH:mm:ss"){
+        const h1 = dateObject.toLocaleString(locale, { hour: "2-digit" }).padStart(2, '0');
+        const m1 = dateObject.toLocaleString(locale, { minute: "2-digit" }).padStart(2, '0');
+        const s1 = dateObject.toLocaleString(locale, { second: "2-digit" }).padStart(2, '0');
+        return(h1+":"+m1+":"+s1);
     }
 
     if (format === "ddd dd mm") {
@@ -101,4 +107,17 @@ export const goBackYears = (date: Date, years: number = 1) => {
     const newDate = new Date(date.getTime() - years * 365.25 * 24 * 60 * 60 * 1000);
 
     return newDate;
+}
+
+export const persianNumbersToEnglish = (number: string) => {
+
+    const persianNumbers = [/۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g];
+    const arabicNumbers = [/٠/g, /١/g, /٢/g, /٣/g, /٤/g, /٥/g, /٦/g, /٧/g, /٨/g, /٩/g];
+
+    if (typeof number === 'string') {
+        for (let i = 0; i < 10; i++) {
+            number = number.replace(persianNumbers[i], i.toString()).replace(arabicNumbers[i], i.toString());
+        }
+    }
+    return number;
 }
