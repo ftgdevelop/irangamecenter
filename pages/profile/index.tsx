@@ -3,7 +3,7 @@ import { ReactNode, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useAppSelector } from "@/hooks/use-store";
 import Skeleton from "@/components/shared/Skeleton";
-import { dateDiplayFormat, toPersianDigits } from "@/helpers";
+import { toPersianDigits } from "@/helpers";
 import Link from "next/link";
 import ArrowTopLeft from "@/components/icons/ArrowTopLeft";
 import Logout from "@/components/authentication/Logout";
@@ -18,13 +18,6 @@ export default function Profile() {
 
   useEffect(() => {
     let redirectTimout : undefined | NodeJS.Timeout;
-    
-    console.error("Effect in .... ", dateDiplayFormat({
-      date: new Date().toISOString(),
-      format: "HH:mm:ss",
-      locale: "fa"
-    }) );
-
     if (!isAuthenticated && !userLoading) {
       redirectTimout = setTimeout(()=>{
         router.push("/login");
@@ -32,11 +25,6 @@ export default function Profile() {
     }
 
     return(()=>{
-      console.error("clean up in .... ", dateDiplayFormat({
-        date: new Date().toISOString(),
-        format: "HH:mm:ss",
-        locale: "fa"
-      }) );
       clearTimeout(redirectTimout);
     })
 
@@ -52,7 +40,7 @@ export default function Profile() {
     fullName += userInfo.firstName;
   }
   if (userInfo?.lastName) {
-    fullName += ` ${userInfo.firstName}`;
+    fullName += ` ${userInfo.lastName}`;
   }
 
   const userName = toPersianDigits(userInfo?.userName || "");

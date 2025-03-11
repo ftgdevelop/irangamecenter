@@ -1,6 +1,6 @@
-import { toPersianDigits } from "@/helpers";
-import { validateMobileNumberId } from "@/helpers/formik-validation"
-import { Field, Form, Formik } from "formik"
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
+import {Form, Formik } from "formik"
 import { useEffect, useRef, useState } from "react";
 import ArrowTopLeft from "../icons/ArrowTopLeft";
 import Link from "next/link";
@@ -11,8 +11,7 @@ import { useAppDispatch } from "@/hooks/use-store";
 import { setReduxUser } from "@/redux/authenticationSlice";
 import { setReduxNotification } from "@/redux/notificationSlice";
 import OtpVerification from "./OtpVerification";
-
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+import PhoneInput from "../shared/PhoneInput";
 
 type Props = {
     toggleLoginType: () => void;
@@ -25,7 +24,6 @@ const LoginOtp: React.FC<Props> = props => {
 
     const phoneInputRef = useRef<HTMLInputElement>(null);
 
-    const [typedPhoneNumber, setTypedPhoneNumber] = useState<string>("");
     const [savedPhoneNumber, setSavedPhoneNumber] = useState<string>("");
     const [verificationMode, setverificationMode] = useState<boolean>(false);
 
@@ -37,12 +35,6 @@ const LoginOtp: React.FC<Props> = props => {
     useEffect(() => {
         phoneInputRef.current?.focus();
     }, []);
-
-    function isNumeric(input: string) {
-        const regex = /^[\u0660-\u0669\u06F0-\u06F9\u0030-\u0039]+$/;
-        return regex.test(input);
-    }
-
 
     const sendOtpCode = async (phoneNumber: string, callBack?: () => void) => {
 
@@ -87,7 +79,6 @@ const LoginOtp: React.FC<Props> = props => {
         }
     }
 
-
     const onSuccessLogin = (response: any) => {
         if (response && response.status === 200) {
 
@@ -121,9 +112,8 @@ const LoginOtp: React.FC<Props> = props => {
     const submitHandler = async (values: {
         phoneNumber: string;
     }) => {
-        const formatedPhoneNumber = "+98" + values.phoneNumber.substring(1);
         setSavedPhoneNumber(values.phoneNumber);
-        sendOtpCode(formatedPhoneNumber, () => {
+        sendOtpCode(values.phoneNumber, () => {
             setverificationMode(true);
         });
     }
@@ -138,7 +128,6 @@ const LoginOtp: React.FC<Props> = props => {
                 editMobileNumber={() => {
                     setverificationMode(false);
                     setSavedPhoneNumber("");
-                    setTypedPhoneNumber("");
                 }}
                 onSuccessLogin={onSuccessLogin}
                 sendCodeMoment={sendCodeMoment}
@@ -155,51 +144,32 @@ const LoginOtp: React.FC<Props> = props => {
                 initialValues={{ phoneNumber: "" }}
                 onSubmit={submitHandler}
             >
-                {({ errors, touched, setFieldValue }) => {
+                {({ errors, touched, values, setFieldValue }) => {
                     return (
 
                         <Form className='p-5 text-sm flex flex-col items-center justify-center gap-5 leading-6' autoComplete='off' >
-
-
                             <div className="self-stretch mb-5">
-                                <label className="px-5 mb-3 block font-semibold">
-                                    شماره موبایل
-                                </label>
-
-                                <Field
-                                    name="phoneNumber"
-                                    validate={(value: string) => validateMobileNumberId({
-                                        expectedLength: 11,
-                                        invalidMessage: "شماره موبایل وارد شده معتبر نیست",
-                                        reqiredMessage: "شماره موبایل خود را وارد کنید",
-                                        value: value
-                                    })}
-                                    type='hidden'
-                                />
-
-
-                                <input
-                                    ref={phoneInputRef}
-                                    type='text'
-                                    autoComplete="off"
-                                    onChange={(e: any) => {
-                                        if ((!["0", "۰", "٠"].includes(e.target.value[0]) || !isNumeric(e.target.value)) && e.target.value) return;
-                                        setTypedPhoneNumber(e.target.value);
-                                        setFieldValue('phoneNumber', e.target.value)
-                                    }}
-                                    value={typedPhoneNumber}
-                                    maxLength={11}
+                                <PhoneInput
                                     placeholder="شماره موبایل را وارد نمایید"
-                                    className="block rounded-full h-14 w-full px-5 bg-[#192b39] mb-3 border-none outline-none tracking-widest placeholder:tracking-normal placeholder:text-right "
-                                    dir="ltr"
+                                    heightClass="h-14"
+                                    label='شماره موبایل'
+                                    defaultCountry={
+                                        {
+                                            countryCode: "ir",
+                                            dialCode: "98",
+                                            format: "... ... ...."
+                                        }
+                                    }
+                                    onChange={(v: string) => {
+                                        setFieldValue('phoneNumber', v)
+                                    }}
+                                    value={values.phoneNumber}
+                                    name='phoneNumber'
+                                    isTouched={touched.phoneNumber}
+                                    errorText={errors.phoneNumber}
+                                    className="mb-5"
                                 />
-
-                                {errors.phoneNumber && touched.phoneNumber && <div className='text-red-400 text-xs px-5 mb-4 relative'>{errors.phoneNumber}</div>}
-
-
-                                <p className="px-5 text-sm"> مثلا {toPersianDigits("09123456789")} </p>
                             </div>
-
 
                             <button
                                 type="submit"
@@ -212,7 +182,6 @@ const LoginOtp: React.FC<Props> = props => {
                                 ) : (
                                     <ArrowTopLeft className="fill-current w-5 h-5" />
                                 )}
-
                             </button>
 
                             <button

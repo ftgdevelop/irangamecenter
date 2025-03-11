@@ -42,7 +42,7 @@ const Error: React.FC = () => {
         >
             <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen bg-black/50 backdrop-blur-sm z-50 flex justify-center items-center">
 
-                <div className="bg-white max-sm:h-screen sm:rounded-xl px-5 pt-10 pb-12 w-full max-w-md text-center">
+                <div className="bg-white rounded-xl px-5 pt-10 pb-12 w-5/6 max-w-md text-center">
                     <Image src="/images/icons/error.svg" alt="error" className="w-10 h-10 mx-auto mb-4" width={60} height={60} />
 
                     <h5 className="text-red-500 text-lg sm:text-2xl font-bold mb-1">

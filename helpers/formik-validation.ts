@@ -7,23 +7,32 @@ export const validateRequired = (value: string, message: string) => {
     return error;
 }
 
-export const validateMobileNumberId = ({ value, expectedLength, reqiredMessage, invalidMessage }: { value: string, expectedLength?: number, reqiredMessage: string, invalidMessage: string }) => {
+export const validateMobileNumberId = ({value,expectedLength ,reqiredMessage, invalidMessage }:{value: string,expectedLength?:number, reqiredMessage: string, invalidMessage: string}) => {
     let error;
     if (!value && reqiredMessage) {
         error = reqiredMessage;
     } else if (
         !/^[+0123456789۰۱۲۳۴۵۶۷۸۹]*$/.test(value)
         ||
-        (expectedLength && value.replace("+", "").length !== expectedLength)
-        ||
+        (expectedLength && value.replace("+","").length !== expectedLength)
+        || 
         (!expectedLength && value.length < 10)
-    ) {
+        ) {
         error = invalidMessage;
     }
 
     return error;
 }
+export const validateEmail = ({value, reqiredMessage, invalidMessage}:{value: string, reqiredMessage?: string, invalidMessage: string}) => {
+    let error;
+    if (!value && reqiredMessage) {
+        error = reqiredMessage;
+    } else if (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+        error = invalidMessage;
+    }
 
+    return error;
+}
 export const validateRequiedPersianAndEnglish = (value: string, reqiredMessage: string, invalidMessage: string) => {
     let error;
     if (!value) {

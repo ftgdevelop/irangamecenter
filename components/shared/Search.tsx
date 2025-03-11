@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import { Field, Form, Formik } from "formik";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -28,7 +30,7 @@ const Search = () => {
                 initialValues={{ text: searchedText || "" }}
                 onSubmit={submitHandler}
             >
-                {({ errors, touched, setFieldValue, values }) => {
+                {({ setFieldValue, values }) => {
                     return (
 
                         <Form className='relative' autoComplete='off' >

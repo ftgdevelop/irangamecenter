@@ -1,9 +1,12 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { Image } from '@mantine/core'
 import { Field } from 'formik'
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useState } from 'react'
+import VisibilityOff from '../icons/Visibility-Off'
+import Visibility from '../icons/Visibility'
 
 type Props = {
+  placeholder?: string;
   errorText?: string
   isTouched?: boolean
   label?: string
@@ -23,7 +26,16 @@ type Props = {
 }
 
 const FormikField: React.FC<Props> = (props) => {
-  const inputClassNames: string[] = ['w-full h-11 px-5 mb-1 bg-[#192a39] border outline-none rounded-full text-sm']
+
+  const [isPassword, setIsPassword] = useState<boolean>(props.isPassword || false);
+
+  const inputClassNames: string[] = ['w-full px-5 mb-1 bg-[#192a39] border outline-none rounded-full text-sm'];
+
+  if(props.heightClassName){
+    inputClassNames.push(props.heightClassName)
+  }else{
+    inputClassNames.push("h-11")
+  }
 
   if (props.errorText && props.isTouched) {
     inputClassNames.push(`border-[#ff163e]`)
@@ -35,11 +47,27 @@ const FormikField: React.FC<Props> = (props) => {
     inputClassNames.push(props.fieldClassName)
   }
 
+  let passwordToggleBtn = null;
+
+  if (props.isPassword) {
+    passwordToggleBtn = <button
+      type='button'
+      className='absolute top-1/2 left-3 -translate-y-1/2 outline-none'
+      tabIndex={-1}
+      onClick={() => { setIsPassword(prevState => !prevState) }}
+    >
+      {isPassword ? (
+        <VisibilityOff className='w-5 h-5 fill-neutral-500' />
+      ) : (
+        <Visibility className='w-5 h-5 fill-neutral-500' />
+      )}
+    </button>
+  }
+
   return (
     <div
-      className={`${props.errorText ? 'has-validation-error' : ''} ${
-        props.className || ''
-      }`}
+      className={`${props.errorText ? 'has-validation-error' : ''} ${props.className || ''
+        }`}
     >
       <div className="relative">
 
@@ -62,11 +90,12 @@ const FormikField: React.FC<Props> = (props) => {
           />
         )}
 
-        <div className="relative mt-1">
+        <div className="relative mt-2">
           <Field
             disabled={props.disabled}
             maxLength={props.maxLength || undefined}
             validate={props.validateFunction}
+            placeholder={props.placeholder || ""}
             id={props.id}
             name={props.name}
             autoComplete="off"
@@ -78,8 +107,11 @@ const FormikField: React.FC<Props> = (props) => {
               }
             }}
             value={props.value}
-            type='text'
+            type={isPassword && props.value.length ? "password" : "text"}
           />
+          
+          {passwordToggleBtn}
+
         </div>
       </div>
 

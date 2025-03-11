@@ -8,12 +8,16 @@ import { validateMobileNumberId } from '@/helpers/formik-validation';
 import { persianNumbersToEnglish } from '@/helpers';
 
 type Props = {
+    placeholder?: string;
+    heightClass?: string;
+    showConfirmedText?: boolean;
     showConfirmedBadge?: boolean;
     disabled?:boolean;
     errorText?: string;
     isTouched?: boolean;
     label?: string;
     name?: string;
+    value?: string;
     className?: string;
     onChange: (v: string) => void;
     defaultCountry: {
@@ -22,7 +26,6 @@ type Props = {
         format?: string
     }
     initialValue?: string;
-    showNotConfirmedBadge?: boolean;
 }
 
 type CountryObject = {
@@ -104,16 +107,20 @@ const PhoneInput: React.FC<Props> = props => {
     }, []);
 
 
-    useEffect(() => {
-        setTypedCode("");
-    }, [country?.dialCode]);
+    const countryDialCode = country?.dialCode;
 
     useEffect(() => {
-        if (country && phoneNumberValue) {
-            const transformedDigits = persianNumbersToEnglish(country.dialCode + phoneNumberValue)
-            props.onChange("+" + transformedDigits)
+        setTypedCode("");
+    }, [countryDialCode]);
+
+    const {onChange} = props;
+
+    useEffect(() => {
+        if (countryDialCode && phoneNumberValue) {
+            const transformedDigits = persianNumbersToEnglish(countryDialCode + phoneNumberValue)
+            onChange("+" + transformedDigits)
         }
-    }, [country.dialCode, phoneNumberValue])
+    }, [countryDialCode, phoneNumberValue]);
 
     const selectCountry = (item: any[]) => {
         setOpenCodes(false);
@@ -152,24 +159,33 @@ const PhoneInput: React.FC<Props> = props => {
     const expectedTotalLength = expectedLength ? expectedLength + country.dialCode.length : undefined;
 
 
-    const inputClassNames : string[] = [`bg-caret bg-gradient-to-t from-[#01343c] to-[#1f4340] h-11 rounded-l-full px-5 outline-none`];
+    const inputClassNames : string[] = [`bg-caret bg-gradient-to-t from-[#01343c] to-[#1f4340] ${props.heightClass||"h-11"} rounded-l-full px-5 outline-none`];
 
     if(errorText && isTouched){
         inputClassNames.push(`border-red-500`);
     }
 
-    const inputClassNames2 : string[] = [`h-11 px-2 col-span-4 rounded-r-full outline-none bg-[#192a39]`];
+    const inputClassNames2 : string[] = [`${props.heightClass||"h-11"} placeholder:text-right placeholder:tracking-normal px-5 col-span-4 rounded-r-full outline-none bg-[#192a39] tracking-widest`];
 
     if(errorText && isTouched){
         inputClassNames2.push(`border-red-500`);
     }else{
         inputClassNames2.push(`border-neutral-300 focus:border-blue-500`);
     }
+
+    const validationMessage = validateMobileNumberId({
+        expectedLength: expectedTotalLength,
+        invalidMessage: "شماره موبایل وارد شده معتبر نیست",
+        reqiredMessage: "لطفا شماره موبایل خود را وارد کنید",
+        value: props.value || ""
+    });
+    
+
     return (
         <div className={props.className || ""}>
             <div className='relative'>
 
-                <div className='flex justify-between items-center px-5 mb-1'>
+                <div className='flex justify-between items-center px-5 mb-2'>
 
                     <div className='flex items-center gap-2'>
                         {!!props.label && (
@@ -177,7 +193,7 @@ const PhoneInput: React.FC<Props> = props => {
                             {props.label}
                             </label>
                         )}
-                        {!props.showConfirmedBadge && (
+                        {props.showConfirmedBadge && !validationMessage && (
                             <Image
                             src="/images/icons/greenCircleCheck.svg"
                             alt="check icon"
@@ -188,11 +204,9 @@ const PhoneInput: React.FC<Props> = props => {
                         )}
                     </div>
 
-
-
-                    {props.showNotConfirmedBadge && (
-                        <div className='bg-amber-100 text-xs text-neutral-500 leading-6 px-3 rounded-full before:inline-block before:w-2 before:h-2 before:bg-amber-400 before:rounded-full before:align-middle before:ltr:mr-1 before:rtl:ml-1'>
-                            تایید نشده
+                    {props.showConfirmedText && (
+                        <div className='text-green-400 text-xs'>
+                            تایید شده
                         </div>
                     )}
                 </div>
@@ -226,6 +240,7 @@ const PhoneInput: React.FC<Props> = props => {
                         autoComplete="off"
                         onChange={(e: any) => { if (["0", "۰", "٠"].includes(e.target.value[0])) return; setPhoneNumberValue(e.target.value) }}
                         value={phoneNumberValue}
+                        placeholder={props.placeholder || ""}
                         maxLength={expectedLength || 15}
                         className={inputClassNames2.join(" ")}
                     />
@@ -234,7 +249,7 @@ const PhoneInput: React.FC<Props> = props => {
                         validate={(value: string) => validateMobileNumberId({
                             expectedLength: expectedTotalLength,
                             invalidMessage: "شماره موبایل وارد شده معتبر نیست",
-                            reqiredMessage: "لطفا شماره موبایل خود را وارد کنید",
+                            reqiredMessage: "شماره موبایل را وارد نمایید",
                             value: value
                         })}
                         type='hidden'
@@ -259,7 +274,7 @@ const PhoneInput: React.FC<Props> = props => {
 
                 </div>
             </div>
-            {errorText && isTouched && <div className='text-red-500 text-xs'>{errorText}</div>}
+            {errorText && isTouched && <div className='text-[#ff163e] text-center text-xs px-5 mt-1'>{errorText}</div>}
         </div>
     )
 }

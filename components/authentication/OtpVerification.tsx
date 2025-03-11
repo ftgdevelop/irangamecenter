@@ -1,5 +1,5 @@
 import { toPersianDigits } from "@/helpers";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import ArrowTopLeft from "../icons/ArrowTopLeft";
 import { registerOrLogin } from "@/actions/identity";
 import { useAppDispatch } from "@/hooks/use-store";
@@ -64,7 +64,7 @@ const OtpVerification: React.FC<Props> = props => {
                 getUserLoading: true
             }));
 
-            const response: any = await registerOrLogin({ code: code, emailOrPhoneNumber: "+98" + (props.savedPhoneNumber.slice(1)) });
+            const response: any = await registerOrLogin({ code: code, emailOrPhoneNumber: props.savedPhoneNumber });
 
             setRegisterLoading(false);
             if (response.status == 200) {
@@ -101,7 +101,7 @@ const OtpVerification: React.FC<Props> = props => {
             <div className="flex justify-between px-4 text-xs mb-12">
                 <div>
                     شماره موبایل دریافت کد
-                    <div className="mt-2 text-lg font-semibold tracking-widest" dir="ltr"> {toPersianDigits(props.savedPhoneNumber)} </div>
+                    <div className="mt-2 text-lg font-semibold tracking-widest" dir="ltr"> {toPersianDigits(props.savedPhoneNumber.replace("+98","0"))} </div>
                 </div>
                 <button
                     type="button"

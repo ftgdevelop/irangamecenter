@@ -23,7 +23,7 @@ export default function Login() {
     if (isAuthenticated) {
       router.push('/profile')
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated, router])
 
   return (
     <>

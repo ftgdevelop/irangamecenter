@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import { PropsWithChildren, useEffect } from "react";
 import Header from "./header/Index";
 import Footer from "./footer/Index";

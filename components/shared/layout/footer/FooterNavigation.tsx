@@ -49,7 +49,7 @@ const FooterNavigation = () => {
                     <Link
                         key={item.label}
                         href={item.href}
-                        className={`basis-1/4 rounded-xl py-3  text-xs text-center ${item.active ? " bg-[#2e3e4b]" : ""}`}
+                        className={`basis-1/4 rounded-xl py-3  text-2xs text-center ${item.active ? " bg-[#2e3e4b]" : ""}`}
                     >
                         <Image src={item.imageUrl} alt={item.label} className="block mx-auto mb-2" width={30} height={30} />
                         <span>

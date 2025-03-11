@@ -58,7 +58,7 @@ export const getCurrentUserProfile = async (token: string) => {
     }
 }
 
-export const updateCurrentUserProfile = async (params: UpdateUserParams, token: string) => {
+export const updateCurrentUserProfile = async (params :UpdateUserParams , token:string) => {
 
     try {
         let response = await axios.put(
@@ -66,10 +66,8 @@ export const updateCurrentUserProfile = async (params: UpdateUserParams, token: 
             params,
             {
                 headers: {
-                    Accept: 'application/json;charset=UTF-8',
-                    apikey: process.env.PROJECT_SERVER_APIKEY,
-                    Authorization: `Bearer ${token}`,
-                    Tenantid: process.env.PROJECT_SERVER_TENANTID
+                    ...Headers,
+                    Authorization: `Bearer ${token}`
                 },
             },
         )
@@ -88,10 +86,8 @@ export const updateNewsletterUserProfile = async (params: UpdateUserParams, toke
             params,
             {
                 headers: {
-                    Accept: 'application/json;charset=UTF-8',
-                    apikey: process.env.PROJECT_SERVER_APIKEY,
-                    Authorization: `Bearer ${token}`,
-                    Tenantid: process.env.PROJECT_SERVER_TENANTID
+                    ...Headers,
+                    Authorization: `Bearer ${token}`
                 },
             },
         )
@@ -109,11 +105,8 @@ export const updateProfileEmail = async (emailAddress: string, token: string, ac
             { emailAddress: emailAddress },
             {
                 headers: {
-                    Accept: 'application/json;charset=UTF-8',
-                    apikey: process.env.PROJECT_SERVER_APIKEY,
-                    "Accept-Language": acceptLanguage,
-                    Authorization: `Bearer ${token}`,
-                    Tenantid: process.env.PROJECT_SERVER_TENANTID
+                    ...Headers,
+                    Authorization: `Bearer ${token}`
                 },
             },
         )
@@ -133,11 +126,8 @@ export const updateProfilePhoneNumber = async (phoneNumber: string, token: strin
             { phoneNumber: phoneNumber },
             {
                 headers: {
-                    Accept: 'application/json;charset=UTF-8',
-                    apikey: process.env.PROJECT_SERVER_APIKEY,
-                    "Accept-Language": acceptLanguage,
-                    Authorization: `Bearer ${token}`,
-                    Tenantid: process.env.PROJECT_SERVER_TENANTID
+                    ...Headers,
+                    Authorization: `Bearer ${token}`
                 },
             },
         )
@@ -146,3 +136,23 @@ export const updateProfilePhoneNumber = async (phoneNumber: string, token: strin
         return error
     }
 }
+
+export const loginWithPassword = async (params: {emailOrPhoneNumber :string , password:string} , acceptLanguage: string = 'fa-IR') => {
+
+    try {
+        let response = await axios.post(
+            `${ServerAddress.Type}${ServerAddress.Identity}${Identity.LoginWithPassword}`,
+            params,
+            {
+                headers: {
+                    ...Headers,
+                    "Accept-Language": acceptLanguage
+                },
+            },
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}
+

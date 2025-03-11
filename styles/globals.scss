@@ -80,6 +80,14 @@ body {
   }
 }
 @layer utilities {
+
+  .ltr{
+    direction: ltr;
+  }
+  .rtl{
+    direction: rtl;
+  }
+  
   .animate-spin-reverse{
     animation: spinReverse 1s linear infinite;
   }	
@@ -153,10 +161,19 @@ body {
   justify-content: center;
   gap: 5px;
   .mantine-PinInput-pinInput{
-    width: 55px;
+    width: 45px;
+    @media screen and (min-width:400px) {
+      width: 55px;
+    }
   }
   .mantine-PinInput-input {
-    height: 55px;
+    height: 45px;
+    width: 45px;
+    min-height: 45px;
+    @media screen and (min-width:400px) {
+      height: 55px;
+      width: 55px;
+    }
     border-radius: 100%;
     background-color: #192b39;
     border-color: #192b39;
