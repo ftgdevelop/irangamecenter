@@ -170,6 +170,7 @@ body {
     height: 45px;
     width: 45px;
     min-height: 45px;
+    font-weight: 600;
     @media screen and (min-width:400px) {
       height: 55px;
       width: 55px;
@@ -186,6 +187,18 @@ body {
     }
     &::selection{
       background: transparent;
+    }
+  }
+  &.has-error{
+    .mantine-PinInput-input{
+      border-color: red;
+      color: red;
+    }
+  }
+  &.has-sucess{
+    .mantine-PinInput-input{
+      border-color: #2ac99f;
+      color: #2ac99f;
     }
   }
 }

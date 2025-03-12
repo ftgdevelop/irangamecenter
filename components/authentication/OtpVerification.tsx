@@ -9,6 +9,7 @@ import Refresh from "../icons/Refresh";
 import { PinInput } from "@mantine/core";
 import { setReduxUser } from "@/redux/authenticationSlice";
 import { setReduxNotification } from "@/redux/notificationSlice";
+import Loading from "../icons/Loading";
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
@@ -26,6 +27,8 @@ const OtpVerification: React.FC<Props> = props => {
     const dispatch = useAppDispatch();
 
     const [verificationCode, setVerificationCode] = useState<string>("");
+
+    const [status, setStatus ] = useState<undefined | "success" | "error">(undefined);
 
     const [remaindSeconds, setRemaindSeconds] = useState<number>(80);
 
@@ -69,6 +72,7 @@ const OtpVerification: React.FC<Props> = props => {
             setRegisterLoading(false);
             if (response.status == 200) {
                 props.onSuccessLogin(response);
+                setStatus("success");
             } else {
                 let message = "";
                 if (response?.response?.data?.error?.message) {
@@ -79,6 +83,7 @@ const OtpVerification: React.FC<Props> = props => {
                     message: message,
                     isVisible: true
                 }));
+                setStatus("error");
                 dispatch(setReduxUser({
                     isAuthenticated: false,
                     user: {},
@@ -116,11 +121,13 @@ const OtpVerification: React.FC<Props> = props => {
             <div className="px-5 text-center">
 
                 <PinInput
+                    inputMode="numeric"
                     autoFocus
                     size="lg"
                     length={6}
-                    className={`otp-pin`}
+                    className={`otp-pin ${status === "error"?"has-error": status === "success" ? "has-sucess" : ""}`}
                     onChange={code => {
+                        setStatus(undefined);
                         if (code.length === 6) {
                             setVerificationCode(code);
                             if (!verificationCode) {
@@ -170,7 +177,12 @@ const OtpVerification: React.FC<Props> = props => {
                 >
                     تایید
 
-                    <ArrowTopLeft className="fill-current w-5 h-5" />
+                    {registerLoading ? (
+                        <Loading className="fill-current w-5 h-5 animate-spin" />
+                    ) : (
+                        <ArrowTopLeft className="fill-current w-5 h-5" />
+                    )}
+                    
                 </button>
             </div>
 
