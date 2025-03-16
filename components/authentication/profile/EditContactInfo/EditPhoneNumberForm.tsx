@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import { getCurrentUserProfile, updateProfilePhoneNumber } from "@/actions/identity";
 import Loading from "@/components/icons/Loading";
 import PhoneInput from "@/components/shared/PhoneInput";

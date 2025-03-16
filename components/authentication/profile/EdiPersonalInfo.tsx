@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import { getCurrentUserProfile, updateCurrentUserProfile } from "@/actions/identity";
 import Female from "@/components/icons/Female";
 import Loading from "@/components/icons/Loading";

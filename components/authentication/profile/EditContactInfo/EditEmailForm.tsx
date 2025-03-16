@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import { getCurrentUserProfile, sendEmailActivation, updateProfileEmail } from "@/actions/identity";
 import Loading from "@/components/icons/Loading";
 import FormikField from "@/components/shared/FormikField";

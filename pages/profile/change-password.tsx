@@ -40,7 +40,7 @@ export default function ChangePassword() {
     return () => {
       clearTimeout(redirectTimout)
     }
-  }, [isAuthenticated, userLoading]);
+  }, [isAuthenticated, userLoading, router]);
 
   const closeLoginHandle = () => {
     router.push('/')

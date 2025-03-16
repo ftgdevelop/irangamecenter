@@ -1,5 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import ArrowRight from '@/components/icons/ArrowRight';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -34,7 +32,7 @@ export default function ProfileEdit() {
     return () => {
       clearTimeout(redirectTimout)
     }
-  }, [isAuthenticated, userLoading]);
+  }, [isAuthenticated, userLoading, router]);
 
   const closeLoginHandle = () => {
     router.push('/')

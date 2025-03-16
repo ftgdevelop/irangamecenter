@@ -28,7 +28,7 @@ export default function Profile() {
       clearTimeout(redirectTimout);
     })
 
-  }, [isAuthenticated, userLoading]);
+  }, [isAuthenticated, userLoading, router]);
 
 
   if (!userInfo && !userLoading) {
