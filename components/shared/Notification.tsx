@@ -18,9 +18,9 @@ const Notification: React.FC = () => {
     let icon: React.ReactNode = "";
 
     if (storedNotification.status === "error") {
-        icon = <ErrorCircle className="fill-red-500 w-7 h-7" />;
+        icon = <ErrorCircle className="fill-red-500 w-6 h-6" />;
     } else if (storedNotification.status === "success") {
-        icon = <CheckCircle className="fill-green-500 w-7 h-7" />;
+        icon = <CheckCircle className="fill-green-500 w-6 h-6" />;
     }
 
     useEffect(() => {
@@ -48,8 +48,8 @@ const Notification: React.FC = () => {
             show={storedNotification.isVisible}
             selector='notification_modal_portal'
         >
-            <div className={`fixed text-sm transition-all ${open ? "right-24 opacity-100" : "-right-96 opacity-0"} bottom-8 z-10 bg-black/90 text-white shadow-normal rounded w-60 p-3 sm:p-5 sm:w-96 max-w-md flex justify-between`}>
-                {storedNotification.message}
+            <div className={`fixed text-sm transition-all translate-x-1/2 max-w-4/5 ${open ? "right-1/2 opacity-100" : "-right-1/2 opacity-0"} bottom-8 z-10 bg-black/90 text-white shadow-normal rounded w-60 p-3 sm:p-5 sm:w-96 max-w-md flex justify-between`}>
+                {storedNotification.message }
                 {icon}
             </div>
         </ModalPortal>

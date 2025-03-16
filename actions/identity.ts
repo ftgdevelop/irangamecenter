@@ -118,7 +118,7 @@ export const updateProfileEmail = async (emailAddress: string, token: string, ac
 
 
 
-export const updateProfilePhoneNumber = async (phoneNumber: string, token: string, acceptLanguage: string = 'fa-IR') => {
+export const updateProfilePhoneNumber = async (phoneNumber: string, token: string) => {
 
     try {
         let response = await axios.put(
@@ -156,3 +156,46 @@ export const loginWithPassword = async (params: {emailOrPhoneNumber :string , pa
     }
 }
 
+
+
+export const changePasswordByAuthorizedUser = async (param: { newPassword : string, token: string; }) => {
+
+    try {
+        const response = await axios.post(
+            `${ServerAddress.Type}${ServerAddress.Identity}${Identity.ChangePasswordByAuthorizedUser}`,
+            { newPassword : param.newPassword },
+            {
+                headers: {
+                    ...Headers,
+                    Authorization: `Bearer ${param.token}`
+                }
+            },
+        );
+
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
+export const sendEmailActivation = async (emailAddress: string, token: string, acceptLanguage: string = 'fa-IR') => {
+
+    try {
+        let response = await axios.post(
+            `${ServerAddress.Type}${ServerAddress.Identity}${Identity.SendEmailActivation}`,
+            {
+                emailAddress: emailAddress
+            },
+            {
+                headers: {
+                    ...Headers,
+                    Authorization: `Bearer ${token}`,
+                    "Accept-Language": acceptLanguage
+                }
+            },
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}

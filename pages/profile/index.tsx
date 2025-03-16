@@ -89,7 +89,7 @@ export default function Profile() {
         title: "اطلاعات کاربری"
       },
       {
-        href: "#",
+        href: "/profile/change-password",
         iconUrl: "/images/icons/2color/password-2.svg",
         label: "مدیریت کلمه عبور",
         title: "مدیریت کلمه عبور"

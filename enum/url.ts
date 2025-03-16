@@ -15,6 +15,7 @@ export const ServerAddress = {
 export const Identity = {
   SendOTP: "/api/services/app/OTP/SendOTP",
   RegisterOrLogin: "/api/services/app/OTP/RegisterOrLogin",
+  ChangePasswordByAuthorizedUser:"/api/services/app/Account/ChangePasswordByAuthorizedUser",
 
   GetCurrentUserProfileForEdit: "/api/services/app/Profile/GetCurrentUserProfileForEdit",
   UpdateCurrentUserProfile: "/api/services/app/Profile/UpdateCurrentUserProfile",

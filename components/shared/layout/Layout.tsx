@@ -25,12 +25,13 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     let showFooter = true;
     let showFixedNav = true;
 
-    if (router.pathname === "/login") {
+    if (router.pathname === "/login" || router.pathname === "/profile/edit" || router.pathname === "/profile/change-password" ){
         showFooter = false;
         showHeader = false;
         showFixedNav = false;
     }
-    if (router.pathname === "/profile" || router.pathname === "/profile/edit" ){
+
+    if (router.pathname === "/profile"){
         showHeader = false;
         showFooter = false;
     }

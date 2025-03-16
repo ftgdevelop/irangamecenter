@@ -5,6 +5,7 @@ import Link from "next/link"
 const FooterNavigation = () => {
 
     const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
+    const userInfoLoading = useAppSelector(state => state.authentication.getUserLoading);
 
     const items: {
         label: string;
@@ -32,7 +33,7 @@ const FooterNavigation = () => {
             },
             {
                 label: "پروفایل",
-                href: isAuthenticated ? "/profile" : "/login",
+                href: (isAuthenticated || userInfoLoading) ? "/profile" : "/login",
                 imageUrl: "/images/icons/profile.svg",
                 active: true
             }

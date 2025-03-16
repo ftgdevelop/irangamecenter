@@ -20,7 +20,7 @@ const Tab: React.FC<Props> = props => {
     const [activetabKey, setActiveTabKey] = useState(items[0]?.key);
 
     const tabClassName = (active: boolean) => {
-        return `outline-none whitespace-nowrap select-none text-xs px-2 sm:px-3 py-2 sm:py-3 border-b-2 transition-all block grow ${active ? "border-[#db63ff] text-[#db63ff]" : "border-transparent text-white"}`;
+        return `outline-none font-semibold whitespace-nowrap select-none text-xs px-2 sm:px-3 py-2 sm:py-3 border-b-2 transition-all block grow ${active ? "border-[#aa3aff] text-[#aa3aff]" : "border-transparent text-white"}`;
     }
 
     return (

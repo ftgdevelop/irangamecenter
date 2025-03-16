@@ -202,13 +202,13 @@ const PhoneInput: React.FC<Props> = props => {
                             className="w-5 h-5 block"
                             />
                         )}
+                        {props.showConfirmedText && (
+                            <div className='text-green-400 text-2xs'>
+                                تایید شده
+                            </div>
+                        )}
                     </div>
 
-                    {props.showConfirmedText && (
-                        <div className='text-green-400 text-xs'>
-                            تایید شده
-                        </div>
-                    )}
                 </div>
 
                 <div className={`relative text-sm grid grid-cols-5`} dir='ltr' ref={codeRef}>

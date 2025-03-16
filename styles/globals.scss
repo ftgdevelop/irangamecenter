@@ -64,10 +64,9 @@ body {
   &::-webkit-scrollbar-thumb {
     background: #fe1940;
     border-radius: 5px;
-
-    &:hover {
-      background: #fe4d6b;
-    }
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #fe4d6b;
   }
 }
 
@@ -121,9 +120,9 @@ body {
       background: #fe1940;
       border-radius: 5px;
   
-      &:hover {
-        background: #fe4d6b;
-      }
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: #fe4d6b;
     }
   }
 
@@ -171,14 +170,14 @@ body {
     width: 45px;
     min-height: 45px;
     font-weight: 600;
-    @media screen and (min-width:400px) {
-      height: 55px;
-      width: 55px;
-    }
     border-radius: 100%;
     background-color: #192b39;
     border-color: #192b39;
     color: #fff;
+    @media screen and (min-width:400px) {
+      height: 55px;
+      width: 55px;
+    }
     &::placeholder{
       color: transparent;
     }
@@ -189,16 +188,12 @@ body {
       background: transparent;
     }
   }
-  &.has-error{
-    .mantine-PinInput-input{
-      border-color: red;
-      color: red;
-    }
+  &.has-error .mantine-PinInput-input{
+    border-color: red;
+    color: red;
   }
-  &.has-sucess{
-    .mantine-PinInput-input{
-      border-color: #2ac99f;
-      color: #2ac99f;
-    }
+  &.has-sucess .mantine-PinInput-input{
+    border-color: #2ac99f;
+    color: #2ac99f;
   }
 }

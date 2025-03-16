@@ -1,7 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { Image } from '@mantine/core'
 import { Field } from 'formik'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, ReactNode, useState } from 'react'
 import VisibilityOff from '../icons/Visibility-Off'
 import Visibility from '../icons/Visibility'
 
@@ -10,6 +10,7 @@ type Props = {
   errorText?: string
   isTouched?: boolean
   label?: string
+  labelDescription?: ReactNode;
   maxLength?: number
   id?: string
   name?: string
@@ -23,17 +24,20 @@ type Props = {
   showConfirmedBadge?: boolean
   disabled?: boolean
   heightClassName?: string
+  inputWarningIcon?: boolean
+  showConfirmedText?: boolean
+  labelLeft?: ReactNode
 }
 
 const FormikField: React.FC<Props> = (props) => {
 
   const [isPassword, setIsPassword] = useState<boolean>(props.isPassword || false);
 
-  const inputClassNames: string[] = ['w-full px-5 mb-1 bg-[#192a39] border outline-none rounded-full text-sm'];
+  const inputClassNames: string[] = ['w-full px-5 bg-[#192a39] border outline-none rounded-full text-sm'];
 
-  if(props.heightClassName){
+  if (props.heightClassName) {
     inputClassNames.push(props.heightClassName)
-  }else{
+  } else {
     inputClassNames.push("h-11")
   }
 
@@ -65,31 +69,46 @@ const FormikField: React.FC<Props> = (props) => {
   }
 
   return (
-    <div
-      className={`${props.errorText ? 'has-validation-error' : ''} ${props.className || ''
-        }`}
-    >
+    <div className={`${props.errorText ? 'has-validation-error' : ''} ${props.className || '' }`} >
+
       <div className="relative">
 
-        {!!props.label && (
-          <label
-            htmlFor={props.id || undefined}
-            className="select-none pointer-events-none inline-block text-sm pr-5"
-          >
-            {props.label}
-          </label>
-        )}
+        <div className='flex justify-between items-center px-5 mb-2'>
 
-        {props.showConfirmedBadge && (
-          <Image
-            src="/images/icons/greenCircleCheck.svg"
-            alt="check icon"
-            width={20}
-            height={20}
-            className="w-5 h-5 inline-block mr-2"
-          />
-        )}
+          <div className='flex items-center gap-2'>
 
+            {!!props.label && (
+              <label
+                htmlFor={props.id || undefined}
+                className="select-none pointer-events-none inline-block text-sm"
+              >
+                {props.label}
+              </label>
+            )}
+
+            {props.showConfirmedBadge && (
+              <Image
+                src="/images/icons/greenCircleCheck.svg"
+                alt="check icon"
+                width={20}
+                height={20}
+                className="w-5 h-5 inline-block"
+              />
+            )}
+
+            {props.showConfirmedText && (
+              <div className='text-green-400 text-2xs'>
+                تایید شده
+              </div>
+            )}
+
+          </div>
+
+          {props.labelLeft}
+
+        </div>
+
+        {props.labelDescription || null}
         <div className="relative mt-2">
           <Field
             disabled={props.disabled}
@@ -109,9 +128,11 @@ const FormikField: React.FC<Props> = (props) => {
             value={props.value}
             type={isPassword && props.value.length ? "password" : "text"}
           />
-          
-          {passwordToggleBtn}
 
+          {passwordToggleBtn}
+          {props.inputWarningIcon && (
+            <Image src="/images/icons/error.svg" alt="error" className="w-4 h-4 absolute top-1/2 left-3 -translate-y-1/2" width={30} height={30} />
+          )}
         </div>
       </div>
 
