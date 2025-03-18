@@ -15,7 +15,6 @@ import PhoneInput from "../shared/PhoneInput";
 
 type Props = {
     toggleLoginType: () => void;
-    onCloseLogin: () => void;
 }
 
 const LoginOtp: React.FC<Props> = props => {
@@ -84,7 +83,6 @@ const LoginOtp: React.FC<Props> = props => {
 
             const token = response.data?.result?.accessToken
             localStorage.setItem('Token', token);
-            props.onCloseLogin();
 
             dispatch(setReduxUser({
                 isAuthenticated: true,

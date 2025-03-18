@@ -42,9 +42,6 @@ export default function ChangePassword() {
     }
   }, [isAuthenticated, userLoading, router]);
 
-  const closeLoginHandle = () => {
-    router.push('/')
-  }
 
   if (!isAuthenticated && !userLoading) {
     return null
@@ -114,7 +111,7 @@ export default function ChangePassword() {
   return (
     <>
       <header className="flex items-center gap-5 p-4 mb-5 text-xs">
-        <Link href="/profile" className="w-6 h-6" onClick={closeLoginHandle}>
+        <Link href="/profile" className="w-6 h-6">
           <ArrowRight />
         </Link>
         مدیریت کلمه

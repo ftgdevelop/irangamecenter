@@ -11,7 +11,7 @@ export default function Login() {
 
   const router = useRouter()
 
-  const closeLoginHandle = () => {
+  const backToHome = () => {
     router.push('/')
   }
 
@@ -31,7 +31,7 @@ export default function Login() {
         <button
           type="button"
           className="absolute right-7 w-6 h-6 top-1/2 -mt-3"
-          onClick={closeLoginHandle}
+          onClick={backToHome}
         >
           <ArrowRight />
         </button>
@@ -50,14 +50,12 @@ export default function Login() {
           toggleLoginType={() => {
             setLoginType('password')
           }}
-          onCloseLogin={closeLoginHandle}
         />
       ) : (
         <LoginWithPassword
           toggleLoginType={() => {
             setLoginType('otp')
           }}
-          onCloseLogin={closeLoginHandle}
         />
       )}
     </>

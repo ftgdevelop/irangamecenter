@@ -12,9 +12,8 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   env: {
     PROJECT_SERVER_TYPE: "https://",
-    PROJECT_SERVER_IDENTITY2:"identity.irangamecenter.com",
-    PROJECT_SERVER_IDENTITY:"identity.safaraneh.com",
-    PROJECT_SERVER_PAYMENT: "payline.safaraneh.com",
+    PROJECT_SERVER_IDENTITY:"identity.irangamecenter.com",
+    PROJECT_SERVER_PAYMENT: "payline.irangamecenter.com",
     PORT: '',
 
   }

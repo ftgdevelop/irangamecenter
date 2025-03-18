@@ -22,10 +22,10 @@ export const Identity = {
   UpdateProfileEmail: "/api/services/app/Profile/UpdateProfileEmail",
   UpdateProfilePhoneNumber: "/api/services/app/Profile/UpdateProfilePhoneNumber",
   SendEmailActivation: "/api/services/app/Account/SendEmailActivation",
+  LoginWithPassword: "/api/TokenAuth/Login",
   
   
   
-  // LoginWithPassword: "/api/TokenAuth/Login",
   // UpdateNewsletterUserProfile: "/api/services/app/Profile/UpdateNewsletterUserProfile",
   // SendVerificationSms: "/api/services/app/Profile/SendVerificationSms",
   // VerifySmsCode: "/api/services/app/Profile/VerifySmsCode",

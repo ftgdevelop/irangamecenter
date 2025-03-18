@@ -16,7 +16,6 @@ import { setReduxError } from "@/redux/errorSlice";
 
 type Props = {
     toggleLoginType: () => void;
-    onCloseLogin: () => void;
 }
 
 const LoginWithPassword: React.FC<Props> = props => {
@@ -30,7 +29,6 @@ const LoginWithPassword: React.FC<Props> = props => {
 
             const token = response.data?.result?.accessToken
             localStorage.setItem('Token', token);
-            props.onCloseLogin();
 
             dispatch(setReduxUser({
                 isAuthenticated: true,

@@ -78,24 +78,24 @@ export const updateCurrentUserProfile = async (params :UpdateUserParams , token:
 }
 
 
-export const updateNewsletterUserProfile = async (params: UpdateUserParams, token: string) => {
+// export const updateNewsletterUserProfile = async (params: UpdateUserParams, token: string) => {
 
-    try {
-        let response = await axios.put(
-            `${ServerAddress.Type}${ServerAddress.Identity}${Identity.UpdateNewsletterUserProfile}`,
-            params,
-            {
-                headers: {
-                    ...Headers,
-                    Authorization: `Bearer ${token}`
-                },
-            },
-        )
-        return response
-    } catch (error) {
-        return error
-    }
-}
+//     try {
+//         let response = await axios.put(
+//             `${ServerAddress.Type}${ServerAddress.Identity}${Identity.UpdateNewsletterUserProfile}`,
+//             params,
+//             {
+//                 headers: {
+//                     ...Headers,
+//                     Authorization: `Bearer ${token}`
+//                 },
+//             },
+//         )
+//         return response
+//     } catch (error) {
+//         return error
+//     }
+// }
 
 export const updateProfileEmail = async (emailAddress: string, token: string, acceptLanguage: string = 'fa-IR') => {
 
