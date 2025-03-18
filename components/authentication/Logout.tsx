@@ -40,7 +40,7 @@ const Logout: React.FC<Props> = props => {
     return (
         <button
             type="button"
-            className="flex w-full gap-3 items-center pr-5 rounded-xl"
+            className="flex w-full gap-3 items-center pr-3 rounded-xl"
             onClick={logout}
         >
             <Image
@@ -52,7 +52,7 @@ const Logout: React.FC<Props> = props => {
             />
             <div className="grow flex justify-between items-center px-3 py-5 text-sm text-red-500">
                 خروج از پروفایل
-                <ArrowTopLeft className="w-3.5 h-3.5 fill-current" />
+                <ArrowTopLeft className="w-3 h-3 fill-current" />
             </div>
         </button>
     )

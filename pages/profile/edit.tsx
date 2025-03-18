@@ -34,18 +34,14 @@ export default function ProfileEdit() {
     }
   }, [isAuthenticated, userLoading, router]);
 
-  const closeLoginHandle = () => {
-    router.push('/')
-  }
-
   if (!userInfo && !userLoading) {
     return null
   }
 
   return (
     <>
-      <header className="flex gap-5 p-4 mb-1">
-        <Link href="/profile" className="w-6 h-6" onClick={closeLoginHandle}>
+      <header className="flex items-center gap-5 p-4 mb-1 text-xs">
+        <Link href="/profile" className="w-6 h-6">
           <ArrowRight />
         </Link>
         اطلاعات کاربری

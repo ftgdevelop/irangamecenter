@@ -1,0 +1,59 @@
+import { Headers, Payment, ServerAddress } from "@/enum/url";
+import axios from "axios";
+
+export const getUserBalance = async (token: string) => {
+
+  try {
+    let response = await axios.get(
+      `${ServerAddress.Type}${ServerAddress.Payment}${Payment.GetBalance}`,
+      {
+        headers: {
+          ...Headers,
+          Currency: "IRR",
+          Authorization: `Bearer ${token}`
+        },
+      },
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+export const getDepositBankGateway = async (token: string) => {
+  try {
+    const response = await axios.get(
+      `${ServerAddress.Type}${ServerAddress.Payment}${Payment.GetDepositBankGateway}?CurrencyType=IRR`,
+      {
+        headers: {
+
+          ...Headers,
+          Currency: "IRR",
+          Authorization: `Bearer ${token}`,
+          "Accept-Language": "fa-IR",
+          Accept: 'application/json;charset=UTF-8'
+        },
+      },
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+export const makeDepositToken = async (params: { gatewayId: number; callBackUrl: string; amount: number; currencyType: string; ipAddress: number }, token: string) => {
+  try {
+    const response = await axios.post(
+      `${ServerAddress.Type}${ServerAddress.Payment}${Payment.MakeDepositToken}`,
+      params,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}

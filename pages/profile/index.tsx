@@ -3,10 +3,12 @@ import { ReactNode, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useAppSelector } from "@/hooks/use-store";
 import Skeleton from "@/components/shared/Skeleton";
-import { toPersianDigits } from "@/helpers";
+import { numberWithCommas, toPersianDigits } from "@/helpers";
 import Link from "next/link";
 import ArrowTopLeft from "@/components/icons/ArrowTopLeft";
 import Logout from "@/components/authentication/Logout";
+import LoadingFull from "@/components/shared/LoadingFull";
+import Loading from "@/components/icons/Loading";
 
 
 export default function Profile() {
@@ -16,15 +18,18 @@ export default function Profile() {
   const userInfo = useAppSelector(state => state.authentication.user);
   const userLoading = useAppSelector(state => state.authentication.getUserLoading);
 
+  const userBalanceLoading = useAppSelector(state => state.authentication.balanceLoading);
+  const userBalance = useAppSelector(state => state.authentication.balance);
+
   useEffect(() => {
-    let redirectTimout : undefined | NodeJS.Timeout;
+    let redirectTimout: undefined | NodeJS.Timeout;
     if (!isAuthenticated && !userLoading) {
-      redirectTimout = setTimeout(()=>{
+      redirectTimout = setTimeout(() => {
         router.push("/login");
       }, 1000);
     }
 
-    return(()=>{
+    return (() => {
       clearTimeout(redirectTimout);
     })
 
@@ -50,15 +55,7 @@ export default function Profile() {
     label: ReactNode;
     href: string;
     iconUrl: string;
-    leftIcon?: string;
   }[] = [
-      {
-        href: "#",
-        iconUrl: "/images/icons/2color/wallet-2.svg",
-        label: "کیف پول",
-        title: "کیف پول",
-        leftIcon : "/images/icons/greenCirclePlus.svg"
-      },
       {
         href: "#",
         iconUrl: "/images/icons/2color/cart-2.svg",
@@ -83,7 +80,7 @@ export default function Profile() {
         label: (
           <span className="flex gap-2">
             اطلاعات کاربری
-            <Image src="/images/icons/error.svg" alt="error" className="w-4 h-4" width={16} height={16} />
+            {userInfo?.emailAddress && !userInfo.isEmailConfirmed ? <Image src="/images/icons/error.svg" alt="error" className="w-4 h-4" width={16} height={16} /> : null}
           </span>
         ),
         title: "اطلاعات کاربری"
@@ -96,6 +93,12 @@ export default function Profile() {
       }
     ]
 
+  if (userLoading && !isAuthenticated) {
+    return (
+      <LoadingFull />
+    )
+  }
+
   return (
     <>
       <div className="p-3.5 flex gap-5 items-center">
@@ -104,12 +107,12 @@ export default function Profile() {
       </div>
       <div className="px-3.5">
 
-        <div className="bg-white bg-gradient-to-t from-[#ffe59a] to-[#feffd5] rounded-full flex justify-center items-center gap-2 px-5 py-0.5 text-black font-semibold text-3xs">
+        <Link href="/profile/edit" className="bg-white bg-gradient-to-t from-[#ffe59a] to-[#feffd5] rounded-full flex justify-center items-center gap-2 px-5 py-0.5 text-black font-semibold text-3xs">
           <Image src="/images/icons/error.svg" alt="error" className="w-6 h-6" width={24} height={24} />
           لطفا اطلاعات کاربری را تکمیل نمایید!
-        </div>
+        </Link>
 
-        <div className="rounded-t-xl bg-[#181d3a] flex items-center gap-3 p-4 py-5 mt-4 mb-2">
+        <div className="rounded-t-xl bg-[#181d3a] flex items-center gap-3 p-4 mt-4 mb-1.5 text-sm">
           <Image src="/images/icons/user-gradient.svg" alt="avatar" className="w-10 h-10" width={40} height={40} />
           {userLoading ? (
             <Skeleton className="w-2/5" />
@@ -120,11 +123,36 @@ export default function Profile() {
           )}
         </div>
 
+
+        <Link href="/profile/wallet" className="p-3 block bg-gradient-to-t from-[#01212e] to-[#102c33]">
+          <div className="flex justify-between items-center">
+            <div className="flex gap-3 items-center text-xs" >
+              <Image
+                src="/images/icons/2color/wallet-2.svg"
+                alt="wallet icon"
+                className="w-7 h-7 grow-0 shrink-0"
+                width={28}
+                height={28}
+              />
+              کیف پول
+              {userBalanceLoading ? (
+                <Loading className="w-5 h-5 fill-current" />
+              ) : userBalance ? (
+                <div className="text-green-400 text-xs font-semibold">
+                  {numberWithCommas(userBalance)} تومان
+                </div>) : null}
+            </div>
+
+            <Image src="/images/icons/greenCirclePlus.svg" alt="wallet" className="w-10 h-10" width={24} height={24} />
+
+          </div>
+        </Link>
+
         {items.map(item => (
           <Link
             key={item.title}
             href={item.href}
-            className="flex gap-3 items-center pr-5 rounded-xl"
+            className="flex gap-3 items-center pr-3 rounded-xl"
           >
             <Image
               src={item.iconUrl}
@@ -133,14 +161,9 @@ export default function Profile() {
               width={28}
               height={28}
             />
-            <div className="grow flex justify-between items-center px-3 py-5 border-b border-white/10 text-sm">
+            <div className="grow flex justify-between items-center px-3 py-5 border-b border-white/10 text-xs">
               {item.label}
-
-              {item.leftIcon ? (
-                <Image src={item.leftIcon} alt={item.title} className="w-10 h-10" width={24} height={24} />
-              ) :(
-                <ArrowTopLeft className="w-3.5 h-3.5 fill-current" />
-              )}
+              <ArrowTopLeft className="w-3 h-3 fill-current" />
             </div>
           </Link>
         ))}

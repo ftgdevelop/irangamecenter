@@ -6,10 +6,11 @@ import Footer from "./footer/Index";
 import { useRouter } from "next/router";
 import Error from "../Error";
 import Notification from "../Notification";
-import { setReduxUser } from "@/redux/authenticationSlice";
+import { setReduxBalance, setReduxUser } from "@/redux/authenticationSlice";
 import { getCurrentUserProfile } from "@/actions/identity";
 import { useAppDispatch } from "@/hooks/use-store";
 import FooterNavigation from "./footer/FooterNavigation";
+import { getUserBalance } from "@/actions/payment";
 
 type Props = {
     className?: string;
@@ -25,7 +26,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     let showFooter = true;
     let showFixedNav = true;
 
-    if (router.pathname === "/login" || router.pathname === "/profile/edit" || router.pathname === "/profile/change-password" ){
+    if (router.pathname === "/login" || router.pathname ==="/profile/wallet/charge" || router.pathname === "/profile/edit" || router.pathname === "/profile/change-password" || router.pathname === "/profile/wallet" ){
         showFooter = false;
         showHeader = false;
         showFixedNav = false;
@@ -63,10 +64,30 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
                 }
 
             }
-
             getUserData();
+
+            const fetchBalance = async () => {
+                dispatch(setReduxBalance({ balance: undefined, loading: true }));
+                const response: any = await getUserBalance(token);
+                if (response.data?.result?.amount !== null) {
+                    dispatch(setReduxBalance({ balance: response?.data?.result?.amount, loading: false }))
+                } else {
+                    dispatch(setReduxBalance({ balance: undefined, loading: false }));
+                } 
+            }
+            fetchBalance();
         }
     }, []);
+
+
+
+    useEffect(() => {
+    }, []);
+
+
+
+
+
 
     return (
         <>

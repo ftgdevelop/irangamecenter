@@ -140,6 +140,7 @@ const EditEmailForm = () => {
                                     invalidMessage: "invalidMessage",
                                     reqiredMessage: "reqiredMessage"
                                 })}
+                                showConfirmedText={!!(userInfo?.emailAddress && userInfo.isEmailConfirmed)}
                                 className='mb-5'
                                 setFieldValue={setFieldValue}
                                 errorText={errors.emailAddress as string}

@@ -15,7 +15,7 @@ export const numberWithCommas = (x: number) => {
         const y = x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return toPersianDigits(y);
     } else {
-        return "0";
+        return toPersianDigits("0");
     }
 }
 
@@ -121,3 +121,206 @@ export const persianNumbersToEnglish = (number: string) => {
     }
     return number;
 }
+
+
+const number3digitsToLeters = (number: number) => {
+    
+    const a = Math.floor(number / 100);
+    const remained = number % 100;
+    const b = Math.floor(remained / 10);
+    const c = Math.floor(number % 10);
+
+    let A: string = "";
+
+    switch (a) {
+        case 1:
+            A = "صد";
+            break;
+        case 2:
+            A = "دویست";
+            break;
+        case 3:
+            A = "سیصد";
+            break;
+        case 4:
+            A = "چهارصد";
+            break;
+        case 5:
+            A = "پانصد";
+            break;
+        case 6:
+            A = "ششصد";
+            break;
+        case 7:
+            A = "هفتصد";
+            break;
+        case 8:
+            A = "هشتصد";
+            break;
+        case 9:
+            A = "نهصد";
+            break;
+        default:
+            A = "";
+    }
+
+    let B: string = "";
+
+    switch (b) {
+        case 1:
+            switch (c) {
+                case 1:
+                    B = "یازده";
+                    break;
+                case 2:
+                    B = "دوازده";
+                    break;
+                case 3:
+                    B = "سیزده";
+                    break;
+                case 4:
+                    B = "چهارده";
+                    break;
+                case 5:
+                    B = "پانزده";
+                    break;
+                case 6:
+                    B = "شانزده";
+                    break;
+                case 7:
+                    B = "هفده";
+                    break;
+                case 8:
+                    B = "هجده";
+                    break;
+                case 9:
+                    B = "نوزده";
+                    break;
+                case 0:
+                    B = "ده";
+                    break;
+                default:
+                    B = "ده";
+            }
+            break;
+        case 2:
+            B = "بیست";
+            break;
+        case 3:
+            B = "سی";
+            break;
+        case 4:
+            B = "چهل";
+            break;
+        case 5:
+            B = "پنجاه";
+            break;
+        case 6:
+            B = "شصت";
+            break;
+        case 7:
+            B = "هفتاد";
+            break;
+        case 8:
+            B = "هشتاد";
+            break;
+        case 9:
+            B = "نود";
+            break;
+        default:
+            B = "";
+    }
+
+    let C: string = "";
+
+    if (b !== 1) {
+        switch (c) {
+            case 1:
+                C = "یک";
+                break;
+            case 2:
+                C = "دو";
+                break;
+            case 3:
+                C = "سه";
+                break;
+            case 4:
+                C = "چهار";
+                break;
+            case 5:
+                C = "پنج";
+                break;
+            case 6:
+                C = "شش";
+                break;
+            case 7:
+                C = "هفت";
+                break;
+            case 8:
+                C = "هشت";
+                break;
+            case 9:
+                C = "نه";
+                break;
+            default:
+                C = "";
+        }
+    }
+
+    const resultArray = [];
+
+    if (A) {
+        resultArray.push(A);
+    }
+    if (B) {
+        resultArray.push(B);
+    }
+    if (C) {
+        resultArray.push(C);
+    }
+
+    const result = resultArray.join(" و ");
+
+    return result;
+
+}
+
+export const rialsToLettersToman = (number: number) => {
+    const n = number / 10;
+    if (n < 1) {
+        return 0;
+    }
+    if (n >= 1000000000) {
+        return numberWithCommas(n) + " تومان";
+    }
+
+    const milions = Math.floor(n / 1000000);
+    const milionRemained = n % 1000000;
+    const thousands = Math.floor(milionRemained / 1000);
+    const thousandRemained = milionRemained % 1000;
+
+    const Milions = milions ? number3digitsToLeters(milions) + " میلیون " : "";
+    let Thousands: string;
+    if (thousands === 1){
+        Thousands = " هزار ";
+    }else{
+        Thousands = thousands ? number3digitsToLeters(thousands) + " هزار " : "";
+    }
+    const ThousandRemained = thousandRemained ? number3digitsToLeters(thousandRemained) : "";
+
+    const resultArray = [];
+
+    if (Milions) {
+        resultArray.push(Milions);
+    }
+    if (Thousands) {
+        resultArray.push(Thousands);
+    }
+    if (ThousandRemained) {
+        resultArray.push(ThousandRemained);
+    }
+    const result = resultArray.join(" و ");
+
+    return (result + " تومان");
+}
+

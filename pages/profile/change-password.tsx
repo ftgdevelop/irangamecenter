@@ -113,7 +113,7 @@ export default function ChangePassword() {
 
   return (
     <>
-      <header className="flex gap-5 p-4 mb-5">
+      <header className="flex items-center gap-5 p-4 mb-5 text-xs">
         <Link href="/profile" className="w-6 h-6" onClick={closeLoginHandle}>
           <ArrowRight />
         </Link>
