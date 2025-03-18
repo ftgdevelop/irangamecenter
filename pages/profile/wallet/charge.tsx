@@ -45,7 +45,7 @@ const Charge = () => {
                         <div className="text-green-400 text-xs font-semibold">
                             {numberWithCommas(userBalance)} تومان
                         </div>
-                    ) : null}
+                    ) : <div className="text-green-400 text-xs font-semibold"> 0 </div>}
 
                 </div>
 

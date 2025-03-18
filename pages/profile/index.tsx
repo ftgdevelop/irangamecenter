@@ -140,7 +140,7 @@ export default function Profile() {
               ) : userBalance ? (
                 <div className="text-green-400 text-xs font-semibold">
                   {numberWithCommas(userBalance)} تومان
-                </div>) : null}
+                </div>) : <div className="text-green-400 text-xs font-semibold"> 0 </div>}
             </div>
 
             <Image src="/images/icons/greenCirclePlus.svg" alt="wallet" className="w-10 h-10" width={24} height={24} />
