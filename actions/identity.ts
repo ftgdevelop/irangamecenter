@@ -5,7 +5,7 @@ import axios from "axios";
 export const sendOtp = async (param: { emailOrPhoneNumber: string }, acceptLanguage: string = 'fa-IR') => {
 
     try {
-        let response = await axios.post(
+        const response = await axios.post(
             `${ServerAddress.Type}${ServerAddress.Identity}${Identity.SendOTP}`,
             param,
             {
@@ -21,11 +21,31 @@ export const sendOtp = async (param: { emailOrPhoneNumber: string }, acceptLangu
     }
 }
 
-export const registerOrLogin = async (param: { emailOrPhoneNumber: string, code: string; }, acceptLanguage: string = 'fa-IR') => {
+export const loginOTP = async (param: { emailOrPhoneNumber: string, code: string; }, acceptLanguage: string = 'fa-IR') => {
 
     try {
         const response = await axios.post(
-            `${ServerAddress.Type}${ServerAddress.Identity}${Identity.RegisterOrLogin}`,
+            `${ServerAddress.Type}${ServerAddress.Identity}${Identity.LoginOTP}`,
+            param,
+            {
+                headers: {
+                    ...Headers,
+                    "Accept-Language": acceptLanguage
+                }
+            },
+        );
+
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
+export const registerOTP = async (param: { emailOrPhoneNumber: string, code: string;password: string; }, acceptLanguage: string = 'fa-IR') => {
+
+    try {
+        const response = await axios.post(
+            `${ServerAddress.Type}${ServerAddress.Identity}${Identity.RegisterOTP}`,
             param,
             {
                 headers: {
@@ -44,7 +64,7 @@ export const registerOrLogin = async (param: { emailOrPhoneNumber: string, code:
 export const getCurrentUserProfile = async (token: string) => {
 
     try {
-        let response = await axios.get(
+        const response = await axios.get(
             `${ServerAddress.Type}${ServerAddress.Identity}${Identity.GetCurrentUserProfileForEdit}`,
             {
                 headers: {
@@ -61,7 +81,7 @@ export const getCurrentUserProfile = async (token: string) => {
 export const updateCurrentUserProfile = async (params :UpdateUserParams , token:string) => {
 
     try {
-        let response = await axios.put(
+        const response = await axios.put(
             `${ServerAddress.Type}${ServerAddress.Identity}${Identity.UpdateCurrentUserProfile}`,
             params,
             {
@@ -100,12 +120,13 @@ export const updateCurrentUserProfile = async (params :UpdateUserParams , token:
 export const updateProfileEmail = async (emailAddress: string, token: string, acceptLanguage: string = 'fa-IR') => {
 
     try {
-        let response = await axios.put(
+        const response = await axios.put(
             `${ServerAddress.Type}${ServerAddress.Identity}${Identity.UpdateProfileEmail}`,
             { emailAddress: emailAddress },
             {
                 headers: {
                     ...Headers,
+                    "Accept-Language":acceptLanguage,
                     Authorization: `Bearer ${token}`
                 },
             },
@@ -121,7 +142,7 @@ export const updateProfileEmail = async (emailAddress: string, token: string, ac
 export const updateProfilePhoneNumber = async (phoneNumber: string, token: string) => {
 
     try {
-        let response = await axios.put(
+        const response = await axios.put(
             `${ServerAddress.Type}${ServerAddress.Identity}${Identity.UpdateProfilePhoneNumber}`,
             { phoneNumber: phoneNumber },
             {
@@ -140,7 +161,7 @@ export const updateProfilePhoneNumber = async (phoneNumber: string, token: strin
 export const loginWithPassword = async (params: {emailOrPhoneNumber :string , password:string} , acceptLanguage: string = 'fa-IR') => {
 
     try {
-        let response = await axios.post(
+        const response = await axios.post(
             `${ServerAddress.Type}${ServerAddress.Identity}${Identity.LoginWithPassword}`,
             params,
             {
@@ -181,7 +202,7 @@ export const changePasswordByAuthorizedUser = async (param: { newPassword : stri
 export const sendEmailActivation = async (emailAddress: string, token: string, acceptLanguage: string = 'fa-IR') => {
 
     try {
-        let response = await axios.post(
+        const response = await axios.post(
             `${ServerAddress.Type}${ServerAddress.Identity}${Identity.SendEmailActivation}`,
             {
                 emailAddress: emailAddress
@@ -190,6 +211,29 @@ export const sendEmailActivation = async (emailAddress: string, token: string, a
                 headers: {
                     ...Headers,
                     Authorization: `Bearer ${token}`,
+                    "Accept-Language": acceptLanguage
+                }
+            },
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
+export const changePassword = async (params: { currentPassword: string; newPassword: string; token: string }, acceptLanguage: string = 'fa-IR') => {
+
+    try {
+        const response = await axios.post(
+            `${ServerAddress.Type}${ServerAddress.Identity}${Identity.ChangePassword}`,
+            {
+                currentPassword: params.currentPassword,
+                newPassword: params.newPassword
+            },
+            {
+                headers: {
+                    ...Headers,
+                    Authorization: `Bearer ${params.token}`,
                     "Accept-Language": acceptLanguage
                 }
             },

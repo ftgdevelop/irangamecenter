@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
   env: {
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_IDENTITY:"identity.irangamecenter.com",
-    PROJECT_SERVER_PAYMENT: "payline.irangamecenter.com",
+    PROJECT_SERVER_PAYMENT: "payline.safaraneh.com",
     PORT: '',
 
   }

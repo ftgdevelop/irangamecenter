@@ -11,9 +11,10 @@ import { Form, Formik } from 'formik';
 import FormikField from '@/components/shared/FormikField';
 
 import { setReduxNotification } from '@/redux/notificationSlice';
-import { changePasswordByAuthorizedUser } from '@/actions/identity';
+import { changePassword } from '@/actions/identity';
 import Loading from '@/components/icons/Loading';
 import InfoCircle from '@/components/icons/InfoCircle';
+import { setReduxError } from '@/redux/errorSlice';
 
 export default function ChangePassword() {
   const router = useRouter();
@@ -48,11 +49,13 @@ export default function ChangePassword() {
   }
 
   const initialValues = {
+    currentPassword:"",
     newPassword: "",
     repeatPassword: ""
   }
 
   const submitHandler = async (parameters: {
+    currentPassword: string;
     newPassword: string;
     repeatPassword: string;
   }) => {
@@ -68,7 +71,8 @@ export default function ChangePassword() {
       isVisible: false
     }));
 
-    const response: any = await changePasswordByAuthorizedUser({
+    const response: any = await changePassword({
+      currentPassword: parameters.currentPassword,
       newPassword: parameters.newPassword,
       token: token
     })
@@ -85,9 +89,12 @@ export default function ChangePassword() {
       router.push("/profile");
 
     } else {
-      dispatch(setReduxNotification({
+      
+      const errorMessage = response?.response?.data?.error?.message;
+
+      dispatch(setReduxError({
         status: 'error',
-        message: "ارسال اطلاعات ناموفق",
+        message: errorMessage || "ارسال اطلاعات ناموفق",
         isVisible: true
       }));
 
@@ -145,6 +152,21 @@ export default function ChangePassword() {
             }
             return (
               <Form className="mx-3" autoComplete="off">
+
+                <FormikField
+                  isPassword
+                  className="mb-5"
+                  setFieldValue={setFieldValue}
+                  errorText={errors.currentPassword as string}
+                  id='currentPassword'
+                  name='currentPassword'
+                  isTouched={touched.currentPassword}
+                  label={"کلمه عبور فعلی"}
+                  validateFunction={(value: string) => validatePassword(value)}
+                  value={values.currentPassword!}
+                />
+
+                
 
                 <FormikField
                   isPassword

@@ -26,7 +26,7 @@ export default function Profile() {
     if (!isAuthenticated && !userLoading) {
       redirectTimout = setTimeout(() => {
         router.push("/login");
-      }, 1000);
+      }, 500);
     }
 
     return (() => {
@@ -136,7 +136,7 @@ export default function Profile() {
               />
               کیف پول
               {userBalanceLoading ? (
-                <Loading className="w-5 h-5 fill-current" />
+                <Loading className="w-5 h-5 fill-current animate-spin" />
               ) : userBalance ? (
                 <div className="text-green-400 text-xs font-semibold">
                   {numberWithCommas(userBalance)} تومان

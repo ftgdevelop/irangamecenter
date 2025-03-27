@@ -15,7 +15,8 @@ export const ServerAddress = {
 
 export const Identity = {
   SendOTP: "/api/services/app/OTP/SendOTP",
-  RegisterOrLogin: "/api/services/app/OTP/RegisterOrLogin",
+  LoginOTP:"/api/services/app/OTP/Login",
+  RegisterOTP:"/api/services/app/OTP/Register",
   ChangePasswordByAuthorizedUser:"/api/services/app/Account/ChangePasswordByAuthorizedUser",
   GetCurrentUserProfileForEdit: "/api/services/app/Profile/GetCurrentUserProfileForEdit",
   UpdateCurrentUserProfile: "/api/services/app/Profile/UpdateCurrentUserProfile",
@@ -23,6 +24,7 @@ export const Identity = {
   UpdateProfilePhoneNumber: "/api/services/app/Profile/UpdateProfilePhoneNumber",
   SendEmailActivation: "/api/services/app/Account/SendEmailActivation",
   LoginWithPassword: "/api/TokenAuth/Login",
+  ChangePassword: "/api/services/app/Account/ChangePassword",
   
   
   
@@ -34,7 +36,6 @@ export const Identity = {
   // ResetPassword: "/api/services/app/Account/ResetPassword",
   // ForgotPasswordByEmail: "/api/services/app/Account/ForgotPassword",
   // Register: "/api/services/app/Account/Register",
-  // ChangePassword: "/api/services/app/Account/ChangePassword",
   // ActivateEmail: "/api/services/app/Account/ActivateEmail",
 };
 

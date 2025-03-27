@@ -8,7 +8,7 @@ import Error from "../Error";
 import Notification from "../Notification";
 import { setReduxBalance, setReduxUser } from "@/redux/authenticationSlice";
 import { getCurrentUserProfile } from "@/actions/identity";
-import { useAppDispatch } from "@/hooks/use-store";
+import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import FooterNavigation from "./footer/FooterNavigation";
 import { getUserBalance } from "@/actions/payment";
 
@@ -21,6 +21,8 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     const router = useRouter();
 
     const dispatch = useAppDispatch();
+
+    const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
 
     let showHeader = true;
     let showFooter = true;
@@ -65,29 +67,27 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
             }
             getUserData();
-
-            const fetchBalance = async () => {
-                dispatch(setReduxBalance({ balance: undefined, loading: true }));
-                const response: any = await getUserBalance(token);
-                if (response.data?.result?.amount !== null) {
-                    dispatch(setReduxBalance({ balance: response?.data?.result?.amount, loading: false }))
-                } else {
-                    dispatch(setReduxBalance({ balance: undefined, loading: false }));
-                } 
-            }
-            fetchBalance();
         }
     }, []);
 
+    useEffect(()=>{
+        const fetchBalance = async () => {
+            
+            const token = localStorage?.getItem('Token');
+            if(!token) return;
 
-
-    useEffect(() => {
-    }, []);
-
-
-
-
-
+            dispatch(setReduxBalance({ balance: undefined, loading: true }));
+            const response: any = await getUserBalance(token);
+            if (response.data?.result?.amount !== null) {
+                dispatch(setReduxBalance({ balance: response?.data?.result?.amount, loading: false }))
+            } else {
+                dispatch(setReduxBalance({ balance: undefined, loading: false }));
+            } 
+        }
+        if(isAuthenticated){
+            fetchBalance();
+        }
+    },[isAuthenticated]);
 
     return (
         <>

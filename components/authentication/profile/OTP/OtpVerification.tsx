@@ -1,17 +1,18 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import { toPersianDigits } from "@/helpers";
 import { useEffect, useState } from "react";
-import ArrowTopLeft from "../icons/ArrowTopLeft";
-import { registerOrLogin } from "@/actions/identity";
+import ArrowTopLeft from "../../../icons/ArrowTopLeft";
+import { loginOTP } from "@/actions/identity";
 import { useAppDispatch } from "@/hooks/use-store";
-import Skeleton from "../shared/Skeleton";
-import CountDown from "../shared/CountDown";
-import Refresh from "../icons/Refresh";
+import Skeleton from "../../../shared/Skeleton";
+import CountDown from "../../../shared/CountDown";
+import Refresh from "../../../icons/Refresh";
 import { PinInput } from "@mantine/core";
 import { setReduxUser } from "@/redux/authenticationSlice";
 import { setReduxNotification } from "@/redux/notificationSlice";
-import Loading from "../icons/Loading";
-
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+import Loading from "../../../icons/Loading";
+import OtpRegister from "./OtpRegister";
 
 type Props = {
     editMobileNumber: () => void;
@@ -27,6 +28,8 @@ const OtpVerification: React.FC<Props> = props => {
     const dispatch = useAppDispatch();
 
     const [verificationCode, setVerificationCode] = useState<string>("");
+
+    const [registerMode, setRegisterMode] = useState<boolean>(false);
 
     const [status, setStatus ] = useState<undefined | "success" | "error">(undefined);
 
@@ -67,29 +70,38 @@ const OtpVerification: React.FC<Props> = props => {
                 getUserLoading: true
             }));
 
-            const response: any = await registerOrLogin({ code: code, emailOrPhoneNumber: props.savedPhoneNumber });
+            const response: any = await loginOTP({ code: code, emailOrPhoneNumber: props.savedPhoneNumber });
 
             setRegisterLoading(false);
+
             if (response.status == 200) {
                 props.onSuccessLogin(response);
                 setStatus("success");
             } else {
+                const errorMessage = response?.response?.data?.error?.message;
+
                 let message = "";
-                if (response?.response?.data?.error?.message) {
+                if (errorMessage) {
                     message = response.response.data.error.message;
                 }
-                dispatch(setReduxNotification({
-                    status: 'error',
-                    message: message,
-                    isVisible: true
-                }));
-                setStatus("error");
-                dispatch(setReduxUser({
-                    isAuthenticated: false,
-                    user: {},
-                    getUserLoading: false
-                }));
 
+                if(errorMessage === "UserNotFound"){
+                    setRegisterMode(true);
+                }else{
+
+                    dispatch(setReduxNotification({
+                        status: 'error',
+                        message: message,
+                        isVisible: true
+                    }));
+                    setStatus("error");
+                    dispatch(setReduxUser({
+                        isAuthenticated: false,
+                        user: {},
+                        getUserLoading: false
+                    }));
+                }
+                
             }
         }
     }
@@ -97,6 +109,16 @@ const OtpVerification: React.FC<Props> = props => {
     let codeIsEntered = false;
     if (verificationCode && verificationCode.length === 6) {
         codeIsEntered = true;
+    }
+
+    if(registerMode){
+        return(
+            <OtpRegister 
+                onSuccessLogin={props.onSuccessLogin}
+                code={verificationCode}
+                phoneNumber={props.savedPhoneNumber}
+            />
+        )
     }
 
     return (
@@ -143,7 +165,7 @@ const OtpVerification: React.FC<Props> = props => {
                         type='button'
                         className='my-10 text-sm flex justify-center gap-2 items-center mx-auto'
                         onClick={() => {
-                            props.sendOtpCode("+98" + (props.savedPhoneNumber.slice(1)) , () => {
+                            props.sendOtpCode(props.savedPhoneNumber , () => {
                                 setRemaindSeconds(80);
                             });
                         }}
