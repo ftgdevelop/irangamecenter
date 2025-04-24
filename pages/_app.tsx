@@ -1,6 +1,7 @@
 import Layout from "@/components/shared/layout/Layout";
 import { store } from "@/redux";
 import '@mantine/core/styles.css';
+import '@/styles/mobiscroll.scss';
 import "@/styles/globals.scss";
 import { createTheme, MantineProvider } from "@mantine/core";
 import type { AppProps } from "next/app";

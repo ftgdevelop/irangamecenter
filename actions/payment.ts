@@ -1,4 +1,5 @@
 import { Headers, Payment, ServerAddress } from "@/enum/url";
+import { GetTransactionParams } from "@/types/payment";
 import axios from "axios";
 
 export const getUserBalance = async (token: string) => {
@@ -56,4 +57,26 @@ export const makeDepositToken = async (params: { gatewayId: number; callBackUrl:
   } catch (error) {
     return error
   }
+}
+
+
+export const getTransactionDeposit = async (params:GetTransactionParams, token:string, acceptLanguage: string = 'fa-IR') => {
+  try {
+    const response = await axios.get(
+      `${ServerAddress.Type}${ServerAddress.Payment}${Payment.GetTransactionDeposit}`,
+      {
+        params:params,
+        headers: {
+          ...Headers,
+          Currency: "IRR",
+          Authorization: `Bearer ${token}`,
+          "Accept-Language": "en-US"
+        }
+      }
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+
 }

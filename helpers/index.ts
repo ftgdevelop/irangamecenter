@@ -19,7 +19,7 @@ export const numberWithCommas = (x: number) => {
     }
 }
 
-export const dateDiplayFormat = ({ date, format, locale }: { date: string; format?: "weekDayNumber" | "m" | "d" | "HH:mm"|"HH:mm:ss"| "dd mm"| "ddd dd mm"| "ddd dd mm yyyy" | "dd mm yyyy" | "yyyy/mm/dd" | "YYYY-MM-DD" | "yyyy/mm/dd h:m" , locale?: string }): string => {
+export const dateDiplayFormat = ({ date, format, locale }: { date: string; format?: "weekDayNumber" | "m" | "d" | "HH:mm"|"HH:mm:ss"| "dd mm"| "ddd dd mm"| "ddd dd mm yyyy" | "dd mm yyyy" | "yyyy/mm/dd" | "YYYY-MM-DD" | "yyyy/mm/dd h:m" | "yyyy MMM" , locale?: string }): string => {
 
     if (!date) return "";
 
@@ -82,6 +82,10 @@ export const dateDiplayFormat = ({ date, format, locale }: { date: string; forma
 
     if (format === "ddd dd mm yyyy"){
         return (`${weekDay} ${day} ${month} ${year}`)
+    }
+
+    if (format === "yyyy MMM"){
+        return(`${month} ماه ${year}`)
     }
 
     return date;

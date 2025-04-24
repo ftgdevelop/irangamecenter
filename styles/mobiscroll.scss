@@ -1,0 +1,244 @@
+label.mbsc-form-control-wrapper {
+  margin: 0 !important;
+}
+
+label.mbsc-form-control-wrapper .mbsc-textfield {
+  .domestic-hotel-search-form & {
+    border: 1px solid #aaa;
+    border-radius: 8px;
+    padding-top: 15px;
+    height: 48px;
+    font-size: 14px;
+    padding-right: 38px;
+  }
+
+  .persian-datepicker-wrapper & {
+    font-family: 'vazir', sans-serif;
+    background: #2e3e4b;
+    color: #fff;
+    border-radius: 100px;
+    height: 40px;
+  }
+}
+
+.persian-date-picker .mbsc-font,
+.mobi-date-picker-header {
+  font-family: 'vazir', sans-serif;
+}
+
+.red .mbsc-calendar-day-text {
+  color: red;
+}
+
+.mbsc-calendar-marks {
+  display: none;
+}
+
+.mbsc-popup-content {
+  display: flex;
+  flex-direction: column;
+
+  .mobi-date-picker-header {
+    order: 1;
+  }
+
+  .mbsc-datepicker {
+    order: 2;
+  }
+
+  .mobi-date-picker-footer {
+    order: 3;
+  }
+
+}
+
+.mobi-range-picker .mbsc-calendar-slide {
+  padding: 0 15px !important;
+
+  .mbsc-calendar-week-days {
+    margin: 10px 0px 15px;
+    font-size: 26px;
+  }
+}
+
+.mbsc-calendar-cell {
+  padding-bottom: 0 !important;
+}
+
+.mbsc-calendar-title {
+  font-weight: bold;
+  color: #000;
+  font-size: 19px;
+}
+
+.mbsc-calendar-header {
+  padding-top: 15px;
+}
+
+.mbsc-calendar-controls {
+  .mbsc-calendar-button-next {
+    box-shadow: 1px 1px 5px 0 #00000054;
+    font-size: 13px;
+    width: 22px;
+    height: 22px;
+
+    .mobi-date-picker.persian-date-picker & {
+      margin-left: 20px;
+    }
+
+    .mobi-date-picker:not(.persian-date-picker) & {
+      margin-right: 20px;
+    }
+  }
+
+  .mbsc-calendar-button-prev {
+    box-shadow: 1px 1px 5px 0 #00000054;
+    font-size: 13px;
+    width: 22px;
+    height: 22px;
+
+    .mobi-date-picker.persian-date-picker & {
+      margin-right: 20px;
+    }
+
+    .mobi-date-picker:not(.persian-date-picker) & {
+      margin-left: 20px;
+    }
+  }
+}
+
+
+.mobi-date-picker .mbsc-calendar-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  .mbsc-calendar-title-wrapper{
+    order: 2;
+    text-align: center;
+    button{
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+  .mbsc-calendar-button-prev{
+    order: 1;
+  }
+  .mbsc-calendar-button-next{
+    order: 3;
+  }
+}
+
+.mobiscroll-datepicker-wrapper .mbsc-textfield-wrapper .mbsc-textfield{
+  font-size: 13px;
+  [dir="rtl"] & {
+    text-align: right;
+  }
+}
+.mobiscroll-datepicker-wrapper.theme1 .mbsc-textfield {
+  border: 1px solid #999;
+}
+.mobiscroll-datepicker-wrapper.simple .mbsc-textfield {
+  height: 2.5rem;
+  border: 1px solid #d4d4d4;
+}
+
+.moboscroll-time-picker-wrapper {
+  &.hasError {
+    .mbsc-textfield-inner .mbsc-textfield {
+      border: 1px solid #ef4444;
+    }
+  }
+  .mbsc-textfield-inner .mbsc-textfield {
+    border: 1px solid #d4d4d4;
+    border-radius: 6px;
+    height: 40px;
+    body.theme-2 &{
+    border: 1px solid #a3a3a3;
+    height: 3.25rem;
+    }
+  }
+  .mbsc-form-control-wrapper{
+    &:after, &:before{
+      display: none;
+    }
+  }
+}
+
+.mbsc-ios.mbsc-textfield-box, .mbsc-ios.mbsc-textfield-outline {
+  background: #2e3e4b;
+  border: 0 none !important;
+  border-radius: 30px;
+  color: #fff;
+  height: 45px;
+}
+.mbsc-popup-wrapper.mbsc-popup-wrapper-bottom {
+  background: #0000008a;
+  backdrop-filter: blur(2px);
+  .mbsc-ios.mbsc-scroller-bottom{
+    background: #192a39;
+  }
+  .mbsc-ios.mbsc-scroller-wheel-overlay-bottom,
+  .mbsc-ios.mbsc-scroller-wheel-overlay-top {
+    background: linear-gradient(#192a39, transparent, #192a39);
+  }
+}
+
+.mbsc-ios.mbsc-scroller-wheel-cont-bottom.mbsc-scroller-wheel-cont-3d, .mbsc-ios.mbsc-scroller-wheel-cont-top.mbsc-scroller-wheel-cont-3d{
+  background-color: #192a39 !important;
+}
+body .mbsc-ios.mbsc-scroller-wheel-item-2d, body .mbsc-ios.mbsc-scroller-wheel-item.mbsc-selected{
+  color: #a93aff;
+}
+
+body .mbsc-ios.mbsc-scroller-wheel-item {
+  font-family: 'vazir';
+  font-size: 18px;
+  text-align: center !important;
+}
+
+body .mbsc-popup-wrapper{
+  .mbsc-popup-button-bottom.mbsc-popup-button-close {
+    background: #011425;
+    color: #fff;
+    border-radius: 50px;
+    font-size: 15px;
+    padding: 4px 25px;
+    margin: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: normal;
+    font-family: "iranyekan" ;
+    font-size: 14px;
+    width: 100px;
+  }
+  button.mbsc-popup-button.mbsc-popup-button-bottom.mbsc-rtl.mbsc-hb.mbsc-popup-button-primary {
+    background: #a93aff;
+    color: #fff;
+    border-radius: 50px;
+    padding: 4px 25px;
+    margin: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: normal;
+    font-family: "iranyekan" ;
+    font-size: 14px;
+    width: calc(100% - 115px);
+  }
+  .mbsc-ios.mbsc-popup-buttons-bottom, .mbsc-ios.mbsc-popup-buttons-top {
+    background: #192a39;
+    border: 0 none;
+    padding: 5px 15px 25px;
+  }
+  .mbsc-ios.mbsc-popup-bottom{
+    border: 0 none;
+  }
+  .mbsc-flex-col.mbsc-flex-1-1.mbsc-popup-body.mbsc-popup-body-bottom {
+    margin: 15px;
+    border-radius: 20px;
+    background: transparent;
+  
+  }
+  .mbsc-ios.mbsc-popup-buttons{
+    order: 1;
+  }
+}

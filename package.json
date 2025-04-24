@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mobiscroll/react": "npm:@mobiscroll/datepicker-react-next@^5.30.0",
     "@mantine/core": "^7.17.0",
     "@mantine/hooks": "^7.17.0",
     "@reduxjs/toolkit": "^2.5.1",

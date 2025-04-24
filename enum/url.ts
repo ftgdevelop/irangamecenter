@@ -11,7 +11,12 @@ export const ServerAddress = {
   Type: process.env.PROJECT_SERVER_TYPE,
   Identity: process.env.PROJECT_SERVER_IDENTITY,
   Payment: process.env.PROJECT_SERVER_PAYMENT,
+  Strapi: process.env.PROJECT_SERVER_STRAPI,
 };
+
+export const Strapi = {
+  Pages:"/api/pages"
+}
 
 export const Identity = {
   SendOTP: "/api/services/app/OTP/SendOTP",
@@ -44,13 +49,12 @@ export const Payment = {
   GetBalance:"/api/services/app/Deposit/GetBalance",
   GetDepositBankGateway:"/api/services/app/UserDepositBankGateway/GetAll",
   MakeDepositToken:"/api/services/app/UserDepositBankGateway/MakeToken",
-
+  GetTransactionDeposit:"/api/services/app/TransactionDeposit/GetAll",
 
   // ValidateDiscountCode:"/api/services/app/Discount/Validate",
   // RegisterDiscountCode: "/api/services/app/Discount/Register",
   // GetBankGateway:"/api/services/app/ReserveBankGateway/GetAll",
   // MakeToken:"/api/services/app/ReserveBankGateway/MakeToken",
-  // GetTransactionDeposit:"/api/services/app/TransactionDeposit/GetAll",
   // ConfirmByDeposit:"/api/services/app/DepositReserve/ConfirmByDeposit"
 };
 

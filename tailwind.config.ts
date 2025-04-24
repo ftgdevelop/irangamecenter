@@ -12,8 +12,15 @@ export default {
         'large': '2rem',
       },
       spacing: {
+        '13': '3.25rem',
         '18': '4.5rem',
         '17': '4.25rem',
+        '4.5': '1.125rem',
+        '2px': '2px',
+        '5px': '5px',
+        '550': '550px',
+        '600': '600px',
+        '480': '480px'
       },
       fontSize: {
         '4xs': '9px',

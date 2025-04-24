@@ -28,7 +28,16 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     let showFooter = true;
     let showFixedNav = true;
 
-    if (router.pathname === "/login" || router.pathname ==="/profile/wallet/charge" || router.pathname === "/profile/edit" || router.pathname === "/profile/change-password" || router.pathname === "/profile/wallet" ){
+    if (
+        [
+            "/login",
+            "/profile/edit",
+            "/profile/change-password",
+            "/profile/wallet",
+            "/profile/wallet/charge",
+            "/profile/wallet/faq",
+            "/profile/wallet/transactions"
+        ].includes(router.pathname)){
         showFooter = false;
         showHeader = false;
         showFixedNav = false;
