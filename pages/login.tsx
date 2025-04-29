@@ -5,9 +5,21 @@ import { useRouter } from 'next/router'
 import LoginWithPassword from '@/components/authentication/LoginWithPassword'
 import { useAppSelector } from '@/hooks/use-store'
 import Otp from '@/components/authentication/profile/OTP'
+import { useSearchParams } from "next/navigation";
 
 export default function Login() {
-  const [loginType, setLoginType] = useState<'otp' | 'password'>('otp')
+
+  const searchParams = useSearchParams();
+  
+  const phoneNumber = searchParams.get('phoneNumber');
+  const mode = searchParams.get('mode');
+  const [loginType, setLoginType] = useState<'otp' | 'password'>('otp');
+
+  useEffect(()=>{
+    if(mode === "password"){
+      setLoginType("password");
+    }
+  },[mode])
 
   const router = useRouter()
 
@@ -53,6 +65,7 @@ export default function Login() {
         />
       ) : (
         <LoginWithPassword
+          initialPhoneNumber={phoneNumber?("+98"+phoneNumber) : undefined}
           toggleLoginType={() => {
             setLoginType('otp')
           }}

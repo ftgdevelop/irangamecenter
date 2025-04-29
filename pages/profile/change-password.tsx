@@ -121,7 +121,7 @@ export default function ChangePassword() {
         <Link href="/profile" className="w-6 h-6">
           <ArrowRight />
         </Link>
-        مدیریت کلمه
+        مدیریت کلمه عبور
       </header>
 
       {!!isAuthenticated && (

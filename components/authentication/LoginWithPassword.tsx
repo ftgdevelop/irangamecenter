@@ -2,7 +2,7 @@
 
 import { validateRequired } from "@/helpers/formik-validation"
 import { Form, Formik } from "formik"
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ArrowTopLeft from "../icons/ArrowTopLeft";
 import Link from "next/link";
 import Loading from "../icons/Loading";
@@ -16,13 +16,22 @@ import { setReduxError } from "@/redux/errorSlice";
 
 type Props = {
     toggleLoginType: () => void;
+    initialPhoneNumber?: string;
 }
 
 const LoginWithPassword: React.FC<Props> = props => {
 
     const dispatch = useAppDispatch();
 
+    const passwordRef  = useRef<HTMLElement>(null);
+
     const [loading, setLoading] = useState<boolean>(false);
+
+    useEffect(()=>{
+        if(props.initialPhoneNumber){
+            passwordRef.current?.focus();
+        }
+    },[props.initialPhoneNumber]);
 
     const onSuccessLogin = (response: any) => {
         if (response && response.status === 200) {
@@ -102,7 +111,7 @@ const LoginWithPassword: React.FC<Props> = props => {
 
             <Formik
                 validate={() => { return {} }}
-                initialValues={{ phoneNumber: "", password: "" }}
+                initialValues={{ phoneNumber: props.initialPhoneNumber || "", password: "" }}
                 onSubmit={submitHandler}
             >
                 {({ errors, touched, values, setFieldValue }) => {
@@ -127,6 +136,7 @@ const LoginWithPassword: React.FC<Props> = props => {
                                         setFieldValue('phoneNumber', v)
                                     }}
                                     value={values.phoneNumber}
+                                    initialValue={values.phoneNumber}
                                     name='phoneNumber'
                                     isTouched={touched.phoneNumber}
                                     errorText={errors.phoneNumber}
@@ -137,6 +147,7 @@ const LoginWithPassword: React.FC<Props> = props => {
                             <div className="self-stretch">
 
                                 <FormikField
+                                    ref={passwordRef}
                                     heightClassName="h-14"
                                     isPassword
                                     className="mb-8"
@@ -178,7 +189,7 @@ const LoginWithPassword: React.FC<Props> = props => {
                             </button>
 
                             <Link
-                                href={"/forget-password"}
+                                href={"/profile/forget-password"}
                                 className="text-[#2ac99f] font-semibold text-sm"
                             >
                                 فراموشی رمز عبور

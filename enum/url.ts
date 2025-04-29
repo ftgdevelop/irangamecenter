@@ -30,15 +30,15 @@ export const Identity = {
   SendEmailActivation: "/api/services/app/Account/SendEmailActivation",
   LoginWithPassword: "/api/TokenAuth/Login",
   ChangePassword: "/api/services/app/Account/ChangePassword",
+  ForgotPasswordByPhoneNumber: "/api/services/app/Account/ForgotPasswordByPhoneNumber",
+  ForgotPasswordVerification: "/api/services/app/Account/ForgotPasswordVerification",
+  ResetPassword: "/api/services/app/Account/ResetPassword",
   
   
   
   // UpdateNewsletterUserProfile: "/api/services/app/Profile/UpdateNewsletterUserProfile",
   // SendVerificationSms: "/api/services/app/Profile/SendVerificationSms",
   // VerifySmsCode: "/api/services/app/Profile/VerifySmsCode",
-  // ForgotPasswordByPhoneNumber: "/api/services/app/Account/ForgotPasswordByPhoneNumber",
-  // ForgotPasswordVerification: "/api/services/app/Account/ForgotPasswordVerification",
-  // ResetPassword: "/api/services/app/Account/ResetPassword",
   // ForgotPasswordByEmail: "/api/services/app/Account/ForgotPassword",
   // Register: "/api/services/app/Account/Register",
   // ActivateEmail: "/api/services/app/Account/ActivateEmail",

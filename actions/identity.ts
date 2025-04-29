@@ -243,3 +243,72 @@ export const changePassword = async (params: { currentPassword: string; newPassw
         return error
     }
 }
+
+
+export const forgetPassword = async (phoneNumber: string, acceptLanguage: string = 'fa-IR') => {
+
+    try {
+        const response = await axios.post(
+            `${ServerAddress.Type}${ServerAddress.Identity}${Identity.ForgotPasswordByPhoneNumber}`,
+            {
+                phoneNumber: phoneNumber
+            },
+            {
+                headers: {
+                    ...Headers,
+                    "Accept-Language": acceptLanguage
+                }
+            },
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
+
+export const forgotPasswordVerification = async (params:{code: string; userId: number}, acceptLanguage: string = 'fa-IR') => {
+
+    try {
+        const response = await axios.post(
+            `${ServerAddress.Type}${ServerAddress.Identity}${Identity.ForgotPasswordVerification}`,
+            {
+                code: params.code,
+                userId: params.userId
+            },
+            {
+                headers: {
+                    ...Headers,
+                    "Accept-Language": acceptLanguage
+                }
+            },
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
+
+export const forgotPasswordResetPassword = async (params:{code: string; userId: number; password: string;}, acceptLanguage: string = 'fa-IR') => {
+
+    try {
+        const response = await axios.post(
+            `${ServerAddress.Type}${ServerAddress.Identity}${Identity.ResetPassword}`,
+            {
+                code: params.code,
+                password: params.password,
+                userId: params.userId
+            },
+            {
+                headers: {
+                    ...Headers,
+                    "Accept-Language": acceptLanguage
+                }
+            },
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}

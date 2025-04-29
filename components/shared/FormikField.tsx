@@ -1,7 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { Image } from '@mantine/core'
 import { Field } from 'formik'
-import { ChangeEvent, ReactNode, useState } from 'react'
+import { ChangeEvent, forwardRef, ReactNode, useImperativeHandle, useRef, useState } from 'react'
 import VisibilityOff from '../icons/Visibility-Off'
 import Visibility from '../icons/Visibility'
 
@@ -29,7 +29,18 @@ type Props = {
   labelLeft?: ReactNode
 }
 
-const FormikField: React.FC<Props> = (props) => {
+type FieldHandle = {
+  focus: () => void
+}
+
+const FormikField: React.ForwardRefRenderFunction<FieldHandle, Props> = (props, forwardedRef) => {
+
+  const inputRef = useRef<HTMLInputElement>(null);
+  useImperativeHandle(forwardedRef, () => ({
+    focus() {
+      inputRef.current?.focus();
+    }
+  }));
 
   const [isPassword, setIsPassword] = useState<boolean>(props.isPassword || false);
 
@@ -127,6 +138,7 @@ const FormikField: React.FC<Props> = (props) => {
             }}
             value={props.value}
             type={isPassword && props.value.length ? "password" : "text"}
+            ref={inputRef}
           />
 
           {passwordToggleBtn}
@@ -143,4 +155,4 @@ const FormikField: React.FC<Props> = (props) => {
   )
 }
 
-export default FormikField
+export default forwardRef(FormikField);

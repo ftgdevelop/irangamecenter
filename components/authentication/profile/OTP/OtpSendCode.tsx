@@ -74,7 +74,7 @@ const OtpSendCode: React.FC<Props> = props => {
                             </button>
 
                             <Link
-                                href={"/forget-password"}
+                                href={"/profile/forget-password"}
                                 className="text-[#2ac99f] font-semibold text-sm"
                             >
                                 فراموشی رمز عبور

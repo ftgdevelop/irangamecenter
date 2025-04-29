@@ -33,6 +33,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             "/login",
             "/profile/edit",
             "/profile/change-password",
+            "/profile/forget-password",
             "/profile/wallet",
             "/profile/wallet/charge",
             "/profile/wallet/faq",
