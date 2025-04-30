@@ -8,7 +8,7 @@ import { useAppDispatch } from "@/hooks/use-store";
 import Skeleton from "../../../shared/Skeleton";
 import CountDown from "../../../shared/CountDown";
 import Refresh from "../../../icons/Refresh";
-import { PinInput } from "@mantine/core";
+// import { PinInput } from "@mantine/core";
 import { setReduxUser } from "@/redux/authenticationSlice";
 import { setReduxNotification } from "@/redux/notificationSlice";
 import Loading from "../../../icons/Loading";
@@ -164,7 +164,7 @@ const OtpVerification: React.FC<Props> = props => {
                     type="tel"
                     autoComplete="one-time-code" 
                     autoFocus
-                    className={`border px-5 py-2 text-black`}
+                    className={`border px-5 py-2 text-black ${status === "error"?"has-error": status === "success" ? "has-sucess" : ""}`}
                     onChange={e => {
                         setStatus(undefined);
                         if (e.target.value.length === 6) {
