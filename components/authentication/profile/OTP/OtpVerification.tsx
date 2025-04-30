@@ -142,7 +142,7 @@ const OtpVerification: React.FC<Props> = props => {
 
             <div className="px-5 text-center">
 
-                <PinInput
+                {/* <PinInput
                     inputMode="numeric"
                     autoFocus
                     size="lg"
@@ -158,6 +158,22 @@ const OtpVerification: React.FC<Props> = props => {
                         }
                     }
                     }
+                /> */}
+
+                <input 
+                    type="tel"
+                    autoComplete="one-time-code" 
+                    autoFocus
+                    className={`border px-5 py-2 text-black`}
+                    onChange={e => {
+                        setStatus(undefined);
+                        if (e.target.value.length === 6) {
+                            setVerificationCode(e.target.value);
+                            if (!verificationCode) {
+                                registerOtp(e.target.value);
+                            }
+                        }
+                    }}
                 />
 
                 {props.savedPhoneNumber && remaindSeconds === 0 ? (

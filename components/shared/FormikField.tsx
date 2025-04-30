@@ -1,9 +1,9 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
-import { Image } from '@mantine/core'
 import { Field } from 'formik'
 import { ChangeEvent, forwardRef, ReactNode, useImperativeHandle, useRef, useState } from 'react'
 import VisibilityOff from '../icons/Visibility-Off'
 import Visibility from '../icons/Visibility'
+import Image from 'next/image'
 
 type Props = {
   placeholder?: string;
