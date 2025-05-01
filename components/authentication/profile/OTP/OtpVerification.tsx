@@ -8,7 +8,7 @@ import { useAppDispatch } from "@/hooks/use-store";
 import Skeleton from "../../../shared/Skeleton";
 import CountDown from "../../../shared/CountDown";
 import Refresh from "../../../icons/Refresh";
-// import { PinInput } from "@mantine/core";
+import { PinInput } from "@mantine/core";
 import { setReduxUser } from "@/redux/authenticationSlice";
 import { setReduxNotification } from "@/redux/notificationSlice";
 import Loading from "../../../icons/Loading";
@@ -35,22 +35,11 @@ const OtpVerification: React.FC<Props> = props => {
 
     const [remaindSeconds, setRemaindSeconds] = useState<number>(80);
 
-
-
-
-
-
-
-
-
-
-    
     interface OTPCredential extends Credential {
         code: string;
     }
     
     type OTPTransportType = 'sms';
-
 
     useEffect(() => {
         if ("OTPCredential" in window) {
@@ -77,19 +66,6 @@ const OtpVerification: React.FC<Props> = props => {
             };
         }
     }, []);
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     useEffect(() => {
 
@@ -198,10 +174,11 @@ const OtpVerification: React.FC<Props> = props => {
 
             <div className="px-5 text-center">
 
-                {/* <PinInput
+                <PinInput
                     inputMode="numeric"
                     autoFocus
                     size="lg"
+                    value={verificationCode}
                     length={6}
                     className={`otp-pin ${status === "error"?"has-error": status === "success" ? "has-sucess" : ""}`}
                     onChange={code => {
@@ -214,9 +191,9 @@ const OtpVerification: React.FC<Props> = props => {
                         }
                     }
                     }
-                /> */}
+                />
 
-                <input 
+                {/* <input 
                     type="tel"
                     autoComplete="one-time-code" 
                     autoFocus
@@ -231,7 +208,7 @@ const OtpVerification: React.FC<Props> = props => {
                             }
                         }
                     }}
-                />
+                /> */}
 
                 {props.savedPhoneNumber && remaindSeconds === 0 ? (
                     <button
