@@ -35,6 +35,41 @@ const VerifyForgetPassword: React.FC<Props> = props => {
     const [sendCodeLoading, setSendCodeLoading] = useState(false);
     const [verificationLoading, setVerificationLoading] = useState(false);
 
+    interface OTPCredential extends Credential {
+        code: string;
+    }
+    
+    type OTPTransportType = 'sms';
+
+    useEffect(() => {
+        if ("OTPCredential" in window) {
+            const ac = new AbortController();
+    
+            navigator.credentials
+                .get({
+                    otp: { transport: ["sms"] as OTPTransportType[] },
+                    signal: ac.signal,
+                } as CredentialRequestOptions)
+                .then((otp: Credential | null) => {
+                    if (otp && "code" in otp) {
+                        const otpCredential = otp as OTPCredential;                        
+                        setStatus(undefined);
+                        if (otpCredential.code.length === 6) {
+                            setVerificationCode(otpCredential.code);
+                            verifyCode(otpCredential.code);
+                        }
+                    }
+                })
+                .catch((err: Error) => {
+                    console.error(err);
+                });
+    
+            return () => {
+                ac.abort();
+            };
+        }
+    }, []);
+
     useEffect(() => {
 
         let countDownTimer: NodeJS.Timeout;
