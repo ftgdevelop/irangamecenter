@@ -35,6 +35,62 @@ const OtpVerification: React.FC<Props> = props => {
 
     const [remaindSeconds, setRemaindSeconds] = useState<number>(80);
 
+
+
+
+
+
+
+
+
+
+    
+    interface OTPCredential extends Credential {
+        code: string;
+    }
+    
+    type OTPTransportType = 'sms';
+
+
+    useEffect(() => {
+        if ("OTPCredential" in window) {
+            const ac = new AbortController();
+    
+            navigator.credentials
+                .get({
+                    otp: { transport: ["sms"] as OTPTransportType[] },
+                    signal: ac.signal,
+                } as CredentialRequestOptions)
+                .then((otp: Credential | null) => {
+                    if (otp && "code" in otp) {
+                        const otpCredential = otp as OTPCredential;
+
+                        setVerificationCode(otpCredential.code);
+                    }
+                })
+                .catch((err: Error) => {
+                    console.error(err);
+                });
+    
+            return () => {
+                ac.abort();
+            };
+        }
+    }, []);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     useEffect(() => {
 
         let countDownTimer: NodeJS.Timeout;
@@ -164,6 +220,7 @@ const OtpVerification: React.FC<Props> = props => {
                     type="tel"
                     autoComplete="one-time-code" 
                     autoFocus
+                    value={verificationCode}
                     className={`border px-5 py-2 text-black ${status === "error"?"has-error": status === "success" ? "has-sucess" : ""}`}
                     onChange={e => {
                         setStatus(undefined);
