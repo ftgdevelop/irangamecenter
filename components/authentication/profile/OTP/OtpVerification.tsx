@@ -53,8 +53,12 @@ const OtpVerification: React.FC<Props> = props => {
                 .then((otp: Credential | null) => {
                     if (otp && "code" in otp) {
                         const otpCredential = otp as OTPCredential;
-
-                        setVerificationCode(otpCredential.code);
+                        
+                        setStatus(undefined);
+                        if (otpCredential.code.length === 6) {
+                            setVerificationCode(otpCredential.code);
+                            registerOtp(otpCredential.code);
+                        }
                     }
                 })
                 .catch((err: Error) => {
@@ -192,23 +196,6 @@ const OtpVerification: React.FC<Props> = props => {
                     }
                     }
                 />
-
-                {/* <input 
-                    type="tel"
-                    autoComplete="one-time-code" 
-                    autoFocus
-                    value={verificationCode}
-                    className={`border px-5 py-2 text-black ${status === "error"?"has-error": status === "success" ? "has-sucess" : ""}`}
-                    onChange={e => {
-                        setStatus(undefined);
-                        if (e.target.value.length === 6) {
-                            setVerificationCode(e.target.value);
-                            if (!verificationCode) {
-                                registerOtp(e.target.value);
-                            }
-                        }
-                    }}
-                /> */}
 
                 {props.savedPhoneNumber && remaindSeconds === 0 ? (
                     <button
