@@ -9,9 +9,22 @@ import BestSellers from "@/components/home/BestSellers";
 import Blog from "@/components/home/Blog";
 import About from "@/components/home/About";
 import FAQ from "@/components/home/FAQ";
+import { useEffect } from "react";
+import { getStrapiPages } from "@/actions/strapi";
 
 
 export default function Home() {
+
+  useEffect(()=>{
+    
+    const fetchData = async () => {
+      const res  = await getStrapiPages('filters[Page][$eq]=Home&populate[Sections][populate]=*')   
+    }
+
+    fetchData();
+
+  },[]);
+
   return (
     <>
       <Search />
