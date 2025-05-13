@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {protocol: 'http', hostname: 'cdn2.safaraneh.com', pathname: '**'},
       {protocol: 'https', hostname: 'server.belink.ir', pathname: '**'},
+      {protocol:'https', hostname: 'strapi.irangamecenter.com', pathname: '**'},
     ],
     formats: ['image/avif', 'image/webp'],
   },

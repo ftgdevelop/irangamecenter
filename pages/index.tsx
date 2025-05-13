@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import CircleLinks from "@/components/home/CircleLinks";
 import Categories from "@/components/home/Categories";
 import Search from "@/components/shared/Search";
@@ -9,21 +11,49 @@ import BestSellers from "@/components/home/BestSellers";
 import Blog from "@/components/home/Blog";
 import About from "@/components/home/About";
 import FAQ from "@/components/home/FAQ";
-import { useEffect } from "react";
 import { getStrapiPages } from "@/actions/strapi";
+import { NextPage } from "next";
+
+type HomeSectionItems = {
+  Description?: string;
+  ImageAlternative?: string;
+  ImageTitle?: string;
+  Keyword?: string;
+  Subtitle?: string;
+  Title?: string;
+  Url: string;
+  id: number;
+  Image?: {
+    url?: string;
+  }
+}
+
+type HomeSections = {
+  Keyword: "category" | "banner" | "special-offer" | "special-offer" | "special-offer";
+  Title: string;
+  Items: HomeSectionItems[];
+  IsActive: boolean;
+}
+
+type SliderItemType = {
+  Url?: string;
+  Title?: string;
+  ImageAlternative?: string;
+  ImageTitle?: string;
+  id: number;
+  Description?: string;
+  Subtitle?: string;
+  Image: {
+    url: string;
+  }
+}
 
 
-export default function Home() {
+const Home: NextPage = ({ homeSections }: { homeSections?: HomeSections[] }) => {
 
-  useEffect(()=>{
-    
-    const fetchData = async () => {
-      const res  = await getStrapiPages('filters[Page][$eq]=Home&populate[Sections][populate]=*')   
-    }
+  const categoris = homeSections?.find(section => section.Keyword === "category");
 
-    fetchData();
-
-  },[]);
+  const sliderItems = homeSections?.find(section => section.Keyword === "banner")?.Items?.filter(item => item.Image?.url) as SliderItemType[];
 
   return (
     <>
@@ -31,9 +61,12 @@ export default function Home() {
 
       <CircleLinks />
 
-      <Categories />
+      <Categories
+        items={categoris?.Items || []}
+        title={categoris?.Title}
+      />
 
-      <Slider />
+      <Slider items={sliderItems} />
 
       <BannerLinkWides />
 
@@ -52,3 +85,22 @@ export default function Home() {
     </>
   );
 }
+
+
+export const getStaticProps = async (context: any) => {
+
+  const homeSections = await getStrapiPages('filters[Page][$eq]=Home&locale=fa&populate[Sections][on][shared.repeter][populate][Items][populate]=*')
+
+  return ({
+    props: {
+      context: {
+        locales: context.locales || null
+      },
+      homeSections: homeSections?.data?.data?.[0]?.Sections || null,
+    },
+    revalidate: 3600
+  })
+
+}
+
+export default Home;
