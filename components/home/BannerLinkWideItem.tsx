@@ -5,6 +5,8 @@ import ClipRadius from "@/public/images/icons/ClipRadius";
 
 type Props = {
     imageUrl?: string;
+    imageAlt?: string;
+    imageTitle?: string;
     title: string;
     subtitle?: string;
     url: string;
@@ -16,7 +18,7 @@ const BannerLinkWideItem:React.FC<Props> = props => {
         <div className={`relative ${props.wrapperClassName || ""}`}>
             <Image
                 src={props.imageUrl || "/images/default-game.png"}
-                alt={props.title}
+                alt={props.imageAlt || props.imageTitle || props.title}
                 width={600}
                 height={300}
                 className="rounded-3xl w-full h-32 object-cover"

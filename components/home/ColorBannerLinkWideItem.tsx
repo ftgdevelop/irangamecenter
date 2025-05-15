@@ -5,6 +5,8 @@ import ClipRadius from "@/public/images/icons/ClipRadius";
 
 type Props = {
     imageUrl?: string;
+    imageAlt?: string;
+    imageTitle?: string;
     title: string;
     subtitle?: string;
     url: string;
@@ -20,7 +22,7 @@ const ColorBannerLinkWideItem:React.FC<Props> = props => {
         >
             <Image
                 src={props.imageUrl || "/images/default-game.png"}
-                alt={props.title}
+                alt={props.imageAlt || props.imageTitle || props.title}
                 width={200}
                 height={60}
                 className="w-7/12 h-14 object-contain"

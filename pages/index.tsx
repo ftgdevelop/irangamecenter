@@ -1,5 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
+import { useEffect, useRef, useState } from "react";
 import CircleLinks from "@/components/home/CircleLinks";
 import Categories from "@/components/home/Categories";
 import Search from "@/components/shared/Search";
@@ -11,8 +12,9 @@ import BestSellers from "@/components/home/BestSellers";
 import Blog from "@/components/home/Blog";
 import About from "@/components/home/About";
 import FAQ from "@/components/home/FAQ";
-import { getStrapiPages } from "@/actions/strapi";
+import { getStrapiHighlight, getStrapiPages } from "@/actions/strapi";
 import { NextPage } from "next";
+import { ServerAddress } from "@/enum/url";
 
 type HomeSectionItems = {
   Description?: string;
@@ -23,13 +25,15 @@ type HomeSectionItems = {
   Title?: string;
   Url: string;
   id: number;
+  price?: number;
+  oldPrice?: number;
   Image?: {
     url?: string;
   }
 }
 
 type HomeSections = {
-  Keyword: "category" | "banner" | "special-offer" | "special-offer" | "special-offer";
+  Keyword: "category" | "banner" | "banner2" | "banner3" | "special-offer";
   Title: string;
   Items: HomeSectionItems[];
   IsActive: boolean;
@@ -48,13 +52,40 @@ type SliderItemType = {
   }
 }
 
+type BannerItemType = {
+  Url?: string;
+  Title?: string;
+  ImageAlternative?: string;
+  ImageTitle?: string;
+  id: number;
+  Description?: string;
+  Subtitle?: string;
+  Image: {
+    url: string;
+  }
+}
+
 
 const Home: NextPage = ({ homeSections }: { homeSections?: HomeSections[] }) => {
 
   const categoris = homeSections?.find(section => section.Keyword === "category");
 
   const sliderItems = homeSections?.find(section => section.Keyword === "banner")?.Items?.filter(item => item.Image?.url) as SliderItemType[];
+  
+  const banner2Items = homeSections?.find(section => section.Keyword === "banner2")?.Items?.filter(item => item.Image?.url) as BannerItemType[];
 
+  const banner3Items = homeSections?.find(section => section.Keyword === "banner3")?.Items?.filter(item => item.Image?.url) as BannerItemType[];
+  
+  const promotionData = homeSections?.find(section => section.Keyword === "special-offer");
+
+  useEffect(()=>{
+    const fetchData =async () => {
+         const ggg = await getStrapiHighlight('locale=fa&populate[Items][populate][Items][populate]=*');
+        const ggg2 = await getStrapiHighlight('locale=fa&populate[Items][populate]=*');
+    }
+    fetchData()
+  },[]);
+  
   return (
     <>
       <Search />
@@ -68,11 +99,38 @@ const Home: NextPage = ({ homeSections }: { homeSections?: HomeSections[] }) => 
 
       <Slider items={sliderItems} />
 
-      <BannerLinkWides />
+      <BannerLinkWides items={banner2Items.map(item => ({
+        title: item.Title||"",
+        url: item.Url|| "#",
+        subtitle: item.Subtitle,
+        imageUrl: ServerAddress.Type! + ServerAddress.Strapi + item.Image.url,
+        imageAlt: item.ImageAlternative,
+        imageTitle: item.ImageTitle
+      }))} />
 
-      <Promotion />
+      <Promotion 
+        items={promotionData?.Items.map(item => ({
+          title:item.Title || "",
+          url: item.Url,
+          price: item.price,
+          oldPrice: item.oldPrice,
+          imageAlt: item.ImageAlternative,
+          imageTitle: item.ImageTitle,
+          imageUrl: item.Image?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}${item.Image.url}` :undefined,
+        }))}
+        title={promotionData?.Title || ""}
+      />
 
-      <ColorBannerLinkWides />
+      <ColorBannerLinkWides 
+        items={banner3Items.map(item => ({
+        title: item.Title||"",
+        url: item.Url|| "#",
+        subtitle: item.Subtitle,
+        imageUrl: ServerAddress.Type! + ServerAddress.Strapi + item.Image.url,
+        imageAlt: item.ImageAlternative,
+        imageTitle: item.ImageTitle
+      }))}
+      />
 
       <BestSellers />
 
