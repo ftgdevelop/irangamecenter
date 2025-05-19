@@ -24,6 +24,8 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
     const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
 
+    const isBodyScrollable = useAppSelector(state => state?.styles?.bodyScrollable);
+
     let showHeader = true;
     let showFooter = true;
     let showFixedNav = true;
@@ -103,7 +105,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         <>
             <Error />
             <Notification />
-            <div className="bg-[#011425] text-white max-w-lg mx-auto">
+            <div className={`bg-[#011425] text-white max-w-lg mx-auto ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`}>
                 {showHeader && <Header />}
                 <main className={showFixedNav ? "min-h-screen-nav" : "min-h-screen"}>
                     {props.children}

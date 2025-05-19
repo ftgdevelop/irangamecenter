@@ -155,6 +155,10 @@ body {
   .min-h-screen-nav{
     min-height: calc(100vh - 80px);
   }
+
+  .h-highlight{
+    height: calc(100vh - 90px);
+  }
   
 }
 
@@ -221,5 +225,24 @@ body {
   &.has-sucess .mantine-PinInput-input{
     border-color: #2ac99f;
     color: #2ac99f;
+  }
+}
+
+.highlight-slider {
+  ul.slick-dots {
+    text-align: left;
+    padding: 0 10px;
+
+    li {
+      margin: 0 3px;
+      button {
+        background-color: #bbbbbb;
+        padding: 4px;
+      }
+      &.slick-active button {
+        background-color: #a93aff;
+        width: 20px;
+      }
+    }
   }
 }
