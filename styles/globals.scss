@@ -157,7 +157,7 @@ body {
   }
 
   .h-highlight{
-    height: calc(100vh - 90px);
+    height: calc(100svh - 90px);
   }
   
 }
@@ -260,4 +260,7 @@ body {
   to {
     width: 100%;
   }
+}
+.touch-action-none{
+  touch-action: none
 }

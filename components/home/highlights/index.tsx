@@ -95,7 +95,7 @@ const Highlights: React.FC<Props> = (props) => {
           selector="modal_portal"
         >
           <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen">
-            <div className="relative w-full lg:max-w-lg lg:mx-auto h-screen overflow-hidden">
+            <div className="relative w-full lg:max-w-lg lg:mx-auto h-[100svh] overflow-hidden">
               
               <div
                 className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0"

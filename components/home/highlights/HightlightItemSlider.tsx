@@ -176,7 +176,7 @@ const HightlightItemSlider: React.FC<Props> = (props) => {
       )}
 
       <div
-        className={'h-highlight relative'}
+        className={'touch-action-none h-highlight relative'}
         onContextMenu={e => { e.preventDefault() }}
         onMouseEnter={pause}
         onMouseLeave={resume}
