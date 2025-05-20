@@ -27,7 +27,7 @@ type DataItemType = {
 }
 
 const HightlightItemSlider: React.FC<Props> = (props) => {
-  const duration = 400000
+  const duration = 4000
 
   const [activeIndex, setActiveIndex] = useState<number>(0)
   const [items, setItems] = useState<DataItemType[] | undefined>()
