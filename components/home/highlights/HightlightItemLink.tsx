@@ -6,7 +6,7 @@ type Props = {
     open: () => void;
 }
 
-const HightlightItem: React.FC<Props> = props => {
+const HightlightItemLink: React.FC<Props> = props => {
     return (
         <button
             className="inline-block text-center shrink-0"
@@ -30,4 +30,4 @@ const HightlightItem: React.FC<Props> = props => {
     )
 }
 
-export default HightlightItem;
+export default HightlightItemLink;

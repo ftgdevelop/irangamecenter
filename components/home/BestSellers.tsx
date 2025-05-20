@@ -14,6 +14,7 @@ const BestSellers = () => {
         price: number;
         oldPrice?: number;
         discountPercentage?: number;
+        key:number;
     }[] = [
             {
                 url: "#",
@@ -22,7 +23,8 @@ const BestSellers = () => {
                 imageAlt: "",
                 price: 2559000,
                 oldPrice: 2959000,
-                discountPercentage: 10
+                discountPercentage: 10,
+                key:1
             },
             {
                 url: "#",
@@ -30,14 +32,16 @@ const BestSellers = () => {
                 image: "/mock-images/pro2.jpg",
                 price: 4000000,
                 oldPrice: 4200000,
-                discountPercentage: 5
+                discountPercentage: 5,
+                key:2
             },
             {
                 url: "#",
                 title: "شارژ اکانت پلی استیشن پلاس یکساله",
                 image: "/mock-images/pro3.jpg",
                 price: 2559000,
-                discountPercentage: 0
+                discountPercentage: 0,
+                key:3
             },
             {
                 url: "#",
@@ -45,7 +49,8 @@ const BestSellers = () => {
                 image: "/mock-images/pro2.jpg",
                 price: 4000000,
                 oldPrice: 4200000,
-                discountPercentage: 5
+                discountPercentage: 5,
+                key:4
             },
             {
                 url: "#",
@@ -53,14 +58,16 @@ const BestSellers = () => {
                 image: "/mock-images/pro2.jpg",
                 price: 4000000,
                 oldPrice: 4200000,
-                discountPercentage: 5
+                discountPercentage: 5,
+                key:5
             },
             {
                 url: "#",
                 title: "شارژ اکانت پلی استیشن پلاس یکساله",
                 image: "/mock-images/pro3.jpg",
                 price: 2559000,
-                discountPercentage: 8
+                discountPercentage: 8,
+                key:6
             },
             {
                 url: "#",
@@ -68,7 +75,8 @@ const BestSellers = () => {
                 image: "/mock-images/pro2.jpg",
                 price: 4000000,
                 oldPrice: 4200000,
-                discountPercentage: 5
+                discountPercentage: 5,
+                key:7
             }
 
         ];
@@ -78,7 +86,7 @@ const BestSellers = () => {
         <div className="py-5">
             {items.map(item => (
                 <div
-                    key={item.title}
+                    key={item.key}
                     className="mb-4"
                 >
                     <Link

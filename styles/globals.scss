@@ -246,3 +246,18 @@ body {
     }
   }
 }
+
+.highlight-progresbar {
+  animation: fillWidth 4s linear forwards;
+}
+.animation-paused{
+  animation-play-state: paused;
+}
+@keyframes fillWidth {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
