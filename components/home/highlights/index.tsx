@@ -124,7 +124,7 @@ const Highlights: React.FC<Props> = (props) => {
                 return (
                   <div
                     key={highlight.id}
-                    className={`py-5 px-3 rounded-2xl absolute flex items-stretch transition-all left-0 right-0 top-0 h-screen transition-all ${
+                    className={`py-5 px-3 rounded-2xl absolute flex items-stretch transition-all left-0 right-0 top-0 h-[100svh] transition-all ${
                       position === 'left'
                         ? '-translate-x-full'
                         : position === 'right'

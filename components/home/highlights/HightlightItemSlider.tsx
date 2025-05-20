@@ -27,7 +27,7 @@ type DataItemType = {
 }
 
 const HightlightItemSlider: React.FC<Props> = (props) => {
-  const duration = 4000
+  const duration = 400000
 
   const [activeIndex, setActiveIndex] = useState<number>(0)
   const [items, setItems] = useState<DataItemType[] | undefined>()
@@ -158,7 +158,7 @@ const HightlightItemSlider: React.FC<Props> = (props) => {
   return items.map((item, index) => (
     <div
       key={item.id}
-      className={`absolute top-0 left-0 right-0 transition-all ${
+      className={`absolute top-0 left-0 right-0 transition-all duration-500 ${
         index === activeIndex ? 'opacity-100 visible' : 'opacity-0 invisible'
       }`}
     >
@@ -176,8 +176,10 @@ const HightlightItemSlider: React.FC<Props> = (props) => {
       )}
 
       <div
-        className={'touch-action-none h-highlight relative'}
-        onContextMenu={e => { e.preventDefault() }}
+        className="touch-action-none h-highlight relative"
+        onContextMenu={(e) => {
+          e.preventDefault()
+        }}
         onMouseEnter={pause}
         onMouseLeave={resume}
         onTouchStart={pause}
