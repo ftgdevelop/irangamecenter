@@ -94,7 +94,7 @@ const Home: NextPage = ({ homeSections, homeHighlights }: { homeSections?: HomeS
 
       <Slider items={sliderItems} />
 
-      <BannerLinkWides items={banner2Items.map(item => ({
+      <BannerLinkWides items={banner2Items?.map(item => ({
         title: item.Title || "",
         url: item.Url || "#",
         subtitle: item.Subtitle,

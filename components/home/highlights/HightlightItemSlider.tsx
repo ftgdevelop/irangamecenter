@@ -85,9 +85,8 @@ const HightlightItemSlider: React.FC<Props> = (props) => {
         )
 
         setItems(response?.data?.data?.[0]?.Item?.Items || [])
-        console.log(response?.data?.data?.[0]?.Item?.Items || [])
-
-        setLoading(false)
+        
+        setTimeout(()=>{setLoading(false)}, 500)
       }
 
       fetchData(props.keyword)
@@ -194,8 +193,8 @@ const HightlightItemSlider: React.FC<Props> = (props) => {
                     : 'default-game.png'
                 }
                 alt={item.Title || item.Subtitle || ''}
-                width={500}
-                height={700}
+                width={600}
+                height={1000}
                 className="rounded-2xl w-full h-highlight object-cover "
               />
               <div className="absolute bottom-0 left-0 right-0 p-5 pt-24 text-white bg-gradient-to-t from-black/90 to-transparent rounded-b-2xl">

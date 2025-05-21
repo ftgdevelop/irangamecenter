@@ -21,40 +21,21 @@ const Highlights: React.FC<Props> = (props) => {
 
   const { highlights } = props
 
-  //const [loading, setLoading] = useState<boolean>(false)
-
   const [activeHighlightId, setActiveHighlightId] = useState<number>()
 
-  // const fetchHighlightDetail = async (Keyword?: string) => {
-  //   if (!Keyword) return
+  const [slideIn, setSlideIn] = useState(false);
 
-  //   setLoading(true)
-  //   const response: any = await getStrapiHighlight(
-  //     `filters[Keyword][$eq]=${Keyword}&locale=fa&populate[Item][populate][Items][populate]=*`,
-  //   )
+  useEffect(() => {
+    if (activeHighlightId) {
+      setTimeout(() => { setSlideIn(true); }, 200)
+    }
+}, [activeHighlightId]);
 
-  //   if (response?.data?.data?.[0]?.Item?.Items) {
-  //     console.dir(response.data.data[0].Item.Items)
-  //     setHighlights((prevState) => {
-  //       const updatingItem = prevState.find((h) => h.Keyword === Keyword)
-  //       const otherItems = prevState.filter((h) => h.Keyword !== Keyword)
-  //       if (updatingItem) {
-  //         return [
-  //           ...otherItems,
-  //           {
-  //             ...updatingItem,
-  //             Items: response?.data?.data?.[0].Item.Items,
-  //           },
-  //         ].sort(
-  //           (a, b) =>
-  //             new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-  //         )
-  //       }
-  //       return prevState
-  //     })
-  //   }
-  //   setLoading(false)
-  // }
+useEffect(() => {
+    if (!slideIn) {
+        setTimeout(() => { setActiveHighlightId(undefined) }, 300)
+    }
+}, [slideIn]);
 
   useEffect(() => {
     if (activeHighlightId) {
@@ -86,17 +67,14 @@ const Highlights: React.FC<Props> = (props) => {
 
         <ModalPortal
           show={!!activeHighlightId}
-          //todo: add animation to modal;
           selector="modal_portal"
         >
           <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen">
-            <div className="relative w-full lg:max-w-lg lg:mx-auto h-[100svh] overflow-hidden">
+            <div className={`relative w-full lg:max-w-lg lg:mx-auto h-[100svh] overflow-hidden transition-all duration-300 ease-in-out ${slideIn?"scale-100 opacity-100 mt-0":"scale-0 opacity-0 mt-12"}`}>
               
               <div
                 className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0"
-                onClick={() => {
-                  setActiveHighlightId(undefined)
-                }}
+                onClick={() => {setSlideIn(false)}}
               />
               
               {highlights.map((highlight, index) => {
@@ -131,7 +109,7 @@ const Highlights: React.FC<Props> = (props) => {
                       
                       <button
                         type='button'
-                        onClick={()=>{setActiveHighlightId(undefined)}}
+                        onClick={()=>{setSlideIn(false)}}
                         className={`absolute top-0 z-10 ${props.direction=== 'ltr'?"right-0":"left-0"}`}
                       >
                         <CloseSimple className='w-8 h-8 fill-white' />
@@ -149,7 +127,8 @@ const Highlights: React.FC<Props> = (props) => {
                             if (prevActiveIndex < highlights.length - 1) {
                               return highlights[prevActiveIndex + 1].id
                             }
-                            return undefined
+                            setSlideIn(false);
+                            return prevId
                           })
                         }}
                         goToPreviousHighlight={() => {
@@ -177,7 +156,9 @@ const Highlights: React.FC<Props> = (props) => {
                           height={80}
                           className="block w-10 h-10"
                         />
+                        <span className='text-neutral-800 font-semibold'>
                         {highlight?.Item?.Title}
+                        </span>
                       </div>
                     </div>
                   </div>
