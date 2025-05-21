@@ -83,6 +83,7 @@ const Home: NextPage = ({ homeSections, homeHighlights }: { homeSections?: HomeS
       <Search />
 
       {homeHighlights && <Highlights
+        direction="rtl"
         highlights={homeHighlights}
       />}
 

@@ -228,25 +228,6 @@ body {
   }
 }
 
-.highlight-slider {
-  ul.slick-dots {
-    text-align: left;
-    padding: 0 10px;
-
-    li {
-      margin: 0 3px;
-      button {
-        background-color: #bbbbbb;
-        padding: 4px;
-      }
-      &.slick-active button {
-        background-color: #a93aff;
-        width: 20px;
-      }
-    }
-  }
-}
-
 .highlight-progresbar {
   animation: fillWidth 4s linear forwards;
 }

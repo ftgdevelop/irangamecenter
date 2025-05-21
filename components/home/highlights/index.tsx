@@ -12,7 +12,8 @@ import HightlightItemSlider from './HightlightItemSlider'
 import CloseSimple from '@/components/icons/CloseSimple'
 
 type Props = {
-  highlights: HighlightItemType[]
+  highlights: HighlightItemType[];
+  direction: "ltr" | "rtl";
 }
 
 const Highlights: React.FC<Props> = (props) => {
@@ -58,12 +59,6 @@ const Highlights: React.FC<Props> = (props) => {
   useEffect(() => {
     if (activeHighlightId) {
       dispatch(setBodyScrollable(false))
-      // const activeItem = highlights.find(
-      //   (item) => item.id === activeHighlightId,
-      // )
-      // if (!activeItem?.Items?.length) {
-      //   fetchHighlightDetail(activeItem?.Keyword)
-      // }
     } else {
       dispatch(setBodyScrollable(true))
     }
@@ -72,7 +67,7 @@ const Highlights: React.FC<Props> = (props) => {
   if (highlights.length) {
     return (
       <section className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip py-3">
-        <div className="flex items-start gap-3 px-3">
+        <div className="flex items-start gap-3 px-3" dir={props.direction}>
           {highlights.map((highlight) => (
             <HightlightItemLink
               open={() => {
@@ -112,10 +107,10 @@ const Highlights: React.FC<Props> = (props) => {
                 let position: 'left' | 'right' | 'center' = 'left'
 
                 if (index > activeHighlightIndex) {
-                  position = 'left'
+                  position = props.direction === 'rtl' ? 'left' : 'right'
                 }
                 if (index < activeHighlightIndex) {
-                  position = 'right'
+                  position = props.direction === 'rtl' ? 'right' : 'left'
                 }
                 if (index === activeHighlightIndex) {
                   position = 'center'
@@ -124,7 +119,7 @@ const Highlights: React.FC<Props> = (props) => {
                 return (
                   <div
                     key={highlight.id}
-                    className={`py-5 px-3 rounded-2xl absolute flex items-stretch transition-all left-0 right-0 top-0 h-[100svh] transition-all ${
+                    className={`py-5 px-3 rounded-2xl absolute flex items-stretch transition-all left-0 right-0 top-0 h-[100svh] transition-all duration-300 ease-out ${
                       position === 'left'
                         ? '-translate-x-full'
                         : position === 'right'
@@ -133,14 +128,17 @@ const Highlights: React.FC<Props> = (props) => {
                     }`}
                   >
                     <div className="bg-white w-full rounded-2xl relative">
+                      
                       <button
                         type='button'
                         onClick={()=>{setActiveHighlightId(undefined)}}
-                        className='absolute top-0 right-0 z-10'
+                        className={`absolute top-0 z-10 ${props.direction=== 'ltr'?"right-0":"left-0"}`}
                       >
                         <CloseSimple className='w-8 h-8 fill-white' />
                       </button>
+
                       <HightlightItemSlider
+                        direction={props.direction}
                         keyword={highlight.Keyword}
                         isActive={activeHighlightId === highlight.id}
                         goToNextHighlight={() => {

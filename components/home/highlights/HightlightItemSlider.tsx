@@ -12,6 +12,7 @@ type Props = {
   isActive: boolean
   goToNextHighlight: () => void
   goToPreviousHighlight: () => void
+  direction: "ltr" | "rtl";
 }
 
 type DataItemType = {
@@ -155,82 +156,94 @@ const HightlightItemSlider: React.FC<Props> = (props) => {
   if (!items?.length) {
     return null
   }
-  return items.map((item, index) => (
-    <div
-      key={item.id}
-      className={`absolute top-0 left-0 right-0 transition-all duration-500 ${
-        index === activeIndex ? 'opacity-100 visible' : 'opacity-0 invisible'
-      }`}
-    >
-      {index === activeIndex && (
+  return (
+    <>
+      {items.map((item, index) => (
         <div
-          dir="ltr"
-          className="shadow absolute top-3.5 left-4 rounded-full overflow-hidden right-10 bg-neutral-500 z-10"
-        >
-          <div
-            className={`bg-white h-[3px] highlight-progresbar ${
-              isPaused ? 'animation-paused' : ''
+          key={item.id}
+          className={`absolute top-0 left-0 right-0 transition-all duration-300 ${index === activeIndex ? 'opacity-100 visible blur-none' : 'opacity-0 invisible blur-md'
             }`}
-          />
-        </div>
-      )}
-
-      <div
-        className="touch-action-none h-highlight relative"
-        onContextMenu={(e) => {
-          e.preventDefault()
-        }}
-        onMouseEnter={pause}
-        onMouseLeave={resume}
-        onTouchStart={pause}
-        onTouchEnd={resume}
-      >
-        <div className="bg-[#011425] rounded-2xl relative">
-          <Image
-            src={
-              item.Image?.url
-                ? `${ServerAddress.Type}${ServerAddress.Strapi}${item.Image?.url}`
-                : 'default-game.png'
-            }
-            alt={item.Title || item.Subtitle || ''}
-            width={500}
-            height={700}
-            className="rounded-2xl w-full h-highlight object-cover "
-          />
-          <div className="absolute bottom-0 left-0 right-0 p-5 pt-24 text-white bg-gradient-to-t from-black/90 to-transparent rounded-b-2xl">
-            <div className="text-center mb-5">
-              <div className="mb-2 text-xs font-bold">{item.Header}</div>
-              <b className="block mb-2 text-2xl font-bold">{item.Title} </b>
-              {!!item.Subtitle && <p className="text-xs">{item.Subtitle}</p>}
-            </div>
-            <Link
-              href={item.Url || '#'}
-              className="mx-4 text-sm block p-2 bg-gradient-to-t from-[#a839fe] to-[#fe81ff] rounded-full flex justify-between items-center"
+        >
+          {index === activeIndex && (
+            <div
+              dir={props.direction}
+              className={`shadow absolute top-3.5 rounded-full overflow-hidden bg-neutral-500 z-10 ${props.direction === "ltr" ? "left-4 right-10" : "left-10 right-4"}`}
             >
-              <span className="block w-10" />
-              خرید
-              <span className="block bg-[#a93aff] p-3 rounded-full">
-                <ArrowTopLeft className="w-4 h-4 fill-current" />
-              </span>
-            </Link>
-          </div>
-        </div>
-      </div>
+              <div
+                className={`bg-white h-[3px] highlight-progresbar ${isPaused ? 'animation-paused' : ''
+                  }`}
+              />
+            </div>
+          )}
 
-      <div
-        className="absolute w-20 top-0 bottom-24 -right-3 bottom-0"
-        onClick={() => {
-          goToNextSlide()
-        }}
-      />
-      <div
-        className="absolute w-20 top-0 bottom-24 -left-3 bottom-0"
-        onClick={() => {
-          goToPreviousSlide()
-        }}
-      />
-    </div>
-  ))
+          <div
+            className="touch-action-none h-highlight relative"
+            onContextMenu={(e) => {
+              e.preventDefault()
+            }}
+            onMouseEnter={pause}
+            onMouseLeave={resume}
+            onTouchStart={pause}
+            onTouchEnd={resume}
+          >
+            <div className="bg-[#011425] rounded-2xl relative">
+              <Image
+                src={
+                  item.Image?.url
+                    ? `${ServerAddress.Type}${ServerAddress.Strapi}${item.Image?.url}`
+                    : 'default-game.png'
+                }
+                alt={item.Title || item.Subtitle || ''}
+                width={500}
+                height={700}
+                className="rounded-2xl w-full h-highlight object-cover "
+              />
+              <div className="absolute bottom-0 left-0 right-0 p-5 pt-24 text-white bg-gradient-to-t from-black/90 to-transparent rounded-b-2xl">
+                <div className="text-center mb-5">
+                  <div className="mb-2 text-xs font-bold">{item.Header}</div>
+                  <b className="block mb-2 text-2xl font-bold">{item.Title} </b>
+                  {!!item.Subtitle && <p className="text-xs">{item.Subtitle}</p>}
+                </div>
+                <Link
+                  href={item.Url || '#'}
+                  className="mx-4 text-sm block p-2 bg-gradient-to-t from-[#a839fe] to-[#fe81ff] rounded-full flex justify-between items-center"
+                >
+                  <span className="block w-10" />
+                  خرید
+                  <span className="block bg-[#a93aff] p-3 rounded-full">
+                    <ArrowTopLeft className="w-4 h-4 fill-current" />
+                  </span>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          <div
+            className={`absolute w-20 top-0 bottom-24 bottom-0 ${props.direction === "ltr" ? "-right-3" : "-left-3"}`}
+            onClick={() => {
+              goToNextSlide()
+            }}
+          />
+          <div
+            className={`absolute w-20 top-0 bottom-24 bottom-0 ${props.direction === "ltr" ? "-left-3" : "-right-3"}`}
+            onClick={() => {
+              goToPreviousSlide()
+            }}
+          />
+        </div>
+      ))}
+
+      <div className='flex gap-2 absolute bottom-5 left-4'>
+        {items.map((item, index) => (
+          <button
+            key={item.id}
+            className={`h-2.5 rounded-[15px] block transition-all ${index === activeIndex ? "w-6 bg-[#a93aff]" : "w-2.5 bg-[#bbbbbb]"}`}
+            onClick={() => { setActiveIndex(index) }}
+          />
+        ))}
+      </div>
+    </>
+  )
 }
 
 export default HightlightItemSlider
