@@ -1,6 +1,11 @@
 import Image from "next/image";
+import Markdown from 'react-markdown';
 
-const About = () => {
+type Props = {
+    description : string;
+}
+
+const About:React.FC<Props> = props => {
     return (
         <div className="p-3">
             <div className="flex gap-4 py-5">
@@ -15,9 +20,11 @@ const About = () => {
                 </div>
             </div>
 
-            <p className="text-xs leading-6 text-justify mb-6">
-                گیمیوو بزرگترین فروشگاه آنلاین شارژ بازی های موبایل، پلی استیشن و... لورم ایپسوم یا طرح‌نما به متنی آزمایشی و بی‌معنی در صنعت چاپ، صفحه‌آرایی و طراحی گرافیک گفته می‌شود. طراح گرافیک از این متن به عنوان عنصری از ترکیب بندی برای پر کردن صفحه و ارایه اولیه شکل ظاهری و کلی طرح سفارش گرفته شده استفاده می نماید، تا از نظر گرافیکی نشانگر چگونگی نوع و اندازه فونت و ظاهر متن باشد. معمولا طراحان گرافیک برای صفحه‌آرایی، نخست از متن‌های آزمایشی و بی‌معنی استفاده می‌کنند تا صرفا به مشتری یا صاحب کار خود نشان دهند که صفحه طراحی یا صفحه بندی شده بعد از اینکه متن در آن قرار گیرد چگونه به نظر می‌رسد.
-            </p>
+            <div className="text-sm leading-6 text-justify mb-6">
+                <Markdown>
+                    {props.description}
+                </Markdown>
+            </div>
         </div>
     )
 }

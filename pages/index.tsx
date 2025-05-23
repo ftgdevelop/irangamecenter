@@ -15,7 +15,20 @@ import { NextPage } from "next";
 import { ServerAddress } from "@/enum/url";
 import Highlights from "@/components/home/highlights";
 import { HighlightItemType } from "@/types/highlight";
+import Contacts from "@/components/home/Contacts";
 
+type HomeAboutDataType = {
+  Keyword: "about_intro" | "icons" | "faq" | "telNumber" | "email";
+  Body?: string;
+  Items?: {
+    id: number;
+    Question?: string;
+    Answer?: string;
+  }[];
+  Description?: string;
+  Subtitle?: string;
+  Url?: string;
+}[]
 type HomeSectionItems = {
   Description?: string;
   ImageAlternative?: string;
@@ -66,7 +79,7 @@ type BannerItemType = {
 }
 
 
-const Home: NextPage = ({ homeSections, homeHighlights }: { homeSections?: HomeSections[], homeHighlights?: HighlightItemType[] }) => {
+const Home: NextPage = ({ homeSections, homeHighlights, homeAboutData }: { homeSections?: HomeSections[], homeHighlights?: HighlightItemType[], homeAboutData?: HomeAboutDataType }) => {
 
   const categoris = homeSections?.find(section => section.Keyword === "category");
 
@@ -77,6 +90,15 @@ const Home: NextPage = ({ homeSections, homeHighlights }: { homeSections?: HomeS
   const banner3Items = homeSections?.find(section => section.Keyword === "banner3")?.Items?.filter(item => item.Image?.url) as BannerItemType[];
 
   const promotionData = homeSections?.find(section => section.Keyword === "special-offer");
+
+  const aboutDescription = homeAboutData?.find(item => item.Keyword === "about_intro")?.Body;
+
+  const FAQ_items = homeAboutData?.find(item => item.Keyword === "faq")?.Items;
+  
+  const SupportNumber = homeAboutData?.find(item => item.Keyword === "telNumber")?.Description;
+  const SupportNumberUrl = homeAboutData?.find(item => item.Keyword === "telNumber")?.Url;
+  const SupportNumberSubtitle = homeAboutData?.find(item => item.Keyword === "telNumber")?.Subtitle;
+  const emailAddress = homeAboutData?.find(item => item.Keyword === "email")?.Description;
 
   return (
     <>
@@ -131,9 +153,16 @@ const Home: NextPage = ({ homeSections, homeHighlights }: { homeSections?: HomeS
 
       <Blog />
 
-      <About />
+      {aboutDescription && <About description={aboutDescription} />}
 
-      <FAQ />
+      {!!FAQ_items?.length && <FAQ items={FAQ_items} />}
+
+      {<Contacts 
+        emailAddress={emailAddress}
+        supportNUmberUrl={SupportNumberUrl}
+        supportNumber={SupportNumber}
+        supportNumberSubtitle={SupportNumberSubtitle}
+      />}
 
     </>
   );
@@ -142,9 +171,10 @@ const Home: NextPage = ({ homeSections, homeHighlights }: { homeSections?: HomeS
 
 export const getStaticProps = async (context: any) => {
 
-  const [strapiSectionResponse, strapiHighlightsResponse] = await Promise.all<any>([
+  const [strapiSectionResponse, strapiHighlightsResponse, strapiAboutSectionResponse] = await Promise.all<any>([
     getStrapiPages('filters[Page][$eq]=Home&locale=fa&populate[Sections][on][shared.repeter][populate][Items][populate]=*'),
-    getStrapiHighlight('locale=fa&populate[Item][populate]=*')
+    getStrapiHighlight('locale=fa&populate[Item][populate]=*'),
+    getStrapiPages('filters[Page][$eq]=aboutUs&locale=fa&populate[Sections][populate]=*'),
   ]);
 
 
@@ -155,6 +185,7 @@ export const getStaticProps = async (context: any) => {
       },
       homeSections: strapiSectionResponse?.data?.data?.[0]?.Sections || null,
       homeHighlights: strapiHighlightsResponse?.data?.data || null,
+      homeAboutData: strapiAboutSectionResponse?.data?.data?.[0]?.Sections || null
     },
     revalidate: 3600
   })

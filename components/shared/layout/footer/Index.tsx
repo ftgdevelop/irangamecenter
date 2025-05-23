@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Accordion from "../../Accordion";
 import Link from "next/link";
-import { toPersianDigits } from "@/helpers";
 
 const Footer = () => {
 
@@ -34,35 +33,6 @@ const Footer = () => {
 
     return (
         <footer className="p-3">
-
-            <Link
-                href="#"
-                className="bg-blue-500 flex justify-between items-center gap-5 mb-4 mt-6 rounded-full px-5 h-14"
-            >
-                <div className="flex gap-3 items-center">
-                    <Image src='/images/icons/phone.svg' alt="contact number" className="w-8 h-8" width={32} height={32} />
-                    <div>
-                        <p className="text-sm block"> شماره پشتیبانی </p>
-                        <span className="text-xs"> {toPersianDigits("ساعت 9 تا 14")} </span>
-                    </div>
-                </div>
-
-                <span className="tracking-widest" dir="ltr"> {toPersianDigits("021-1234567")} </span>
-
-            </Link>
-
-            <Link
-                href="#"
-                className="bg-emerald-400 flex justify-between items-center gap-5 mb-6 rounded-full px-5 h-14"
-            >
-                <div className="flex gap-3 items-center">
-                    <Image src='/images/icons/email.svg' alt="contact number" className="w-8 h-8" width={32} height={32} />
-                    <p className="text-sm block"> ایمیل </p>
-                </div>
-
-                <span dir="ltr"> support@irangamecenter.com </span>
-
-            </Link>
 
             <Accordion
                 title="لینک های مهم"

@@ -29,6 +29,10 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     let showHeader = true;
     let showFooter = true;
     let showFixedNav = true;
+    let headerType2Params: {
+        title: string;
+        backUrl: string;
+    } | undefined = undefined;
 
     if (
         [
@@ -40,15 +44,24 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             "/profile/wallet/charge",
             "/profile/wallet/faq",
             "/profile/wallet/transactions"
-        ].includes(router.pathname)){
+        ].includes(router.pathname)) {
         showFooter = false;
         showHeader = false;
         showFixedNav = false;
     }
 
-    if (router.pathname === "/profile"){
+    if (router.pathname === "/profile") {
         showHeader = false;
         showFooter = false;
+    }
+
+    if (router.pathname === "/terms") {
+        headerType2Params = {
+            backUrl: "/",
+            title: "قوانین و مقررات"
+        };
+        showFooter = false;
+        showFixedNav = false;
     }
 
     useEffect(() => {
@@ -82,11 +95,11 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         }
     }, []);
 
-    useEffect(()=>{
+    useEffect(() => {
         const fetchBalance = async () => {
-            
+
             const token = localStorage?.getItem('Token');
-            if(!token) return;
+            if (!token) return;
 
             dispatch(setReduxBalance({ balance: undefined, loading: true }));
             const response: any = await getUserBalance(token);
@@ -94,19 +107,19 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
                 dispatch(setReduxBalance({ balance: response?.data?.result?.amount, loading: false }))
             } else {
                 dispatch(setReduxBalance({ balance: undefined, loading: false }));
-            } 
+            }
         }
-        if(isAuthenticated){
+        if (isAuthenticated) {
             fetchBalance();
         }
-    },[isAuthenticated]);
+    }, [isAuthenticated]);
 
     return (
         <>
             <Error />
             <Notification />
             <div className={`bg-[#011425] text-white max-w-lg mx-auto ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`}>
-                {showHeader && <Header />}
+                {showHeader && <Header type2Params={headerType2Params} />}
                 <main className={showFixedNav ? "min-h-screen-nav" : "min-h-screen"}>
                     {props.children}
                 </main>

@@ -4,7 +4,7 @@ type Props = {
     items:{
         content: React.ReactNode;
         title: React.ReactNode;
-        key: string;   
+        key: number;   
     }[]
 }
 

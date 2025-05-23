@@ -1,44 +1,21 @@
+import Markdown from "react-markdown";
 import Accordion from "../shared/Accordion";
 
-const FAQ = () => {
-    const faqItems: {
-        content: React.ReactNode;
-        title: React.ReactNode;
-        key: string;
-    }[] = [
-            {
-                key: "1",
-                title: "معتبرترین فروشگاه رسمی فروش گیفت کارت؟",
-                content: "معتبرترین فروشگاه رسمی فروش گیفت کارت؟"
-            },
-            {
-                key: "2",
-                title: "چگونه میتوانم در ایران گیم سنتر سفارش ثبت کنم؟",
-                content: `برای ثبت سفارش در ایران گیم سنتر، ابتدا وارد وب‌سایت یا اپلیکیشن شوید و از طریق منوی دسته‌بندی‌ها، محصول یا خدمات موردنظر خود را انتخاب کنید. سپس با کلیک بر روی گزینه "افزودن به سبد خرید"، جزئیات سفارش خود را بررسی و تایید کنید. در مرحله بعد، آدرس و اطلاعات تماس خود را وارد کرده و روش پرداخت دلخواه (پرداخت آنلاین یا استفاده از اعتبار) را انتخاب کنید. پس از تکمیل فرآیند پرداخت، سفارش شما ثبت شده و کد پیگیری برای شما ارسال خواهد شد.`
-            },
-            {
-                key: "3",
-                title: "بعد از پرداخت چه زمانی گیفت کارت تحویل میگیرم؟",
-                content: "بعد از پرداخت چه زمانی گیفت کارت تحویل میگیرم؟"
-            },
-            {
-                key: "4",
-                title: "میخواهید گیفت کارت پلی استیشن آیتونز اپل و گوگل پلی خرید کنید؟",
-                content: "میخواهید گیفت کارت پلی استیشن آیتونز اپل و گوگل پلی خرید کنید؟"
-            },
-            {
-                key: "5",
-                title: "چگونه به ایران گیم سنتر اعتماد کنیم؟",
-                content: "چگونه به ایران گیم سنتر اعتماد کنیم؟"
-            }
-        ];
+type Props = {
+    items: {
+        id: number;
+        Question?: string;
+        Answer?: string;
+    }[];
+}
+const FAQ: React.FC<Props> = props => {
     return (
         <div className="px-3">
-            {faqItems.map((item, index) => (
+            {props.items.map((item, index) => (
                 <Accordion
-                    key={item.key}
-                    title={item.title}
-                    content={item.content}
+                    key={item.id}
+                    title={item.Question}
+                    content={<Markdown>{item.Answer}</Markdown>}
                     WrapperClassName={`border-b border-white/15 py-2 ${index ? "" : "border-t"}`}
                 />
             ))}

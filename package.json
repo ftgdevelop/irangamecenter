@@ -9,15 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@mobiscroll/react": "npm:@mobiscroll/datepicker-react-next@^5.30.0",
     "@mantine/core": "^7.17.0",
     "@mantine/hooks": "^7.17.0",
+    "@mobiscroll/react": "npm:@mobiscroll/datepicker-react-next@^5.30.0",
     "@reduxjs/toolkit": "^2.5.1",
     "axios": "^1.7.9",
     "formik": "^2.4.6",
     "next": "15.1.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-markdown": "^10.1.0",
     "react-redux": "^9.2.0",
     "react-slick": "^0.30.3",
     "sass": "^1.83.4",
