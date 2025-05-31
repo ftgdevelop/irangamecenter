@@ -16,6 +16,8 @@ import { ServerAddress } from "@/enum/url";
 import Highlights from "@/components/home/highlights";
 import { HighlightItemType } from "@/types/highlight";
 import Contacts from "@/components/home/Contacts";
+import { getBlogs } from "@/actions/blog";
+import { BlogItemType } from "@/types/blog";
 
 type HomeAboutDataType = {
   Keyword: "about_intro" | "icons" | "faq" | "telNumber" | "email";
@@ -79,15 +81,15 @@ type BannerItemType = {
 }
 
 
-const Home: NextPage = ({ homeSections, homeHighlights, homeAboutData }: { homeSections?: HomeSections[], homeHighlights?: HighlightItemType[], homeAboutData?: HomeAboutDataType }) => {
+const Home: NextPage = ({ homeSections, homeHighlights, homeAboutData, recentBlogs }: { homeSections?: HomeSections[], homeHighlights?: HighlightItemType[], homeAboutData?: HomeAboutDataType , recentBlogs?: BlogItemType[]}) => {
 
   const categoris = homeSections?.find(section => section.Keyword === "category");
 
-  const sliderItems = homeSections?.find(section => section.Keyword === "banner")?.Items?.filter(item => item.Image?.url) as SliderItemType[];
+  const sliderItems = homeSections?.find(section => section.Keyword === "banner")?.Items?.filter(item => item.Image?.url) as SliderItemType[] || [];
 
-  const banner2Items = homeSections?.find(section => section.Keyword === "banner2")?.Items?.filter(item => item.Image?.url) as BannerItemType[];
+  const banner2Items = homeSections?.find(section => section.Keyword === "banner2")?.Items?.filter(item => item.Image?.url) as BannerItemType[] || [];
 
-  const banner3Items = homeSections?.find(section => section.Keyword === "banner3")?.Items?.filter(item => item.Image?.url) as BannerItemType[];
+  const banner3Items = homeSections?.find(section => section.Keyword === "banner3")?.Items?.filter(item => item.Image?.url) as BannerItemType[] || [];
 
   const promotionData = homeSections?.find(section => section.Keyword === "special-offer");
 
@@ -99,6 +101,10 @@ const Home: NextPage = ({ homeSections, homeHighlights, homeAboutData }: { homeS
   const SupportNumberUrl = homeAboutData?.find(item => item.Keyword === "telNumber")?.Url;
   const SupportNumberSubtitle = homeAboutData?.find(item => item.Keyword === "telNumber")?.Subtitle;
   const emailAddress = homeAboutData?.find(item => item.Keyword === "email")?.Description;
+
+  if(recentBlogs){
+    console.log(recentBlogs);
+  }
 
   return (
     <>
@@ -139,7 +145,7 @@ const Home: NextPage = ({ homeSections, homeHighlights, homeAboutData }: { homeS
       />
 
       <ColorBannerLinkWides
-        items={banner3Items.map(item => ({
+        items={banner3Items?.map(item => ({
           title: item.Title || "",
           url: item.Url || "#",
           subtitle: item.Subtitle,
@@ -151,7 +157,7 @@ const Home: NextPage = ({ homeSections, homeHighlights, homeAboutData }: { homeS
 
       <BestSellers />
 
-      <Blog />
+      {!!recentBlogs?.length && <Blog blogs={recentBlogs} />}
 
       {aboutDescription && <About description={aboutDescription} />}
 
@@ -171,10 +177,11 @@ const Home: NextPage = ({ homeSections, homeHighlights, homeAboutData }: { homeS
 
 export const getStaticProps = async (context: any) => {
 
-  const [strapiSectionResponse, strapiHighlightsResponse, strapiAboutSectionResponse] = await Promise.all<any>([
+  const [strapiSectionResponse, strapiHighlightsResponse, strapiAboutSectionResponse, blogResponse] = await Promise.all<any>([
     getStrapiPages('filters[Page][$eq]=Home&locale=fa&populate[Sections][on][shared.repeter][populate][Items][populate]=*'),
     getStrapiHighlight('locale=fa&populate[Item][populate]=*'),
     getStrapiPages('filters[Page][$eq]=aboutUs&locale=fa&populate[Sections][populate]=*'),
+    getBlogs({page:1,per_page:5})
   ]);
 
 
@@ -185,7 +192,8 @@ export const getStaticProps = async (context: any) => {
       },
       homeSections: strapiSectionResponse?.data?.data?.[0]?.Sections || null,
       homeHighlights: strapiHighlightsResponse?.data?.data || null,
-      homeAboutData: strapiAboutSectionResponse?.data?.data?.[0]?.Sections || null
+      homeAboutData: strapiAboutSectionResponse?.data?.data?.[0]?.Sections || null,
+      recentBlogs:blogResponse?.data || null
     },
     revalidate: 3600
   })

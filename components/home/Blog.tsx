@@ -2,46 +2,31 @@ import Image from "next/image";
 import Link from "next/link";
 import SlickSlider from "react-slick";
 import ArrowTopLeft from "../icons/ArrowTopLeft";
+import { BlogItemType } from "@/types/blog";
+import { toPersianDigits } from "@/helpers";
+import parse from 'html-react-parser';
 
-const Blog = () => {
+type Props = {
+        blogs : BlogItemType[]
+    };
+const Blog: React.FC<Props> = props => {
 
+  
     const items: {
         image: string;
         imageAlt?: string;
         title: string;
         subTitle?: string;
         url: string;
-    }[] = [
-            {
-                url: "#",
-                title: "FC 25 : در عمق بازی فوتبال جدید EA Sport",
-                image: "/mock-images/blog.jpg",
-                imageAlt: "",
-                subTitle: "7 ساعت پیش"
-            },
-            {
-                url: "#",
-                title: "FC 25 : در عمق بازی فوتبال جدید EA Sport 2",
-                image: "/mock-images/blog.jpg",
-                imageAlt: "",
-                subTitle: "4 ساعت پیش"
-            },
-            {
-                url: "#",
-                title: "FC 25 : در عمق بازی فوتبال جدید EA Sport 2",
-                image: "/mock-images/blog.jpg",
-                imageAlt: "",
-                subTitle: "4 ساعت پیش"
-            },
-            {
-                url: "#",
-                title: "FC 25 : در عمق بازی فوتبال جدید EA Sport 2",
-                image: "/mock-images/blog.jpg",
-                imageAlt: "",
-                subTitle: "4 ساعت پیش"
-            }
-
-        ];
+        date: string
+    }[] = props.blogs.map(blog=>({
+            image:blog.jetpack_featured_media_url || "/images/no-image.jpg",
+            title:blog.title.rendered ||"",
+            url:`/blog/${blog.slug}`,
+            imageAlt:blog.title.rendered || "",
+            subTitle:blog.excerpt.rendered||"",
+            date: toPersianDigits(blog.date)
+    }));
 
     const settings = {
         dots: true,
@@ -51,6 +36,10 @@ const Blog = () => {
         slidesToShow: 1,
         slidesToScroll: 1
     };
+
+    if (!items?.length){
+        return null
+    }
 
     return (
         <section className="bg-[#192b39] py-6">
@@ -72,16 +61,14 @@ const Blog = () => {
                                 className="rounded-large w-full min-h-52 object-cover"
                             />
 
-                            <Link href={item.url} className="p-5 flex justify-between gap-3 items-center">
-                                <div>
-                                    <strong className="block mb-1 text-sm truncate">
-                                        {item.title}
-                                    </strong>
-                                    {!!item.subTitle && <p className="text-xs truncate">
-                                        {item.subTitle}
-                                    </p>}
-                                </div>
-                                <ArrowTopLeft className="w-4 h-4 fill-current" />
+                            <Link href={item.url} className="relative pl-10 p-5 block justify-between gap-3 items-center">
+                                <strong className="block mb-1 text-sm">
+                                    {item.title}
+                                </strong>
+                                {!!item.subTitle && <div className="text-xs truncate-content-p">
+                                    {parse(item.subTitle)}
+                                </div>}
+                                <ArrowTopLeft className="w-4 h-4 fill-current absolute top-1/2 left-4 -translate-y-1/2" />
                             </Link>
 
                         </div>

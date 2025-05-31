@@ -12,6 +12,7 @@ export const ServerAddress = {
   Identity: process.env.PROJECT_SERVER_IDENTITY,
   Payment: process.env.PROJECT_SERVER_PAYMENT,
   Strapi: process.env.PROJECT_SERVER_STRAPI,
+  Blog: process.env.PROJECT_SERVER_BLOG
 };
 
 export const Strapi = {
@@ -59,7 +60,13 @@ export const Payment = {
   // ConfirmByDeposit:"/api/services/app/DepositReserve/ConfirmByDeposit"
 };
 
-
+  export const Blog = {
+    getPosts: "//wp-json/wp/v2/posts",
+    getBestCategories: '/wp-json/wp/v2/best_category',
+    getCategoeyName: '/wp-json/wp/v2/categories',
+    getCities: "//wp-json/wp/v2/cities/",
+    getTagName: '/wp-json/wp/v2/tags/',
+  }
 
 export const ServerStatus = {
   Success: 1,

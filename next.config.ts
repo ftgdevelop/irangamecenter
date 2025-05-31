@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
       {protocol: 'http', hostname: 'cdn2.safaraneh.com', pathname: '**'},
       {protocol: 'https', hostname: 'server.belink.ir', pathname: '**'},
       {protocol:'https', hostname: 'strapi.irangamecenter.com', pathname: '**'},
+      {protocol:'https', hostname: 'pn.irangamecenter.com', pathname: '**'},
     ],
     formats: ['image/avif', 'image/webp'],
   },
@@ -14,6 +15,7 @@ const nextConfig: NextConfig = {
   env: {
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_IDENTITY:"identity.irangamecenter.com",
+    PROJECT_SERVER_BLOG:"pn.irangamecenter.com",
     PROJECT_SERVER_PAYMENT: "payline.samita.com",
     PORT: '',
     PROJECT_SERVER_STRAPI:"strapi.irangamecenter.com",

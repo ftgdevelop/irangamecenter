@@ -248,3 +248,8 @@ body {
   -webkit-user-select: none;     /* جلوگیری از انتخاب متن در iOS */
   user-select: none;
 }
+.truncate-content-p p{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
