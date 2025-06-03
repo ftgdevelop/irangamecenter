@@ -6,6 +6,7 @@ import Accordion from "@/components/shared/Accordion";
 import { useAppDispatch } from "@/hooks/use-store";
 import { useEffect } from "react";
 import { setHeaderType2Params } from "@/redux/pages";
+import Markdown from "react-markdown";
 
 type StrapiData = {
   Items: {
@@ -41,7 +42,7 @@ const Terms: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
         <Accordion
           key={item.id}
           title={item.Question}
-          content={item.Answer}
+          content={<Markdown>{item.Answer}</Markdown>}
           WrapperClassName={`border-b border-white/15 py-2 ${index ? "" : "border-t"}`}
           initiallyOpen={!index}
         />
