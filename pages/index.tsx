@@ -102,10 +102,6 @@ const Home: NextPage = ({ homeSections, homeHighlights, homeAboutData, recentBlo
   const SupportNumberSubtitle = homeAboutData?.find(item => item.Keyword === "telNumber")?.Subtitle;
   const emailAddress = homeAboutData?.find(item => item.Keyword === "email")?.Description;
 
-  if(recentBlogs){
-    console.log(recentBlogs);
-  }
-
   return (
     <>
       <Search />

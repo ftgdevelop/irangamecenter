@@ -3,6 +3,9 @@
 import { getStrapiPages } from "@/actions/strapi";
 import { NextPage } from "next";
 import Accordion from "@/components/shared/Accordion";
+import { useAppDispatch } from "@/hooks/use-store";
+import { useEffect } from "react";
+import { setHeaderType2Params } from "@/redux/pages";
 
 type StrapiData = {
   Items: {
@@ -13,6 +16,24 @@ type StrapiData = {
 }
 
 const Terms: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
+
+  const dispath = useAppDispatch();
+
+  useEffect(()=>{
+
+    dispath(setHeaderType2Params({
+      backUrl:"/",
+      title:"قوانین و مقررات"
+    }));
+
+    return(()=>{
+      dispath(setHeaderType2Params({
+        backUrl:"",
+        title:""
+      }));
+    })
+
+  },[]);
 
   return (
     <div className="px-3">

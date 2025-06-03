@@ -3,13 +3,15 @@ import errorSlice from "./errorSlice";
 import notificationSlice from "./notificationSlice";
 import authenticationSlice from "./authenticationSlice";
 import stylesSlice from "./stylesSlice";
+import pagesSlice from "./pages";
 
 export const store = configureStore({
     reducer: {
         error: errorSlice,
         notification: notificationSlice,
         authentication: authenticationSlice,
-        styles: stylesSlice
+        styles: stylesSlice,
+        pages: pagesSlice
     }
 })
 

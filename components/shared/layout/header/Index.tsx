@@ -5,15 +5,15 @@ import ArrowRight from "@/components/icons/ArrowRight";
 
 type Props = {
     type2Params?: {
-        title: string;
-        backUrl: string;
+        title?: string;
+        backUrl?: string;
     }
 }
 
 const Header: React.FC<Props> = props => {
     return (
         <header className="flex justify-between p-3">
-            {props.type2Params ? (
+            {props.type2Params?.backUrl && props?.type2Params.title ? (
                 <div className="flex items-center py-3.5 gap-4">
                     <Link href={props.type2Params.backUrl} className="w-6 h-6">
                         <ArrowRight />

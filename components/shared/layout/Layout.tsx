@@ -26,6 +26,8 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
     const isBodyScrollable = useAppSelector(state => state?.styles?.bodyScrollable);
 
+    const headerType2ParamsFromRedux = useAppSelector(state => state.pages.headerType2Params);
+
     let showHeader = true;
     let showFooter = true;
     let showFixedNav = true;
@@ -63,6 +65,16 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         showFooter = false;
         showFixedNav = false;
     }
+
+    if (router.pathname.startsWith("/faq")) {
+        headerType2Params = {
+            backUrl: "/",
+            title: "سوالات متداول"
+        };
+        showFooter = false;
+        showFixedNav = false;
+    }
+
 
     useEffect(() => {
         const token = localStorage?.getItem('Token');
@@ -114,12 +126,17 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         }
     }, [isAuthenticated]);
 
+    let headertype2 = headerType2Params;
+    if(headerType2ParamsFromRedux.title && headerType2ParamsFromRedux.backUrl){
+        headertype2 = headerType2ParamsFromRedux;
+    }
+
     return (
         <>
             <Error />
             <Notification />
             <div className={`bg-[#011425] text-white max-w-lg mx-auto ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`}>
-                {showHeader && <Header type2Params={headerType2Params} />}
+                {showHeader && <Header type2Params={headertype2} />}
                 <main className={showFixedNav ? "min-h-screen-nav" : "min-h-screen"}>
                     {props.children}
                 </main>
