@@ -56,8 +56,8 @@ const Blog: React.FC<Props> = props => {
                             <Image
                                 src={item.image || "default-game.png"}
                                 alt={item.imageAlt || item.title}
-                                width={500}
-                                height={300}
+                                width={488}
+                                height={214}
                                 className="rounded-large w-full min-h-52 object-cover"
                             />
 

@@ -14,10 +14,10 @@ const MainMenu: React.FC = () => {
             { label: "دسته بندی ها", url: "#" },
             { label: "پیگیری سفارش", url: "#" },
             { label: "راهنمای ثبت سفارش", url: "#" },
-            { label: "قوانین و مقررات", url: "#" },
-            { label: "سوالات متداول", url: "#" },
-            { label: "درباره ما", url: "#" },
-            { label: "تماس با ما", url: "#" }
+            { label: "قوانین و مقررات", url: "/terms" },
+            { label: "سوالات متداول", url: "/faq" },
+            { label: "درباره ما", url: "/about" },
+            { label: "تماس با ما", url: "/contact" }
         ];
 
 
@@ -84,7 +84,12 @@ const MainMenu: React.FC = () => {
 
                             <nav className="px-3.5">
                                 {items.map((item, index) => (
-                                    <Link key={item.label} href={item.url} className={`block py-5 border-white/15 text-sm ${index ? "border-t" : ""}`}>
+                                    <Link 
+                                        onClick={()=>{setDelayedOpen(false)}}
+                                        key={item.label}
+                                        href={item.url} 
+                                        className={`block py-5 border-white/15 text-sm ${index ? "border-t" : ""}`}
+                                    >
                                         {item.label}
                                     </Link>
                                 ))}
