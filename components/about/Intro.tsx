@@ -3,15 +3,17 @@ import Markdown from 'react-markdown';
 
 type Props = {
     description : string;
+    isInHome?: boolean;
 }
 
-const About:React.FC<Props> = props => {
+const Intro:React.FC<Props> = props => {
     return (
         <div className="p-3">
-            <div className="flex gap-4 py-5">
-                <Image src="/logo2.svg" alt="irangamecenter" width={50} height={50} />
-                <div>
-                    <strong className="block text-xl font-bold">
+
+            <div className={`flex gap-4 ${props.isInHome ? "py-5" : "mb-6 flex-col items-center justify-center"}`}>
+                <Image src={props.isInHome ? "/logo2.svg" : "/logo.svg"} alt="irangamecenter" width={50} height={50} />
+                <div className={props.isInHome?"":"text-center"}>
+                    <strong className={`block font-bold ${props.isInHome?"text-xl":"text-2xl mb-2"}`}>
                         ایران گیم سنتر
                     </strong>
                     <span className="text-xs">
@@ -29,4 +31,4 @@ const About:React.FC<Props> = props => {
     )
 }
 
-export default About;
+export default Intro;

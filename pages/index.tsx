@@ -8,14 +8,14 @@ import Promotion from "@/components/home/Promotion";
 import ColorBannerLinkWides from "@/components/home/ColorBannerLinkWides";
 import BestSellers from "@/components/home/BestSellers";
 import Blog from "@/components/home/Blog";
-import About from "@/components/home/About";
-import FAQ from "@/components/home/FAQ";
+import Intro from "@/components/about/Intro";
+import FAQ from "@/components/about/FAQ";
 import { getStrapiHighlight, getStrapiPages } from "@/actions/strapi";
 import { NextPage } from "next";
 import { ServerAddress } from "@/enum/url";
 import Highlights from "@/components/home/highlights";
 import { HighlightItemType } from "@/types/highlight";
-import Contacts from "@/components/home/Contacts";
+import Contacts from "@/components/shared/Contacts";
 import { getBlogs } from "@/actions/blog";
 import { BlogItemType } from "@/types/blog";
 
@@ -155,7 +155,7 @@ const Home: NextPage = ({ homeSections, homeHighlights, homeAboutData, recentBlo
 
       {!!recentBlogs?.length && <Blog blogs={recentBlogs} />}
 
-      {aboutDescription && <About description={aboutDescription} />}
+      {aboutDescription && <Intro isInHome description={aboutDescription} />}
 
       {!!FAQ_items?.length && <FAQ items={FAQ_items} />}
 

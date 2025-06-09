@@ -13,12 +13,12 @@ type Props = {
 const Header: React.FC<Props> = props => {
     return (
         <header className="flex justify-between p-3">
-            {props.type2Params?.backUrl && props?.type2Params.title ? (
+            {props.type2Params?.backUrl ? (
                 <div className="flex items-center py-3.5 gap-4">
                     <Link href={props.type2Params.backUrl} className="w-6 h-6">
                         <ArrowRight />
                     </Link>
-                    {props.type2Params.title}
+                    {props.type2Params?.title || ""}
                 </div>
             ) : (
                 <Link href="/" className="flex gap-4">

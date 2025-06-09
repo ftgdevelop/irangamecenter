@@ -65,6 +65,15 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         showFooter = false;
         showFixedNav = false;
     }
+    if (router.pathname === "/about") {
+        headerType2Params = {
+            backUrl: "/",
+            title: ""
+        };
+        showHeader = true;
+        showFooter = true;
+        showFixedNav = false;
+    }
 
     if (router.pathname.startsWith("/faq")) {
         headerType2Params = {
@@ -127,7 +136,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }, [isAuthenticated]);
 
     let headertype2 = headerType2Params;
-    if(headerType2ParamsFromRedux.title && headerType2ParamsFromRedux.backUrl){
+    if(headerType2ParamsFromRedux.backUrl){
         headertype2 = headerType2ParamsFromRedux;
     }
 
