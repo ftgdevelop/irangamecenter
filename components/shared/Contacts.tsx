@@ -10,7 +10,7 @@ type Props = {
 }
 const Contacts: React.FC<Props> = props => {
     return (
-        <div className="px-3">
+        <div className="px-5">
             {!!props.supportNumber && <Link
                 href={props.supportNUmberUrl ? `tel:${props.supportNUmberUrl}` : "#"}
                 className="bg-blue-500 flex justify-between items-center gap-5 mb-4 mt-6 rounded-full px-5 h-14"

@@ -8,7 +8,7 @@ type Props = {
 
 const Intro:React.FC<Props> = props => {
     return (
-        <div className="p-3">
+        <div className="px-5">
 
             <div className={`flex gap-4 ${props.isInHome ? "py-5" : "mb-6 flex-col items-center justify-center"}`}>
                 <Image src={props.isInHome ? "/logo2.svg" : "/logo.svg"} alt="irangamecenter" width={50} height={50} />

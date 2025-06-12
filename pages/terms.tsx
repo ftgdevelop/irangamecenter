@@ -37,7 +37,7 @@ const Terms: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
   },[]);
 
   return (
-    <div className="px-3">
+    <div className="px-5">
       {strapiData?.Items?.map((item, index) => (
         <Accordion
           key={item.id}

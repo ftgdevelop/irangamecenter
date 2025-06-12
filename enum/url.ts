@@ -17,7 +17,8 @@ export const ServerAddress = {
 
 export const Strapi = {
   Pages:"/api/pages",
-  Highlights:"/api/highlights"
+  Highlights:"/api/highlights",
+  Contact: "/api/contacts"
 }
 
 export const Identity = {

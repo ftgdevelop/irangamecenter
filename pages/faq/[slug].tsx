@@ -47,7 +47,7 @@ const FaqDetail: NextPage = ({ faq }: {faq?: FAQ }) => {
     },[title]);
 
   return (
-    <div className="px-3">
+    <div className="px-5">
       {faq?.Items?.map((item, index) => (
         <Accordion
           key={item.id}

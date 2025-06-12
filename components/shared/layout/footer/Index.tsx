@@ -32,7 +32,7 @@ const Footer = () => {
         ];
 
     return (
-        <footer className="p-3">
+        <footer className="p-3 px-5">
 
             <Accordion
                 title="لینک های مهم"

@@ -39,7 +39,7 @@ const Faq: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
     },[]);
 
   return (
-    <div className="px-3 grid grid-cols-2 gap-5">
+    <div className="px-5 grid grid-cols-2 gap-5">
       {strapiData?.map(item => {
         const imagePath = item.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}${item.icon?.url}` : undefined;
         return(

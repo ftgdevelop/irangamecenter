@@ -12,7 +12,7 @@ type Props = {
 }
 const AboutIcons: React.FC<Props> = props => {
     return (
-        <div className="px-3 grid grid-cols-2 gap-3.5 mb-10">
+        <div className="px-5 grid grid-cols-2 gap-3.5 mb-10">
             {props.items.map(item=> (
                 <div 
                     key={item.Title}

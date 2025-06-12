@@ -10,7 +10,7 @@ type Props = {
 }
 const FAQ: React.FC<Props> = props => {
     return (
-        <div className="px-3">
+        <div className="px-5">
             {props.items.map((item, index) => (
                 <Accordion
                     key={item.id}

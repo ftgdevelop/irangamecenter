@@ -74,6 +74,15 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         showFooter = true;
         showFixedNav = false;
     }
+    if (router.pathname === "/contact") {
+        headerType2Params = {
+            backUrl: "/",
+            title: ""
+        };
+        showHeader = true;
+        showFooter = false;
+        showFixedNav = false;
+    }
 
     if (router.pathname.startsWith("/faq")) {
         headerType2Params = {

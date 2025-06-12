@@ -328,3 +328,25 @@ export const rialsToLettersToman = (number: number) => {
     return (result + " تومان");
 }
 
+
+export const  isWithinWorkingHours = () => {
+  const now = new Date();
+
+  const tehranTime = new Date(
+    now.toLocaleString("en-US", { timeZone: "Asia/Tehran" })
+  );
+
+  const day = tehranTime.getDay();
+  const hour = tehranTime.getHours();
+  const minute = tehranTime.getMinutes();
+
+  if (day === 5) {
+    return false;
+  }
+
+  const currentMinutes = hour * 60 + minute;
+  const startMinutes = 7 * 60 + 30; 
+  const endMinutes = 19 * 60; 
+
+  return currentMinutes >= startMinutes && currentMinutes <= endMinutes;
+}
