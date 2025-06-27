@@ -19,7 +19,7 @@ export const numberWithCommas = (x: number) => {
     }
 }
 
-export const dateDiplayFormat = ({ date, format, locale }: { date: string; format?: "weekDayNumber" | "m" | "d" | "HH:mm"|"HH:mm:ss"| "dd mm"| "ddd dd mm"| "ddd dd mm yyyy" | "dd mm yyyy" | "yyyy/mm/dd" | "YYYY-MM-DD" | "yyyy/mm/dd h:m" | "yyyy MMM" , locale?: string }): string => {
+export const dateDiplayFormat = ({ date, format, locale }: { date: string; format?: "timeAgo" | "weekDayNumber" | "m" | "d" | "HH:mm"|"HH:mm:ss"| "dd mm"| "ddd dd mm"| "ddd dd mm yyyy" | "dd mm yyyy" | "yyyy/mm/dd" | "YYYY-MM-DD" | "yyyy/mm/dd h:m" | "yyyy MMM" , locale?: string }): string => {
 
     if (!date) return "";
 
@@ -86,6 +86,30 @@ export const dateDiplayFormat = ({ date, format, locale }: { date: string; forma
 
     if (format === "yyyy MMM"){
         return(`${month} ماه ${year}`)
+    }
+
+    if (format === "timeAgo"){
+        const now = new Date();
+        const diffInMs = now.getTime() - dateObject.getTime();
+        const diffInSeconds = Math.floor(diffInMs / 1000);
+        const diffInMinutes = Math.floor(diffInSeconds / 60);
+        const diffInHours = Math.round(diffInMinutes / 60);
+        const diffInDays = Math.round(diffInHours / 24);
+
+        if (diffInMinutes <= 10) {
+            return "لحظاتی پیش";
+        } else if (diffInMinutes < 60) {
+            return `${diffInMinutes} دقیقه پیش`;
+        } else if (diffInHours < 24) {
+            return `${diffInHours} ساعت پیش`;
+        } else if (diffInDays < 7) {
+            return `${diffInDays} روز پیش`;        
+        } else if (diffInDays < 60) {
+            return (`${day} ${month}`)
+        } else {
+           return(`${month} ${year}`)
+        }
+
     }
 
     return date;

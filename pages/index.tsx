@@ -7,7 +7,6 @@ import BannerLinkWides from "@/components/home/BannerLinkWides";
 import Promotion from "@/components/home/Promotion";
 import ColorBannerLinkWides from "@/components/home/ColorBannerLinkWides";
 import BestSellers from "@/components/home/BestSellers";
-import Blog from "@/components/home/Blog";
 import Intro from "@/components/about/Intro";
 import FAQ from "@/components/about/FAQ";
 import { getStrapiHighlight, getStrapiPages } from "@/actions/strapi";
@@ -18,6 +17,7 @@ import { HighlightItemType } from "@/types/highlight";
 import Contacts from "@/components/shared/Contacts";
 import { getBlogs } from "@/actions/blog";
 import { BlogItemType } from "@/types/blog";
+import Blog from "@/components/blog/Blog";
 
 type HomeAboutDataType = {
   Keyword: "about_intro" | "icons" | "faq" | "telNumber" | "email";
