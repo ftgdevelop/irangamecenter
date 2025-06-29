@@ -17,7 +17,7 @@ import { HighlightItemType } from "@/types/highlight";
 import Contacts from "@/components/shared/Contacts";
 import { getBlogs } from "@/actions/blog";
 import { BlogItemType } from "@/types/blog";
-import Blog from "@/components/blog/Blog";
+import BlogsCarousel from "@/components/blog/BlogsCarousel";
 
 type HomeAboutDataType = {
   Keyword: "about_intro" | "icons" | "faq" | "telNumber" | "email";
@@ -153,7 +153,7 @@ const Home: NextPage = ({ homeSections, homeHighlights, homeAboutData, recentBlo
 
       <BestSellers />
 
-      {!!recentBlogs?.length && <Blog blogs={recentBlogs} />}
+      {!!recentBlogs?.length && <BlogsCarousel blogs={recentBlogs} />}
 
       {aboutDescription && <Intro isInHome description={aboutDescription} />}
 

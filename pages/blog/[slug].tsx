@@ -8,7 +8,7 @@ import Image from "next/image";
 import { dateDiplayFormat, toPersianDigits } from "@/helpers";
 import parse from 'html-react-parser';
 import Link from "next/link";
-import Blog from "@/components/blog/Blog";
+import BlogsCarousel from "@/components/blog/BlogsCarousel";
 import Contacts from "@/components/shared/Contacts";
 import { useEffect, useState } from "react";
 import UserCircle from "@/components/icons/UserCircle";
@@ -57,15 +57,15 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
 
             <BreadCrumpt 
                 items={[
-                    {label:"وبلاگ", link:"/blogs"},
+                    {label:"وبلاگ", link:"/blog"},
                     {label: post.title.rendered || "", link:""}
                 ]}
-                wrapperClassName="bg-[#192a39] px-5 py-3"
+                wrapperClassName="bg-[#192a39] px-4 py-3"
                 textColorClass="text-neutral-300"                
             />
             
 
-            <div className="px-5 mb-5">
+            <div className="px-5 mb-4">
                 {!!post?.jetpack_featured_media_url && <Image
                     src={post.jetpack_featured_media_url}
                     alt={post.title.rendered}
@@ -144,7 +144,7 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
                 )}
 
             </div>
-            {!!relatedPosts && <Blog 
+            {!!relatedPosts && <BlogsCarousel 
                 blogs={relatedPosts}
                 title="مطالب مشابه"
             />}

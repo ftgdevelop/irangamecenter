@@ -10,7 +10,7 @@ type Props = {
     blogs : BlogItemType[];
     title?: string;
 };
-const Blog: React.FC<Props> = props => {
+const BlogsCarousel: React.FC<Props> = props => {
 
   
     const items: {
@@ -106,4 +106,4 @@ const Blog: React.FC<Props> = props => {
     )
 }
 
-export default Blog;
+export default BlogsCarousel;

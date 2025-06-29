@@ -109,6 +109,12 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         showHeader = true;
         showFixedNav = false;
     }
+    
+    if (router.pathname === "/blog") {
+        showFooter = true;
+        showHeader = true;
+        showFixedNav = false;
+    }
 
     useEffect(() => {
         const token = localStorage?.getItem('Token');
