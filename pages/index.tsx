@@ -160,10 +160,12 @@ const Home: NextPage = ({ homeSections, homeHighlights, homeAboutData, recentBlo
       {!!FAQ_items?.length && <FAQ items={FAQ_items} />}
 
       {<Contacts 
-        emailAddress={emailAddress}
-        supportNUmberUrl={SupportNumberUrl}
-        supportNumber={SupportNumber}
-        supportNumberSubtitle={SupportNumberSubtitle}
+        data={{
+          emailAddress:emailAddress,
+          supportNUmberUrl : SupportNumberUrl,
+          supportNumber:SupportNumber,
+          supportNumberSubtitle:SupportNumberSubtitle
+        }}
       />}
 
     </>

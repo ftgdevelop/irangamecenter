@@ -33,7 +33,10 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     let showFixedNav = true;
     let headerType2Params: {
         title: string;
-        backUrl: string;
+        backUrl?: string;
+        backToPrev?: boolean;
+        withShare?: boolean;
+        withLogo?: boolean;
     } | undefined = undefined;
 
     if (
@@ -93,6 +96,19 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         showFixedNav = false;
     }
 
+
+    
+    if (router.pathname.startsWith("/blog/")) {
+        headerType2Params = {
+            title:"",
+            withShare: true,
+            withLogo: true,
+            backToPrev: true
+        };
+        showFooter = true;
+        showHeader = true;
+        showFixedNav = false;
+    }
 
     useEffect(() => {
         const token = localStorage?.getItem('Token');

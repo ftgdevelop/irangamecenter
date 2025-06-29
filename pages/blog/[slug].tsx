@@ -1,6 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { GetBlogPostDetails, GetCategories, GetTagName, getBlogs } from "@/actions/blog";
+import { GetBlogPostDetails, GetCategories, GetTagName, GetUsers, getBlogs } from "@/actions/blog";
 import { NextPage } from "next";
 import { BlogItemType, CategoriesNameType } from "@/types/blog";
 import Head from "next/head";
@@ -9,10 +9,27 @@ import { dateDiplayFormat, toPersianDigits } from "@/helpers";
 import parse from 'html-react-parser';
 import Link from "next/link";
 import Blog from "@/components/blog/Blog";
+import Contacts from "@/components/shared/Contacts";
+import { useEffect, useState } from "react";
+import UserCircle from "@/components/icons/UserCircle";
+import BreadCrumpt from "@/components/shared/BreadCrumpt";
 
 
 const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags , relatedPosts}:
     {post: BlogItemType, allCategories: CategoriesNameType[], moduleDisabled?: boolean, tags?:{label:string, id:number}[] , relatedPosts?: BlogItemType[]} ) => {
+
+    const [users, setUsers] = useState<{ id:number, name: string}[] | undefined>();
+
+    useEffect(()=>{
+        const fetchUsers = async () => {
+            const response: any = await GetUsers();
+            setUsers(response.data);
+            
+        }
+        fetchUsers();
+    },[]);
+
+    const authorName = users?.find(user => user.id === post?.author)?.name;
 
     if (moduleDisabled) {
         return (
@@ -25,7 +42,7 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
 
     const PostTitle : string = post?.title?.rendered || ""
 
-    const {content, date, time_read} = post;
+    const {content, date, acf} = post;
 
     const categories = post.categories.map(item => {
         const catObject = allCategories.find(c => c.id === item);
@@ -37,6 +54,15 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
             <Head>
                 <title>{PostTitle}</title>
             </Head>
+
+            <BreadCrumpt 
+                items={[
+                    {label:"وبلاگ", link:"/blogs"},
+                    {label: post.title.rendered || "", link:""}
+                ]}
+                wrapperClassName="bg-[#192a39] px-5 py-3"
+                textColorClass="text-neutral-300"                
+            />
             
 
             <div className="px-5 mb-5">
@@ -75,10 +101,10 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
                         </Link>
                     )}
 
-                    {!!time_read && <div className="block border border-white/15 p-4 rounded-xl text-xs">
+                    {!!acf?.time_read && <div className="block border border-white/15 p-4 rounded-xl text-xs">
                         مدت مطالعه
                         <b className="block font-semibold mt-2 text-sm">
-                            {time_read}
+                            {acf.time_read}
                         </b>
                     </div>}
 
@@ -87,6 +113,15 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
                  {!!content?.rendered && (
                     <div className="inserted-content">
                         {parse(content.rendered)}
+                    </div>
+                )}
+
+                {!!authorName && (
+                    <div className="flex items-center gap-1 my-8">
+                        <UserCircle className="w-6 h-6 fill-current" />
+                        <span className="text-sm">
+                            نویسنده مقاله: {authorName}
+                        </span>
                     </div>
                 )}
 
@@ -113,6 +148,8 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
                 blogs={relatedPosts}
                 title="مطالب مشابه"
             />}
+
+            <Contacts />
             
         </>
     )

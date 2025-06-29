@@ -65,7 +65,7 @@ export const Payment = {
     getPosts: "//wp-json/wp/v2/posts",
     getBestCategories: '/wp-json/wp/v2/best_category',
     getCategoeyName: '/wp-json/wp/v2/categories',
-    getCities: "//wp-json/wp/v2/cities/",
+    getUsers: "/wp-json/wp/v2/users",
     getTagName: '/wp-json/wp/v2/tags/',
   }
 

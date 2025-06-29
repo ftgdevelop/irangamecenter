@@ -1,5 +1,6 @@
 export interface BlogItemType {
     id: number;
+    author?: number;
     date: string;
     slug: string;
     acf: {
@@ -24,7 +25,6 @@ export interface BlogItemType {
         rendered?: string;
     };
     time_read?: string;
-
 }
 
 export interface CityItemType {

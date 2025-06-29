@@ -46,11 +46,11 @@ export const getBlogs = async (options: {per_page?:number, page?: number; tags?:
 
 }
 
-export const GetCities = async () => {
+export const GetUsers = async () => {
 
     try {
       const res = await axios.get(
-        `${ServerAddress.Type}${ServerAddress.Blog}${Blog.getCities}`,
+        `${ServerAddress.Type}${ServerAddress.Blog}${Blog.getUsers}`,
         {
           headers: {
           },
