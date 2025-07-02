@@ -91,7 +91,7 @@ export const getStaticProps = async (context: any) => {
 
   const iconsSection = responseForIconsSection?.data?.data?.[0]?.Sections?.find((item:any) => item.Keyword==="icons");
   const otherSections = responseForAllSections?.data?.data?.[0]?.Sections?.filter((item:any) => item.Keyword !=="icons");
-  const AllSections = [...otherSections, iconsSection];
+  const AllSections = otherSections ? [...otherSections, iconsSection] : null;
 
   return ({
     props: {

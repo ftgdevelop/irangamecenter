@@ -128,7 +128,7 @@ export const getStaticProps = async (context: any) => {
   const contacts1:ContactsData = contactUsResponse1?.data?.data?.[0]?.ContactUs;
   const contacts2:ContactsData = contactUsResponse2?.data?.data?.[0]?.ContactUs;
 
-  const contacts = contacts2.map((item) => {
+  const contacts = contacts2?.map((item) => {
     const icon = contacts1.find((x) => x.id === item.id)?.icon
     return({
       ...item,
