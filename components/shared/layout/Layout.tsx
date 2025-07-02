@@ -11,6 +11,8 @@ import { getCurrentUserProfile } from "@/actions/identity";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import FooterNavigation from "./footer/FooterNavigation";
 import { getUserBalance } from "@/actions/payment";
+import PageLoadingBar from "./PageLoadingBar";
+import { setProgressLoading } from "@/redux/stylesSlice";
 
 type Props = {
     className?: string;
@@ -25,6 +27,29 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
 
     const isBodyScrollable = useAppSelector(state => state?.styles?.bodyScrollable);
+
+    const loading = useAppSelector(state => state.styles.progressLoading);
+    
+    const addLoading = () => {
+        dispatch(setProgressLoading(true));
+        setTimeout(removeLoading, 4000);
+    }
+    const removeLoading = () => { dispatch(setProgressLoading(false)) }
+
+    useEffect(() => {
+
+        removeLoading();
+
+        document.querySelectorAll('a').forEach(item => {
+            item.addEventListener('click', addLoading)
+        });
+
+        return (() => {
+            document.querySelectorAll('a').forEach(item => {
+                item.removeEventListener('click', addLoading)
+            });
+        })
+    }, [router.asPath]);
 
     const headerType2ParamsFromRedux = useAppSelector(state => state.pages.headerType2Params);
 
@@ -176,6 +201,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             <Error />
             <Notification />
             <div className={`bg-[#011425] text-white max-w-lg mx-auto ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`}>
+                <PageLoadingBar active={loading} />
                 {showHeader && <Header type2Params={headertype2} />}
                 <main className={showFooter ? "":showFixedNav ? "min-h-screen-nav" : "min-h-screen"}>
                     {props.children}
