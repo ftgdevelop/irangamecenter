@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import { useState, useEffect } from 'react';
 
 type Props = {
@@ -18,7 +20,7 @@ const PageLoadingBar: React.FC<Props> = props => {
             setOpen(true);
         } else {
             setTimeout(() => { setOpen(false) }, 500);
-            setTimeout(() => { setPercentage(0), 600 });
+            setTimeout(() => { setPercentage(0)}, 600);
         }
     }, [active]);
 
@@ -40,11 +42,9 @@ const PageLoadingBar: React.FC<Props> = props => {
             timeOut = setTimeout(() => { setPercentage(prevState => prevState + .2) }, 500);
         }
 
-        return (() => { clearTimeout(timeOut); })
+        return (() => { clearTimeout(timeOut) })
 
     }, [percentage, active, open]);
-
-
 
 
     if (!open) return null;
