@@ -20,7 +20,7 @@ const Tag: NextPage<any> = ({ page, posts, totalPages, tagName }: { page?: strin
                 wrapperClassName="bg-[#192a39] px-4 py-3"
                 textColorClass="text-neutral-300"
                 items={[
-                    { label: "وبلاگ", link: "" },
+                    { label: "وبلاگ", link: "/blogs" },
                     {label:tagName ||"برچسب نامشخص", link:""}
                 ]}
             />

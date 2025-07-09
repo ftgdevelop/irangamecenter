@@ -123,7 +123,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
 
     
-    if (router.pathname.startsWith("/blog/")) {
+    if (router.pathname.startsWith("/blogs/")) {
         headerType2Params = {
             title:"",
             withShare: true,
@@ -135,7 +135,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         showFixedNav = false;
     }
     
-    if (router.pathname === "/blog") {
+    if (router.pathname === "/blogs") {
         showFooter = true;
         showHeader = true;
         showFixedNav = false;

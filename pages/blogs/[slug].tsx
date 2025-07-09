@@ -57,7 +57,7 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
 
             <BreadCrumpt 
                 items={[
-                    {label:"وبلاگ", link:"/blog"},
+                    {label:"وبلاگ", link:"/blogs"},
                     {label: post.title.rendered || "", link:""}
                 ]}
                 wrapperClassName="bg-[#192a39] px-4 py-3"
@@ -92,7 +92,7 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
                     {!!categories.length && (
                         <Link
                             className="block border border-white/15 p-4 rounded-xl text-xs"
-                            href={`/blog/category/${categories[0]?.id}`}
+                            href={`/blogs/categories/${categories[0]?.id}`}
                         >
                             دسته بندی
                             <b className="block font-semibold mt-2 text-sm">
@@ -132,7 +132,7 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
                         {tags.map(tag => (
                             <Link
                                 key={tag.id}
-                                href={`/blog/tag/${tag.id}`}
+                                href={`/blogs/tags/${tag.id}`}
                                 className="bg-[#161b3b] text-[#a93aff] font-semibold p-4 text-xs rounded-xl block"
                             >
                                 #{tag.label}
