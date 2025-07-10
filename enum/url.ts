@@ -12,7 +12,8 @@ export const ServerAddress = {
   Identity: process.env.PROJECT_SERVER_IDENTITY,
   Payment: process.env.PROJECT_SERVER_PAYMENT,
   Strapi: process.env.PROJECT_SERVER_STRAPI,
-  Blog: process.env.PROJECT_SERVER_BLOG
+  Blog: process.env.PROJECT_SERVER_BLOG,
+  Commerce:process.env.PROJECT_SERVER_ECOMMERCE
 };
 
 export const Strapi = {
@@ -67,6 +68,11 @@ export const Payment = {
     getCategoeyName: '/wp-json/wp/v2/categories',
     getUsers: "/wp-json/wp/v2/users",
     getTagName: '/wp-json/wp/v2/tags/',
+  }
+
+  export const Commerce = {
+    GetAll:"/api/services/app/Product/GetAll",
+    GetBySlug:"/api/services/app/Product/GetBySlug"
   }
 
 export const ServerStatus = {

@@ -18,6 +18,9 @@ import Contacts from "@/components/shared/Contacts";
 import { getBlogs } from "@/actions/blog";
 import { BlogItemType } from "@/types/blog";
 import BlogsCarousel from "@/components/blog/BlogsCarousel";
+import { useEffect } from "react";
+import { getProducts } from "@/actions/commerce";
+import { ProductItem } from "@/types/commerce";
 
 type HomeAboutDataType = {
   Keyword: "about_intro" | "icons" | "faq" | "telNumber" | "email";
@@ -80,8 +83,22 @@ type BannerItemType = {
   }
 }
 
+type ProductsDataType = {
+  totalCount?: number;
+  items?: ProductItem[];
+}
 
-const Home: NextPage = ({ homeSections, homeHighlights, homeAboutData, recentBlogs }: { homeSections?: HomeSections[], homeHighlights?: HighlightItemType[], homeAboutData?: HomeAboutDataType , recentBlogs?: BlogItemType[]}) => {
+const Home: NextPage = ({ homeSections, homeHighlights, homeAboutData, recentBlogs, productsData }: { homeSections?: HomeSections[], homeHighlights?: HighlightItemType[], homeAboutData?: HomeAboutDataType , recentBlogs?: BlogItemType[] , productsData?: ProductsDataType }) => {
+
+  useEffect(()=>{
+    const fetchData = async () => {
+      const response : any = await getProducts({SkipCount:0, MaxResultCount:10});
+      console.log(response.data?.result)
+    }
+    
+    fetchData();
+
+  },[]);
 
   const categoris = homeSections?.find(section => section.Keyword === "category");
 
@@ -151,7 +168,7 @@ const Home: NextPage = ({ homeSections, homeHighlights, homeAboutData, recentBlo
         }))}
       />
 
-      <BestSellers />
+      {!!productsData?.items && <BestSellers products={productsData?.items} />}
 
       {!!recentBlogs?.length && <BlogsCarousel blogs={recentBlogs} />}
 
@@ -175,11 +192,12 @@ const Home: NextPage = ({ homeSections, homeHighlights, homeAboutData, recentBlo
 
 export const getStaticProps = async (context: any) => {
 
-  const [strapiSectionResponse, strapiHighlightsResponse, strapiAboutSectionResponse, blogResponse] = await Promise.all<any>([
+  const [strapiSectionResponse, strapiHighlightsResponse, strapiAboutSectionResponse, blogResponse, productsResponse] = await Promise.all<any>([
     getStrapiPages('filters[Page][$eq]=Home&locale=fa&populate[Sections][on][shared.repeter][populate][Items][populate]=*'),
     getStrapiHighlight('locale=fa&populate[Item][populate]=*'),
     getStrapiPages('filters[Page][$eq]=aboutUs&locale=fa&populate[Sections][populate]=*'),
-    getBlogs({page:1,per_page:5})
+    getBlogs({page:1,per_page:5}),
+    getProducts({SkipCount:0, MaxResultCount:10})
   ]);
 
 
@@ -191,7 +209,8 @@ export const getStaticProps = async (context: any) => {
       homeSections: strapiSectionResponse?.data?.data?.[0]?.Sections || null,
       homeHighlights: strapiHighlightsResponse?.data?.data || null,
       homeAboutData: strapiAboutSectionResponse?.data?.data?.[0]?.Sections || null,
-      recentBlogs:blogResponse?.data || null
+      recentBlogs:blogResponse?.data || null,
+      productsData: productsResponse?.data?.result || null 
     },
     revalidate: 3600
   })

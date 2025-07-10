@@ -3,127 +3,62 @@ import Image from "next/image";
 import Link from "next/link";
 import Tab from "../shared/Tab";
 import Add from "../icons/Add";
+import { ProductItem } from "@/types/commerce";
+import React from "react";
 
-const BestSellers = () => {
+type Props = {
+    products : ProductItem[];
+};
 
-    const items: {
-        image: string;
-        imageAlt?: string;
-        title: string;
-        url: string;
-        price: number;
-        oldPrice?: number;
-        discountPercentage?: number;
-        key:number;
-    }[] = [
-            {
-                url: "#",
-                title: "خرید 10000 cp کال اف دیوتی موبایل",
-                image: "/mock-images/pro1.jpg",
-                imageAlt: "",
-                price: 2559000,
-                oldPrice: 2959000,
-                discountPercentage: 10,
-                key:1
-            },
-            {
-                url: "#",
-                title: "گیفت کارت 50 دلاری نینتندو",
-                image: "/mock-images/pro2.jpg",
-                price: 4000000,
-                oldPrice: 4200000,
-                discountPercentage: 5,
-                key:2
-            },
-            {
-                url: "#",
-                title: "شارژ اکانت پلی استیشن پلاس یکساله",
-                image: "/mock-images/pro3.jpg",
-                price: 2559000,
-                discountPercentage: 0,
-                key:3
-            },
-            {
-                url: "#",
-                title: "گیفت کارت 50 دلاری نینتندو",
-                image: "/mock-images/pro2.jpg",
-                price: 4000000,
-                oldPrice: 4200000,
-                discountPercentage: 5,
-                key:4
-            },
-            {
-                url: "#",
-                title: "گیفت کارت 50 دلاری نینتندو",
-                image: "/mock-images/pro2.jpg",
-                price: 4000000,
-                oldPrice: 4200000,
-                discountPercentage: 5,
-                key:5
-            },
-            {
-                url: "#",
-                title: "شارژ اکانت پلی استیشن پلاس یکساله",
-                image: "/mock-images/pro3.jpg",
-                price: 2559000,
-                discountPercentage: 8,
-                key:6
-            },
-            {
-                url: "#",
-                title: "گیفت کارت 50 دلاری نینتندو",
-                image: "/mock-images/pro2.jpg",
-                price: 4000000,
-                oldPrice: 4200000,
-                discountPercentage: 5,
-                key:7
-            }
-
-        ];
-
+const BestSellers:React.FC<Props> = props => {
 
     const content = (
         <div className="py-5">
-            {items.map(item => (
-                <div
-                    key={item.key}
-                    className="mb-4"
-                >
-                    <Link
-                        href="#"
-                        className="flex"
-                    >
+            {props.products?.map(item => {
+                const oldPrice = 2959000;
+                const price = 2559000;
 
-                        <Image
-                            src={item.image}
-                            alt={item.imageAlt || item.title}
-                            width={160}
-                            height={160}
-                            className="block w-32 h-32 rounded-2xl"
-                        />
+                let discountPercentage = 0;
 
-                        <div className="p-2.5">
-                            <h4 className="text-xs mb-5"> {toPersianDigits(item.title)} </h4>
-                            <div className="flex gap-3 items-end pb-1">
-                                {!!item.discountPercentage && (
-                                    <div className="w-9 h-9 rounded-full bg-gradient-to-t from-orange-600 to-amber-300 text-center pt-2 font-bold text-sm">
-                                        {toPersianDigits(item.discountPercentage?.toString())}
-                                        %
-                                    </div>
-                                )}
+                if (price && oldPrice) {
+                    const discount = ((oldPrice - price) / oldPrice) * 100;
+                    discountPercentage =  Math.floor(discount);
+                }
 
-                                <div className="text-xs text-left">
-                                    {item.oldPrice && (
-                                        <div className="text-[11px] mb-1 line-through">{numberWithCommas(item.oldPrice)} تومان </div>
+                return(
+                    <div key={item.id} className="mb-4">
+                        <Link href={`/products/${item.slug}`} className="flex" >
+                            <Image
+                                src={item.image.url || "/images/default-game.png"}
+                                alt={item.name || ""}
+                                width={128}
+                                height={128}
+                                className="block w-32 h-32 rounded-2xl"
+                            />
+
+                            <div className="p-2.5">
+                                <h4 className="text-xs mb-5"> {toPersianDigits(item.name || "")} </h4>
+                                <div className="flex gap-3 items-end pb-1">
+                                    {!!discountPercentage && (
+                                        <div className="w-9 h-9 rounded-full bg-gradient-to-t from-orange-600 to-amber-300 text-center pt-2 font-bold text-sm">
+                                            {toPersianDigits(discountPercentage?.toString())}
+                                            %
+                                        </div>
                                     )}
-                                    {numberWithCommas(item.price)} تومان
-                                </div>
 
+                                    <div className="text-xs text-left">
+                                        {oldPrice && (
+                                            <div className="text-[11px] mb-1 line-through">{numberWithCommas(oldPrice)} تومان </div>
+                                        )}
+                                        {numberWithCommas(price)} تومان
+                                    </div>
+
+                                </div>
                             </div>
-                        </div>
-                    </Link>
-                </div>
-            ))}
+                        </Link>
+                    </div>
+                )
+            })}
 
             <button
                 type="button"
