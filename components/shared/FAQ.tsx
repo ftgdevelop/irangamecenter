@@ -1,5 +1,6 @@
 import Markdown from "react-markdown";
-import Accordion from "../shared/Accordion";
+import Accordion from "./Accordion";
+import parse from 'html-react-parser';
 
 type Props = {
     items: {
@@ -7,6 +8,7 @@ type Props = {
         Question?: string;
         Answer?: string;
     }[];
+    answerParse:"parse"|"markDown"
 }
 const FAQ: React.FC<Props> = props => {
     return (
@@ -15,7 +17,7 @@ const FAQ: React.FC<Props> = props => {
                 <Accordion
                     key={item.id}
                     title={item.Question}
-                    content={<Markdown>{item.Answer}</Markdown>}
+                    content={props.answerParse === "markDown" ? (<Markdown>{item.Answer}</Markdown>) : parse(item.Answer||"")}
                     WrapperClassName={`border-b border-white/15 py-2 ${index ? "" : "border-t"}`}
                 />
             ))}

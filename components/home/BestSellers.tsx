@@ -1,10 +1,9 @@
-import { numberWithCommas, toPersianDigits } from "@/helpers";
 import Image from "next/image";
-import Link from "next/link";
 import Tab from "../shared/Tab";
 import Add from "../icons/Add";
 import { ProductItem } from "@/types/commerce";
 import React from "react";
+import ProductListItem from "../products/ProductListItem";
 
 type Props = {
     products : ProductItem[];
@@ -14,51 +13,8 @@ const BestSellers:React.FC<Props> = props => {
 
     const content = (
         <div className="py-5">
-            {props.products?.map(item => {
-                const oldPrice = 2959000;
-                const price = 2559000;
 
-                let discountPercentage = 0;
-
-                if (price && oldPrice) {
-                    const discount = ((oldPrice - price) / oldPrice) * 100;
-                    discountPercentage =  Math.floor(discount);
-                }
-
-                return(
-                    <div key={item.id} className="mb-4">
-                        <Link href={`/products/${item.slug}`} className="flex" >
-                            <Image
-                                src={item.image.url || "/images/default-game.png"}
-                                alt={item.name || ""}
-                                width={128}
-                                height={128}
-                                className="block w-32 h-32 rounded-2xl"
-                            />
-
-                            <div className="p-2.5">
-                                <h4 className="text-xs mb-5"> {toPersianDigits(item.name || "")} </h4>
-                                <div className="flex gap-3 items-end pb-1">
-                                    {!!discountPercentage && (
-                                        <div className="w-9 h-9 rounded-full bg-gradient-to-t from-orange-600 to-amber-300 text-center pt-2 font-bold text-sm">
-                                            {toPersianDigits(discountPercentage?.toString())}
-                                            %
-                                        </div>
-                                    )}
-
-                                    <div className="text-xs text-left">
-                                        {oldPrice && (
-                                            <div className="text-[11px] mb-1 line-through">{numberWithCommas(oldPrice)} تومان </div>
-                                        )}
-                                        {numberWithCommas(price)} تومان
-                                    </div>
-
-                                </div>
-                            </div>
-                        </Link>
-                    </div>
-                )
-            })}
+            {props.products?.map(item => <ProductListItem product={item} key={item.id} /> )}
 
             <button
                 type="button"

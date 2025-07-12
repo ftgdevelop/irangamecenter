@@ -27,7 +27,10 @@ const Header: React.FC<Props> = props => {
                         <button
                             type="button"
                             className="w-6 h-6"
-                            onClick={()=>{router.back()}}
+                            onClick={e=>{
+                                e.preventDefault();
+                                router.back()
+                            }}
                         >
                             <ArrowRight />
                         </button>

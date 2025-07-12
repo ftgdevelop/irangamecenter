@@ -32,7 +32,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     
     const addLoading = () => {
         dispatch(setProgressLoading(true));
-        setTimeout(removeLoading, 4000);
+        //setTimeout(removeLoading, 4000);
     }
     const removeLoading = () => { dispatch(setProgressLoading(false)) }
 
@@ -128,7 +128,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             title:"",
             withShare: true,
             withLogo: true,
-            backToPrev: true
+            backUrl:"/blogs"
         };
         showFooter = true;
         showHeader = true;
@@ -136,6 +136,18 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }
     
     if (router.pathname === "/blogs") {
+        showFooter = true;
+        showHeader = true;
+        showFixedNav = false;
+    }
+
+    if (router.pathname.startsWith("/products/")) {
+        headerType2Params = {
+            title:"",
+            withShare: true,
+            withLogo: true,
+            backUrl:"/products"
+        };
         showFooter = true;
         showHeader = true;
         showFixedNav = false;

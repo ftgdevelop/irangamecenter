@@ -24,7 +24,6 @@ const PageLoadingBar: React.FC<Props> = props => {
         }
     }, [active]);
 
-
     useEffect(() => {
 
         let timeOut: any;

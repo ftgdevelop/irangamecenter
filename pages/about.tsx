@@ -6,7 +6,7 @@ import { useAppDispatch } from "@/hooks/use-store";
 import { useEffect } from "react";
 import { setHeaderType2Params } from "@/redux/pages";
 import Intro from "@/components/about/Intro";
-import FAQ from "@/components/about/FAQ";
+import FAQ from "@/components/shared/FAQ";
 import Contacts from "@/components/shared/Contacts";
 import AboutIcons from "@/components/about/AboutIcons";
 
@@ -67,7 +67,7 @@ const AboutUs: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
 
       {!!icons && <AboutIcons items={icons} />}
 
-      {!!FAQ_items?.length && <FAQ items={FAQ_items} />}
+      {!!FAQ_items?.length && <FAQ items={FAQ_items} answerParse="markDown" />}
 
       <Contacts
         data={{

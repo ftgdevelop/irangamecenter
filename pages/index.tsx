@@ -8,7 +8,7 @@ import Promotion from "@/components/home/Promotion";
 import ColorBannerLinkWides from "@/components/home/ColorBannerLinkWides";
 import BestSellers from "@/components/home/BestSellers";
 import Intro from "@/components/about/Intro";
-import FAQ from "@/components/about/FAQ";
+import FAQ from "@/components/shared/FAQ";
 import { getStrapiHighlight, getStrapiPages } from "@/actions/strapi";
 import { NextPage } from "next";
 import { ServerAddress } from "@/enum/url";
@@ -18,7 +18,6 @@ import Contacts from "@/components/shared/Contacts";
 import { getBlogs } from "@/actions/blog";
 import { BlogItemType } from "@/types/blog";
 import BlogsCarousel from "@/components/blog/BlogsCarousel";
-import { useEffect } from "react";
 import { getProducts } from "@/actions/commerce";
 import { ProductItem } from "@/types/commerce";
 
@@ -90,15 +89,15 @@ type ProductsDataType = {
 
 const Home: NextPage = ({ homeSections, homeHighlights, homeAboutData, recentBlogs, productsData }: { homeSections?: HomeSections[], homeHighlights?: HighlightItemType[], homeAboutData?: HomeAboutDataType , recentBlogs?: BlogItemType[] , productsData?: ProductsDataType }) => {
 
-  useEffect(()=>{
-    const fetchData = async () => {
-      const response : any = await getProducts({SkipCount:0, MaxResultCount:10});
-      console.log(response.data?.result)
-    }
-    
-    fetchData();
+  // useEffect(()=>{
+  //   const fetchData = async () => {
+  //     const response : any = await getProducts({SkipCount:0, MaxResultCount:10});
 
-  },[]);
+  //   }
+    
+  //   fetchData();
+
+  // },[]);
 
   const categoris = homeSections?.find(section => section.Keyword === "category");
 
@@ -174,7 +173,7 @@ const Home: NextPage = ({ homeSections, homeHighlights, homeAboutData, recentBlo
 
       {aboutDescription && <Intro isInHome description={aboutDescription} />}
 
-      {!!FAQ_items?.length && <FAQ items={FAQ_items} />}
+      {!!FAQ_items?.length && <FAQ items={FAQ_items} answerParse="markDown" />}
 
       {<Contacts 
         data={{
@@ -197,7 +196,7 @@ export const getStaticProps = async (context: any) => {
     getStrapiHighlight('locale=fa&populate[Item][populate]=*'),
     getStrapiPages('filters[Page][$eq]=aboutUs&locale=fa&populate[Sections][populate]=*'),
     getBlogs({page:1,per_page:5}),
-    getProducts({SkipCount:0, MaxResultCount:10})
+    getProducts({SkipCount:0, MaxResultCount:100})
   ]);
 
 
