@@ -30,10 +30,12 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
     const loading = useAppSelector(state => state.styles.progressLoading);
     
-    const addLoading = () => {
-        dispatch(setProgressLoading(true));
-        //setTimeout(removeLoading, 4000);
+    const addLoading = (href: string) => {
+        if(href !== router.asPath){
+            dispatch(setProgressLoading(true));
+        }
     }
+
     const removeLoading = () => { dispatch(setProgressLoading(false)) }
 
     useEffect(() => {
@@ -41,12 +43,12 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         removeLoading();
 
         document.querySelectorAll('a').forEach(item => {
-            item.addEventListener('click', addLoading)
+            item.addEventListener('click', () => {addLoading(item.getAttribute("href")||"")})
         });
 
         return (() => {
             document.querySelectorAll('a').forEach(item => {
-                item.removeEventListener('click', addLoading)
+                item.removeEventListener('click', ()=>{addLoading("")})
             });
         })
     }, [router.asPath]);
@@ -123,7 +125,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
 
     
-    if (router.pathname.startsWith("/blogs/")) {
+    if (router.pathname.startsWith("/blog/")) {
         headerType2Params = {
             title:"",
             withShare: true,
@@ -141,7 +143,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         showFixedNav = false;
     }
 
-    if (router.pathname.startsWith("/products/")) {
+    if (router.pathname.startsWith("/product/")) {
         headerType2Params = {
             title:"",
             withShare: true,

@@ -1,6 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { useState, useEffect } from 'react';
+import LoadingFull from '../LoadingFull';
 
 type Props = {
     active: boolean;
@@ -49,6 +50,7 @@ const PageLoadingBar: React.FC<Props> = props => {
     if (!open) return null;
 
     return (
+        <>
         <div className='fixed z-50 top-0 left-0 h-2 w-full'>
             <div className='max-w-lg mx-auto'>
                 <div
@@ -57,6 +59,8 @@ const PageLoadingBar: React.FC<Props> = props => {
                 />
             </div>
         </div>
+        <LoadingFull />
+        </>
     )
 }
 

@@ -1,6 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { getBlogs, GetTagName } from "@/actions/blog";
+import { getBlogs, GetCategories } from "@/actions/blog";
 import { NextPage } from "next";
 import { BlogItemType } from "@/types/blog";
 import Contacts from "@/components/shared/Contacts";
@@ -9,7 +9,7 @@ import BlogListItem from "@/components/blog/BlogListItem";
 import Pagination from "@/components/shared/Pagination";
 import { useRouter } from "next/router";
 
-const Tag: NextPage<any> = ({ page, posts, totalPages, tagName }: { page?: string, posts?: BlogItemType[], totalPages: number, tagName?: string }) => {
+const Category: NextPage<any> = ({ page, posts, totalPages, categoryName }: { page?: string, posts?: BlogItemType[], totalPages: number, categoryName?: string }) => {
 
     const router = useRouter();
     const routerQuery: any = useRouter().query;
@@ -20,8 +20,8 @@ const Tag: NextPage<any> = ({ page, posts, totalPages, tagName }: { page?: strin
                 wrapperClassName="bg-[#192a39] px-4 py-3"
                 textColorClass="text-neutral-300"
                 items={[
-                    { label: "وبلاگ", link: "/blogs" },
-                    {label:tagName ||"برچسب نامشخص", link:""}
+                    // { label: "وبلاگ", link: "/blogs" },
+                    {label:categoryName ||"دسته بندی نامشخص", link:""}
                 ]}
             />
 
@@ -62,18 +62,21 @@ export async function getServerSideProps(context: any) {
 
     const page = context.query?.page || 1;
 
-    const tagId = context.query.tagId;
+    const categoriesResponse: any = await GetCategories();
 
-    const [blogs, tagObject] = await Promise.all<any>([
+    const categorySlug = context.query.categorySlug;
+    const categoryId = categoriesResponse?.data?.find((c:any) => c.slug === categorySlug )?.id;
+
+    const [blogs, categories] = await Promise.all<any>([
         getBlogs({
             per_page: 10,
             page: page,
-            tags:tagId
+            category: categoryId
         }),
-        GetTagName(tagId)
+        GetCategories()
     ]);
 
-    const tagName = tagObject?.data?.name;
+    const categoryName = categories?.data?.find((c:any) => +c.id === +categoryId)?.name;
 
     return (
         {
@@ -81,11 +84,11 @@ export async function getServerSideProps(context: any) {
                 posts: blogs?.data || null,
                 totalPages: +blogs?.headers?.['x-wp-totalpages'] || null,
                 page: page,
-                tagName: tagName || null
+                categoryName: categoryName || null
             }
         }
     )
 }
 
 
-export default Tag;
+export default Category;

@@ -54,7 +54,8 @@ export interface HomeCategoryItemType {
     ]
 }
 
-export interface CategoriesNameType{
+export interface CategoriesObjectType{
     name: string;
-    id:number
+    id:number;
+    slug: string;
 }

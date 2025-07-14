@@ -1,6 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { getBlogs, GetCategories } from "@/actions/blog";
+import { getBlogs, GetTagBySlug } from "@/actions/blog";
 import { NextPage } from "next";
 import { BlogItemType } from "@/types/blog";
 import Contacts from "@/components/shared/Contacts";
@@ -9,7 +9,7 @@ import BlogListItem from "@/components/blog/BlogListItem";
 import Pagination from "@/components/shared/Pagination";
 import { useRouter } from "next/router";
 
-const Category: NextPage<any> = ({ page, posts, totalPages, categoryName }: { page?: string, posts?: BlogItemType[], totalPages: number, categoryName?: string }) => {
+const Tag: NextPage<any> = ({ page, posts, totalPages, tagName }: { page?: string, posts?: BlogItemType[], totalPages: number, tagName?: string }) => {
 
     const router = useRouter();
     const routerQuery: any = useRouter().query;
@@ -20,8 +20,8 @@ const Category: NextPage<any> = ({ page, posts, totalPages, categoryName }: { pa
                 wrapperClassName="bg-[#192a39] px-4 py-3"
                 textColorClass="text-neutral-300"
                 items={[
-                    { label: "وبلاگ", link: "/blogs" },
-                    {label:categoryName ||"دسته بندی نامشخص", link:""}
+                    // { label: "وبلاگ", link: "/blogs" },
+                    { label: tagName || "برچسب نامشخص", link: "" }
                 ]}
             />
 
@@ -62,18 +62,18 @@ export async function getServerSideProps(context: any) {
 
     const page = context.query?.page || 1;
 
-    const categoriyId = context.query.categoryId;
+    const tagSlug = context.query.tagSlug;
 
-    const [blogs, categories] = await Promise.all<any>([
-        getBlogs({
-            per_page: 10,
-            page: page,
-            category: categoriyId
-        }),
-        GetCategories()
-    ]);
+    const res: any = await GetTagBySlug(tagSlug);
+    const tagId = res.data?.[0]?.id;
+    const tagName = res.data?.[0]?.name;
 
-    const categoryName = categories?.data?.find((c:any) => +c.id === +categoriyId)?.name;
+    const blogs : any = await getBlogs({
+        per_page: 10,
+        page: page,
+        tags: tagId
+    });
+
 
     return (
         {
@@ -81,11 +81,12 @@ export async function getServerSideProps(context: any) {
                 posts: blogs?.data || null,
                 totalPages: +blogs?.headers?.['x-wp-totalpages'] || null,
                 page: page,
-                categoryName: categoryName || null
+                tagName: tagName || null,
+                slug: tagSlug || null
             }
         }
     )
 }
 
 
-export default Category;
+export default Tag;

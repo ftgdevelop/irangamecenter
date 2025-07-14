@@ -23,7 +23,7 @@ const BlogsCarousel: React.FC<Props> = props => {
     }[] = props.blogs.map(blog=>({
             image:blog.jetpack_featured_media_url || "/images/no-image.jpg",
             title:blog.title.rendered ||"",
-            url:`/blogs/${blog.slug}`,
+            url:`/blog/${blog.slug}`,
             imageAlt:blog.title.rendered || "",
             subTitle:blog.excerpt.rendered||"",
             date: toPersianDigits(blog.date)

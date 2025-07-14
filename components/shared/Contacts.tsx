@@ -19,7 +19,7 @@ type Props = {
 
 const Contacts: React.FC<Props> = props => {
 
-    const [data, setData] = useState<dataType>(props.data || {emailAddress:"", supportNumber:"", supportNumberSubtitle:"", supportNUmberUrl:""});
+    const [data, setData] = useState<dataType | undefined>(props.data || undefined);
 
     useEffect(()=>{        
         const fetchData = async () => {
@@ -35,11 +35,13 @@ const Contacts: React.FC<Props> = props => {
             }
         }
 
-        if(!props.data){
+        if(!data){
             fetchData();
         }
 
     },[data]);
+
+    if (!data) return null;
 
     const {emailAddress, supportNUmberUrl, supportNumber, supportNumberSubtitle} = data;
 

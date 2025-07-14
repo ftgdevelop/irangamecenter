@@ -2,7 +2,7 @@
 
 import { GetBlogPostDetails, GetCategories, GetTagName, GetUsers, getBlogs } from "@/actions/blog";
 import { NextPage } from "next";
-import { BlogItemType, CategoriesNameType } from "@/types/blog";
+import { BlogItemType, CategoriesObjectType } from "@/types/blog";
 import Head from "next/head";
 import Image from "next/image";
 import { dateDiplayFormat, toPersianDigits } from "@/helpers";
@@ -16,7 +16,7 @@ import BreadCrumpt from "@/components/shared/BreadCrumpt";
 
 
 const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags , relatedPosts}:
-    {post: BlogItemType, allCategories: CategoriesNameType[], moduleDisabled?: boolean, tags?:{label:string, id:number}[] , relatedPosts?: BlogItemType[]} ) => {
+    {post: BlogItemType, allCategories: CategoriesObjectType[], moduleDisabled?: boolean, tags?:{label:string, id:number, slug: string}[] , relatedPosts?: BlogItemType[]} ) => {
 
     const [users, setUsers] = useState<{ id:number, name: string}[] | undefined>();
 
@@ -92,7 +92,7 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
                     {!!categories.length && (
                         <Link
                             className="block border border-white/15 p-4 rounded-xl text-xs"
-                            href={`/blogs/categories/${categories[0]?.id}`}
+                            href={`/category/${categories[0]?.slug}`}
                         >
                             دسته بندی
                             <b className="block font-semibold mt-2 text-sm">
@@ -132,7 +132,7 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
                         {tags.map(tag => (
                             <Link
                                 key={tag.id}
-                                href={`/blogs/tags/${tag.id}`}
+                                href={`/tag/${tag.slug}`}
                                 className="bg-[#161b3b] text-[#a93aff] font-semibold p-4 text-xs rounded-xl block"
                             >
                                 #{tag.label}
@@ -175,6 +175,7 @@ export async function getServerSideProps(context: any) {
     const tags : {
         label: string;
         id: number;
+        slug: string;
     }[] = [];
 
     const tagsIds = BlogPost?.data?.[0]?.tags;
@@ -187,7 +188,8 @@ export async function getServerSideProps(context: any) {
             if(response.data){
                 tags.push({
                     id:response.data.id,
-                    label: response.data.name
+                    label: response.data.name,
+                    slug: response.data.slug
                 })
             }
         }
