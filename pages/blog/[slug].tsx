@@ -16,14 +16,14 @@ import BreadCrumpt from "@/components/shared/BreadCrumpt";
 
 
 const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags , relatedPosts}:
-    {post: BlogItemType, allCategories: CategoriesObjectType[], moduleDisabled?: boolean, tags?:{label:string, id:number, slug: string}[] , relatedPosts?: BlogItemType[]} ) => {
+    {post?: BlogItemType, allCategories: CategoriesObjectType[], moduleDisabled?: boolean, tags?:{label:string, id:number, slug: string}[] , relatedPosts?: BlogItemType[]} ) => {
 
     const [users, setUsers] = useState<{ id:number, name: string}[] | undefined>();
 
     useEffect(()=>{
         const fetchUsers = async () => {
             const response: any = await GetUsers();
-            setUsers(response.data);
+            setUsers(response?.data);
             
         }
         fetchUsers();
@@ -41,6 +41,8 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
     //data={post.title?.rendered} page="بلاگ" category={[post.categories_names[0], post?.categories[0]]} />
 
     const PostTitle : string = post?.title?.rendered || ""
+
+    if (!post) return null;
 
     const {content, date, acf} = post;
 
@@ -185,7 +187,7 @@ export async function getServerSideProps(context: any) {
     if(tagsIds?.length){
         for(let i=0 ; i < tagsIds.length ; i++){
             const response: any = await GetTagName(tagsIds[i]);
-            if(response.data){
+            if(response?.data){
                 tags.push({
                     id:response.data.id,
                     label: response.data.name,
@@ -199,7 +201,7 @@ export async function getServerSideProps(context: any) {
     if(categories?.length){
         for(let i=0 ; i < categories.length ; i++){
             const response: any = await getBlogs({category:categories[i]});
-            if(response.data){
+            if(response?.data){
                 relatedPosts.push(...response.data)
             }
         } 
