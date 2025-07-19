@@ -4,6 +4,7 @@ import Add from "../icons/Add";
 import { ProductItem } from "@/types/commerce";
 import React from "react";
 import ProductListItem from "../products/ProductListItem";
+import Link from "next/link";
 
 type Props = {
     products : ProductItem[];
@@ -16,13 +17,13 @@ const BestSellers:React.FC<Props> = props => {
 
             {props.products?.map(item => <ProductListItem product={item} key={item.id} /> )}
 
-            <button
-                type="button"
+            <Link
+                href="/products"
                 className="text-sm text-[#ca54ff] bg-[#161b39] w-full px-5 py-3 flex rounded-full justify-center gap-3 "
             >
                 <Add />
                 محصولات بیشتر
-            </button>
+            </Link>
         </div>
     );
 

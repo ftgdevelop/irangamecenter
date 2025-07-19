@@ -196,7 +196,7 @@ export const getStaticProps = async (context: any) => {
     getStrapiHighlight('locale=fa&populate[Item][populate]=*'),
     getStrapiPages('filters[Page][$eq]=aboutUs&locale=fa&populate[Sections][populate]=*'),
     getBlogs({page:1,per_page:5}),
-    getProducts({SkipCount:0, MaxResultCount:100})
+    getProducts({SkipCount:0, MaxResultCount:10})
   ]);
 
 

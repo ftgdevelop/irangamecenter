@@ -17,7 +17,7 @@ const Tag: NextPage<any> = ({ page, posts, totalPages, tagName }: { page?: strin
     return (
         <>
             <BreadCrumpt
-                wrapperClassName="bg-[#192a39] px-4 py-3"
+                wrapperClassName="bg-[#192a39] px-4 py-3 mb-4"
                 textColorClass="text-neutral-300"
                 items={[
                     // { label: "وبلاگ", link: "/blogs" },

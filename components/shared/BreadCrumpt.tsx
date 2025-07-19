@@ -20,7 +20,7 @@ const BreadCrumpt: React.FC<Props> = props => {
     const carret = <CaretLeft className="w-3.5 h-3.5 fill-[#a93aff]" />
 
     return (
-        <div className={`flex flex-wrap items-center gap-2 text-2xs mb-4 ${props.wrapperClassName || ""}`}>
+        <div className={`flex flex-wrap items-center gap-2 text-2xs ${props.wrapperClassName || ""}`}>
             {!props.hideHome && <Fragment>
                 <Link href="/" className={`${linksClassName}`} aria-label="home">
                     <Home2 className="w-5 h-5 mb-1.5 fill-current" />

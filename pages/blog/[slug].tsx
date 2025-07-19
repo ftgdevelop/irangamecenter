@@ -62,7 +62,7 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
                     {label:"وبلاگ", link:"/blogs"},
                     {label: post.title.rendered || "", link:""}
                 ]}
-                wrapperClassName="bg-[#192a39] px-4 py-3"
+                wrapperClassName="bg-[#192a39] px-4 py-3 mb-4"
                 textColorClass="text-neutral-300"                
             />
             

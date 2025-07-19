@@ -137,5 +137,34 @@ export interface ProductDetailData {
         url?: string;
     };
     rating?: RatingItemType[];
-
+    publisher?: any;
+    playerPerspective?: {
+        keyword?: string;
+        name?: string;
+    }[];
+    pegi?: {
+        title?: string;
+        description?: string;
+        keyword?: string;
+        name?: string;
+        id?: number;
+    }
+    esrb?: {
+        title?: string;
+        description?: string;
+        keyword?: string;
+        name?: string;
+        id?: number;
+    };
+    theme?: {
+        keyword?: string;
+        name?: string;
+        id?: number;
+    }[];
+    awards?:string[];
+    releaseDate?: string;
+    gameplay?:{
+        keyword?: string;
+        name?: string;
+    }[];
 }
