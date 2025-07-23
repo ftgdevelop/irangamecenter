@@ -33,10 +33,10 @@ export const getServerSideProps = async ({ res }: { res: any }) => {
 
   if (process.env.PROJECT_SERVER_BLOG) {
     const postsResponse: any = await getBlogs({
-      per_page:100,
+      per_page:1,
       page:1
     });
-    sitemap = creareSiteMap(+postsResponse?.headers?.['x-wp-totalpages'] || 0);
+    sitemap = creareSiteMap(Math.ceil(+postsResponse?.headers?.['x-wp-totalpages']/100 || 0));
   } else {
     sitemap = creareSiteMap(0);
   }
