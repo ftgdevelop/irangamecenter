@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
   },
   reactStrictMode: true,
   env: {
+    SITE_NAME: 'https://www.irangamecenter.com',
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_IDENTITY:"identity.irangamecenter.com",
     PROJECT_SERVER_BLOG:"pn.irangamecenter.com",

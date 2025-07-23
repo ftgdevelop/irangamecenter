@@ -1,0 +1,6 @@
+user-agent: *
+Disallow: /bin/
+Disallow: /Errors/*
+Disallow: /errors/*
+Disallow: /*.html$
+Sitemap:  https://www.irangamecenter.com/sitemap.xml

@@ -115,6 +115,19 @@ export const GetTagName = async (id : number) => {
   }
 };
 
+export const GetAllTags = async () => {
+  try {
+    const res = await axios.get(
+      `${ServerAddress.Type}${ServerAddress.Blog}${Blog.getTagName}`
+    );
+    return res;
+  } catch (error : any) {
+    console.log("error", error);
+    return error.response
+  }
+};
+
+
 export const GetTagBySlug = async (slug : string) => {
   try {
     const res = await axios.get(
