@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
       {protocol: 'https', hostname: 'server.belink.ir', pathname: '**'},
       {protocol:'https', hostname: 'strapi.irangamecenter.com', pathname: '**'},
       {protocol:'https', hostname: 'pn.irangamecenter.com', pathname: '**'},
+      {protocol:'https', hostname: 'cdn.irangamecenter.com', pathname: '**'}
     ],
     formats: ['image/avif', 'image/webp'],
   },

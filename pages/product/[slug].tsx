@@ -19,8 +19,8 @@ const DetailBlog: NextPage<any> = ({ productData }:
 
   console.log(productData);
 
-  const [consoleType,setConsoleType ] = useState<string>("");
-  const [capacity,setCapacity ] = useState<string>("a");
+  const [consoleType, setConsoleType] = useState<string>("");
+  const [capacity, setCapacity] = useState<string>("a");
 
 
   const breadcrumbsItems: {
@@ -67,45 +67,45 @@ const DetailBlog: NextPage<any> = ({ productData }:
 
         <div className="flex gap-3 flex-wrap mb-5">
           {!!productData.genres?.[0]?.name && (
-            <div className="block border border-white/15 p-4 rounded-xl text-xs max-w-56" >
+            <div className="block border border-white/15 p-3 rounded-xl text-xs max-w-56" >
               سبک بازی
-              <b className="block font-semibold mt-2 text-sm">
+              <b className="block font-semibold mt-2 text-xs">
                 {productData.genres.map(item => item.name).join("، ")}
               </b>
             </div>
           )}
 
           {!!productData.publisher && (
-            <div className="block border border-white/15 p-4 rounded-xl text-xs max-w-56" >
+            <div className="block border border-white/15 p-3 rounded-xl text-xs max-w-56" >
               شرکت انتشار دهنده
-              <b className="block font-semibold mt-2 text-sm">
+              <b className="block font-semibold mt-2 text-xs">
                 under construction
               </b>
             </div>
           )}
 
           {!!productData.gameplay?.length && (
-            <div className="block border border-white/15 p-4 rounded-xl text-xs max-w-56" >
+            <div className="block border border-white/15 p-3 rounded-xl text-xs max-w-56" >
               حالت بازی
-              <b className="block font-semibold mt-2 text-sm">
+              <b className="block font-semibold mt-2 text-xs">
                 {productData.gameplay.map(item => item.name).join("، ")}
               </b>
             </div>
           )}
-          {!!productData.playerPerspective && (
-            <div className="block border border-white/15 p-4 rounded-xl text-xs max-w-56" >
+          {!!productData.playerPerspective?.length && (
+            <div className="block border border-white/15 p-3 rounded-xl text-xs max-w-56" >
               زاویه دید
-              <b className="block font-semibold mt-2 text-sm">
+              <b className="block font-semibold mt-2 text-xs">
                 {productData.playerPerspective.map(item => item.name).join("، ")}
               </b>
             </div>
           )}
 
 
-          {!!productData.theme && (
-            <div className="block border border-white/15 p-4 rounded-xl text-xs max-w-56" >
+          {!!productData.theme?.length && (
+            <div className="block border border-white/15 p-3 rounded-xl text-xs max-w-56" >
               تم بازی
-              <b className="block font-semibold mt-2 text-sm">
+              <b className="block font-semibold mt-2 text-xs">
                 {productData.theme.map(item => item.name).join("، ")}
               </b>
             </div>
@@ -113,35 +113,53 @@ const DetailBlog: NextPage<any> = ({ productData }:
 
 
           {!!productData.pegi && (
-            <div className="block border border-white/15 p-4 rounded-xl text-xs max-w-56" >
-              رده سنی اروپا (PEGI)
-              <b className="block font-semibold mt-2 text-sm">
-                name: {productData.pegi.name}
-                <br />
-                title: {productData.pegi.title}
-                <br />
-                description: {productData.pegi.description}
-              </b>
+            <div className="block border border-white/15 p-3 rounded-xl text-xs max-w-56" >
+              <div className="flex gap-2">
+                {productData?.pegi?.image && (
+                  <Image
+                    src={productData.pegi.image}
+                    alt={productData.pegi.title || productData.pegi.name || ""}
+                    width={48}
+                    height={48}
+                    className="w-12 h-12 text-4xs"
+                  />
+                )}
+                <div>
+                  رده سنی اروپا (PEGI)
+                  <b className="block font-semibold mt-2 text-xs">
+                    {productData.pegi.name}
+                  </b>
+                </div>
+              </div>
             </div>
           )}
 
           {!!productData.esrb && (
-            <div className="block border border-white/15 p-4 rounded-xl text-xs max-w-56" >
-              رده سنی آمریکا (ESRB)
-              <b className="block font-semibold mt-2 text-sm">
-                name: {productData.esrb.name}
-                <br />
-                title: {productData.esrb.title}
-                <br />
-                description: {productData.esrb.description}
-              </b>
+            <div className="block border border-white/15 p-3 rounded-xl text-xs max-w-56" >
+              <div className="flex gap-2">
+                {productData?.esrb?.image && (
+                  <Image
+                    src={productData.esrb.image}
+                    alt={productData.esrb.title || productData.esrb.name || ""}
+                    width={48}
+                    height={48}
+                    className="w-12 h-12 text-4xs"
+                  />
+                )}
+                <div>
+                  رده سنی آمریکا (ESRB)
+                  <b className="block font-semibold mt-2 text-xs">
+                    {productData.esrb.name}
+                  </b>
+                </div>
+              </div>
             </div>
           )}
 
           {!!productData.releaseDate && (
-            <div className="block border border-white/15 p-4 rounded-xl text-xs max-w-56" >
+            <div className="block border border-white/15 p-3 rounded-xl text-xs max-w-56" >
               تاریخ انتشار
-              <b className="block font-semibold mt-2 text-sm">
+              <b className="block font-semibold mt-2 text-xs">
                 {dateDiplayFormat({
                   date: productData.releaseDate,
                   locale: "fa",
@@ -153,20 +171,20 @@ const DetailBlog: NextPage<any> = ({ productData }:
 
         </div>
 
-        <Select 
+        <Select
           wrapperClassName="mb-5"
           buttonClassName="h-12"
-          items={[{label:"console a", value:"a"},{label:"console b", value:"b"},{label:"console c", value:"c"}]}
-          onChange={e => {setConsoleType(e)}}
+          items={[{ label: "console a", value: "a" }, { label: "console b", value: "b" }, { label: "console c", value: "c" }]}
+          onChange={e => { setConsoleType(e) }}
           value={consoleType}
           label="انتخاب کنسول مورد نظر"
           placeholder="نوع کنسول را انتخاب نمایید"
-        />    
+        />
 
-        <Select 
+        <Select
           buttonClassName="h-12"
-          items={[{label:"ظرفیت 2", value:"a"},{label:"ظرفیت 4", value:"b"},{label:"ظرفیت 10", value:"c"}]}
-          onChange={e => {setCapacity(e)}}
+          items={[{ label: "ظرفیت 2", value: "a" }, { label: "ظرفیت 4", value: "b" }, { label: "ظرفیت 10", value: "c" }]}
+          onChange={e => { setCapacity(e) }}
           value={capacity}
           label="انتخاب ظرفیت"
           placeholder=""

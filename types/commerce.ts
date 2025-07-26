@@ -148,13 +148,22 @@ export interface ProductDetailData {
         keyword?: string;
         name?: string;
         id?: number;
-    }
+        image?: string;
+    };
+    pegics?:{
+        title?: string;
+        description?: string;
+        keyword?: string;
+        name?: string;
+        id?: number;
+    }[];
     esrb?: {
         title?: string;
         description?: string;
         keyword?: string;
         name?: string;
         id?: number;
+        image?: string;
     };
     theme?: {
         keyword?: string;
