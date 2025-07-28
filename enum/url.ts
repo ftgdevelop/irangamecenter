@@ -72,7 +72,8 @@ export const Payment = {
 
   export const Commerce = {
     GetAll:"/api/services/app/Product/GetAll",
-    GetBySlug:"/api/services/app/Product/GetBySlug"
+    GetBySlug:"/api/services/app/Product/GetBySlug",
+    GetBrandBySlug:"/api/services/app/Brand/GetBySlug"
   }
 
 export const ServerStatus = {

@@ -12,12 +12,11 @@ import Image from "next/image";
 import RatingItem from "@/components/products/RatingItem";
 import { dateDiplayFormat } from "@/helpers";
 import Select from "@/components/shared/Select";
+import Link from "next/link";
 
 
 const DetailBlog: NextPage<any> = ({ productData }:
   { productData: ProductDetailData }) => {
-
-  console.log(productData);
 
   const [consoleType, setConsoleType] = useState<string>("");
   const [capacity, setCapacity] = useState<string>("a");
@@ -41,7 +40,6 @@ const DetailBlog: NextPage<any> = ({ productData }:
     })
   }
 
-  console.log("productData.publisher", productData.publisher)
   return (
     <>
       {!!breadcrumbsItems.length && (
@@ -65,21 +63,57 @@ const DetailBlog: NextPage<any> = ({ productData }:
 
         <h2 className="text-2xl font-semibold my-4"> بازی {productData.name}</h2>
 
-        <div className="flex gap-3 flex-wrap mb-5">
+        <div className="flex gap-3 flex-wrap items-start mb-5">
+
+          {!!productData.developer?.name && (
+            <Link href={`/brand/${productData.developer.slug || "unknown"}`} className="block border border-white/15 p-3 rounded-xl text-xs max-w-56" >
+              <div className="flex gap-2">
+                {productData.developer.filePath && (
+                  <Image
+                    src={productData.developer.filePath}
+                    alt={productData.developer.fileAltAttribute || productData.developer.fileTitleAttribute || ""}
+                    width={48}
+                    height={48}
+                    className="w-12 h-12 text-4xs"
+                  />
+                )}
+                <div>
+                  شرکت سازنده
+                  <b className="block font-semibold mt-2 text-xs">
+                    {productData.developer.name}
+                  </b>
+                </div>
+              </div>
+            </Link>
+          )}
+
+          {!!productData.publisher?.name && (
+            <Link href={`/brand/${productData.publisher.slug || "unknown"}`} className="block border border-white/15 p-3 rounded-xl text-xs max-w-56" >
+              <div className="flex gap-2">
+                {productData.publisher.filePath && (
+                  <Image
+                    src={productData.publisher.filePath}
+                    alt={productData.publisher.fileAltAttribute || productData.publisher.fileTitleAttribute || ""}
+                    width={48}
+                    height={48}
+                    className="w-12 h-12 text-4xs"
+                  />
+                )}
+                <div>
+                  شرکت انتشار دهنده
+                  <b className="block font-semibold mt-2 text-xs">
+                    {productData.publisher.name}
+                  </b>
+                </div>
+              </div>
+            </Link>
+          )}
+
           {!!productData.genres?.[0]?.name && (
             <div className="block border border-white/15 p-3 rounded-xl text-xs max-w-56" >
               سبک بازی
               <b className="block font-semibold mt-2 text-xs">
                 {productData.genres.map(item => item.name).join("، ")}
-              </b>
-            </div>
-          )}
-
-          {!!productData.publisher && (
-            <div className="block border border-white/15 p-3 rounded-xl text-xs max-w-56" >
-              شرکت انتشار دهنده
-              <b className="block font-semibold mt-2 text-xs">
-                under construction
               </b>
             </div>
           )}

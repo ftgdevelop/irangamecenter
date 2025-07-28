@@ -137,7 +137,6 @@ export interface ProductDetailData {
         url?: string;
     };
     rating?: RatingItemType[];
-    publisher?: any;
     playerPerspective?: {
         keyword?: string;
         name?: string;
@@ -150,7 +149,7 @@ export interface ProductDetailData {
         id?: number;
         image?: string;
     };
-    pegics?:{
+    pegics?: {
         title?: string;
         description?: string;
         keyword?: string;
@@ -170,10 +169,24 @@ export interface ProductDetailData {
         name?: string;
         id?: number;
     }[];
-    awards?:string[];
+    awards?: string[];
     releaseDate?: string;
-    gameplay?:{
+    gameplay?: {
         keyword?: string;
         name?: string;
     }[];
+    developer?: {
+        fileAltAttribute?: string;
+        filePath?: string;
+        fileTitleAttribute?: string;
+        name?: string;
+        slug?: string;
+    };
+    publisher?:{
+        fileAltAttribute?: string;
+        filePath?: string;
+        fileTitleAttribute?: string;
+        name?: string;
+        slug?: string;
+    }
 }
