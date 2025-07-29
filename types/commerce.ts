@@ -116,7 +116,18 @@ export interface RatingItemType {
     type: "IGN" | "GameSpot" | "Metacritic" | "Eurogamer" | "Steam";
     value: number;
 }
-
+export interface ProductVariant {
+    id: number;
+    name?: string;
+    slug?: string;
+    value?: string;
+    items?: {
+        status?: "";
+        attributes?: {
+            value?: string;
+        }[];
+    }[];
+}
 export interface ProductDetailData {
     breadcrumbs?: {
         name?: string;
@@ -182,11 +193,12 @@ export interface ProductDetailData {
         name?: string;
         slug?: string;
     };
-    publisher?:{
+    publisher?: {
         fileAltAttribute?: string;
         filePath?: string;
         fileTitleAttribute?: string;
         name?: string;
         slug?: string;
     }
+    variants?: ProductVariant[];
 }

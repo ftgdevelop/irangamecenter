@@ -1,7 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { NextPage } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getProductBySlug } from "@/actions/commerce";
 import { ProductDetailData } from "@/types/commerce";
 import BreadCrumpt from "@/components/shared/BreadCrumpt";
@@ -18,8 +18,39 @@ import Link from "next/link";
 const DetailBlog: NextPage<any> = ({ productData }:
   { productData: ProductDetailData }) => {
 
-  const [consoleType, setConsoleType] = useState<string>("");
-  const [capacity, setCapacity] = useState<string>("a");
+  const [variant, setVariant] = useState<string>("");
+
+  const [capacity, setCapacity] = useState<string>("");
+
+
+  useEffect(() => {
+    if (variant) {
+      setCapacity("");
+    }
+  }, [variant]);
+
+  const selectedVariant = productData.variants?.find(item => item.slug === variant);
+  const capacityOptions: {
+    label: string;
+    value: string;
+  }[] = [];
+
+  selectedVariant?.items?.forEach(item => {
+    item.attributes?.forEach(attributes => {
+      if (attributes.value) {
+        capacityOptions.push({
+          label: attributes.value,
+          value: attributes.value
+        })
+      }
+    })
+  });
+
+  selectedVariant?.items?.map(item => item.attributes?.map(attribute => ({
+    label: attribute.value || "",
+    value: attribute.value || ""
+  }))
+  );
 
 
   const breadcrumbsItems: {
@@ -205,23 +236,26 @@ const DetailBlog: NextPage<any> = ({ productData }:
 
         </div>
 
-        <Select
+        {!!productData.variants?.length && (<Select
           wrapperClassName="mb-5"
           buttonClassName="h-12"
-          items={[{ label: "console a", value: "a" }, { label: "console b", value: "b" }, { label: "console c", value: "c" }]}
-          onChange={e => { setConsoleType(e) }}
-          value={consoleType}
+          items={productData.variants.map(item => ({
+            label: item.value || "",
+            value: item.slug || ""
+          }))}
+          onChange={setVariant}
+          value={variant}
           label="انتخاب کنسول مورد نظر"
           placeholder="نوع کنسول را انتخاب نمایید"
-        />
+        />)}
 
         <Select
           buttonClassName="h-12"
-          items={[{ label: "ظرفیت 2", value: "a" }, { label: "ظرفیت 4", value: "b" }, { label: "ظرفیت 10", value: "c" }]}
-          onChange={e => { setCapacity(e) }}
+          items={capacityOptions}
+          onChange={setCapacity}
           value={capacity}
           label="انتخاب ظرفیت"
-          placeholder=""
+          placeholder="ظرفیت را انتخاب کنید"
         />
 
       </div>

@@ -9,17 +9,34 @@ interface GetAllProductsParams {
     SkipCount: number;
     MaxResultCount: number;
     Brands?: string[];
+    sort?: ProductSortKeywords
 }
 
 export const getProducts = async (params: GetAllProductsParams, acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
 
 
-    let queryParams = `?MaxResultCount=${params.MaxResultCount}&SkipCount=${params.SkipCount}&Brands[]=hazelight-studios`
+    let queryParams = `?MaxResultCount=${params.MaxResultCount}&SkipCount=${params.SkipCount}`
 
     if (params.Brands?.length) {
         params.Brands.forEach(brand => {
-            queryParams+= `&Brands=${brand}`
+            queryParams += `&Brands=${brand}`
         })
+    }
+    switch (params.sort) {
+        case "HighPrice":
+            queryParams += `&OrderBy=Price&SortBy=asc`;
+            break;
+        case "LowPrice":
+            queryParams += `&OrderBy=Price&SortBy=desc`;
+            break;
+        case "Sale":
+            queryParams += `&OrderBy=Sale&SortBy=asc`;
+            break;
+        case "Visitor":
+            queryParams += `&OrderBy=Visitor&SortBy=asc`;
+            break;
+        default:
+            break;
     }
 
     try {
@@ -77,4 +94,10 @@ export const getBrandBySlug = async (slug: string, acceptLanguage: "fa-IR" | "en
     }
 }
 
+export type ProductSortKeywords = "Sale" | "Visitor" | "LowPrice" | "HighPrice";
+
+export type ProductSortOption = {
+    label: string;
+    keywords: ProductSortKeywords;
+}
 

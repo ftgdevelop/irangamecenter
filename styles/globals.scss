@@ -104,6 +104,7 @@ body {
     transform: rotate(-360deg);
   }
 }
+
 @layer utilities {
 
   .ltr{
@@ -158,6 +159,10 @@ body {
 
   .h-highlight{
     height: calc(100svh - 90px);
+  }
+
+  .bg-gradient-green{
+    @apply bg-gradient-to-t from-[#028d7e] to-[#99feac];
   }
   
 }
