@@ -6,6 +6,8 @@ import React from "react";
 import ProductListItem from "../products/ProductListItem";
 import Link from "next/link";
 import { TabItem } from "@/types";
+import { setProgressLoading } from "@/redux/stylesSlice";
+import { useAppDispatch } from "@/hooks/use-store";
 
 type Props = {
     playstation5Products?: ProductItem[];
@@ -16,6 +18,8 @@ type Props = {
 };
 
 const BestSellers: React.FC<Props> = props => {
+    
+    const dispatch = useAppDispatch();
 
     const items: {
         products: ProductItem[];
@@ -64,11 +68,12 @@ const BestSellers: React.FC<Props> = props => {
         key: item.label,
         children: (<div className="py-5">
 
-            {item.products.map(i => <ProductListItem product={i} key={i.id} />)}
+            {item.products.map(i => <ProductListItem onClick={()=>{dispatch(setProgressLoading(true))}} product={i} key={i.id} />)}
 
             <Link
                 href={`/products?VariantSlug=${item.slug}`}
-                className="text-sm text-[#ca54ff] bg-[#161b39] w-full px-5 py-3 flex rounded-full justify-center gap-3 "
+                onClick={()=>{dispatch(setProgressLoading(true));}}
+                className="text-sm text-[#ca54ff] bg-[#161b39] w-full px-5 py-3 flex rounded-full justify-center gap-3"
             >
                 <Add />
                 محصولات بیشتر

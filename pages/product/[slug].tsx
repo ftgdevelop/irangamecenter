@@ -61,7 +61,7 @@ const DetailBlog: NextPage<any> = ({ productData }:
   if (productData.breadcrumbs?.length) {
     breadcrumbsItems.push(...productData.breadcrumbs.map(item => ({
       label: item.name || "",
-      link: `/product-category/${item.slug}`
+      link: `/products?VariantSlug=${item.slug}`
     })))
   }
   if (productData.name) {

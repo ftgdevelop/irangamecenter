@@ -23,7 +23,7 @@ const FooterNavigation = () => {
             },
             {
                 label: "دسته بندی ها",
-                href: "/categories",
+                href: "/products",
                 imageUrl: "/images/icons/squares.svg",
                 active: false
             },

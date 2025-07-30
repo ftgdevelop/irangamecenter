@@ -5,6 +5,7 @@ import Link from "next/link";
 
 type Props = {
     product: ProductItem;
+    onClick?: ()=> void;
 }
 
 const ProductListItem: React.FC<Props> = props => {
@@ -25,7 +26,7 @@ const ProductListItem: React.FC<Props> = props => {
 
     return (
         <div className="mb-4">
-            <Link href={`/product/${product.slug}`} className="flex" >
+            <Link href={`/product/${product.slug}`} className="flex" onClick={()=>{if(props.onClick){props.onClick()}}}>
                 <Image
                     src={product.image.url || "/images/default-game.png"}
                     alt={product.name || ""}
