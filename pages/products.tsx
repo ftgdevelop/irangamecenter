@@ -7,13 +7,14 @@ import { useEffect, useRef, useState } from "react";
 import Skeleton from "@/components/shared/Skeleton";
 import Add from "@/components/icons/Add";
 import { getProducts, ProductSortKeywords } from "@/actions/commerce";
-import { ProductItem } from "@/types/commerce";
+import { GetAllProductsParams, ProductItem } from "@/types/commerce";
 import ProductListItem from "@/components/products/ProductListItem";
 import ModalPortal from "@/components/shared/layout/ModalPortal";
 import Filter2 from "@/components/icons/Filter2";
 import SortIcon from "@/components/icons/SortIcon";
 import CheckboxGroup from "@/components/shared/CheckboxGroup";
 import Sort from "@/components/products/Sort";
+import { useRouter } from "next/router";
 
 type ProductsDataType = {
     totalCount?: number;
@@ -24,6 +25,10 @@ type Props = {
     productsData?: ProductsDataType;
 }
 const Products: NextPage<Props> = props => {
+
+    const router = useRouter();
+
+    const urlVariantSlug = router.query?.VariantSlug;
 
     const [products, setProducts] = useState<ProductItem[]>(props.productsData?.items || []);
     const [fetchMode, setFetchMode] = useState<boolean>(false);
@@ -68,11 +73,18 @@ const Products: NextPage<Props> = props => {
 
             setLoading(true);
 
-            const productsResponse: any = await getProducts({
-                MaxResultCount: 10,
+            const parameters: GetAllProductsParams = {
                 SkipCount: 0,
+                MaxResultCount: 10,
                 sort: sort
-            });
+            }
+
+            if (urlVariantSlug) {
+                //TODO what if there is multiple variants in url??
+                parameters.VariantSlug = urlVariantSlug as string;
+            }
+            
+            const productsResponse: any = await getProducts(parameters);
             if (productsResponse?.data?.result?.items) {
                 setProducts(productsResponse.data.result.items);
                 document.addEventListener('scroll', checkIsInView);
@@ -169,9 +181,9 @@ const Products: NextPage<Props> = props => {
                 >
                     <SortIcon className="w-5 h-5 fill-current" />
                     جدیدترین ها
-                </button>                                
+                </button>
             </div>
-            
+
             <hr className="m-4 border-white/25" />
 
             <div className="px-4 mb-12">
@@ -288,7 +300,7 @@ const Products: NextPage<Props> = props => {
     )
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context: any) {
 
     if (!process.env.PROJECT_SERVER_BLOG) {
         return (
@@ -300,7 +312,16 @@ export async function getServerSideProps() {
         )
     }
 
-    const productsResponse: any = await getProducts({ SkipCount: 0, MaxResultCount: 10 });
+    const parameters: GetAllProductsParams = {
+        SkipCount: 0,
+        MaxResultCount: 10
+    }
+
+    if (context?.query?.VariantSlug) {
+        parameters.VariantSlug = context.query.VariantSlug;
+    }
+
+    const productsResponse: any = await getProducts(parameters);
 
     return (
         {

@@ -5,27 +5,76 @@ import { ProductItem } from "@/types/commerce";
 import React from "react";
 import ProductListItem from "../products/ProductListItem";
 import Link from "next/link";
+import { TabItem } from "@/types";
 
 type Props = {
-    products : ProductItem[];
+    playstation5Products?: ProductItem[];
+    playstation4Products?: ProductItem[];
+    steamProducts?: ProductItem[];
+    xboxOneProducts?: ProductItem[];
+    xboxSeriesXsProducts?: ProductItem[];
 };
 
-const BestSellers:React.FC<Props> = props => {
+const BestSellers: React.FC<Props> = props => {
 
-    const content = (
-        <div className="py-5">
+    const items: {
+        products: ProductItem[];
+        slug: string;
+        label: string;
+    }[] = [];
 
-            {props.products?.map(item => <ProductListItem product={item} key={item.id} /> )}
+    if (props.playstation5Products?.length) {
+        items.push({
+            slug: "playstation-5",
+            label: "Playstation 5",
+            products: props.playstation5Products
+        })
+    }
+    if (props.playstation4Products?.length) {
+        items.push({
+            slug: "playstation-4",
+            label: "Playstation 4",
+            products: props.playstation4Products
+        })
+    }
+    if (props.steamProducts?.length) {
+        items.push({
+            slug: "steam",
+            label: "Steam",
+            products: props.steamProducts
+        })
+    }
+    if (props.xboxOneProducts) {
+        items.push({
+            slug: "xbox-one",
+            label: "Xbox one",
+            products: props.xboxOneProducts
+        })
+    }
+    if (props.xboxSeriesXsProducts) {
+        items.push({
+            slug: "xbox-series-xs",
+            label: "Xbox Series X/S",
+            products: props.xboxSeriesXsProducts
+        })
+    }
+
+    const tabItems: TabItem[] = items.map(item => ({
+        label: item.label,
+        key: item.label,
+        children: (<div className="py-5">
+
+            {item.products.map(i => <ProductListItem product={i} key={i.id} />)}
 
             <Link
-                href="/products"
+                href={`/products?VariantSlug=${item.slug}`}
                 className="text-sm text-[#ca54ff] bg-[#161b39] w-full px-5 py-3 flex rounded-full justify-center gap-3 "
             >
                 <Add />
                 محصولات بیشتر
             </Link>
-        </div>
-    );
+        </div>)
+    }))
 
     return (
         <section className="py-6">
@@ -36,19 +85,11 @@ const BestSellers:React.FC<Props> = props => {
             </h3>
 
             <Tab
-                items={[
-                    { key: 1, children: content, label: "کالاف دیوتی" },
-                    { key: 2, children: "پلی استیشن", label: "پلی استیشن" },
-                    { key: 3, children: "پابجی موبایل", label: "پابجی موبایل" },
-                    { key: 4, children: "ایکس باکس", label: "ایکس باکس" },
-                    { key: 5, children: "پابجی موبایل", label: "پابجی موبایل" },
-                    { key: 6, children: "ایکس باکس", label: "ایکس باکس" }
-                ]}
+                items={tabItems}
                 style="3"
                 wrapperClassName="mx-3"
                 scrollTabs
             />
-
 
         </section>
     )

@@ -1,3 +1,5 @@
+import { ProductSortKeywords } from "@/actions/commerce";
+
 export interface ProductItem {
     id: number;
     slug?: string;
@@ -201,4 +203,12 @@ export interface ProductDetailData {
         slug?: string;
     }
     variants?: ProductVariant[];
+}
+
+export interface GetAllProductsParams {
+    SkipCount: number;
+    MaxResultCount: number;
+    Brands?: string[];
+    sort?: ProductSortKeywords;
+    VariantSlug?: string;
 }

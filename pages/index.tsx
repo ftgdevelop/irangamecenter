@@ -87,17 +87,22 @@ type ProductsDataType = {
   items?: ProductItem[];
 }
 
-const Home: NextPage = ({ homeSections, homeHighlights, homeAboutData, recentBlogs, productsData }: { homeSections?: HomeSections[], homeHighlights?: HighlightItemType[], homeAboutData?: HomeAboutDataType , recentBlogs?: BlogItemType[] , productsData?: ProductsDataType }) => {
+type Props = {
+  homeSections?: HomeSections[];
+  homeHighlights?: HighlightItemType[];
+  homeAboutData?: HomeAboutDataType;
+  recentBlogs?: BlogItemType[];
+  playstation5Data?: ProductsDataType;
+  playstation4Data?: ProductsDataType;
+  steamData?: ProductsDataType;
+  xboxOneData?: ProductsDataType;
+  xboxSeriesXsData?: ProductsDataType;
+}
 
-  // useEffect(()=>{
-  //   const fetchData = async () => {
-  //     const response : any = await getProducts({SkipCount:0, MaxResultCount:10});
 
-  //   }
-    
-  //   fetchData();
+const Home: NextPage<Props> = props => {
 
-  // },[]);
+  const {homeAboutData, homeHighlights, homeSections,recentBlogs, playstation4Data, playstation5Data, steamData, xboxOneData, xboxSeriesXsData} = props;
 
   const categoris = homeSections?.find(section => section.Keyword === "category");
 
@@ -167,7 +172,13 @@ const Home: NextPage = ({ homeSections, homeHighlights, homeAboutData, recentBlo
         }))}
       />
 
-      {!!productsData?.items && <BestSellers products={productsData?.items} />}
+      <BestSellers 
+        playstation5Products={playstation5Data?.items}
+        playstation4Products={playstation4Data?.items}
+        steamProducts={steamData?.items}
+        xboxOneProducts={xboxOneData?.items}
+        xboxSeriesXsProducts={xboxSeriesXsData?.items}
+      />
 
       {!!recentBlogs?.length && <BlogsCarousel blogs={recentBlogs} />}
 
@@ -188,17 +199,19 @@ const Home: NextPage = ({ homeSections, homeHighlights, homeAboutData, recentBlo
   );
 }
 
-
 export const getStaticProps = async (context: any) => {
 
-  const [strapiSectionResponse, strapiHighlightsResponse, strapiAboutSectionResponse, blogResponse, productsResponse] = await Promise.all<any>([
+  const [strapiSectionResponse, strapiHighlightsResponse, strapiAboutSectionResponse, blogResponse, playstation5DataResponse,playstation4DataResponse,steamDataResponse,xboxOneDataResponse, xboxSeriesXsDataResponse] = await Promise.all<any>([
     getStrapiPages('filters[Page][$eq]=Home&locale=fa&populate[Sections][on][shared.repeter][populate][Items][populate]=*'),
     getStrapiHighlight('locale=fa&populate[Item][populate]=*'),
     getStrapiPages('filters[Page][$eq]=aboutUs&locale=fa&populate[Sections][populate]=*'),
     getBlogs({page:1,per_page:5}),
-    getProducts({SkipCount:0, MaxResultCount:10})
+    getProducts({SkipCount:0, MaxResultCount:10, VariantSlug:"playstation-5"}),
+    getProducts({SkipCount:0, MaxResultCount:10, VariantSlug:"playstation-4"}),
+    getProducts({SkipCount:0, MaxResultCount:10, VariantSlug:"steam"}),
+    getProducts({SkipCount:0, MaxResultCount:10, VariantSlug:"xbox-one"}),
+    getProducts({SkipCount:0, MaxResultCount:10, VariantSlug:"xbox-series-x/s"})
   ]);
-
 
   return ({
     props: {
@@ -209,7 +222,11 @@ export const getStaticProps = async (context: any) => {
       homeHighlights: strapiHighlightsResponse?.data?.data || null,
       homeAboutData: strapiAboutSectionResponse?.data?.data?.[0]?.Sections || null,
       recentBlogs:blogResponse?.data || null,
-      productsData: productsResponse?.data?.result || null 
+      playstation5Data: playstation5DataResponse?.data?.result || null ,
+      playstation4Data: playstation4DataResponse?.data?.result || null ,
+      steamData: steamDataResponse?.data?.result || null ,
+      xboxOneData: xboxOneDataResponse?.data?.result || null ,
+      xboxSeriesXsData: xboxSeriesXsDataResponse?.data?.result || null 
     },
     revalidate: 3600
   })

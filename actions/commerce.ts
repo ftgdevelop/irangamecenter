@@ -1,19 +1,12 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { Commerce, ServerAddress } from "@/enum/url";
+import { GetAllProductsParams } from "@/types/commerce";
 import axios from "axios";
 
 const apikey = "ACE01BF4-AAEE-45D6-ABE7-F3FF519052DB"
 
-interface GetAllProductsParams {
-    SkipCount: number;
-    MaxResultCount: number;
-    Brands?: string[];
-    sort?: ProductSortKeywords
-}
-
 export const getProducts = async (params: GetAllProductsParams, acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
-
 
     let queryParams = `?MaxResultCount=${params.MaxResultCount}&SkipCount=${params.SkipCount}`
 
@@ -37,6 +30,10 @@ export const getProducts = async (params: GetAllProductsParams, acceptLanguage: 
             break;
         default:
             break;
+    }
+
+    if(params.VariantSlug){
+          queryParams += `&VariantSlug=${params.VariantSlug}`;
     }
 
     try {
