@@ -9,6 +9,7 @@ type Props = {
     wrapperClassName?: string;
     tabLinksBold?: boolean;
     scrollTabs?: boolean;
+    noGrowTabs?: boolean;
 }
 
 const Tab: React.FC<Props> = props => {
@@ -20,7 +21,7 @@ const Tab: React.FC<Props> = props => {
     const [activetabKey, setActiveTabKey] = useState(items[0]?.key);
 
     const tabClassName = (active: boolean) => {
-        return `outline-none font-semibold whitespace-nowrap select-none text-xs px-2 sm:px-3 py-2 sm:py-3 border-b-2 transition-all block grow ${active ? "border-[#aa3aff] text-[#aa3aff]" : "border-transparent text-white"}`;
+        return `outline-none font-semibold whitespace-nowrap select-none text-sm px-2 sm:px-3 py-2 sm:py-3 border-b-2 transition-all block ${props.noGrowTabs?"":"grow"} ${active ? "border-[#aa3aff] text-[#aa3aff]" : "border-transparent text-white"}`;
     }
 
     return (

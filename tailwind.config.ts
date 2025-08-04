@@ -32,7 +32,7 @@ export default {
           '0% ': { transform: 'translateX(100%)' },
           '100%': { transform: 'translateX(-100%)' },
         },
-        left2right : {
+        left2right: {
           '0% ': { left: '0' },
           '100%': { left: '100%' },
         }
@@ -40,7 +40,7 @@ export default {
       animation: {
         skeleton: 'skeleton 1s linear infinite',
         left2right: 'left2right 1.2s cubic-bezier(0.52, 0.22, 0.45, 0.74) infinite alternate',
-        
+
       },
       colors: {
         background: "var(--background)",
@@ -56,7 +56,7 @@ export default {
           800: '#e30027',
           900: '#cc0021',
         },
-        'violet':{
+        'violet': {
           100: '#f3e0ff',
           200: '#ddb3ff',
           300: '#c67eff',
@@ -66,6 +66,17 @@ export default {
           700: '#7323ad',
           800: '#581985',
           900: '#3d0f5c',
+        },
+        'teal': {
+          100: '#d2f6ee',
+          200: '#a6edde',
+          300: '#79e4ce',
+          400: '#4cdabe',
+          500: '#2ac99f',
+          600: '#21a285',
+          700: '#197c6b',
+          800: '#105551',
+          900: '#082f37',
         }
       },
       fontFamily: {

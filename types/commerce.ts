@@ -142,6 +142,7 @@ export interface ProductDetailData {
         id: number;
     }[];
     description?: string;
+    shortDescription?: string;
     genres?: {
         keyword?: string;
         name?: string

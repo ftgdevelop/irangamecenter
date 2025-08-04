@@ -32,7 +32,7 @@ const AboutIcons: React.FC<Props> = props => {
                         {item.Title}
                     </h3>
 
-                    <p className="text-2xs text-[#2ac99f]">
+                    <p className="text-2xs text-teal-500">
                         {item.Description}
                     </p>
                 </div>
