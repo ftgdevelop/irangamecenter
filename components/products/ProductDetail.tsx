@@ -1,13 +1,17 @@
 import { ProductDetailData } from "@/types/commerce";
 import Tab from "../shared/Tab"
 import { TabItem } from "@/types";
-import Image from "next/image";
 import { dateDiplayFormat } from "@/helpers";
 import Link from "next/link";
+import parse from 'html-react-parser';
+import { useEffect, useState } from "react";
+import ModalPortal from "../shared/layout/ModalPortal";
+import ArrowTopLeft from "../icons/ArrowTopLeft";
 
 type Props = {
     productData?: ProductDetailData;
-    close: () => void;
+    activeTab: string;
+    changeActiveTab: (key: string | number) => void;
 }
 
 const ProductDetail: React.FC<Props> = props => {
@@ -16,73 +20,45 @@ const ProductDetail: React.FC<Props> = props => {
 
     const tabItems: TabItem[] = [];
 
+    const [openDetails, setOpenDetails] = useState<boolean>(false);
+    const [slideInDetails, setSlideInDetails] = useState<boolean>(true);
+
+    useEffect(() => {
+        if (props.activeTab) {
+            setOpenDetails(true);
+        }
+    }, [props.activeTab]);
+
+    useEffect(() => {
+        if (openDetails) {
+            setSlideInDetails(true);
+        } else {
+            props.changeActiveTab("");
+        }
+    }, [openDetails]);
+
+    useEffect(() => {
+        if (!slideInDetails) {
+            setTimeout(() => { setOpenDetails(false) }, 300)
+        }
+    }, [slideInDetails])
+
+
     if (!productData) return null;
 
-    if (productData.esrb || productData?.pegi) {
+    if (productData.description) {
         tabItems.push({
-            key: "1",
+            key: "descriptions",
             label: "توضیحات",
-            children: (
-                <>
-                    {!!productData.esrb?.name && (
-                        <>
-                            <div className="flex gap-2 my-4">
-                                {productData?.esrb?.image && (
-                                    <Image
-                                        src={productData.esrb.image}
-                                        alt={productData.esrb.title || productData.esrb.name || ""}
-                                        width={48}
-                                        height={48}
-                                        className="w-12 h-12 text-4xs"
-                                    />
-                                )}
-                                <div>
-                                    رده سنی اروپا (PEGI)
-                                    <b className="block font-semibold mt-2 text-xs">
-                                        {productData.esrb.name}
-                                    </b>
-                                </div>
-                            </div>
-                            <div className="text-xs mb-8">
-                                {productData.esrb.description}
-                            </div>
-
-                        </>
-                    )}
-
-                    {!!productData.pegi?.name && (
-                        <>
-                            <div className="flex gap-2 my-4">
-                                {productData?.pegi?.image && (
-                                    <Image
-                                        src={productData.pegi.image}
-                                        alt={productData.pegi.title || productData.pegi.name || ""}
-                                        width={48}
-                                        height={48}
-                                        className="w-12 h-12 text-4xs"
-                                    />
-                                )}
-                                <div>
-                                    رده سنی اروپا (PEGI)
-                                    <b className="block font-semibold mt-2 text-xs">
-                                        {productData.pegi.name}
-                                    </b>
-                                </div>
-                            </div>
-                            <div className="text-xs mb-8">
-                                {productData.pegi.description}
-                            </div>
-
-                        </>
-                    )}
-
-                </>
-            )
+            children: (<div className="inserted-content py-6">
+                {parse(productData.description)}
+            </div>)
         })
     }
 
+
     tabItems.push({
-        key: "2",
+        key: "details",
         label: "مشخصات",
         children: (
             <>
@@ -160,7 +136,7 @@ const ProductDetail: React.FC<Props> = props => {
 
     if (productData.rating?.length) {
         tabItems.push({
-            key: "3",
+            key: "ratings",
             label: "امتیازها",
             children: (
                 <>
@@ -179,46 +155,62 @@ const ProductDetail: React.FC<Props> = props => {
         })
     }
 
-    if (productData.awards?.length) {
-        tabItems.push({
-            key: "4",
-            label: "جوایز",
-            children: (
-                <>
-                    <h4 className="text-sm my-4 font-semibold"> جوایز و دستاوردها </h4>
-                    {productData.awards.map((award, index) => (
-                        <div className={`flex gap-3 items-center py-4 text-sm  font-semibold text-teal-500 ${index ? "border-t border-white/15" : ""}`} key={award} >
-                            <Image src="/images/icons/award.svg" alt="award" className="w-7 h-7" width={28} height={28} />
-                            {award}
-                        </div>
-                    ))}
-                </>
-            )
-        })
-    }
-
     return (
-        <div className="min-h-96 flex flex-col justify-between" >
-            <div>
-                <h2 className="text-lg font-semibold mb-4 px-4 mt-6"> {productData.name}</h2>
-                <Tab
-                    items={tabItems}
-                    style="3"
-                    wrapperClassName="mx-3"
-                    scrollTabs
-                    noGrowTabs
-                />
-            </div>
-            <div className="p-4">
-                <button
-                    type="button"
-                    className="bg-[#011425] rounded-full px-5 py-3 text-sm"
-                    onClick={props.close}
-                >
-                    بستن
-                </button>
-            </div>
-        </div>
+        <>
+            <button
+                type="button"
+                className="text-xs text-violet-500 font-semibold flex gap-2 items-center"
+                onClick={() => { props.changeActiveTab("descriptions") }}
+            >
+                مشاهده جزییات
+                <ArrowTopLeft className="w-3.5 h-3.5 fill-current" />
+            </button>
+
+            <ModalPortal
+                show={openDetails}
+                selector='modal_portal'
+            >
+                <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen">
+
+                    <div className="relative w-full lg:max-w-lg lg:mx-auto h-screen">
+
+                        <div className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInDetails(false) }} />
+
+                        <div className={`bg-[#192a39] text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto absolute transition-all left-0 right-0 ${slideInDetails ? "bottom-0" : "-bottom-[80vh]"}`}>
+                            <div className="min-h-96 flex flex-col justify-between" >
+                                <div>
+                                    <Tab
+                                        heading={productData.name}
+                                        isSticky
+                                        navsBgClass="bg-[#192a39]"
+                                        items={tabItems}
+                                        style="3"
+                                        wrapperClassName="mx-3"
+                                        scrollTabs
+                                        noGrowTabs
+                                        activeTab={props.activeTab}
+                                        onChange={props.changeActiveTab}
+                                    />
+                                </div>
+                                <div className="p-4">
+                                    <button
+                                        type="button"
+                                        className="bg-[#011425] rounded-full px-5 py-3 text-sm"
+                                        onClick={() => { setSlideInDetails(false) }}
+                                    >
+                                        بستن
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </ModalPortal>
+
+        </>
     )
 }
 

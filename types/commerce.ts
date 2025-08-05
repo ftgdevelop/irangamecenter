@@ -162,6 +162,15 @@ export interface ProductDetailData {
         name?: string;
         id?: number;
         image?: string;
+        items?: {
+            description?: string;
+            image?: string;
+            keyword?: string;
+            name?: string;
+            // "title": null,
+            // "items": null,
+            // "id": 0
+        }[];
     };
     pegics?: {
         title?: string;
@@ -177,6 +186,15 @@ export interface ProductDetailData {
         name?: string;
         id?: number;
         image?: string;
+        items?: {
+            description?: string;
+            image?: string;
+            keyword?: string;
+            name?: string;
+            // "title": null,
+            // "items": null,
+            // "id": 0
+        }[];
     };
     theme?: {
         keyword?: string;

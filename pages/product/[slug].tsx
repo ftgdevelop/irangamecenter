@@ -11,38 +11,20 @@ import parse from 'html-react-parser';
 import Image from "next/image";
 import RatingItem from "@/components/products/RatingItem";
 import { dateDiplayFormat } from "@/helpers";
-import Select from "@/components/shared/Select";
 import Link from "next/link";
-import ArrowTopLeft from "@/components/icons/ArrowTopLeft";
-import ModalPortal from "@/components/shared/layout/ModalPortal";
 import ProductDetail from "@/components/products/ProductDetail";
+import AgeRatingDetail from "@/components/products/AgeRatingDetail";
+import ArrowTopLeft from "@/components/icons/ArrowTopLeft";
 
 
 const DetailBlog: NextPage<any> = ({ productData }:
   { productData: ProductDetailData }) => {
 
-  const [variant, setVariant] = useState<string>("");
+  const [variant, setVariant] = useState<string>(productData.variants?.[0]?.slug || "");
 
   const [capacity, setCapacity] = useState<string>("");
 
-  const [showMainContent, setShowMainContent] = useState<boolean>(false);
-
-
-  const [openDetails, setOpenDetails] = useState<boolean>(false);
-  const [slideInDetails, setSlideInDetails] = useState<boolean>(true);
-
-  useEffect(() => {
-    if (openDetails) {
-      setSlideInDetails(true);
-    }
-  }, [openDetails]);
-
-  useEffect(() => {
-    if (!slideInDetails) {
-      setTimeout(() => { setOpenDetails(false) }, 300)
-    }
-  }, [slideInDetails])
-
+  const [detailActiveTab, setDetailActiveTab] = useState<string>("");
 
   useEffect(() => {
     if (variant) {
@@ -121,111 +103,101 @@ const DetailBlog: NextPage<any> = ({ productData }:
 
         <div className="flex justify-between items-top mb-5">
           <strong className="text-sm"> مشخصات بازی </strong>
-          <button
-            type="button"
-            className="text-xs text-violet-500 font-semibold flex gap-2 items-center"
-            onClick={() => { setOpenDetails(true) }}
-          >
-            مشاهده جزییات
-            <ArrowTopLeft className="w-3.5 h-3.5 fill-current" />
-          </button>
-
+          <ProductDetail
+            productData={productData}
+            activeTab={detailActiveTab}
+            changeActiveTab={(key) => { setDetailActiveTab(key.toString()) }}
+          />
         </div>
+
       </div>
 
       <div className="max-lg:hidden-scrollbar lg:styled-scrollbar pb-3 overflow-x-auto overflow-y-clip py-3 pl-3">
         <div className="flex gap-3 pr-4">
-          {/* {!!productData.developer?.name && (
-            <Link href={`/brand/${productData.developer.slug || "unknown"}`} className="shrink-0 block border border-white/15 p-3 rounded-xl text-xs max-w-56" >
-              <div className="flex gap-2">
-                {productData.developer.filePath && (
-                  <Image
-                    src={productData.developer.filePath}
-                    alt={productData.developer.fileAltAttribute || productData.developer.fileTitleAttribute || ""}
-                    width={48}
-                    height={48}
-                    className="w-12 h-12 text-4xs"
-                  />
-                )}
-                <div>
-                  شرکت سازنده
-                  <b className="block font-semibold mt-2 text-xs">
-                    {productData.developer.name}
-                  </b>
-                </div>
-              </div>
-            </Link>
-          )}
-
-          {!!productData.publisher?.name && (
-            <Link href={`/brand/${productData.publisher.slug || "unknown"}`} className="shrink-0 block border border-white/15 p-3 rounded-xl text-xs max-w-56" >
-              <div className="flex gap-2">
-                {productData.publisher.filePath && (
-                  <Image
-                    src={productData.publisher.filePath}
-                    alt={productData.publisher.fileAltAttribute || productData.publisher.fileTitleAttribute || ""}
-                    width={48}
-                    height={48}
-                    className="w-12 h-12 text-4xs"
-                  />
-                )}
-                <div>
-                  شرکت انتشار دهنده
-                  <b className="block font-semibold mt-2 text-xs">
-                    {productData.publisher.name}
-                  </b>
-                </div>
-              </div>
-            </Link>
-          )} */}
 
           {!!productData.genres?.[0]?.name && (
-            <div className="shrink-0 block border border-white/15 p-3 rounded-xl text-xs max-w-56" >
-              سبک بازی
-              <b className="block font-semibold mt-2 text-xs">
+            <button
+              type="button"
+              onClick={() => { setDetailActiveTab("details") }}
+              className="shrink-0 text-right block border border-white/15 p-3 rounded-xl text-xs max-w-56"
+            >
+              <div className="flex gap-2 items-center">
+                سبک بازی
+                <ArrowTopLeft className="w-2.5 h-2.5 fill-current" />
+              </div>
+              <b className="block font-semibold mt-2 text-xs h-8 overflow-hidden">
                 {productData.genres.map(item => item.name).join("، ")}
               </b>
-            </div>
+            </button>
           )}
 
           {!!productData.gameplay?.length && (
-            <div className="shrink-0 block border border-white/15 p-3 rounded-xl text-xs max-w-56" >
-              حالت بازی
-              <b className="block font-semibold mt-2 text-xs">
+            <button
+              type="button"
+              onClick={() => { setDetailActiveTab("details") }}
+              className="shrink-0 text-right block border border-white/15 p-3 rounded-xl text-xs max-w-56"
+            >
+              <div className="flex gap-2 items-center">
+                حالت بازی
+                <ArrowTopLeft className="w-2.5 h-2.5 fill-current" />
+              </div>
+              <b className="block font-semibold mt-2 text-xs h-8 overflow-hidden">
                 {productData.gameplay.map(item => item.name).join("، ")}
               </b>
-            </div>
+            </button>
           )}
+
           {!!productData.playerPerspective?.length && (
-            <div className="shrink-0 block border border-white/15 p-3 rounded-xl text-xs max-w-56" >
-              زاویه دید
-              <b className="block font-semibold mt-2 text-xs">
+            <button
+              type="button"
+              onClick={() => { setDetailActiveTab("details") }}
+              className="shrink-0 text-right block border border-white/15 p-3 rounded-xl text-xs max-w-56"
+            >
+              <div className="flex gap-2 items-center">
+                زاویه دید
+                <ArrowTopLeft className="w-2.5 h-2.5 fill-current" />
+              </div>
+              <b className="block font-semibold mt-2 text-xs h-8 overflow-hidden">
                 {productData.playerPerspective.map(item => item.name).join("، ")}
               </b>
-            </div>
+            </button>
           )}
 
 
           {!!productData.theme?.length && (
-            <div className="shrink-0 block border border-white/15 p-3 rounded-xl text-xs max-w-56" >
-              تم بازی
-              <b className="block font-semibold mt-2 text-xs">
+            <button
+              type="button"
+              onClick={() => { setDetailActiveTab("details") }}
+              className="shrink-0 text-right block border border-white/15 p-3 rounded-xl text-xs max-w-56"
+            >
+              <div className="flex gap-2 items-center">
+                تم بازی
+                <ArrowTopLeft className="w-2.5 h-2.5 fill-current" />
+              </div>
+              <b className="block font-semibold mt-2 text-xs h-8 overflow-hidden">
                 {productData.theme.map(item => item.name).join("، ")}
               </b>
-            </div>
+            </button>
           )}
 
           {!!productData.releaseDate && (
-            <div className="shrink-0 block border border-white/15 p-3 rounded-xl text-xs max-w-56" >
-              تاریخ انتشار
-              <b className="block font-semibold mt-2 text-xs">
+            <button
+              type="button"
+              onClick={() => { setDetailActiveTab("details") }}
+              className="shrink-0 text-right block border border-white/15 p-3 rounded-xl text-xs max-w-56"
+            >
+              <div className="flex gap-2 items-center">
+                تاریخ انتشار
+                <ArrowTopLeft className="w-2.5 h-2.5 fill-current" />
+              </div>
+              <b className="block font-semibold mt-2 text-xs h-8 overflow-hidden">
                 {dateDiplayFormat({
                   date: productData.releaseDate,
                   locale: "fa",
                   format: "dd mm yyyy"
                 })}
               </b>
-            </div>
+            </button>
           )}
 
           <div className="w-1 shrink-0" />
@@ -238,21 +210,13 @@ const DetailBlog: NextPage<any> = ({ productData }:
           <div className="inserted-content">
             {parse(productData.shortDescription)}
 
-            {(!showMainContent) && !!productData.description && <button
+            {!!productData.description && <button
               type="button"
-              className="text-violet-500 inline-block text-sm"
-              onClick={() => { setShowMainContent(true) }}
+              className="text-violet-500 inline-block text-sm font-semibold"
+              onClick={() => { setDetailActiveTab("descriptions") }}
             >
               بیشتر
             </button>}
-
-            {!!(showMainContent && productData.description) && (
-              <>
-                <br />
-                {parse(productData.description)}
-              </>
-            )}
-
           </div>
         </div>
       )}
@@ -306,109 +270,52 @@ const DetailBlog: NextPage<any> = ({ productData }:
 
         </div>
 
-
-        {!!productData.pegi && (
-          <div className="block border border-white/15 p-3 rounded-xl text-xs mt-5" >
-            <div className="flex gap-2 justify-center">
-              {productData?.pegi?.image && (
-                <Image
-                  src={productData.pegi.image}
-                  alt={productData.pegi.title || productData.pegi.name || ""}
-                  width={48}
-                  height={48}
-                  className="w-12 h-12 text-4xs"
-                />
-              )}
-              <div className="w-40">
-                رده سنی اروپا (PEGI)
-                <b className="block font-semibold mt-2 text-xs">
-                  {productData.pegi.name}
-                </b>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {!!productData.esrb && (
-          <div className="block border border-white/15 p-3 rounded-xl text-xs mt-5" >
-            <div className="flex gap-2 justify-center">
-              {productData?.esrb?.image && (
-                <Image
-                  src={productData.esrb.image}
-                  alt={productData.esrb.title || productData.esrb.name || ""}
-                  width={48}
-                  height={48}
-                  className="w-12 h-12 text-4xs"
-                />
-              )}
-              <div className="w-40">
-                رده سنی آمریکا (ESRB)
-                <b className="block font-semibold mt-2 text-xs">
-                  {productData.esrb.name}
-                </b>
-              </div>
-            </div>
-          </div>
-        )}
+        <AgeRatingDetail productData={productData} />
 
       </div>
 
-      <div className="px-5 mt-5">
+      <label className="text-sm pointer-events-none mb-3 block px-5 mt-7">
+        انتخاب کنسول مورد نظر
+      </label>
 
-        {/* <div className="flex gap-3 flex-wrap items-start mb-5">
-        </div> */}
+      <div className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip pb-3 pl-3">
 
-
-
-        {/* 
-        {!!productData.description && (
-          <div className="px-5 inserted-content mt-7">
-            {parse(productData.description)}
-          </div>
-        )} */}
-
-        <div className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip py-3 pl-3">
-          <div className="flex gap-3 pr-4">
-
-            {productData.variants?.map(variantItem => (
+        <div className="flex pr-5">
+          {productData.variants?.map(variantItem => (
+            <div key={variantItem.id} className="pl-3 last:pl-5">
               <button
-                key={variantItem.id}
                 type="button"
-                className={`shrink-0 rounded-xl px-5 py-3 ${variant === variantItem.slug ? "bg-gradient-green" : "bg-[#192a39]"}`}
+                className={`shrink-0 rounded-xl whitespace-nowrap px-5 h-16 border-0 outline-none font-semibold py-3 ${variant === variantItem.slug ? "bg-gradient-green text-neutral-800" : "bg-[#192a39]"}`}
                 disabled={!variantItem.slug}
                 onClick={() => { setVariant(variantItem.slug || "") }}
               >
                 {variantItem.value}
               </button>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-
-
-        {!!productData.variants?.length && (<Select
-          wrapperClassName="mb-5"
-          buttonClassName="h-12"
-          items={productData.variants.map(item => ({
-            label: item.value || "",
-            value: item.slug || ""
-          }))}
-          onChange={setVariant}
-          value={variant}
-          label="انتخاب کنسول مورد نظر"
-          placeholder="نوع کنسول را انتخاب نمایید"
-        />)}
-
-        <Select
-          buttonClassName="h-12"
-          items={capacityOptions}
-          onChange={setCapacity}
-          value={capacity}
-          label="انتخاب ظرفیت"
-          placeholder="ظرفیت را انتخاب کنید"
-        />
-
       </div>
 
+      <label className="text-sm pointer-events-none mb-3 block px-5 mt-7">
+        انتخاب ظرفیت بازی
+      </label>
+
+      <div className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip pb-3 pl-3">
+        <div className="flex pr-5">
+          {capacityOptions?.map((capacityItem, index) => (
+            <div key={index} className="pl-3 last:pl-5">
+              <button
+                type="button"
+                className={`shrink-0 rounded-xl whitespace-nowrap px-5 h-16 border-0 outline-none font-semibold py-3 ${capacity === capacityItem.value ? "bg-gradient-green text-neutral-800" : "bg-[#192a39]"}`}
+                disabled={!capacityItem.value}
+                onClick={() => { setCapacity(capacityItem.value || "") }}
+              >
+                {capacityItem.label}
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {!!productData.rating?.length && (
         <>
@@ -451,27 +358,6 @@ const DetailBlog: NextPage<any> = ({ productData }:
 
 
       <Contacts />
-
-      <ModalPortal
-        show={openDetails}
-        selector='modal_portal'
-      >
-        <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen">
-
-          <div className="relative w-full lg:max-w-lg lg:mx-auto h-screen">
-
-            <div className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInDetails(false) }} />
-
-            <div className={`bg-[#192a39] text-white rounded-2xl max-h-screen overflow-y-auto absolute transition-all left-5 right-5 ${slideInDetails ? "bottom-5" : "-bottom-[80vh]"}`}>
-
-              <ProductDetail productData={productData} close={() => { setSlideInDetails(false) }} />
-
-            </div>
-
-          </div>
-
-        </div>
-      </ModalPortal>
 
     </>
   )
