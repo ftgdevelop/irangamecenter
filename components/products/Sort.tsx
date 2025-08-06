@@ -1,7 +1,6 @@
-import { ProductSortKeywords, ProductSortOption } from "@/actions/commerce";
+import { ProductSortKeywords} from "@/actions/commerce";
 import CheckIcon from "../icons/CheckIcon";
 import { productSortOptions } from "@/enum/models";
-import Close from "../icons/Close";
 import CloseSimple from "../icons/CloseSimple";
 
 type Props = {
