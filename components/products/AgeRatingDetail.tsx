@@ -26,7 +26,7 @@ const AgeRatingDetail: React.FC<Props> = props => {
     }, [activeItem])
 
     const [openDetails, setOpenDetails] = useState<boolean>(false);
-    const [slideInDetails, setSlideInDetails] = useState<boolean>(true);
+    const [slideInDetails, setSlideInDetails] = useState<boolean>(false);
 
     useEffect(() => {
         if (openDetails) {

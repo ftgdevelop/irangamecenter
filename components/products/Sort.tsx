@@ -1,32 +1,36 @@
 import { ProductSortKeywords, ProductSortOption } from "@/actions/commerce";
-import { useState } from "react";
+import CheckIcon from "../icons/CheckIcon";
+import { productSortOptions } from "@/enum/models";
+import Close from "../icons/Close";
+import CloseSimple from "../icons/CloseSimple";
 
 type Props = {
     setSlideInSort: (state: boolean) => void;
-    activeKeyword?:ProductSortKeywords;
-    onChange: (key:ProductSortKeywords) => void;
+    activeKeyword?: ProductSortKeywords;
+    onChange: (key: ProductSortKeywords) => void;
 }
 
 const Sort: React.FC<Props> = props => {
 
-    const [selected, setSelected] = useState<ProductSortKeywords | undefined>(props.activeKeyword);
-
-    const options : ProductSortOption[] =[
-        {label:"پرفروشترین", keywords:"Sale"},
-        {label:"پربازدیدترین", keywords:"Visitor"},
-        {label:"گرانترین", keywords:"HighPrice"},
-        {label:"ارزانترین", keywords:"LowPrice"}
-    ];
+    // const [selected, setSelected] = useState<ProductSortKeywords | undefined>(props.activeKeyword);
 
     return (
         <div className="px-4 py-8">
 
-            <h5 className="mb-4 font-semibold block">
-            نمایش بر اساس
-            </h5>
+            <div className="mb-4 flex justify-between items-center">
+                <h5 className="font-semibold block">
+                    مرتب سازی بر اساس
+                </h5>
+                <button
+                    type="button"
+                    onClick={()=>{props.setSlideInSort(false)}}
+                >
+                    <CloseSimple className="w-6 h-6 fill-current" />
+                </button>
+            </div>
 
             <div>
-                {options.map(option => (
+                {/* {options.map(option => (
                     <button
                         key={option.keywords}
                         type="button"
@@ -35,10 +39,24 @@ const Sort: React.FC<Props> = props => {
                     >
                         {option.label}
                     </button>
+                ))} */}
+                {productSortOptions.map(option => (
+                    <button
+                        key={option.keywords}
+                        type="button"
+                        className={`text-sm h-12 w-full flex items-center justify-between border-b border-white/25`}
+                        onClick={() => {
+                            props.onChange(option.keywords);
+                            props.setSlideInSort(false);
+                        }}
+                    >
+                        {option.label}
+                        {props.activeKeyword === option.keywords ? <CheckIcon className="w-6 h-6 fill-current" /> : null}
+                    </button>
                 ))}
             </div>
 
-            <div className="flex gap-3 mt-5">
+            {/* <div className="flex gap-3 mt-5">
                 <button
                     type="button"
                     className="bg-[#011425] rounded-full px-5 py-3 text-sm"
@@ -50,7 +68,7 @@ const Sort: React.FC<Props> = props => {
                     type="button"
                     className="bg-violet-500 rounded-full px-5 py-3 text-sm grow"
                     onClick={() => {
-                        if(selected){
+                        if (selected) {
                             props.onChange(selected)
                         }
                         props.setSlideInSort(false);
@@ -58,7 +76,7 @@ const Sort: React.FC<Props> = props => {
                 >
                     اعمال تغییرات
                 </button>
-            </div>
+            </div> */}
 
         </div>
     )

@@ -21,7 +21,7 @@ const ProductDetail: React.FC<Props> = props => {
     const tabItems: TabItem[] = [];
 
     const [openDetails, setOpenDetails] = useState<boolean>(false);
-    const [slideInDetails, setSlideInDetails] = useState<boolean>(true);
+    const [slideInDetails, setSlideInDetails] = useState<boolean>(false);
 
     useEffect(() => {
         if (props.activeTab) {

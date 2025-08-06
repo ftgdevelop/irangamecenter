@@ -1,3 +1,5 @@
+import { ProductSortOption } from "@/actions/commerce";
+
 export const CountryCodes = [
     ["Afghanistan", ["asia"], "af", "93"],
     ["Albania", ["europe"], "al", "355"],
@@ -497,4 +499,11 @@ export const Countries = [
     { value: "YE", label: "Yemen" },
     { value: "ZM", label: "Zambia" },
     { value: "ZW", label: "Zimbabwe" }
+];
+
+export const productSortOptions: ProductSortOption[] = [
+    { label: "پرفروشترین", keywords: "Sale" },
+    { label: "پربازدیدترین", keywords: "Visitor" },
+    { label: "گرانترین", keywords: "HighPrice" },
+    { label: "ارزانترین", keywords: "LowPrice" }
 ];

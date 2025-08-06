@@ -15,6 +15,7 @@ import SortIcon from "@/components/icons/SortIcon";
 import CheckboxGroup from "@/components/shared/CheckboxGroup";
 import Sort from "@/components/products/Sort";
 import { useRouter } from "next/router";
+import { productSortOptions } from "@/enum/models";
 
 type ProductsDataType = {
     totalCount?: number;
@@ -35,10 +36,10 @@ const Products: NextPage<Props> = props => {
     const [loading, setLoading] = useState(false);
 
     const [openFilters, setOpenFilters] = useState<boolean>(false);
-    const [slideInFilters, setSlideInFilters] = useState<boolean>(true);
+    const [slideInFilters, setSlideInFilters] = useState<boolean>(false);
 
     const [openSort, setOpenSort] = useState<boolean>(false);
-    const [slideInSort, setSlideInSort] = useState<boolean>(true);
+    const [slideInSort, setSlideInSort] = useState<boolean>(false);
 
     const [selectedSort, setSelectedSort] = useState<ProductSortKeywords | undefined>(undefined);
 
@@ -157,6 +158,8 @@ const Products: NextPage<Props> = props => {
         });
     }, []);
 
+    const selectedSortLabel = productSortOptions?.find(option => option.keywords === selectedSort)?.label || "مرتب سازی";
+
     return (
         <>
             <BreadCrumpt
@@ -180,7 +183,7 @@ const Products: NextPage<Props> = props => {
                     onClick={() => { setOpenSort(true) }}
                 >
                     <SortIcon className="w-5 h-5 fill-current" />
-                    جدیدترین ها
+                    {selectedSortLabel}
                 </button>
             </div>
 
@@ -227,7 +230,7 @@ const Products: NextPage<Props> = props => {
 
                         <div className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInFilters(false) }} />
 
-                        <div className={`bg-[#192a39] text-white rounded-2xl absolute transition-all left-5 right-5 ${slideInFilters ? "bottom-5" : "-bottom-[80vh]"}`}>
+                        <div className={`bg-[#192a39] text-white rounded-t-2xl absolute transition-all left-0 right-0 ${slideInFilters ? "bottom-0" : "-bottom-[80vh]"}`}>
 
                             <div className="px-4 py-5">
 
@@ -283,7 +286,7 @@ const Products: NextPage<Props> = props => {
 
                         <div className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInSort(false) }} />
 
-                        <div className={`bg-[#192a39] text-white rounded-2xl absolute transition-all left-5 right-5 ${slideInSort ? "bottom-5" : "-bottom-[80vh]"}`}>
+                        <div className={`bg-[#192a39] text-white rounded-t-2xl absolute transition-all left-0 right-0 ${slideInSort ? "bottom-0" : "-bottom-[80vh]"}`}>
                             <Sort
                                 setSlideInSort={setSlideInSort}
                                 activeKeyword={selectedSort}
