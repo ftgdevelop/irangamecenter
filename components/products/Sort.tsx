@@ -14,7 +14,7 @@ const Sort: React.FC<Props> = props => {
     // const [selected, setSelected] = useState<ProductSortKeywords | undefined>(props.activeKeyword);
 
     return (
-        <div className="px-4 py-8">
+        <div className="px-4 pt-8">
 
             <div className="mb-4 flex justify-between items-center">
                 <h5 className="font-semibold block">
@@ -39,11 +39,11 @@ const Sort: React.FC<Props> = props => {
                         {option.label}
                     </button>
                 ))} */}
-                {productSortOptions.map(option => (
+                {productSortOptions.map((option, index) => (
                     <button
                         key={option.keywords}
                         type="button"
-                        className={`text-sm h-12 w-full flex items-center justify-between border-b border-white/25`}
+                        className={`text-sm h-12 w-full flex items-center justify-between ${index?"border-t border-white/25":""}`}
                         onClick={() => {
                             props.onChange(option.keywords);
                             props.setSlideInSort(false);
