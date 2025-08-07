@@ -7,6 +7,8 @@ import parse from 'html-react-parser';
 import { useEffect, useState } from "react";
 import ModalPortal from "../shared/layout/ModalPortal";
 import ArrowTopLeft from "../icons/ArrowTopLeft";
+import { useAppDispatch } from "@/hooks/use-store";
+import { setBodyScrollable } from "@/redux/stylesSlice";
 
 type Props = {
     productData?: ProductDetailData;
@@ -23,9 +25,15 @@ const ProductDetail: React.FC<Props> = props => {
     const [openDetails, setOpenDetails] = useState<boolean>(false);
     const [slideInDetails, setSlideInDetails] = useState<boolean>(false);
 
+    const dispatch = useAppDispatch();
+        
     useEffect(() => {
         if (props.activeTab) {
             setOpenDetails(true);
+            dispatch(setBodyScrollable(false));
+        }else{
+            dispatch(setBodyScrollable(true));
+              setSlideInDetails(false);
         }
     }, [props.activeTab]);
 
@@ -173,32 +181,18 @@ const ProductDetail: React.FC<Props> = props => {
                 <div className="bg-black/50 backdrop-blur-sm fixed top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInDetails(false) }} />
 
                 <div className={`bg-[#192a39] text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full md:max-w-lg safePadding-b transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2 ${slideInDetails ? "bottom-0" : "-bottom-[80vh]"}`}>
-                    <div className="min-h-96 flex flex-col justify-between" >
-                        <div>
-                            <Tab
-                                heading={productData.name}
-                                isSticky
-                                navsBgClass="bg-[#192a39]"
-                                items={tabItems}
-                                style="3"
-                                wrapperClassName="mx-3"
-                                scrollTabs
-                                noGrowTabs
-                                activeTab={props.activeTab}
-                                onChange={props.changeActiveTab}
-                            />
-                        </div>
-                        <div className="p-4">
-                            <button
-                                type="button"
-                                className="bg-[#011425] rounded-full px-5 py-3 text-sm"
-                                onClick={() => { setSlideInDetails(false) }}
-                            >
-                                بستن
-                            </button>
-                        </div>
-                    </div>
-
+                    <Tab
+                        heading={productData.name}
+                        isSticky
+                        navsBgClass="bg-[#192a39]"
+                        items={tabItems}
+                        style="3"
+                        wrapperClassName="mx-3"
+                        scrollTabs
+                        noGrowTabs
+                        activeTab={props.activeTab}
+                        onChange={props.changeActiveTab}
+                    />
                 </div>
             </ModalPortal>
 

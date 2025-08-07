@@ -4,6 +4,9 @@ import ModalPortal from "../shared/layout/ModalPortal";
 import { useEffect, useState } from "react";
 import CheckboxGroup from "../shared/CheckboxGroup";
 import Filter2 from "../icons/Filter2";
+import { useAppDispatch } from "@/hooks/use-store";
+import { setBodyScrollable } from "@/redux/stylesSlice";
+import CloseSimple from "../icons/CloseSimple";
 
 type Props = {
     activeKeyword?: any;
@@ -12,14 +15,17 @@ type Props = {
 
 const FilterProducts: React.FC<Props> = () => {
 
-
     const [open, setOpen] = useState<boolean>(false);
     const [slideIn, setSlideIn] = useState<boolean>(false);
-
-
+    
+    const dispatch = useAppDispatch();
+    
     useEffect(() => {
         if (open) {
             setSlideIn(true);
+            dispatch(setBodyScrollable(false));
+        } else {
+            dispatch(setBodyScrollable(true));
         }
     }, [open]);
 
@@ -50,7 +56,20 @@ const FilterProducts: React.FC<Props> = () => {
                 <div className={`bg-[#192a39] text-white rounded-t-2xl fixed w-full md:max-w-lg safePadding-b overflow-y-auto max-h-[50vh] transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2  bottom-0 ${slideIn ? "translate-y-0" : "translate-y-[80vh]"}`}>
                     <div className="px-4 pt-8 pb-3">
 
-                        <h5 className="font-semibold mb-4"> فیلتر بر اساس دسته بندی ها </h5>
+                        <div className="mb-5 flex justify-between items-center">
+                            <h5 className="font-semibold block">
+                                فیلتر محصولات
+                            </h5>
+                            <button
+                                type="button"
+                                onClick={() => { setSlideIn(false) }}
+                            >
+                                <CloseSimple className="w-6 h-6 fill-current" />
+                            </button>
+                        </div>
+
+
+                        <h5 className="font-semibold mb-4 text-sm"> فیلتر بر اساس دسته بندی ها </h5>
 
                         <CheckboxGroup
                             items={[{ label: "دسته بندی 1", value: "cat1" }, { label: "دسته بندی 2", value: "cat2" }, { label: "دسته بندی 3", value: "cat3" }]}
@@ -58,7 +77,7 @@ const FilterProducts: React.FC<Props> = () => {
                             values={["cat1", "cat3"]}
                         />
 
-                        <h5 className="font-semibold my-4"> فیلتر بر اساس برچسب ها </h5>
+                        <h5 className="font-semibold my-4 text-sm"> فیلتر بر اساس برچسب ها </h5>
 
                         <CheckboxGroup
                             items={[{ label: "برچسب 1", value: "cat1" }, { label: "برچسب 2", value: "cat2" }, { label: "برچسب 3", value: "cat3" }]}
@@ -66,23 +85,14 @@ const FilterProducts: React.FC<Props> = () => {
                             values={["cat1", "cat3"]}
                         />
 
-                        <div className="flex gap-3 mt-5">
-                            <button
-                                type="button"
-                                className="bg-[#011425] rounded-full px-5 py-3 text-sm"
-                                onClick={() => { setSlideIn(false) }}
-                            >
-                                بستن
-                            </button>
-                            <button
-                                type="button"
-                                className="bg-violet-500 rounded-full px-5 py-3 text-sm grow"
-                                onClick={() => { setSlideIn(false) }}
-                            >
-                                اعمال تغییرات
-                            </button>
-                        </div>
-
+                        <button
+                            type="button"
+                            className="bg-violet-500 w-full rounded-full px-5 py-3 text-sm mt-5"
+                            onClick={() => { setSlideIn(false) }}
+                        >
+                            اعمال تغییرات
+                        </button>
+                        
                     </div>
 
                 </div>

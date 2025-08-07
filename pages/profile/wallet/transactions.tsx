@@ -17,7 +17,7 @@ const Transactions = () => {
     const [page, setPage] = useState<number>(1);
     const [loading, setLoading] = useState<boolean>(false);
     const [openFilters, setOpenFilters] = useState<boolean>(false);
-    const [slideInFilters, setSlideInFilters] = useState<boolean>(true);
+    const [slideInFilters, setSlideInFilters] = useState<boolean>(false);
     const [filterStartDate, setFilterStartDate] = useState<string>("");
     const [filterEndDate, setFilterEndDate] = useState<string>("");
     const [filterType, setFilterType] = useState<string[]>([]);
@@ -153,26 +153,19 @@ const Transactions = () => {
                 show={openFilters}
                 selector='modal_portal'
             >
-                <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen">
+                <div className="bg-black/50 backdrop-blur-sm fixed top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInFilters(false) }} />
 
-                    <div className="relative w-full md:max-w-lg md:mx-auto h-screen">
+                <div className={`bg-[#192a39] text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full md:max-w-lg safePadding-b transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2 ${slideInFilters ? "bottom-0" : "-bottom-[80vh]"}`}>
 
-                        <div className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInFilters(false) }} />
-
-                        <div className={`bg-[#192a39] text-white rounded-2xl absolute transition-all left-5 right-5 ${slideInFilters ? "bottom-5" : "-bottom-[80vh]"}`}>
-
-                            <TransactionsFilter
-                                onFilter={values => {
-                                    setFilterStartDate(values.startDate);
-                                    setFilterEndDate(values.endDate);
-                                    setFilterType(values.types);
-                                    setOpenFilters(false);
-                                }}
-                                close={() =>{setOpenFilters(false);}}
-                            />
-
-                        </div>
-                    </div>
+                    <TransactionsFilter
+                        onFilter={values => {
+                            setFilterStartDate(values.startDate);
+                            setFilterEndDate(values.endDate);
+                            setFilterType(values.types);
+                            setOpenFilters(false);
+                        }}
+                        close={() => { setOpenFilters(false); }}
+                    />
 
                 </div>
             </ModalPortal>

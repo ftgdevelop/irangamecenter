@@ -2,6 +2,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { TabItem } from '@/types';
+import CloseSimple from '../icons/CloseSimple';
 
 type Props = {
     items: TabItem[];
@@ -11,8 +12,8 @@ type Props = {
     scrollTabs?: boolean;
     noGrowTabs?: boolean;
     activeTab?: string | number;
-    onChange?: (key: string | number ) => void;
-    isSticky?:boolean;
+    onChange?: (key: string | number) => void;
+    isSticky?: boolean;
     navsBgClass?: string;
     heading?: string;
 }
@@ -26,22 +27,34 @@ const Tab: React.FC<Props> = props => {
     const [activetabKey, setActiveTabKey] = useState(items[0]?.key);
 
 
-    useEffect(()=>{
-        if(props.activeTab){
+    useEffect(() => {
+        if (props.activeTab) {
             setActiveTabKey(props.activeTab);
         }
-    },[props.activeTab]);
+    }, [props.activeTab]);
 
     const tabClassName = (active: boolean) => {
-        return `outline-none font-semibold whitespace-nowrap select-none text-sm px-2 sm:px-3 py-2 sm:py-3 border-b-2 transition-all block ${props.noGrowTabs?"":"grow"} ${active ? "border-[#aa3aff] text-[#aa3aff]" : "border-transparent text-white"}`;
+        return `outline-none font-semibold whitespace-nowrap select-none text-sm px-2 sm:px-3 py-2 sm:py-3 border-b-2 transition-all block ${props.noGrowTabs ? "" : "grow"} ${active ? "border-[#aa3aff] text-[#aa3aff]" : "border-transparent text-white"}`;
     }
 
     return (
 
         <div className={props.wrapperClassName || ""}>
 
-            <div className={`${props.isSticky ? "sticky top-0" : ""} ${props.navsBgClass||""}`}>
-                {!!props.heading && <h2 className="text-lg font-semibold mb-4 px-4 pt-5"> {props.heading}</h2>}
+            <div className={`${props.isSticky ? "sticky top-0" : ""} ${props.navsBgClass || ""}`}>
+
+                {!!props.heading && (
+                    <div className="mb-5 flex justify-between items-center pt-5 mb-4">
+                        <h2 className="text-lg font-semibold px-4 block"> {props.heading}</h2>
+                        {!!props.onChange && <button
+                            type="button"
+                            onClick={() => { props.onChange!("") }}
+                        >
+                            <CloseSimple className="w-6 h-6 fill-current" />
+                        </button>}
+                    </div>
+                )}
+
                 <div className={`border-b border-neutral-200/25 ${props.scrollTabs ? 'hidden-scrollbar overflow-x-auto overflow-y-clip' : ""}`}>
                     <div className={`flex ${!props.scrollTabs ? "flex-wrap" : ""} ${props.tabLinksBold ? "font-bold" : ""}`}>
                         {items.map(item => <button
@@ -53,7 +66,7 @@ const Tab: React.FC<Props> = props => {
                                 } else {
                                     setActiveTabKey(item.key);
                                 }
-                                if(props.onChange){
+                                if (props.onChange) {
                                     props.onChange(item.key);
                                 }
                             }}

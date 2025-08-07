@@ -5,6 +5,8 @@ import CloseSimple from "../icons/CloseSimple";
 import ModalPortal from "../shared/layout/ModalPortal";
 import { useEffect, useState } from "react";
 import SortIcon from "../icons/SortIcon";
+import { useAppDispatch } from "@/hooks/use-store";
+import { setBodyScrollable } from "@/redux/stylesSlice";
 
 type Props = {
     activeKeyword?: ProductSortKeywords;
@@ -15,6 +17,8 @@ const SortProducts: React.FC<Props> = props => {
 
     // const [selected, setSelected] = useState<ProductSortKeywords | undefined>(props.activeKeyword);
 
+    const dispatch = useAppDispatch();
+
     const [open, setOpen] = useState<boolean>(false);
     const [slideIn, setSlideIn] = useState<boolean>(false);
 
@@ -22,6 +26,9 @@ const SortProducts: React.FC<Props> = props => {
     useEffect(() => {
         if (open) {
             setSlideIn(true);
+            dispatch(setBodyScrollable(false));
+        }else{
+            dispatch(setBodyScrollable(true));
         }
     }, [open]);
 

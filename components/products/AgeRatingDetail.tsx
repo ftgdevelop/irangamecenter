@@ -6,6 +6,9 @@ import { useEffect, useState } from "react";
 import ModalPortal from "../shared/layout/ModalPortal";
 import Link from "next/link";
 import ArrowTopLeft2 from "../icons/ArrowTopLeft2";
+import { useAppDispatch } from "@/hooks/use-store";
+import { setBodyScrollable } from "@/redux/stylesSlice";
+import CloseSimple from "../icons/CloseSimple";
 
 type Props = {
     productData?: ProductDetailData;
@@ -14,6 +17,8 @@ type Props = {
 const AgeRatingDetail: React.FC<Props> = props => {
 
     const { productData } = props;
+
+    const dispatch = useAppDispatch();
 
     const [activeItem, setActiveItem] = useState<string>("");
 
@@ -31,8 +36,10 @@ const AgeRatingDetail: React.FC<Props> = props => {
     useEffect(() => {
         if (openDetails) {
             setSlideInDetails(true);
+            dispatch(setBodyScrollable(false));
         } else {
             setActiveItem("");
+            dispatch(setBodyScrollable(true));
         }
     }, [openDetails]);
 
@@ -235,7 +242,17 @@ const AgeRatingDetail: React.FC<Props> = props => {
                 <div className={`bg-[#192a39] text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full md:max-w-lg safePadding-b transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2 ${slideInDetails ? "bottom-0" : "-bottom-[80vh]"}`}>
                     <div className="min-h-96 flex flex-col justify-between" >
                         <div>
-                            <h2 className="text-lg font-semibold mb-4 px-4 mt-6"> رده‌بندی سنی</h2>
+
+                            <div className="mb-5 flex justify-between items-center pt-5 px-4 mb-4">
+                                <h2 className="text-lg font-semibold block"> رده‌بندی سنی </h2>
+                                <button
+                                    type="button"
+                                    onClick={() => { setSlideInDetails(false) }}
+                                >
+                                    <CloseSimple className="w-6 h-6 fill-current" />
+                                </button>
+                            </div>
+
                             <Tab
                                 items={tabItems}
                                 style="3"
@@ -246,14 +263,7 @@ const AgeRatingDetail: React.FC<Props> = props => {
                                 onChange={(key) => { setActiveItem(key.toString()) }}
                             />
                         </div>
-                        <div className="p-4 flex justify-between items-center">
-                            <button
-                                type="button"
-                                className="bg-[#011425] rounded-full px-5 py-3 text-sm"
-                                onClick={() => { setSlideInDetails(false) }}
-                            >
-                                بستن
-                            </button>
+                        <div className="p-4">
                             <Link
                                 href={"#"}
                                 className="text-xs flex items-center justify-center gap-2 grow font-semibold text-violet-400"
