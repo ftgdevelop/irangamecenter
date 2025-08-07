@@ -99,6 +99,7 @@ const Products: NextPage<Props> = props => {
             fetchData(selectedSort);
         }
     }, [selectedSort]);
+
     const loadMoreWrapper = useRef<HTMLButtonElement>(null);
 
     const removeListener = () => {
@@ -170,18 +171,18 @@ const Products: NextPage<Props> = props => {
             <div className="flex gap-3 px-4 mb-4">
                 <button
                     type="button"
-                    className="inline-flex gap-2 items-center bg-[#192a39] rounded-full px-5 py-2.5 text-sm"
+                    className="inline-flex gap-2 items-center bg-[#192a39] rounded-full px-5 py-2.5 text-xs"
                     onClick={() => { setOpenFilters(true) }}
                 >
-                    <Filter2 className="w-5 h-5 fill-current" />
+                    <Filter2 className="w-4.5 h-4.5 fill-current" />
                     فیلتر
                 </button>
                 <button
                     type="button"
-                    className="inline-flex gap-2 items-center bg-[#192a39] rounded-full px-5 py-2.5 text-sm"
+                    className="inline-flex gap-2 items-center bg-[#192a39] rounded-full px-5 py-2.5 text-xs"
                     onClick={() => { setOpenSort(true) }}
                 >
-                    <SortIcon className="w-5 h-5 fill-current" />
+                    <SortIcon className="w-4.5 h-4.5 fill-current" />
                     {selectedSortLabel}
                 </button>
             </div>
@@ -283,8 +284,9 @@ const Products: NextPage<Props> = props => {
 
                     <div className="relative w-full lg:max-w-lg lg:mx-auto h-screen">
 
+                        <div className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInSort(false) }} />
 
-                        <div className={`bg-[#192a39] text-white rounded-t-2xl absolute overflow-y-auto max-h-[50vh] transition-all left-0 right-0 bottom-0 ${slideInSort ? "translate-y-0" : "translate-y-[80vh]"}`}>
+                        <div className={`bg-[#192a39] text-white rounded-t-2xl fixed safePadding-b overflow-y-auto max-h-[50vh] transition-all left-0 right-0 bottom-0 ${slideInSort ? "translate-y-0" : "translate-y-[80vh]"}`}>
                             <Sort
                                 setSlideInSort={setSlideInSort}
                                 activeKeyword={selectedSort}
