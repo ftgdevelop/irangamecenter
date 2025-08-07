@@ -16,6 +16,8 @@ import CheckboxGroup from "@/components/shared/CheckboxGroup";
 import Sort from "@/components/products/Sort";
 import { useRouter } from "next/router";
 import { productSortOptions } from "@/enum/models";
+import { useAppDispatch } from "@/hooks/use-store";
+import { setBodyScrollable } from "@/redux/stylesSlice";
 
 type ProductsDataType = {
     totalCount?: number;
@@ -28,6 +30,8 @@ type Props = {
 const Products: NextPage<Props> = props => {
 
     const router = useRouter();
+
+    const dispatch = useAppDispatch();
 
     const urlVariantSlug = router.query?.VariantSlug;
 
@@ -59,6 +63,9 @@ const Products: NextPage<Props> = props => {
     useEffect(() => {
         if (openSort) {
             setSlideInSort(true);
+            dispatch(setBodyScrollable(false));
+        }else{
+            dispatch(setBodyScrollable(true));
         }
     }, [openSort]);
 
@@ -100,6 +107,12 @@ const Products: NextPage<Props> = props => {
         }
     }, [selectedSort]);
 
+    useEffect(()=>{
+        return(()=>{
+            dispatch(setBodyScrollable(true));
+        })
+    },[]);
+    
     const loadMoreWrapper = useRef<HTMLButtonElement>(null);
 
     const removeListener = () => {
@@ -224,9 +237,9 @@ const Products: NextPage<Props> = props => {
                 show={openFilters}
                 selector='modal_portal'
             >
-                <div className="fixed top-0 left-0 right-0 bottom-0 h-svh w-screen">
+                <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen">
 
-                    <div className="relative w-full lg:max-w-lg lg:mx-auto h-svh">
+                    <div className="relative w-full lg:max-w-lg lg:mx-auto h-screen">
 
                         <div className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInFilters(false) }} />
 
@@ -280,9 +293,9 @@ const Products: NextPage<Props> = props => {
                 show={openSort}
                 selector='modal_portal'
             >
-                <div className="fixed top-0 left-0 right-0 bottom-0 h-dvh w-screen">
+                <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen">
 
-                    <div className="relative w-full lg:max-w-lg lg:mx-auto h-dvh">
+                    <div className="relative w-full lg:max-w-lg lg:mx-auto h-screen">
 
                         <div className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInSort(false) }} />
 
