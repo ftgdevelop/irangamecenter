@@ -14,7 +14,7 @@ const Sort: React.FC<Props> = props => {
     // const [selected, setSelected] = useState<ProductSortKeywords | undefined>(props.activeKeyword);
 
     return (
-        <div className="px-4 pt-8">
+        <div className="px-4 py-8">
 
             <div className="mb-4 flex justify-between items-center">
                 <h5 className="font-semibold block">
