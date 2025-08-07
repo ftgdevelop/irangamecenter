@@ -224,9 +224,9 @@ const Products: NextPage<Props> = props => {
                 show={openFilters}
                 selector='modal_portal'
             >
-                <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen">
+                <div className="fixed top-0 left-0 right-0 bottom-0 h-svh w-screen">
 
-                    <div className="relative w-full lg:max-w-lg lg:mx-auto h-screen">
+                    <div className="relative w-full lg:max-w-lg lg:mx-auto h-svh">
 
                         <div className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInFilters(false) }} />
 
@@ -280,9 +280,9 @@ const Products: NextPage<Props> = props => {
                 show={openSort}
                 selector='modal_portal'
             >
-                <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen">
+                <div className="fixed top-0 left-0 right-0 bottom-0 h-dvh w-screen">
 
-                    <div className="relative w-full lg:max-w-lg lg:mx-auto h-screen">
+                    <div className="relative w-full lg:max-w-lg lg:mx-auto h-dvh">
 
                         <div className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInSort(false) }} />
 

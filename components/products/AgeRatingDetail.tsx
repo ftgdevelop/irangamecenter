@@ -230,9 +230,9 @@ const AgeRatingDetail: React.FC<Props> = props => {
                 show={openDetails}
                 selector='modal_portal'
             >
-                <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen">
+                <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-lvh">
 
-                    <div className="relative w-full lg:max-w-lg lg:mx-auto h-screen">
+                    <div className="relative w-full lg:max-w-lg lg:mx-auto h-lvh">
 
                         <div className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInDetails(false) }} />
 
