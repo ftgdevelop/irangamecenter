@@ -16,8 +16,6 @@ import CheckboxGroup from "@/components/shared/CheckboxGroup";
 import Sort from "@/components/products/Sort";
 import { useRouter } from "next/router";
 import { productSortOptions } from "@/enum/models";
-import { useAppDispatch } from "@/hooks/use-store";
-import { setBodyScrollable } from "@/redux/stylesSlice";
 
 type ProductsDataType = {
     totalCount?: number;
@@ -30,8 +28,6 @@ type Props = {
 const Products: NextPage<Props> = props => {
 
     const router = useRouter();
-
-    const dispatch = useAppDispatch();
 
     const urlVariantSlug = router.query?.VariantSlug;
 
@@ -63,9 +59,6 @@ const Products: NextPage<Props> = props => {
     useEffect(() => {
         if (openSort) {
             setSlideInSort(true);
-            dispatch(setBodyScrollable(false));
-        }else{
-            dispatch(setBodyScrollable(true));
         }
     }, [openSort]);
 
@@ -106,13 +99,6 @@ const Products: NextPage<Props> = props => {
             fetchData(selectedSort);
         }
     }, [selectedSort]);
-
-    useEffect(()=>{
-        return(()=>{
-            dispatch(setBodyScrollable(true));
-        })
-    },[]);
-    
     const loadMoreWrapper = useRef<HTMLButtonElement>(null);
 
     const removeListener = () => {
@@ -297,7 +283,6 @@ const Products: NextPage<Props> = props => {
 
                     <div className="relative w-full lg:max-w-lg lg:mx-auto h-screen">
 
-                        <div className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInSort(false) }} />
 
                         <div className={`bg-[#192a39] text-white rounded-t-2xl absolute overflow-y-auto max-h-[50vh] transition-all left-0 right-0 bottom-0 ${slideInSort ? "translate-y-0" : "translate-y-[80vh]"}`}>
                             <Sort
