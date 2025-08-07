@@ -9,13 +9,9 @@ import Add from "@/components/icons/Add";
 import { getProducts, ProductSortKeywords } from "@/actions/commerce";
 import { GetAllProductsParams, ProductItem } from "@/types/commerce";
 import ProductListItem from "@/components/products/ProductListItem";
-import ModalPortal from "@/components/shared/layout/ModalPortal";
-import Filter2 from "@/components/icons/Filter2";
-import SortIcon from "@/components/icons/SortIcon";
-import CheckboxGroup from "@/components/shared/CheckboxGroup";
-import Sort from "@/components/products/Sort";
+import SortProducts from "@/components/products/SortProducts";
 import { useRouter } from "next/router";
-import { productSortOptions } from "@/enum/models";
+import FilterProducts from "@/components/products/FilterProducts";
 
 type ProductsDataType = {
     totalCount?: number;
@@ -35,38 +31,7 @@ const Products: NextPage<Props> = props => {
     const [fetchMode, setFetchMode] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
 
-    const [openFilters, setOpenFilters] = useState<boolean>(false);
-    const [slideInFilters, setSlideInFilters] = useState<boolean>(false);
-
-    const [openSort, setOpenSort] = useState<boolean>(false);
-    const [slideInSort, setSlideInSort] = useState<boolean>(false);
-
     const [selectedSort, setSelectedSort] = useState<ProductSortKeywords | undefined>(undefined);
-
-    useEffect(() => {
-        if (openFilters) {
-            setSlideInFilters(true);
-        }
-    }, [openFilters]);
-
-    useEffect(() => {
-        if (!slideInFilters) {
-            setTimeout(() => { setOpenFilters(false) }, 300)
-        }
-    }, [slideInFilters]);
-
-
-    useEffect(() => {
-        if (openSort) {
-            setSlideInSort(true);
-        }
-    }, [openSort]);
-
-    useEffect(() => {
-        if (!slideInSort) {
-            setTimeout(() => { setOpenSort(false) }, 300)
-        }
-    }, [slideInSort]);
 
     useEffect(() => {
 
@@ -84,7 +49,7 @@ const Products: NextPage<Props> = props => {
                 //TODO what if there is multiple variants in url??
                 parameters.VariantSlug = urlVariantSlug as string;
             }
-            
+
             const productsResponse: any = await getProducts(parameters);
             if (productsResponse?.data?.result?.items) {
                 setProducts(productsResponse.data.result.items);
@@ -158,8 +123,6 @@ const Products: NextPage<Props> = props => {
         });
     }, []);
 
-    const selectedSortLabel = productSortOptions?.find(option => option.keywords === selectedSort)?.label || "مرتب سازی";
-
     return (
         <>
             <BreadCrumpt
@@ -169,22 +132,20 @@ const Products: NextPage<Props> = props => {
             />
 
             <div className="flex gap-3 px-4 mb-4">
-                <button
-                    type="button"
-                    className="inline-flex gap-2 items-center bg-[#192a39] rounded-full px-5 py-2.5 text-xs"
-                    onClick={() => { setOpenFilters(true) }}
-                >
-                    <Filter2 className="w-4.5 h-4.5 fill-current" />
-                    فیلتر
-                </button>
-                <button
-                    type="button"
-                    className="inline-flex gap-2 items-center bg-[#192a39] rounded-full px-5 py-2.5 text-xs"
-                    onClick={() => { setOpenSort(true) }}
-                >
-                    <SortIcon className="w-4.5 h-4.5 fill-current" />
-                    {selectedSortLabel}
-                </button>
+
+                <FilterProducts
+                    onChange={a => {
+                        console.log(a);
+                        debugger;
+                    }}
+                    activeKeyword={""}
+                />
+
+                <SortProducts
+                    activeKeyword={selectedSort}
+                    onChange={(key: ProductSortKeywords) => { setSelectedSort(key) }}
+                />
+
             </div>
 
             <hr className="m-4 border-white/25" />
@@ -219,85 +180,6 @@ const Products: NextPage<Props> = props => {
             </div>
 
             <Contacts />
-
-            <ModalPortal
-                show={openFilters}
-                selector='modal_portal'
-            >
-                <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen">
-
-                    <div className="relative w-full lg:max-w-lg lg:mx-auto h-screen">
-
-                        <div className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInFilters(false) }} />
-
-                        <div className={`bg-[#192a39] text-white rounded-t-2xl absolute transition-all left-0 right-0 ${slideInFilters ? "bottom-0" : "-bottom-[80vh]"}`}>
-
-                            <div className="px-4 py-5">
-
-                                <h5 className="font-semibold mb-4"> فیلتر بر اساس دسته بندی ها </h5>
-
-                                <CheckboxGroup
-                                    items={[{ label: "دسته بندی 1", value: "cat1" }, { label: "دسته بندی 2", value: "cat2" }, { label: "دسته بندی 3", value: "cat3" }]}
-                                    onChange={console.log}
-                                    values={["cat1", "cat3"]}
-                                />
-
-                                <h5 className="font-semibold my-4"> فیلتر بر اساس برچسب ها </h5>
-
-                                <CheckboxGroup
-                                    items={[{ label: "برچسب 1", value: "cat1" }, { label: "برچسب 2", value: "cat2" }, { label: "برچسب 3", value: "cat3" }]}
-                                    onChange={console.log}
-                                    values={["cat1", "cat3"]}
-                                />
-
-
-                                <div className="flex gap-3 mt-5">
-                                    <button
-                                        type="button"
-                                        className="bg-[#011425] rounded-full px-5 py-3 text-sm"
-                                        onClick={() => { setSlideInFilters(false) }}
-                                    >
-                                        بستن
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="bg-violet-500 rounded-full px-5 py-3 text-sm grow"
-                                        onClick={() => { setSlideInFilters(false) }}
-                                    >
-                                        اعمال تغییرات
-                                    </button>
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-            </ModalPortal>
-
-            <ModalPortal
-                show={openSort}
-                selector='modal_portal'
-            >
-                <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen">
-
-                    <div className="relative w-full lg:max-w-lg lg:mx-auto h-screen">
-
-                        <div className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInSort(false) }} />
-
-                        <div className={`bg-[#192a39] text-white rounded-t-2xl fixed safePadding-b overflow-y-auto max-h-[50vh] transition-all left-0 right-0 bottom-0 ${slideInSort ? "translate-y-0" : "translate-y-[80vh]"}`}>
-                            <Sort
-                                setSlideInSort={setSlideInSort}
-                                activeKeyword={selectedSort}
-                                onChange={(key: ProductSortKeywords) => { setSelectedSort(key) }}
-                            />
-
-                        </div>
-                    </div>
-
-                </div>
-            </ModalPortal>
 
         </>
     )

@@ -52,7 +52,7 @@ const PageLoadingBar: React.FC<Props> = props => {
     return (
         <>
         <div className='fixed z-50 top-0 left-0 h-2 w-full'>
-            <div className='max-w-lg mx-auto'>
+            <div className='md:max-w-lg md:mx-auto'>
                 <div
                     className="h-2 bg-gradient-to-r from-[#fe6475] to-[#ff9a8f] transition-all duration-1000"
                     style={{ width: `${percentage}%` }}

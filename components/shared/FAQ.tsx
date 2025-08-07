@@ -12,7 +12,7 @@ type Props = {
 }
 const FAQ: React.FC<Props> = props => {
     return (
-        <div className="px-5">
+        <div className="px-4">
             {props.items.map((item, index) => (
                 <Accordion
                     key={item.id}

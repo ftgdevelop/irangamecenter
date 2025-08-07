@@ -85,7 +85,7 @@ const DetailBlog: NextPage<any> = ({ productData }:
       )}
 
       {productData.image?.url && (
-        <div className="p-5">
+        <div className="p-4">
           <Image
             src={productData.image?.url}
             alt={productData.name || ""}
@@ -97,7 +97,7 @@ const DetailBlog: NextPage<any> = ({ productData }:
       )}
 
 
-      <div className="px-5">
+      <div className="px-4">
 
         <h2 className="text-2xl font-semibold mb-4"> {productData.name}</h2>
 
@@ -205,7 +205,7 @@ const DetailBlog: NextPage<any> = ({ productData }:
       </div>
 
       {!!productData.shortDescription && (
-        <div className="mt-7 px-5">
+        <div className="mt-7 px-4">
           <h3 className="text-lg font-semibold mb-4"> {productData.name}</h3>
           <div className="inserted-content">
             {parse(productData.shortDescription)}
@@ -221,7 +221,7 @@ const DetailBlog: NextPage<any> = ({ productData }:
         </div>
       )}
 
-      <div className="px-5">
+      <div className="px-4">
 
         <div className={`mt-6 bg-[#192a39] p-2.5 rounded-xl ${(productData.developer?.name && productData.publisher?.name) ? "grid grid-cols-2 gap-2.5" : ""}`}>
           {!!productData.developer?.name && (
@@ -274,18 +274,18 @@ const DetailBlog: NextPage<any> = ({ productData }:
 
       </div>
 
-      <label className="text-sm pointer-events-none mb-3 block px-5 mt-7">
+      <label className="text-sm pointer-events-none mb-3 block px-4 mt-7">
         انتخاب کنسول مورد نظر
       </label>
 
       <div className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip pb-3 pl-3">
 
-        <div className="flex pr-5">
+        <div className="flex pr-4">
           {productData.variants?.map(variantItem => (
-            <div key={variantItem.id} className="pl-3 last:pl-5">
+            <div key={variantItem.id} className="pl-3 last:pl-4">
               <button
                 type="button"
-                className={`shrink-0 rounded-xl whitespace-nowrap px-5 h-16 border-0 outline-none font-semibold py-3 ${variant === variantItem.slug ? "bg-gradient-green text-neutral-800" : "bg-[#192a39]"}`}
+                className={`shrink-0 rounded-xl whitespace-nowrap px-4 h-16 border-0 outline-none font-semibold py-3 ${variant === variantItem.slug ? "bg-gradient-green text-neutral-800" : "bg-[#192a39]"}`}
                 disabled={!variantItem.slug}
                 onClick={() => { setVariant(variantItem.slug || "") }}
               >
@@ -296,7 +296,7 @@ const DetailBlog: NextPage<any> = ({ productData }:
         </div>
       </div>
 
-      <label className="text-sm pointer-events-none mb-3 block px-5 mt-7">
+      <label className="text-sm pointer-events-none mb-3 block px-4 mt-7">
         انتخاب ظرفیت بازی
       </label>
 
@@ -306,7 +306,7 @@ const DetailBlog: NextPage<any> = ({ productData }:
             <div key={index} className="pl-3 last:pl-5">
               <button
                 type="button"
-                className={`shrink-0 rounded-xl whitespace-nowrap px-5 h-16 border-0 outline-none font-semibold py-3 ${capacity === capacityItem.value ? "bg-gradient-green text-neutral-800" : "bg-[#192a39]"}`}
+                className={`shrink-0 rounded-xl whitespace-nowrap px-4 h-16 border-0 outline-none font-semibold py-3 ${capacity === capacityItem.value ? "bg-gradient-green text-neutral-800" : "bg-[#192a39]"}`}
                 disabled={!capacityItem.value}
                 onClick={() => { setCapacity(capacityItem.value || "") }}
               >
@@ -319,7 +319,7 @@ const DetailBlog: NextPage<any> = ({ productData }:
 
       {!!productData.rating?.length && (
         <>
-          <strong className="px-5 text-lg font-semibold mb-0 mt-8 text-[#ffefb2] block"> امتیاز در وبسایت های معتبر </strong>
+          <strong className="px-4 text-lg font-semibold mb-0 mt-8 text-[#ffefb2] block"> امتیاز در وبسایت های معتبر </strong>
           <div className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip py-3 pl-3">
             <div className="flex gap-3 pr-4">
               {productData.rating.map((rating, index) => <RatingItem key={rating.id} rating={rating} index={index} />)}
@@ -330,7 +330,7 @@ const DetailBlog: NextPage<any> = ({ productData }:
       )}
       {!!productData.awards?.length && (
         <>
-          <div className="px-5">
+          <div className="px-4">
             <strong className="text-lg font-semibold mb-3 mt-8 text-[#ffefb2] block"> جوایز و دستاوردها </strong>
             {productData.awards.map(award => (
               <div className="flex items-center gap-2 mb-2 text-sm" key={award}>
@@ -344,7 +344,7 @@ const DetailBlog: NextPage<any> = ({ productData }:
 
 
       {!!productData?.faqs?.length && <>
-        <h5 className="px-5 text-lg font-semibold mb-4 mt-8 text-[#ffefb2]"> سوالات متداول درباره  {productData.name}</h5>
+        <h5 className="px-4 text-lg font-semibold mb-4 mt-8 text-[#ffefb2]"> سوالات متداول درباره  {productData.name}</h5>
         <FAQ
           answerParse="parse"
           items={productData.faqs.map(faq => ({

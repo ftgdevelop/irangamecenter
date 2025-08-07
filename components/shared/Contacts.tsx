@@ -46,7 +46,7 @@ const Contacts: React.FC<Props> = props => {
     const {emailAddress, supportNUmberUrl, supportNumber, supportNumberSubtitle} = data;
 
     return (
-        <div className="px-5">
+        <div className="px-4">
             {!!supportNumber && <Link
                 href={supportNUmberUrl ? `tel:${supportNUmberUrl}` : "#"}
                 className="bg-blue-500 flex justify-between items-center gap-5 mb-4 mt-6 rounded-full px-5 h-14"

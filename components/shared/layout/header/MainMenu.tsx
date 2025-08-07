@@ -51,7 +51,7 @@ const MainMenu: React.FC = () => {
                 show={open}
                 selector='menu_portal'
             >
-                <div className="max-w-lg mx-auto relative">
+                <div className="md:max-w-lg md:mx-auto relative">
 
                     <div
                         className={`bg-black/75 absolute top-0 left-0 w-full h-screen transition-all ${delayedOpen ? "opacity-100" : "opacity-0"}`}

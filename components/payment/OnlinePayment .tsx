@@ -158,7 +158,7 @@ const OnlinePayment: React.FC<Props> = props => {
                 show={statusModal === "error"}
             >
                 <div className="fixed bottom-0 left-0 h-screen w-screen overflow-auto">
-                    <div className="text-white bg-[#011425] p-4 max-w-lg mx-auto min-h-screen flex flex-col justift-between">
+                    <div className="text-white bg-[#011425] p-4 md:max-w-lg md:mx-auto min-h-screen flex flex-col justift-between">
                         <div className="flex justify-between items-center pb-4">
                             <Home className="w-6 h-6 fill-current" />
                             <h5 className="text-sm"> نتیجه تراکنش </h5>
@@ -199,7 +199,7 @@ const OnlinePayment: React.FC<Props> = props => {
                 show={statusModal === "success"}
             >
                 <div className="fixed bottom-0 left-0 h-screen w-screen overflow-auto">
-                    <div className="text-white bg-[#011425] p-4 max-w-lg mx-auto min-h-screen flex flex-col justift-between">
+                    <div className="text-white bg-[#011425] p-4 md:max-w-lg md:mx-auto min-h-screen flex flex-col justift-between">
                         <div className="flex justify-between items-center pb-4">
                             <Home className="w-6 h-6 fill-current" />
                             <h5 className="text-sm"> نتیجه تراکنش </h5>

@@ -50,7 +50,7 @@ const ProductDetail: React.FC<Props> = props => {
         tabItems.push({
             key: "descriptions",
             label: "توضیحات",
-            children: (<div className="inserted-content py-6">
+            children: (<div className="inserted-content pt-4">
                 {parse(productData.description)}
             </div>)
         })
@@ -63,7 +63,7 @@ const ProductDetail: React.FC<Props> = props => {
         children: (
             <>
 
-                <h4 className="text-sm my-5 font-semibold"> مشخصات بازی</h4>
+                <h4 className="text-sm my-4 font-semibold"> مشخصات بازی</h4>
 
                 {!!productData.genres?.[0]?.name && (
                     <div className="flex justify-between py-4 border-b border-white/15 text-sm gap-5 last:border-0" >
@@ -170,41 +170,33 @@ const ProductDetail: React.FC<Props> = props => {
                 show={openDetails}
                 selector='modal_portal'
             >
-                <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen">
+                <div className="bg-black/50 backdrop-blur-sm fixed top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInDetails(false) }} />
 
-                    <div className="relative w-full lg:max-w-lg lg:mx-auto h-screen">
-
-                        <div className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInDetails(false) }} />
-
-                        <div className={`bg-[#192a39] text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto absolute transition-all left-0 right-0 ${slideInDetails ? "bottom-0" : "-bottom-[80vh]"}`}>
-                            <div className="min-h-96 flex flex-col justify-between" >
-                                <div>
-                                    <Tab
-                                        heading={productData.name}
-                                        isSticky
-                                        navsBgClass="bg-[#192a39]"
-                                        items={tabItems}
-                                        style="3"
-                                        wrapperClassName="mx-3"
-                                        scrollTabs
-                                        noGrowTabs
-                                        activeTab={props.activeTab}
-                                        onChange={props.changeActiveTab}
-                                    />
-                                </div>
-                                <div className="p-4">
-                                    <button
-                                        type="button"
-                                        className="bg-[#011425] rounded-full px-5 py-3 text-sm"
-                                        onClick={() => { setSlideInDetails(false) }}
-                                    >
-                                        بستن
-                                    </button>
-                                </div>
-                            </div>
-
+                <div className={`bg-[#192a39] text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full md:max-w-lg safePadding-b transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2 ${slideInDetails ? "bottom-0" : "-bottom-[80vh]"}`}>
+                    <div className="min-h-96 flex flex-col justify-between" >
+                        <div>
+                            <Tab
+                                heading={productData.name}
+                                isSticky
+                                navsBgClass="bg-[#192a39]"
+                                items={tabItems}
+                                style="3"
+                                wrapperClassName="mx-3"
+                                scrollTabs
+                                noGrowTabs
+                                activeTab={props.activeTab}
+                                onChange={props.changeActiveTab}
+                            />
                         </div>
-
+                        <div className="p-4">
+                            <button
+                                type="button"
+                                className="bg-[#011425] rounded-full px-5 py-3 text-sm"
+                                onClick={() => { setSlideInDetails(false) }}
+                            >
+                                بستن
+                            </button>
+                        </div>
                     </div>
 
                 </div>

@@ -70,7 +70,7 @@ useEffect(() => {
           selector="modal_portal"
         >
           <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen">
-            <div className={`relative w-full lg:max-w-lg lg:mx-auto h-[100svh] overflow-hidden transition-all duration-300 ease-in-out ${slideIn?"scale-100 opacity-100 mt-0":"scale-0 opacity-0 mt-12"}`}>
+            <div className={`relative w-full md:max-w-lg md:mx-auto h-[100svh] overflow-hidden transition-all duration-300 ease-in-out ${slideIn?"scale-100 opacity-100 mt-0":"scale-0 opacity-0 mt-12"}`}>
               
               <div
                 className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0"

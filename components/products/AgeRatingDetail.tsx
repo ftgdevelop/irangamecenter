@@ -173,18 +173,18 @@ const AgeRatingDetail: React.FC<Props> = props => {
 
                     {!!productData.pegi && (
                         <button
-                            className={`block border border-white/15 p-3 text-xs mt-5 ${productData.esrb ? "rounded-r-xl border-l-0" : "rounded-xl"}`}
+                            className={`block border border-white/15 p-2.5 text-xs mt-5 ${productData.esrb ? "rounded-r-xl border-l-0" : "rounded-xl"}`}
                             type="button"
                             onClick={() => { setActiveItem("pegi") }}
                         >
-                            <div className="flex gap-2 justify-center">
+                            <div className="flex gap-1 justify-center">
                                 {productData?.pegi?.image && (
                                     <Image
                                         src={productData.pegi.image}
                                         alt={productData.pegi.title || productData.pegi.name || ""}
-                                        width={48}
-                                        height={48}
-                                        className="w-12 h-12 text-4xs"
+                                        width={40}
+                                        height={40}
+                                        className="w-10 h-10 text-4xs"
                                     />
                                 )}
                                 <div className="w-40">
@@ -199,18 +199,18 @@ const AgeRatingDetail: React.FC<Props> = props => {
 
                     {!!productData.esrb && (
                         <button
-                            className={`block border border-white/15 p-3 text-xs mt-5 ${productData.pegi ? "rounded-l-xl" : "rounded-xl"}`}
+                            className={`block border border-white/15 p-2.5 text-xs mt-5 ${productData.pegi ? "rounded-l-xl" : "rounded-xl"}`}
                             type="button"
                             onClick={() => { setActiveItem("esrb") }}
                         >
-                            <div className="flex gap-2 justify-center">
+                            <div className="flex gap-1 justify-center">
                                 {productData?.esrb?.image && (
                                     <Image
                                         src={productData.esrb.image}
                                         alt={productData.esrb.title || productData.esrb.name || ""}
-                                        width={48}
-                                        height={48}
-                                        className="w-12 h-12 text-4xs"
+                                        width={40}
+                                        height={40}
+                                        className="w-10 h-10 text-4xs"
                                     />
                                 )}
                                 <div className="w-40">
@@ -230,46 +230,38 @@ const AgeRatingDetail: React.FC<Props> = props => {
                 show={openDetails}
                 selector='modal_portal'
             >
-                <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen">
+                <div className="bg-black/50 backdrop-blur-sm fixed top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInDetails(false) }} />
 
-                    <div className="relative w-full lg:max-w-lg lg:mx-auto h-screen">
-
-                        <div className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInDetails(false) }} />
-
-                        <div className={`bg-[#192a39] text-white rounded-t-2xl max-h-screen overflow-y-auto absolute transition-all left-0 right-0 ${slideInDetails ? "bottom-0" : "-bottom-[80vh]"}`}>
-                            <div className="min-h-96 flex flex-col justify-between" >
-                                <div>
-                                    <h2 className="text-lg font-semibold mb-4 px-4 mt-6"> رده‌بندی سنی</h2>
-                                    <Tab
-                                        items={tabItems}
-                                        style="3"
-                                        wrapperClassName="mx-3"
-                                        scrollTabs
-                                        noGrowTabs
-                                        activeTab={activeItem}
-                                        onChange={(key) => {setActiveItem(key.toString())}}
-                                    />
-                                </div>
-                                <div className="p-4 flex justify-between items-center">
-                                    <button
-                                        type="button"
-                                        className="bg-[#011425] rounded-full px-5 py-3 text-sm"
-                                        onClick={() => { setSlideInDetails(false) }}
-                                    >
-                                        بستن
-                                    </button>
-                                    <Link
-                                        href={"#"}
-                                        className="text-xs flex items-center justify-center gap-2 grow font-semibold text-violet-400"
-                                    >
-                                        <ArrowTopLeft2 className="w-4 h-4 fill-current" />
-                                        توضیحات بیشتر
-                                    </Link>
-                                </div>
-                            </div>
-
+                <div className={`bg-[#192a39] text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full md:max-w-lg safePadding-b transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2 ${slideInDetails ? "bottom-0" : "-bottom-[80vh]"}`}>
+                    <div className="min-h-96 flex flex-col justify-between" >
+                        <div>
+                            <h2 className="text-lg font-semibold mb-4 px-4 mt-6"> رده‌بندی سنی</h2>
+                            <Tab
+                                items={tabItems}
+                                style="3"
+                                wrapperClassName="mx-3"
+                                scrollTabs
+                                noGrowTabs
+                                activeTab={activeItem}
+                                onChange={(key) => { setActiveItem(key.toString()) }}
+                            />
                         </div>
-
+                        <div className="p-4 flex justify-between items-center">
+                            <button
+                                type="button"
+                                className="bg-[#011425] rounded-full px-5 py-3 text-sm"
+                                onClick={() => { setSlideInDetails(false) }}
+                            >
+                                بستن
+                            </button>
+                            <Link
+                                href={"#"}
+                                className="text-xs flex items-center justify-center gap-2 grow font-semibold text-violet-400"
+                            >
+                                <ArrowTopLeft2 className="w-4 h-4 fill-current" />
+                                توضیحات بیشتر
+                            </Link>
+                        </div>
                     </div>
 
                 </div>
