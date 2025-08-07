@@ -290,3 +290,6 @@ body {
 .max-h-95-screen{
   max-height: 95vh;
 }
+.bottom-safe-bottom{
+  bottom: env(safe-area-inset-bottom);
+}

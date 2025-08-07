@@ -286,7 +286,7 @@ const Products: NextPage<Props> = props => {
 
                         <div className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInSort(false) }} />
 
-                        <div className={`bg-[#192a39] text-white rounded-t-2xl absolute transition-all left-0 right-0 ${slideInSort ? "bottom-0" : "-bottom-[80vh]"}`}>
+                        <div className={`bg-[#192a39] text-white rounded-t-2xl absolute transition-all left-0 right-0 ${slideInSort ? "bottom-safe-bottom" : "-bottom-[80vh]"}`}>
                             <Sort
                                 setSlideInSort={setSlideInSort}
                                 activeKeyword={selectedSort}
