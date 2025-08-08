@@ -3,8 +3,6 @@
 import { ServerAddress } from '@/enum/url'
 import { useEffect, useState } from 'react'
 import HightlightItemLink from './HightlightItemLink'
-import { useAppDispatch } from '@/hooks/use-store'
-import { setBodiScrollPosition, setBodyScrollable } from '@/redux/stylesSlice'
 import { HighlightItemType } from '@/types/highlight'
 import ModalPortal from '@/components/shared/layout/ModalPortal'
 import Image from 'next/image'
@@ -17,7 +15,6 @@ type Props = {
 }
 
 const Highlights: React.FC<Props> = (props) => {
-  const dispatch = useAppDispatch()
 
   const { highlights } = props
 
@@ -37,14 +34,14 @@ useEffect(() => {
     }
 }, [slideIn]);
 
-  useEffect(() => {
-    if (activeHighlightId) {
-      dispatch(setBodyScrollable(false));
-      dispatch(setBodiScrollPosition(0));
-    } else {
-      dispatch(setBodyScrollable(true));
-    }
-  }, [activeHighlightId])
+  // useEffect(() => {
+  //   if (activeHighlightId) {
+  //     dispatch(setBodyScrollable(false));
+  //     dispatch(setBodiScrollPosition(0));
+  //   } else {
+  //     dispatch(setBodyScrollable(true));
+  //   }
+  // }, [activeHighlightId])
 
   if (highlights.length) {
     return (
