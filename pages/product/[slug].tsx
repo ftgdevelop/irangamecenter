@@ -1,7 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getProductBySlug } from "@/actions/commerce";
 import { ProductDetailData } from "@/types/commerce";
 import BreadCrumpt from "@/components/shared/BreadCrumpt";
@@ -21,41 +21,7 @@ import VariantSection from "@/components/products/VariantSection";
 const DetailProduct: NextPage<any> = ({ productData }:
   { productData: ProductDetailData }) => {
 
-  const [variant, setVariant] = useState<string>(productData.variants?.[0]?.slug || "");
-
-  const [capacity, setCapacity] = useState<string>("");
-
   const [detailActiveTab, setDetailActiveTab] = useState<string>("");
-
-  useEffect(() => {
-    if (variant) {
-      setCapacity("");
-    }
-  }, [variant]);
-
-  const selectedVariant = productData.variants?.find(item => item.slug === variant);
-  const capacityOptions: {
-    label: string;
-    value: string;
-  }[] = [];
-
-  selectedVariant?.items?.forEach(item => {
-    item.attributes?.forEach(attributes => {
-      if (attributes.value) {
-        capacityOptions.push({
-          label: attributes.value,
-          value: attributes.value
-        })
-      }
-    })
-  });
-
-  selectedVariant?.items?.map(item => item.attributes?.map(attribute => ({
-    label: attribute.value || "",
-    value: attribute.value || ""
-  }))
-  );
-
 
   const breadcrumbsItems: {
     label: string;
