@@ -7,7 +7,7 @@ import ModalPortal from "../shared/layout/ModalPortal";
 import Link from "next/link";
 import ArrowTopLeft2 from "../icons/ArrowTopLeft2";
 import { useAppDispatch } from "@/hooks/use-store";
-import { setBodyScrollable } from "@/redux/stylesSlice";
+import { setBodiScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
 import CloseSimple from "../icons/CloseSimple";
 
 type Props = {
@@ -37,6 +37,7 @@ const AgeRatingDetail: React.FC<Props> = props => {
         if (openDetails) {
             setSlideInDetails(true);
             dispatch(setBodyScrollable(false));
+            dispatch(setBodiScrollPosition(window?.pageYOffset || 0));
         } else {
             setActiveItem("");
             dispatch(setBodyScrollable(true));

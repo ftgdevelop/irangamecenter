@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import CheckboxGroup from "../shared/CheckboxGroup";
 import Filter2 from "../icons/Filter2";
 import { useAppDispatch } from "@/hooks/use-store";
-import { setBodyScrollable } from "@/redux/stylesSlice";
+import { setBodiScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
 import CloseSimple from "../icons/CloseSimple";
 
 type Props = {
@@ -24,6 +24,7 @@ const FilterProducts: React.FC<Props> = () => {
         if (open) {
             setSlideIn(true);
             dispatch(setBodyScrollable(false));
+            dispatch(setBodiScrollPosition(window?.pageYOffset || 0));
         } else {
             dispatch(setBodyScrollable(true));
         }

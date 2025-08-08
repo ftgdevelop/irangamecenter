@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import ModalPortal from "../shared/layout/ModalPortal";
 import ArrowTopLeft from "../icons/ArrowTopLeft";
 import { useAppDispatch } from "@/hooks/use-store";
-import { setBodyScrollable } from "@/redux/stylesSlice";
+import { setBodiScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
 
 type Props = {
     productData?: ProductDetailData;
@@ -30,17 +30,18 @@ const ProductDetail: React.FC<Props> = props => {
     useEffect(() => {
         if (props.activeTab) {
             setOpenDetails(true);
-            dispatch(setBodyScrollable(false));
         }else{
-            dispatch(setBodyScrollable(true));
               setSlideInDetails(false);
         }
     }, [props.activeTab]);
 
     useEffect(() => {
         if (openDetails) {
+            dispatch(setBodyScrollable(false));
+            dispatch(setBodiScrollPosition(window?.pageYOffset || 0));
             setSlideInDetails(true);
         } else {
+            dispatch(setBodyScrollable(true));
             props.changeActiveTab("");
         }
     }, [openDetails]);

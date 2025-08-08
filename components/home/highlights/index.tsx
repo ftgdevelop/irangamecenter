@@ -4,7 +4,7 @@ import { ServerAddress } from '@/enum/url'
 import { useEffect, useState } from 'react'
 import HightlightItemLink from './HightlightItemLink'
 import { useAppDispatch } from '@/hooks/use-store'
-import { setBodyScrollable } from '@/redux/stylesSlice'
+import { setBodiScrollPosition, setBodyScrollable } from '@/redux/stylesSlice'
 import { HighlightItemType } from '@/types/highlight'
 import ModalPortal from '@/components/shared/layout/ModalPortal'
 import Image from 'next/image'
@@ -39,9 +39,10 @@ useEffect(() => {
 
   useEffect(() => {
     if (activeHighlightId) {
-      dispatch(setBodyScrollable(false))
+      dispatch(setBodyScrollable(false));
+      dispatch(setBodiScrollPosition(window?.pageYOffset || 0));
     } else {
-      dispatch(setBodyScrollable(true))
+      dispatch(setBodyScrollable(true));
     }
   }, [activeHighlightId])
 

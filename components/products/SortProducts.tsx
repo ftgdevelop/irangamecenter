@@ -6,7 +6,7 @@ import ModalPortal from "../shared/layout/ModalPortal";
 import { useEffect, useState } from "react";
 import SortIcon from "../icons/SortIcon";
 import { useAppDispatch } from "@/hooks/use-store";
-import { setBodyScrollable } from "@/redux/stylesSlice";
+import { setBodiScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
 
 type Props = {
     activeKeyword?: ProductSortKeywords;
@@ -27,6 +27,7 @@ const SortProducts: React.FC<Props> = props => {
         if (open) {
             setSlideIn(true);
             dispatch(setBodyScrollable(false));
+            dispatch(setBodiScrollPosition(window?.pageYOffset || 0));
         }else{
             dispatch(setBodyScrollable(true));
         }

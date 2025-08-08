@@ -27,11 +27,21 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
 
     const isBodyScrollable = useAppSelector(state => state?.styles?.bodyScrollable);
+    const lastScrollPosition = useAppSelector(state => state?.styles?.lastScrollPosition);
+
+    useEffect(() => {
+        if (isBodyScrollable && lastScrollPosition) {
+            window.scrollTo({
+                top: lastScrollPosition,
+                left: 0,
+                behavior: "instant"
+            });
+        }
+    }, [isBodyScrollable, lastScrollPosition]);
 
     const loading = useAppSelector(state => state.styles.progressLoading);
-    
     const addLoading = (href: string) => {
-        if(href !== router.asPath){
+        if (href !== router.asPath) {
             dispatch(setProgressLoading(true));
         }
     }
@@ -43,12 +53,12 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         removeLoading();
 
         document.querySelectorAll('a').forEach(item => {
-            item.addEventListener('click', () => {addLoading(item.getAttribute("href")||"")})
+            item.addEventListener('click', () => { addLoading(item.getAttribute("href") || "") })
         });
 
         return (() => {
             document.querySelectorAll('a').forEach(item => {
-                item.removeEventListener('click', ()=>{addLoading("")})
+                item.removeEventListener('click', () => { addLoading("") })
             });
         })
     }, [router.asPath]);
@@ -124,19 +134,19 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }
 
 
-    
+
     if (router.pathname.startsWith("/blog/")) {
         headerType2Params = {
-            title:"",
+            title: "",
             withShare: true,
             withLogo: true,
-            backUrl:"/blogs"
+            backUrl: "/blogs"
         };
         showFooter = true;
         showHeader = true;
         showFixedNav = false;
     }
-    
+
     if (router.pathname === "/blogs") {
         showFooter = true;
         showHeader = true;
@@ -145,10 +155,10 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
     if (router.pathname.startsWith("/product/")) {
         headerType2Params = {
-            title:"",
+            title: "",
             withShare: true,
             withLogo: true,
-            backUrl:"/products"
+            backUrl: "/products"
         };
         showFooter = true;
         showHeader = true;
@@ -206,7 +216,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }, [isAuthenticated]);
 
     let headertype2 = headerType2Params;
-    if(headerType2ParamsFromRedux.backUrl){
+    if (headerType2ParamsFromRedux.backUrl) {
         headertype2 = headerType2ParamsFromRedux;
     }
 
@@ -217,7 +227,13 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             <div className={`bg-[#011425] text-white md:max-w-lg mx-auto ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`}>
                 <PageLoadingBar active={loading} />
                 {showHeader && <Header type2Params={headertype2} />}
-                <main className={showFooter ? "":showFixedNav ? "min-h-screen-nav" : "min-h-screen"}>
+                <main 
+                    className={showFooter ? "" : showFixedNav ? "min-h-screen-nav" : "min-h-screen"}
+                    style={{
+                        position: (!isBodyScrollable && lastScrollPosition) ?"relative": "static",
+                        top: -lastScrollPosition+"px"
+                    }}
+                >
                     {props.children}
                 </main>
                 {showFooter && <Footer />}
