@@ -40,7 +40,7 @@ useEffect(() => {
   useEffect(() => {
     if (activeHighlightId) {
       dispatch(setBodyScrollable(false));
-      dispatch(setBodiScrollPosition(window?.pageYOffset || 0));
+      dispatch(setBodiScrollPosition(0));
     } else {
       dispatch(setBodyScrollable(true));
     }
