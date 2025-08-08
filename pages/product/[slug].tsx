@@ -15,9 +15,10 @@ import Link from "next/link";
 import ProductDetail from "@/components/products/ProductDetail";
 import AgeRatingDetail from "@/components/products/AgeRatingDetail";
 import ArrowTopLeft from "@/components/icons/ArrowTopLeft";
+import VariantSection from "@/components/products/VariantSection";
 
 
-const DetailBlog: NextPage<any> = ({ productData }:
+const DetailProduct: NextPage<any> = ({ productData }:
   { productData: ProductDetailData }) => {
 
   const [variant, setVariant] = useState<string>(productData.variants?.[0]?.slug || "");
@@ -274,6 +275,12 @@ const DetailBlog: NextPage<any> = ({ productData }:
 
       </div>
 
+      <VariantSection
+        variant={productData.variants}
+      />
+      
+      {/* <hr/><hr/><hr/><hr/><hr/><hr/><hr/>
+
       <label className="text-sm pointer-events-none mb-3 block px-4 mt-7">
         انتخاب کنسول مورد نظر
       </label>
@@ -294,9 +301,9 @@ const DetailBlog: NextPage<any> = ({ productData }:
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
-      <label className="text-sm pointer-events-none mb-3 block px-4 mt-7">
+      {/* <label className="text-sm pointer-events-none mb-3 block px-4 mt-7">
         انتخاب ظرفیت بازی
       </label>
 
@@ -315,7 +322,7 @@ const DetailBlog: NextPage<any> = ({ productData }:
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {!!productData.rating?.length && (
         <>
@@ -377,4 +384,4 @@ export async function getServerSideProps(context: any) {
 }
 
 
-export default DetailBlog;
+export default DetailProduct;

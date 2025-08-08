@@ -21,6 +21,7 @@ export default function Document() {
       <body className="antialiased font-iranyekan" >
         <Main />
         <div id="menu_portal" className="fixed top-0 left-0 right-0" />
+        <div id="fixed_bottom_portal" />
         <div id="modal_portal" className="relative z-[10]" />
         <div id="error_modal_portal" className="relative" />
         <div id="notification_modal_portal" className="relative" />

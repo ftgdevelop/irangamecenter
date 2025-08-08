@@ -118,18 +118,25 @@ export interface RatingItemType {
     type: "IGN" | "GameSpot" | "Metacritic" | "Eurogamer" | "Steam";
     value: number;
 }
+
 export interface ProductVariant {
     id: number;
     name?: string;
     slug?: string;
     value?: string;
+    children?: ProductVariant[];
     items?: {
         status?: "";
         attributes?: {
             value?: string;
         }[];
+        regularPrice?: number;
+        salePrice?:number;
+        profitPercentage?: number;
+        currencyType?: string;
     }[];
 }
+
 export interface ProductDetailData {
     breadcrumbs?: {
         name?: string;
