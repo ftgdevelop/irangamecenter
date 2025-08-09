@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 type PortalInterface = {
@@ -9,12 +9,15 @@ type PortalInterface = {
 const SimplePortal = ({ children, selector }: PortalInterface) => {
 
   const ref = useRef<Element | null>(null);
+
+  const [show, setShow] = useState<boolean>(false);
   
   useEffect(() => {
     ref.current = document.getElementById(selector);
+    setShow(true);
   }, [selector]);
 
-  return ref.current ? createPortal(children, ref.current) : null;
+  return show && ref.current ? createPortal(children, ref.current) : null;
 };
 
 export default SimplePortal;

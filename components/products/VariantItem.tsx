@@ -1,5 +1,5 @@
 import { ProductVariant } from "@/types/commerce";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import SimplePortal from "../shared/layout/SimplePortal";
 import { numberWithCommas } from "@/helpers";
 import Image from "next/image";
@@ -16,14 +16,17 @@ const VariantItem: React.FC<Props> = props => {
         setSelectedVariant(props.variant?.children?.[0]);
     }, [props.variant?.slug]);
 
-    if (!props.variant?.children?.length) {
 
-        const currency = props.variant?.items?.[0]?.currencyType;
-        return (
+    let childElement: ReactNode = "";
+    if (selectedVariant?.children?.length) {
+        childElement = <VariantItem variant={selectedVariant} />;
+    } else {
+        const currency = selectedVariant?.items?.[0]?.currencyType;
+        childElement = (
             <SimplePortal
                 selector="fixed_bottom_portal"
             >
-                <footer className="fixed bottom-0 left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2 bg-[#192a39] px-4 py-3 flex flex-wrap justify-between gap-2 items-center w-full md:max-w-lg">
+                <footer className="min-h-20 Z-10 fixed bottom-0 left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2 bg-[#192a39] px-4 py-3 flex flex-wrap justify-between gap-2 items-center w-full md:max-w-lg">
                     <button
                         type="button"
                         className="bg-violet-500 text-white rounded-full px-4 py-3 text-xs flex gap-2 items-center font-semibold"
@@ -33,20 +36,21 @@ const VariantItem: React.FC<Props> = props => {
                     </button>
 
                     <div className="text-left text-white">
-                        {!!props.variant?.items?.[0]?.regularPrice && (<div className="flex flex-wrap gap-2 mb-1">
-                            {!!props.variant?.items?.[0]?.profitPercentage && (
+                        {!!selectedVariant?.items?.[0]?.regularPrice && (<div className="flex flex-wrap gap-2 mb-1">
+                            {!!selectedVariant?.items?.[0]?.profitPercentage && (
                                 <span
                                     className="text-[#fe9f00] text-2xs font-semibold"
                                 >
-                                    {props.variant?.items?.[0]?.profitPercentage} % تخفیف
+                                    {selectedVariant?.items?.[0]?.profitPercentage} % تخفیف
                                 </span>
                             )}
-                            <span className="text-xs"> {numberWithCommas(props.variant.items[0].regularPrice)} {currency}</span>
+                            <span className="text-xs"> {numberWithCommas(selectedVariant.items[0].regularPrice)} {currency}</span>
                         </div>)}
 
-                        {!!props.variant?.items?.[0]?.salePrice && <b className="text-base font-semibold block"> {numberWithCommas(props.variant.items[0].salePrice)} {currency} </b>}
+                        {!!selectedVariant?.items?.[0]?.salePrice && <b className="text-base font-semibold block"> {numberWithCommas(selectedVariant.items[0].salePrice)} {currency} </b>}
                     </div>
                 </footer>
+                <div className="h-20" />
             </SimplePortal>
         )
     }
@@ -75,9 +79,10 @@ const VariantItem: React.FC<Props> = props => {
                 </div>
             </div>
 
-            <VariantItem variant={selectedVariant} />
+            {childElement}
         </>
     )
+
 }
 
 export default VariantItem;
