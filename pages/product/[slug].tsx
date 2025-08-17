@@ -51,14 +51,15 @@ const DetailProduct: NextPage<any> = ({ productData }:
         />
       )}
 
-      {productData.image?.url && (
+      {productData.filePath && (
         <div className="p-4">
           <Image
-            src={productData.image?.url}
-            alt={productData.name || ""}
+            src={productData.filePath}
+            alt={productData.fileAltAttribute || productData.name || ""}
             width={400}
             height={200}
             className="h-auto w-full block"
+            title={productData.fileTitleAttribute || productData.name}
           />
         </div>
       )}

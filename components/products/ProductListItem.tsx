@@ -28,11 +28,12 @@ const ProductListItem: React.FC<Props> = props => {
         <div className="mb-4">
             <Link href={`/product/${product.slug}`} className="flex" onClick={()=>{if(props.onClick){props.onClick()}}}>
                 <Image
-                    src={product.image.url || "/images/default-game.png"}
-                    alt={product.name || ""}
+                    src={product.filePath || "/images/default-game.png"}
+                    alt={product.fileAltAttribute || product.name || ""}
                     width={112}
                     height={112}
                     className="block w-28 h-28 rounded-2xl"
+                    title={product.fileTitleAttribute || product.name}
                 />
 
                 <div className="p-2.5">

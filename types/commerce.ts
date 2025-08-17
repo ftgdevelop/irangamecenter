@@ -7,16 +7,9 @@ export interface ProductItem {
     name?: string;
     //link?: string;
     // canonicalUrl?: string;
-    image: {
-        //        "alt": null,
-        url?: string;
-        // "title": null,
-        // "sizes": null,
-        // "large": null,
-        // "small": null,
-        // "medium": null,
-        // "xLarge": null
-    },
+    fileAltAttribute?: string;
+    filePath?: string;
+    fileTitleAttribute?: string;
     variants?: {
         items?: {
             salePrice?: number;
@@ -138,6 +131,9 @@ export interface ProductVariant {
 }
 
 export interface ProductDetailData {
+    fileAltAttribute?: string;
+    filePath?: string;
+    fileTitleAttribute?: string;
     breadcrumbs?: {
         name?: string;
         slug?: string;
@@ -154,9 +150,7 @@ export interface ProductDetailData {
         keyword?: string;
         name?: string
     }[];
-    image?: {
-        url?: string;
-    };
+
     rating?: RatingItemType[];
     playerPerspective?: {
         keyword?: string;

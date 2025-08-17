@@ -5,13 +5,13 @@ import Contacts from "@/components/shared/Contacts";
 import BreadCrumpt from "@/components/shared/BreadCrumpt";
 import { useEffect, useRef, useState } from "react";
 import Skeleton from "@/components/shared/Skeleton";
-import Add from "@/components/icons/Add";
 import { getProducts, ProductSortKeywords } from "@/actions/commerce";
 import { GetAllProductsParams, ProductItem } from "@/types/commerce";
 import ProductListItem from "@/components/products/ProductListItem";
 import SortProducts from "@/components/products/SortProducts";
 import { useRouter } from "next/router";
 import FilterProducts from "@/components/products/FilterProducts";
+import Pagination2 from "@/components/shared/Pagination2";
 
 type ProductsDataType = {
     totalCount?: number;
@@ -20,10 +20,13 @@ type ProductsDataType = {
 
 type Props = {
     productsData?: ProductsDataType;
+    queryPage?: number;
 }
 const Products: NextPage<Props> = props => {
 
     const router = useRouter();
+
+    const { pathname, query } = router;
 
     const urlVariantSlug = router.query?.VariantSlug;
 
@@ -32,6 +35,10 @@ const Products: NextPage<Props> = props => {
     const [loading, setLoading] = useState(false);
 
     const [selectedSort, setSelectedSort] = useState<ProductSortKeywords | undefined>(undefined);
+
+    useEffect(() => {
+        setProducts(props.productsData?.items || []);
+    }, [props.queryPage]);
 
     useEffect(() => {
 
@@ -65,7 +72,7 @@ const Products: NextPage<Props> = props => {
         }
     }, [selectedSort]);
 
-    const loadMoreWrapper = useRef<HTMLButtonElement>(null);
+    const loadMoreWrapper = useRef<HTMLDivElement>(null);
 
     const removeListener = () => {
         document.removeEventListener('scroll', checkIsInView);
@@ -74,7 +81,7 @@ const Products: NextPage<Props> = props => {
 
     useEffect(() => {
         if (fetchMode) {
-            if (products.length < 30) {
+            if (products.length < 50 && !props.queryPage) {
                 addItems();
             } else {
                 removeListener();
@@ -114,14 +121,19 @@ const Products: NextPage<Props> = props => {
     }
 
     useEffect(() => {
-        document.addEventListener('scroll', checkIsInView);
-        window.addEventListener("resize", checkIsInView);
+        if (!props.queryPage) {
+            document.addEventListener('scroll', checkIsInView);
+            window.addEventListener("resize", checkIsInView);
+        } else {
+            document.removeEventListener('scroll', checkIsInView);
+            window.removeEventListener("resize", checkIsInView);
+        }
 
         return (() => {
             document.removeEventListener('scroll', checkIsInView);
             window.removeEventListener("resize", checkIsInView);
         });
-    }, []);
+    }, [props.queryPage]);
 
     return (
         <>
@@ -167,7 +179,24 @@ const Products: NextPage<Props> = props => {
                     </div>
                 ))}
 
-                {!!(props.productsData?.totalCount && products.length < props.productsData.totalCount) && <button
+                {!!(props.productsData?.totalCount && products.length < props.productsData.totalCount) && (
+                    <div ref={loadMoreWrapper}>
+                        <Pagination2
+                            onChange={e => {
+                                router.push({
+                                    pathname: pathname,
+                                    query: { ...query, page: e },
+                                })
+                            }}
+                            totalItems={props.productsData.totalCount}
+                            itemsPerPage={10}
+                            currentPage={query.page ? +query.page : 5}
+                        />
+                    </div>
+                )}
+
+
+                {/* {!!(props.productsData?.totalCount && products.length < props.productsData.totalCount) && <button
                     ref={loadMoreWrapper}
                     type="button"
                     className="text-sm text-[#ca54ff] bg-[#161b39] w-full px-5 py-3 flex rounded-full justify-center gap-3"
@@ -175,7 +204,7 @@ const Products: NextPage<Props> = props => {
                 >
                     <Add />
                     مطالب بیشتر
-                </button>}
+                </button>} */}
 
             </div>
 
@@ -197,8 +226,10 @@ export async function getServerSideProps(context: any) {
         )
     }
 
+    const queryPage = context?.query?.page;
+
     const parameters: GetAllProductsParams = {
-        SkipCount: 0,
+        SkipCount: queryPage ? (queryPage - 1) * 10 : 0,
         MaxResultCount: 10
     }
 
@@ -211,7 +242,8 @@ export async function getServerSideProps(context: any) {
     return (
         {
             props: {
-                productsData: productsResponse?.data?.result || null
+                productsData: productsResponse?.data?.result || null,
+                queryPage: queryPage || null
             }
         }
     )
