@@ -46,7 +46,7 @@ const SortProducts: React.FC<Props> = props => {
 
             <button
                 type="button"
-                className="inline-flex gap-2 items-center bg-[#192a39] rounded-full px-5 py-2.5 text-xs"
+                className="inline-flex gap-2 items-center bg-[#192a39] rounded-full px-5 py-2.5 text-2xs"
                 onClick={() => { setOpen(true) }}
             >
                 <SortIcon className="w-4.5 h-4.5 fill-current" />
