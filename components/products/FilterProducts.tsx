@@ -47,9 +47,13 @@ const FilterProducts = () => {
                 <div className="px-4 pt-8 pb-3">
 
                     <div className="mb-5 flex justify-between items-center">
-                        <h5 className="font-semibold block">
-                            فیلتر محصولات
-                        </h5>
+                        {openedFilter === "all" ? (
+                            <h5 className="font-semibold block">
+                                فیلتر محصولات
+                            </h5>
+                        ) : (
+                            <span />
+                        )}
                         <button
                             type="button"
                             onClick={() => { setSlideIn(false) }}
@@ -60,7 +64,7 @@ const FilterProducts = () => {
                     </div>
 
 
-                    {!!availables.pegis.length && <Accordion
+                    {!!availables.pegis.length && (["pegis", "all"].includes(openedFilter)) && <Accordion
                         title={(
                             <h5 className="font-semibold text-sm"> فیلتر بر اساس رده بندی سنی اروپا (PEGI) </h5>
                         )}
@@ -79,12 +83,13 @@ const FilterProducts = () => {
                                 values={selectedFilters.pegis || []}
                             />
                         )}
+                        initiallyOpen={openedFilter === "pegis"}
                         withArrowIcon
                         rotateArrow180
                         WrapperClassName="mb-4"
                     />}
 
-                    {!!availables.esrbs.length && <Accordion
+                    {!!availables.esrbs.length && (["esrbs", "all"].includes(openedFilter)) && <Accordion
                         title={(
                             <h5 className="font-semibold text-sm"> فیلتر بر اساس رده بندی سنی آمریکا (ESRB) </h5>
                         )}
@@ -103,6 +108,7 @@ const FilterProducts = () => {
                                 values={selectedFilters.esrbs || []}
                             />
                         )}
+                        initiallyOpen={openedFilter === "esrbs"}
                         withArrowIcon
                         rotateArrow180
                         WrapperClassName="mb-4"
@@ -110,7 +116,7 @@ const FilterProducts = () => {
 
 
 
-                    {!!availables.developers.length && <Accordion
+                    {!!availables.developers.length && (["developers", "all"].includes(openedFilter)) && <Accordion
                         title={(
                             <h5 className="font-semibold text-sm"> فیلتر بر اساس توسعه دهنده </h5>
                         )}
@@ -129,12 +135,13 @@ const FilterProducts = () => {
                                 values={selectedFilters.developers || []}
                             />
                         )}
+                        initiallyOpen={openedFilter === "developers"}
                         withArrowIcon
                         rotateArrow180
                         WrapperClassName="mb-4"
                     />}
 
-                    {!!availables.publishers.length && <Accordion
+                    {!!availables.publishers.length && (["publishers", "all"].includes(openedFilter)) && <Accordion
                         title={(
                             <h5 className="font-semibold text-sm"> فیلتر بر اساس ناشر </h5>
                         )}
@@ -153,6 +160,7 @@ const FilterProducts = () => {
                                 values={selectedFilters.publishers || []}
                             />
                         )}
+                        initiallyOpen={openedFilter === "publishers"}
                         withArrowIcon
                         rotateArrow180
                         WrapperClassName="mb-4"
@@ -160,7 +168,7 @@ const FilterProducts = () => {
 
 
 
-                    {!!availables.gameplays?.length && <Accordion
+                    {!!availables.gameplays?.length && (["gameplays", "all"].includes(openedFilter)) && <Accordion
                         title={(
                             <h5 className="font-semibold text-sm"> فیلتر بر اساس حالت بازی </h5>
                         )}
@@ -179,13 +187,14 @@ const FilterProducts = () => {
                                 values={selectedFilters.gameplays || []}
                             />
                         )}
+                        initiallyOpen={openedFilter === "gameplays"}
                         withArrowIcon
                         rotateArrow180
                         WrapperClassName="mb-4"
                     />}
 
 
-                    {!!availables.genres?.length && <Accordion
+                    {!!availables.genres?.length && (["genres", "all"].includes(openedFilter)) && <Accordion
                         title={(
                             <h5 className="font-semibold text-sm"> فیلتر بر اساس ژانر </h5>
                         )}
@@ -204,13 +213,14 @@ const FilterProducts = () => {
                                 values={selectedFilters.genres || []}
                             />
                         )}
+                        initiallyOpen={openedFilter === "genres"}
                         withArrowIcon
                         rotateArrow180
                         WrapperClassName="mb-4"
                     />}
 
 
-                    {!!availables.playerPerspectives?.length && <Accordion
+                    {!!availables.playerPerspectives?.length && (["playerPerspectives", "all"].includes(openedFilter)) && <Accordion
                         title={(
                             <h5 className="font-semibold text-sm"> فیلتر بر اساس زاویه دید </h5>
                         )}
@@ -229,6 +239,7 @@ const FilterProducts = () => {
                                 values={selectedFilters.playerPerspectives || []}
                             />
                         )}
+                        initiallyOpen={openedFilter === "playerPerspectives"}
                         withArrowIcon
                         rotateArrow180
                         WrapperClassName="mb-4"
@@ -236,7 +247,7 @@ const FilterProducts = () => {
 
 
 
-                    {!!availables.themes?.length && <Accordion
+                    {!!availables.themes?.length && (["themes", "all"].includes(openedFilter)) && <Accordion
                         title={(
                             <h5 className="font-semibold text-sm"> فیلتر بر اساس تم بازی  </h5>
                         )}
@@ -255,6 +266,7 @@ const FilterProducts = () => {
                                 values={selectedFilters.themes || []}
                             />
                         )}
+                        initiallyOpen={openedFilter === "themes"}
                         withArrowIcon
                         rotateArrow180
                         WrapperClassName="mb-4"

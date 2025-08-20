@@ -253,31 +253,89 @@ const Products: NextPage<Props> = props => {
                 items={[{ label: "محصولات", link: "" }]}
             />
 
-            <div className="flex gap-3 px-4 mb-4">
+            <div className="max-lg:hidden-scrollbar lg:styled-scrollbar md:pb-3 md:-mb-3 overflow-x-auto overflow-y-clip pl-3">
+                <div className="flex gap-3 pr-4 whitespace-nowrap">
 
-                <button
-                    type="button"
-                    className="inline-flex gap-2 items-center bg-[#192a39] rounded-full px-5 py-2.5 text-2xs"
-                    onClick={() => { dispatch(openFilter("all")) }}
-                >
-                    <Filter className="w-4.5 h-4.5 fill-current" />
-                    فیلتر
-                </button>
+                    <SortProducts
+                        activeKeyword={selectedSort}
+                        onChange={(key: ProductSortKeywords) => { setSelectedSort(key) }}
+                    />
 
-                <SortProducts
-                    activeKeyword={selectedSort}
-                    onChange={(key: ProductSortKeywords) => { setSelectedSort(key) }}
-                />
+                    <button
+                        type="button"
+                        className="inline-flex gap-2 items-center bg-[#192a39] rounded-full px-5 py-2.5 text-2xs"
+                        onClick={() => { dispatch(openFilter("all")) }}
+                    >
+                        <Filter className="w-4.5 h-4.5 fill-current" />
+                        فیلتر
+                    </button>
 
-                <button
-                    type="button"
-                    className="inline-flex gap-2 items-center justify-between bg-[#192a39] rounded-full px-5 py-2.5 text-2xs whitespace-nowrap"
-                    onClick={() => { dispatch(openFilter("pegis")) }}
-                >
-                    رده بندی سنی اروپا
-                    <DownCaretThick className="w-3 h-3 fill-current" />
-                </button>
+                    <button
+                        type="button"
+                        className="inline-flex gap-2 items-center justify-between bg-[#192a39] rounded-full px-5 py-2.5 text-2xs"
+                        onClick={() => { dispatch(openFilter("playerPerspectives")) }}
+                    >
+                        زاویه دید
+                        <DownCaretThick className="w-3 h-3 fill-current" />
+                    </button>
 
+                    <button
+                        type="button"
+                        className="inline-flex gap-2 items-center justify-between bg-[#192a39] rounded-full px-5 py-2.5 text-2xs"
+                        onClick={() => { dispatch(openFilter("publishers")) }}
+                    >
+                        ناشر
+                        <DownCaretThick className="w-3 h-3 fill-current" />
+                    </button>
+                    
+                    <button
+                        type="button"
+                        className="inline-flex gap-2 items-center justify-between bg-[#192a39] rounded-full px-5 py-2.5 text-2xs"
+                        onClick={() => { dispatch(openFilter("developers")) }}
+                    >
+                        توسعه دهنده
+                        <DownCaretThick className="w-3 h-3 fill-current" />
+                    </button>
+
+                    <button
+                        type="button"
+                        className="inline-flex gap-2 items-center justify-between bg-[#192a39] rounded-full px-5 py-2.5 text-2xs"
+                        onClick={() => { dispatch(openFilter("genres")) }}
+                    >
+                        ژانر
+                        <DownCaretThick className="w-3 h-3 fill-current" />
+                    </button>
+
+                    <button
+                        type="button"
+                        className="inline-flex gap-2 items-center justify-between bg-[#192a39] rounded-full px-5 py-2.5 text-2xs"
+                        onClick={() => { dispatch(openFilter("themes")) }}
+                    >
+                        تم بازی
+                        <DownCaretThick className="w-3 h-3 fill-current" />
+                    </button>
+
+                    <button
+                        type="button"
+                        className="inline-flex gap-2 items-center justify-between bg-[#192a39] rounded-full px-5 py-2.5 text-2xs"
+                        onClick={() => { dispatch(openFilter("pegis")) }}
+                    >
+                        رده بندی سنی اروپا
+                        <DownCaretThick className="w-3 h-3 fill-current" />
+                    </button>
+
+                    <button
+                        type="button"
+                        className="inline-flex gap-2 items-center justify-between bg-[#192a39] rounded-full px-5 py-2.5 text-2xs"
+                        onClick={() => { dispatch(openFilter("esrbs")) }}
+                    >
+                        رده بندی سنی آمریکا
+                        <DownCaretThick className="w-3 h-3 fill-current" />
+                    </button>
+
+                    <div className="w-1 shrink-0" />
+
+                </div>
             </div>
 
             <hr className="m-4 border-white/25" />
