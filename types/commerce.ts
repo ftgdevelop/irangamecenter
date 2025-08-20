@@ -10,99 +10,92 @@ export interface ProductItem {
     fileAltAttribute?: string;
     filePath?: string;
     fileTitleAttribute?: string;
-    variants?: {
+    pegi?: {
+        title?: string;
+        description?: string;
+        keyword?: string;
+        name?: string;
+        id?: number;
+        image?: string;
         items?: {
-            salePrice?: number;
-            regularPrice?: number;
+            description?: string;
+            image?: string;
+            keyword?: string;
+            name?: string;
+            // "title": null,
+            // "items": null,
+            // "id": 0
         }[];
-        id: number;
-        slug?: string;
+    };
+    esrb?: {
+        title?: string;
+        description?: string;
+        keyword?: string;
+        name?: string;
+        id?: number;
+        image?: string;
+        items?: {
+            description?: string;
+            image?: string;
+            keyword?: string;
+            name?: string;
+            // "title": null,
+            // "items": null,
+            // "id": 0
+        }[];
+    };
+
+    variants?: ProductVariant[];
+    gameplay?: {
+        keyword?: string;
         name?: string;
     }[];
-    // "shortDescription": "<p data-pm-slice=\"1 1 []\">Elden Ring یک بازی اکشن-نقش‌آفرینی (RPG) جدید از استودیوی <strong>FromSoftware</strong> و به نویسندگی <strong>جورج آر. آر. مارتین</strong> است که بازیکنان را به دنیایی <strong>وسیع، چالش‌برانگیز و پر رمز و راز</strong> دعوت می‌کند. با <strong>گیم‌پلی پیشرفته، مبارزات تاکتیکی و دنیای آزاد (Open World)</strong>، این بازی یکی از موردانتظارترین عناوین سال محسوب می‌شود.</p>\n<p>در Elden Ring، شما به عنوان یک جنگجوی ماجراجو، وارد سرزمین‌های <strong>The Lands Between</strong> می‌شوید. جایی که باید برای <strong>کشف اسرار، شکست باس‌های قدرتمند و رسیدن به جایگاه قهرمانی</strong> تلاش کنید. این بازی از <strong>داستانی غنی، سیستم مبارزاتی پویا و مکانیک‌های نوآورانه</strong> بهره می‌برد که آن را به یکی از بهترین بازی‌های پلی استیشن تبدیل کرده است.</p>\n",
-    // "releaseDate": "2022-02-25T00:00:00",
-    // "brands": [],
-    // "awards": [
-    //     "بازی سال 2022 در مراسم The Game Awards",
-    //     "British Academy Games Award for Multiplayer"
-    // ],
-    // "publisher": null,
-    // "developer": null,
-    // "genres": [
-    //     {
-    //         "keyword": "Action",
-    //         "name": "اکشن",
-    //         "id": 0
-    //     },
-    //     {
-    //         "keyword": "Adventure",
-    //         "name": "ماجراجویی",
-    //         "id": 0
-    //     },
-    //     {
-    //         "keyword": "RPGRolePlayingGame",
-    //         "name": "نقش‌آفرینی",
-    //         "id": 0
-    //     }
-    // ],
-    // "gameplay": [
-    //     {
-    //         "keyword": "",
-    //         "name": "[Gameplay:]",
-    //         "id": 0
-    //     }
-    // ],
-    // "playerPerspective": [
-    //     {
-    //         "keyword": "",
-    //         "name": "[Gameplay:]",
-    //         "id": 0
-    //     }
-    // ],
-    // "theme": [
-    //     {
-    //         "keyword": "",
-    //         "name": "[Theme:]",
-    //         "id": 0
-    //     }
-    // ],
-    // "esrb": {
-    //     "title": "[ESRB::Subtitle]",
-    //     "description": "[ESRB::Description]",
-    //     "keyword": "",
-    //     "name": "[ESRB:]",
-    //     "id": 0
-    // },
-    // "esrbcd": [
-    //     {
-    //         "title": null,
-    //         "description": "[ESRB:CD:Description:]",
-    //         "keyword": "",
-    //         "name": "[ESRB:CD:]",
-    //         "id": 0
-    //     }
-    // ],
-    // "pegi": {
-    //     "title": "[:Subtitle]",
-    //     "description": "[:Description]",
-    //     "keyword": "",
-    //     "name": "[]",
-    //     "id": 0
-    // },
-    // "pegics": {
-    //     "title": null,
-    //     "description": "[PEGI::Description]",
-    //     "keyword": "",
-    //     "name": "[PEGI:]",
-    //     "id": 0
-    // }[];
-    // "selectedVariant": null,
-    // "variations": [],
-    // "tags":{
-    //     "id": 39,
-    //     "name": "PlayStation",
-    //     "slug": "playstation"
-    // }[];
+    developer?: {
+        fileAltAttribute?: string;
+        filePath?: string;
+        fileTitleAttribute?: string;
+        name?: string;
+        slug?: string;
+    };
+    publisher?: {
+        fileAltAttribute?: string;
+        filePath?: string;
+        fileTitleAttribute?: string;
+        name?: string;
+        slug?: string;
+    }
+
+    shortDescription?: string;
+
+    releaseDate?: string;
+    brands: {
+        "name": "EA Sports",
+        "slug": "ea-sports",
+        "isDefault": false,
+        "fileUniqKey": null,
+        "filePath": "https://pn.irangamecenter.com/wp-content/uploads/2025/07/ea-sports.png",
+        "fileTitleAttribute": "ea-sports",
+        "fileAltAttribute": "",
+        "id": 61
+    }[];
+
+    genres?: {
+        keyword?: string;
+        name?: string
+    }[];
+    playerPerspective?: {
+        keyword?: string;
+        name?: string;
+    }[];
+    theme?: {
+        keyword?: string;
+        name?: string;
+        id?: number;
+    }[];
+    tags: {
+        name?: string;
+        slug?: string;
+    }[];
 }
 
 export interface RatingItemType {
@@ -124,7 +117,7 @@ export interface ProductVariant {
             value?: string;
         }[];
         regularPrice?: number;
-        salePrice?:number;
+        salePrice?: number;
         profitPercentage?: number;
         currencyType?: string;
     }[];
@@ -229,6 +222,21 @@ export interface GetAllProductsParams {
     SkipCount: number;
     MaxResultCount: number;
     Brands?: string[];
+    Categories?: string[];
+    Tags?: string[];
     sort?: ProductSortKeywords;
     VariantSlug?: string;
+    Search?: string;
+
+    Pegi?: string[];
+    // variants: first child
+
+    Esrb?: string[];
+    Theme?: string[];
+    PlayerPerspective?: string[];
+    Gameplay?: string[];
+    Genres?: string[];
+    Publisher?: string[];
+    Developer?: string[];
+
 }

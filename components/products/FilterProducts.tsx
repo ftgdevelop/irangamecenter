@@ -4,9 +4,10 @@ import ModalPortal from "../shared/layout/ModalPortal";
 import { useEffect, useState } from "react";
 import CheckboxGroup from "../shared/CheckboxGroup";
 import Filter2 from "../icons/Filter2";
-import { useAppDispatch } from "@/hooks/use-store";
+import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import { setBodiScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
 import CloseSimple from "../icons/CloseSimple";
+import Accordion from "../shared/Accordion";
 
 type Props = {
     activeKeyword?: any;
@@ -17,9 +18,11 @@ const FilterProducts: React.FC<Props> = () => {
 
     const [open, setOpen] = useState<boolean>(false);
     const [slideIn, setSlideIn] = useState<boolean>(false);
-    
+
+    const availables = useAppSelector(state => state.products.availableFilters);
+
     const dispatch = useAppDispatch();
-    
+
     useEffect(() => {
         if (open) {
             setSlideIn(true);
@@ -54,7 +57,7 @@ const FilterProducts: React.FC<Props> = () => {
             >
                 <div className="bg-black/50 backdrop-blur-sm fixed top-0 left-0 right-0 bottom-0" onClick={() => { setSlideIn(false) }} />
 
-                <div className={`bg-[#192a39] text-white rounded-t-2xl fixed w-full md:max-w-lg safePadding-b overflow-y-auto max-h-[50vh] transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2  bottom-0 ${slideIn ? "translate-y-0" : "translate-y-[80vh]"}`}>
+                <div className={`bg-[#192a39] text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full md:max-w-lg safePadding-b transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2 ${slideIn ? "bottom-0" : "-bottom-[80vh]"}`}>
                     <div className="px-4 pt-8 pb-3">
 
                         <div className="mb-5 flex justify-between items-center">
@@ -70,21 +73,165 @@ const FilterProducts: React.FC<Props> = () => {
                         </div>
 
 
-                        <h5 className="font-semibold mb-4 text-sm"> فیلتر بر اساس دسته بندی ها </h5>
+                        {!!availables.pegis.length && <Accordion
+                            title={(
+                                <h5 className="font-semibold text-sm"> فیلتر بر اساس رده بندی سنی اروپا (PEGI) </h5>
+                            )}
+                            content={(
+                                <CheckboxGroup
+                                    items={availables.pegis.map(item => ({
+                                        label: item!.name!,
+                                        value: item!.keyword!
+                                    }))}
+                                    onChange={console.log}
+                                    values={[]}
+                                />
+                            )}
+                            withArrowIcon
+                            rotateArrow180
+                            WrapperClassName="mb-6"
+                        />}
 
-                        <CheckboxGroup
-                            items={[{ label: "دسته بندی 1", value: "cat1" }, { label: "دسته بندی 2", value: "cat2" }, { label: "دسته بندی 3", value: "cat3" }]}
-                            onChange={console.log}
-                            values={["cat1", "cat3"]}
-                        />
+                        {!!availables.esrbs.length && <Accordion
+                            title={(
+                                <h5 className="font-semibold text-sm"> فیلتر بر اساس رده بندی سنی آمریکا (ESRB) </h5>
+                            )}
+                            content={(
+                                <CheckboxGroup
+                                    items={availables.esrbs.map(item => ({
+                                        label: item!.name!,
+                                        value: item!.keyword!
+                                    }))}
+                                    onChange={console.log}
+                                    values={[]}
+                                />
+                            )}
+                            withArrowIcon
+                            rotateArrow180
+                            WrapperClassName="mb-6"
+                        />}
 
-                        <h5 className="font-semibold my-4 text-sm"> فیلتر بر اساس برچسب ها </h5>
 
-                        <CheckboxGroup
-                            items={[{ label: "برچسب 1", value: "cat1" }, { label: "برچسب 2", value: "cat2" }, { label: "برچسب 3", value: "cat3" }]}
-                            onChange={console.log}
-                            values={["cat1", "cat3"]}
-                        />
+
+                        {!!availables.developers.length && <Accordion
+                            title={(
+                                <h5 className="font-semibold text-sm"> فیلتر بر اساس توسعه دهنده </h5>
+                            )}
+                            content={(
+                                <CheckboxGroup
+                                    items={availables.developers.map(item => ({
+                                        label: item!.name!,
+                                        value: item!.slug!
+                                    }))}
+                                    onChange={console.log}
+                                    values={[]}
+                                />
+                            )}
+                            withArrowIcon
+                            rotateArrow180
+                            WrapperClassName="mb-6"
+                        />}
+                        
+                        {!!availables.publishers.length && <Accordion
+                            title={(
+                                <h5 className="font-semibold text-sm"> فیلتر بر اساس ناشر </h5>
+                            )}
+                            content={(
+                                <CheckboxGroup
+                                    items={availables.publishers.map(item => ({
+                                        label: item!.name!,
+                                        value: item!.slug!
+                                    }))}
+                                    onChange={console.log}
+                                    values={[]}
+                                />
+                            )}
+                            withArrowIcon
+                            rotateArrow180
+                            WrapperClassName="mb-6"
+                        />}
+
+
+                        
+                        {!!availables.gameplays?.length && <Accordion
+                            title={(
+                                <h5 className="font-semibold text-sm"> فیلتر بر اساس حالت بازی </h5>
+                            )}
+                            content={(
+                                <CheckboxGroup
+                                    items={availables.gameplays.map(item => ({
+                                        label: item!.name!,
+                                        value: item!.keyword!
+                                    }))}
+                                    onChange={console.log}
+                                    values={[]}
+                                />
+                            )}
+                            withArrowIcon
+                            rotateArrow180
+                            WrapperClassName="mb-6"
+                        />}
+
+                        
+                        {!!availables.genres?.length && <Accordion
+                            title={(
+                                <h5 className="font-semibold text-sm"> فیلتر بر اساس ژانر </h5>
+                            )}
+                            content={(
+                                <CheckboxGroup
+                                    items={availables.genres.map(item => ({
+                                        label: item!.name!,
+                                        value: item!.keyword!
+                                    }))}
+                                    onChange={console.log}
+                                    values={[]}
+                                />
+                            )}
+                            withArrowIcon
+                            rotateArrow180
+                            WrapperClassName="mb-6"
+                        />}
+
+
+                        {!!availables.playerPerspectives?.length && <Accordion
+                            title={(
+                                <h5 className="font-semibold text-sm"> فیلتر بر اساس زاویه دید </h5>
+                            )}
+                            content={(
+                                <CheckboxGroup
+                                    items={availables.playerPerspectives.map(item => ({
+                                        label: item!.name!,
+                                        value: item!.keyword!
+                                    }))}
+                                    onChange={console.log}
+                                    values={[]}
+                                />
+                            )}
+                            withArrowIcon
+                            rotateArrow180
+                            WrapperClassName="mb-6"
+                        />}
+
+
+
+                        {!!availables.themes?.length && <Accordion
+                            title={(
+                                <h5 className="font-semibold text-sm"> فیلتر بر اساس تم بازی  </h5>
+                            )}
+                            content={(
+                                <CheckboxGroup
+                                    items={availables.themes.map(item => ({
+                                        label: item!.name!,
+                                        value: item!.keyword!
+                                    }))}
+                                    onChange={console.log}
+                                    values={[]}
+                                />
+                            )}
+                            withArrowIcon
+                            rotateArrow180
+                            WrapperClassName="mb-6"
+                        />}
 
                         <button
                             type="button"
@@ -93,7 +240,7 @@ const FilterProducts: React.FC<Props> = () => {
                         >
                             اعمال تغییرات
                         </button>
-                        
+
                     </div>
 
                 </div>

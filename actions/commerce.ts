@@ -15,6 +15,21 @@ export const getProducts = async (params: GetAllProductsParams, acceptLanguage: 
             queryParams += `&Brands=${brand}`
         })
     }
+    if (params.Categories?.length) {
+        params.Categories.forEach(cat => {
+            queryParams += `&Categories=${cat}`
+        })
+    }
+    if (params.Tags?.length) {
+        params.Tags.forEach(tag => {
+            queryParams += `&Tags=${tag}`
+        })
+    }
+
+    if(params.Search){
+        queryParams += `&Search=${params.Search}`
+    }
+
     switch (params.sort) {
         case "HighPrice":
             queryParams += `&OrderBy=Price&SortBy=asc`;

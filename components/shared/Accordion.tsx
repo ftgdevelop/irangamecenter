@@ -7,6 +7,7 @@ type Props = {
     initiallyOpen?: boolean;
     updateContent?: string;
     withArrowIcon?: boolean;
+    rotateArrow180?: boolean;
 }
 
 const Accordion: React.FC<Props> = props => {
@@ -31,7 +32,7 @@ const Accordion: React.FC<Props> = props => {
             after:absolute after:bg-white/50 after:w-full after:h-px after:top-1/2 after:left-0`;
 
     if (withArrowIcon) {
-        expandIconClass = `w-3 h-3 border block border-white border-r-transparent border-t-transparent transition-all ${open ? "rotate-45" : "-rotate-45"}`
+        expandIconClass = `w-3 h-3 border block border-white border-r-transparent border-t-transparent transition-all ${!open ? "-rotate-45" : props.rotateArrow180?"rotate-135":"rotate-45"}`
     }
 
     return (

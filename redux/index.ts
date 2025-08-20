@@ -4,6 +4,7 @@ import notificationSlice from "./notificationSlice";
 import authenticationSlice from "./authenticationSlice";
 import stylesSlice from "./stylesSlice";
 import pagesSlice from "./pages";
+import productsSlice from "./productsSlice";
 
 export const store = configureStore({
     reducer: {
@@ -11,7 +12,8 @@ export const store = configureStore({
         notification: notificationSlice,
         authentication: authenticationSlice,
         styles: stylesSlice,
-        pages: pagesSlice
+        pages: pagesSlice,
+        products:productsSlice
     }
 })
 

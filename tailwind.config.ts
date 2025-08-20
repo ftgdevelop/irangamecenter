@@ -11,6 +11,9 @@ export default {
       borderRadius: {
         'large': '2rem',
       },
+      rotate: {
+        '135': '135deg',
+      },
       spacing: {
         '13': '3.25rem',
         '18': '4.5rem',
