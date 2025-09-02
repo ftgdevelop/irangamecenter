@@ -26,8 +26,55 @@ export const getProducts = async (params: GetAllProductsParams, acceptLanguage: 
         })
     }
 
-    if(params.Search){
+    if (params.Search) {
         queryParams += `&Search=${params.Search}`
+    }
+
+    if (params.VariantSlug) {
+        for (const item of params.VariantSlug) {
+            queryParams += `&VariantSlug=${item}`;
+        }
+    }
+    if (params.Developer?.length) {
+        for (const item of params.Developer) {
+            queryParams += `&Developer=${item}`;
+        }
+    }
+
+    if (params.Esrb?.length) {
+        for (const item of params.Esrb) {
+            queryParams += `&Esrb=${item}`;
+        }
+    }
+    if (params.Gameplay?.length) {
+        for (const item of params.Gameplay) {
+            queryParams += `&Gameplay=${item}`;
+        }
+    }
+    if (params.Genres?.length) {
+        for (const item of params.Genres) {
+            queryParams += `&Genres=${item}`;
+        }
+    }
+    if (params.Pegi?.length) {
+        for (const item of params.Pegi) {
+            queryParams += `&Pegi=${item}`;
+        }
+    }
+    if (params.PlayerPerspective?.length) {
+        for (const item of params.PlayerPerspective) {
+            queryParams += `&PlayerPerspective=${item}`;
+        }
+    }
+    if (params.Publisher?.length) {
+        for (const item of params.Publisher) {
+            queryParams += `&Publisher=${item}`;
+        }
+    }
+    if (params.Theme?.length) {
+        for (const item of params.Theme) {
+            queryParams += `&Theme=${item}`;
+        }
     }
 
     switch (params.sort) {
@@ -45,10 +92,6 @@ export const getProducts = async (params: GetAllProductsParams, acceptLanguage: 
             break;
         default:
             break;
-    }
-
-    if(params.VariantSlug){
-          queryParams += `&VariantSlug=${params.VariantSlug}`;
     }
 
     try {

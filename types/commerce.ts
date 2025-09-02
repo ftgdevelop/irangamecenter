@@ -225,7 +225,7 @@ export interface GetAllProductsParams {
     Categories?: string[];
     Tags?: string[];
     sort?: ProductSortKeywords;
-    VariantSlug?: string;
+    VariantSlug?: string[];
     Search?: string;
 
     Pegi?: string[];
@@ -240,3 +240,5 @@ export interface GetAllProductsParams {
     Developer?: string[];
 
 }
+
+export type FilterItems = "publishers" | "developers" | "gameplays" | "genres" | "themes" | "playerPerspectives" | "pegis" | "esrbs" | "variants";
