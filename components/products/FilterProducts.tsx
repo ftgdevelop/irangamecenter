@@ -43,7 +43,7 @@ const FilterProducts = () => {
     }, [slideIn]);
 
     const changeFilterHandel = (values: string[], type: FilterItems) => {
-        const otherSlugs = slugs.filter(item => !(item.includes(`${type}-`)));
+        const otherSlugs = slugs?.filter(item => !(item.includes(`${type}-`)));
         const segments = ["/products", ...otherSlugs, ...(values.map(x => `${type}-${x}`))];
         const newUrl = segments.join("/");
         router.push({
@@ -51,7 +51,7 @@ const FilterProducts = () => {
         });
     }
 
-    const selectedFilter = (type: FilterItems) => { return (slugs.filter(x => x.includes(`${type}-`))?.map(x => x.split(`${type}-`)?.[1])) || [] };
+    const selectedFilter = (type: FilterItems) => { return (slugs?.filter(x => x.includes(`${type}-`))?.map(x => x.split(`${type}-`)?.[1])) || [] };
 
     const activeClass = "mx-2 w-2 h-2 inline-block align-middle bg-red-500 rounded-full";
 

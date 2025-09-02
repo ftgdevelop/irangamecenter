@@ -46,7 +46,7 @@ const Products: NextPage<Props> = props => {
     // }, [props.queryPage]);
 
     const changePageHandel = (p: number) => {
-        const otherSlugs = slugs.filter(item => !(item.includes("page-")));
+        const otherSlugs = slugs?.filter(item => !(item.includes("page-")));
         const segments = ["/products", ...otherSlugs, `page-${p}`];
         const newUrl = segments.join("/");
         router.push({
@@ -54,10 +54,10 @@ const Products: NextPage<Props> = props => {
         });
     }
 
-    const selectedPage = +(slugs.find(x => x.includes("page-"))?.split("page-")?.[1] || 0);
+    const selectedPage = +(slugs?.find(x => x.includes("page-"))?.split("page-")?.[1] || 0);
 
     const changeSortHandel = (val: ProductSortKeywords) => {
-        const otherSlugs = slugs.filter(item => !(item.includes("sort-")));
+        const otherSlugs = slugs?.filter(item => !(item.includes("sort-")));
         const segments = ["/products", ...otherSlugs, `sort-${val}`];
         const newUrl = segments.join("/");
         router.push({
@@ -65,7 +65,7 @@ const Products: NextPage<Props> = props => {
         });
     }
 
-    const selectedSort = slugs.find(x => x.includes("sort-"))?.split("sort-")?.[1] as ProductSortKeywords;
+    const selectedSort = slugs?.find(x => x.includes("sort-"))?.split("sort-")?.[1] as ProductSortKeywords;
 
     const filtered_developers = selectedFilter(slugs, "developers");
     const filtered_esrbs = selectedFilter(slugs, "esrbs");
@@ -491,9 +491,9 @@ export async function getServerSideProps(context: any) {
     const slugs = query.slugs as string[];
 
 
-    const selectedPage = +(slugs.find(x => x.includes("page-"))?.split("page-")?.[1] || 0);
+    const selectedPage = +(slugs?.find(x => x.includes("page-"))?.split("page-")?.[1] || 0);
 
-    const selectedSort = slugs.find(x => x.includes("sort-"))?.split("sort-")?.[1] as ProductSortKeywords;
+    const selectedSort = slugs?.find(x => x.includes("sort-"))?.split("sort-")?.[1] as ProductSortKeywords;
 
     const filtered_developers = selectedFilter(slugs, "developers");
     const filtered_esrbs = selectedFilter(slugs, "esrbs");
