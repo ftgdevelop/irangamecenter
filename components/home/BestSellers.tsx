@@ -71,7 +71,7 @@ const BestSellers: React.FC<Props> = props => {
             {item.products.map(i => <ProductListItem onClick={()=>{dispatch(setProgressLoading(true))}} product={i} key={i.id} />)}
 
             <Link
-                href={`/products?VariantSlug=${item.slug}`}
+                href={`/products/variants-${item.slug}`}
                 onClick={()=>{dispatch(setProgressLoading(true));}}
                 className="text-sm text-[#ca54ff] bg-[#161b39] w-full px-5 py-3 flex rounded-full justify-center gap-3"
             >

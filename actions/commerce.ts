@@ -149,6 +149,30 @@ export const getBrandBySlug = async (slug: string, acceptLanguage: "fa-IR" | "en
     }
 }
 
+
+export const getAllForSiteMap = async (
+    params : {
+        type: "Image" | "Video",
+        SkipCount: number,
+        MaxResultCount: number
+    }
+    , acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
+
+    try {
+        const response: any = await axios({
+            method: "get",
+            url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetAllForSiteMap}?MediaType=${params.type}&SkipCount=${params.SkipCount}&MaxResultCount=${params.MaxResultCount}`,
+            headers: {
+                "Accept-Language": acceptLanguage,
+                apikey: apikey
+            }
+        });
+        return (response)
+    } catch (error: any) {
+        return error
+    }
+}
+
 export type ProductSortKeywords = "Sale" | "Visitor" | "LowPrice" | "HighPrice";
 
 export type ProductSortOption = {

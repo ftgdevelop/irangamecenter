@@ -5,7 +5,7 @@ import Contacts from "@/components/shared/Contacts";
 import BreadCrumpt from "@/components/shared/BreadCrumpt";
 import { useEffect, useRef, useState } from "react";
 import Skeleton from "@/components/shared/Skeleton";
-import { getProducts, ProductSortKeywords } from "@/actions/commerce";
+import { getAllForSiteMap, getProducts, ProductSortKeywords } from "@/actions/commerce";
 import { GetAllProductsParams, ProductItem } from "@/types/commerce";
 import ProductListItem from "@/components/products/ProductListItem";
 import SortProducts from "@/components/products/SortProducts";
@@ -53,6 +53,21 @@ const Products: NextPage<Props> = props => {
             pathname: newUrl,
         });
     }
+
+    useEffect(()=>{
+        const fff = async () => {
+            const res : any = await getAllForSiteMap({
+                type: "Video",
+                MaxResultCount:5,
+                SkipCount:0
+            });
+            console.dir(res.data?.result?.items);
+            debugger;
+        }
+
+        fff();
+
+    },[]);
 
     const selectedPage = +(slugs?.find(x => x.includes("page-"))?.split("page-")?.[1] || 0);
 

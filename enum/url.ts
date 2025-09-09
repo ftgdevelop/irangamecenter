@@ -73,8 +73,10 @@ export const Payment = {
   export const Commerce = {
     GetAll:"/api/services/app/Product/GetAll",
     GetBySlug:"/api/services/app/Product/GetBySlug",
-    GetBrandBySlug:"/api/services/app/Brand/GetBySlug"
+    GetBrandBySlug:"/api/services/app/Brand/GetBySlug",
+    GetAllForSiteMap:"/api/services/app/Product/GetAllForSiteMap"
   }
+  
 
 export const ServerStatus = {
   Success: 1,

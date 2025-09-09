@@ -17,6 +17,14 @@ function creareSiteMap(){
     </sitemap>      
   `}
 
+  if (process.env.PROJECT_SERVER_ECOMMERCE){
+    contents += `
+    <sitemap>
+      <loc>${process.env.SITE_NAME}/sitemaps/videos.xml</loc>
+    </sitemap> 
+    `
+}
+
   return `<?xml version="1.0" encoding="UTF-8"?>
     <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
       ${contents}    
