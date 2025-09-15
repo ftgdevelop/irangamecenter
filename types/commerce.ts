@@ -216,6 +216,7 @@ export interface ProductDetailData {
         slug?: string;
     }
     variants?: ProductVariant[];
+    similar?:ProductItem[];
 }
 
 export interface GetAllProductsParams {

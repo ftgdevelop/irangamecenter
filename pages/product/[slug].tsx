@@ -16,6 +16,7 @@ import ProductDetail from "@/components/products/ProductDetail";
 import AgeRatingDetail from "@/components/products/AgeRatingDetail";
 import ArrowTopLeft from "@/components/icons/ArrowTopLeft";
 import VariantSection from "@/components/products/VariantSection";
+import SimilarProductsCarousel from "@/components/products/SimilarProductsCarousel";
 
 
 const DetailProduct: NextPage<any> = ({ productData }:
@@ -31,7 +32,7 @@ const DetailProduct: NextPage<any> = ({ productData }:
   if (productData.breadcrumbs?.length) {
     breadcrumbsItems.push(...productData.breadcrumbs.map(item => ({
       label: item.name || "",
-      link: `/products?VariantSlug=${item.slug}`
+      link: `/products/VariantSlug=${item.slug}`
     })))
   }
   if (productData.name) {
@@ -328,6 +329,10 @@ const DetailProduct: NextPage<any> = ({ productData }:
           }))}
         />
       </>}
+
+      {!!productData.similar?.length && (
+        <SimilarProductsCarousel products={productData.similar} />
+      )}
 
 
 

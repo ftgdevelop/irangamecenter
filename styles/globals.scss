@@ -293,3 +293,19 @@ body {
 .safePadding-b{
   padding-bottom: calc(10px + env(safe-area-inset-bottom));
 }
+
+.similar-products-carousel{
+  .slick-list{
+    max-height: 280px;
+  }
+  .slick-dots{
+    position: absolute;
+    bottom: 100%;
+    left: 15px;
+    width: auto;
+    margin-bottom: 18px;
+    li{
+      margin: 0 4px;
+    }
+  }
+}

@@ -165,6 +165,18 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         showFixedNav = false;
     }
 
+    if (router.pathname === "/categories"){
+        headerType2Params = {
+            title: "",
+            withShare: false,
+            withLogo: true,
+            backUrl: "/"
+        };
+        showFooter = false;
+        showHeader = true;
+        showFixedNav = true;
+    }
+
     useEffect(() => {
         const token = localStorage?.getItem('Token');
         if (token) {

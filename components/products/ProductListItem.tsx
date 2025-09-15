@@ -25,19 +25,19 @@ const ProductListItem: React.FC<Props> = props => {
 
 
     return (
-        <div className="mb-4">
+        <div className="mb-4 bg-[#011425] rounded-2xl">
             <Link href={`/product/${product.slug}`} className="flex" onClick={()=>{if(props.onClick){props.onClick()}}}>
                 <Image
                     src={product.filePath || "/images/default-game.png"}
                     alt={product.fileAltAttribute || product.name || ""}
-                    width={112}
-                    height={112}
-                    className="block w-28 h-28 rounded-2xl"
+                    width={72}
+                    height={72}
+                    className="block w-18 h-18 rounded-2xl"
                     title={product.fileTitleAttribute || product.name}
                 />
 
-                <div className="p-2.5">
-                    <h4 className="text-xs mb-5"> {toPersianDigits(product.name || "")} </h4>
+                <div className="px-2.5 py-2">
+                    <h4 className="text-xs mb-3"> {toPersianDigits(product.name || "")} </h4>
                     <div className="flex gap-3 items-end pb-1">
                         {!!discountPercentage && (
                             <div className="w-9 h-9 rounded-full bg-gradient-to-t from-orange-600 to-amber-300 text-center pt-2 font-bold text-sm">

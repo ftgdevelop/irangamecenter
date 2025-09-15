@@ -125,13 +125,13 @@ const Brand: NextPage<Props> = props => {
         {products?.map(item => <ProductListItem product={item} key={item.id} />)}
 
         {!!loading && [1, 2, 3, 4, 5].map(item => (
-          <div className="grid grid grid-cols-4 gap-3 mb-4" key={item}>
+          <div className="flex gap-3 mb-4" key={item}>
             <Skeleton
               type="image"
-              className="aspect-square rounded-large"
+              className="w-18 h-18 rounded-2xl shrink-0"
             />
-            <div className="col-span-3">
-              <Skeleton className="h-4 w-full mt-5 mb-4" />
+            <div className="w-full">
+              <Skeleton className="h-4 w-full mt-3 mb-4" />
               <Skeleton className="w-1/2" />
             </div>
           </div>
