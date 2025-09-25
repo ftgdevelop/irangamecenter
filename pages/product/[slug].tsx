@@ -92,7 +92,7 @@ const DetailProduct: NextPage<any> = ({ productData }:
             >
               <div className="flex gap-2 items-center">
                 سبک بازی
-                <ArrowTopLeft className="w-2.5 h-2.5 fill-current" />
+                <ArrowTopLeft className="w-3.5 h-3.5 fill-current" />
               </div>
               <b className="block font-semibold mt-2 text-xs h-8 overflow-hidden">
                 {productData.genres.map(item => item.name).join("، ")}
@@ -108,7 +108,7 @@ const DetailProduct: NextPage<any> = ({ productData }:
             >
               <div className="flex gap-2 items-center">
                 حالت بازی
-                <ArrowTopLeft className="w-2.5 h-2.5 fill-current" />
+                <ArrowTopLeft className="w-3.5 h-3.5 fill-current" />
               </div>
               <b className="block font-semibold mt-2 text-xs h-8 overflow-hidden">
                 {productData.gameplay.map(item => item.name).join("، ")}
@@ -124,7 +124,7 @@ const DetailProduct: NextPage<any> = ({ productData }:
             >
               <div className="flex gap-2 items-center">
                 زاویه دید
-                <ArrowTopLeft className="w-2.5 h-2.5 fill-current" />
+                <ArrowTopLeft className="w-3.5 h-3.5 fill-current" />
               </div>
               <b className="block font-semibold mt-2 text-xs h-8 overflow-hidden">
                 {productData.playerPerspective.map(item => item.name).join("، ")}
@@ -141,7 +141,7 @@ const DetailProduct: NextPage<any> = ({ productData }:
             >
               <div className="flex gap-2 items-center">
                 تم بازی
-                <ArrowTopLeft className="w-2.5 h-2.5 fill-current" />
+                <ArrowTopLeft className="w-3.5 h-3.5 fill-current" />
               </div>
               <b className="block font-semibold mt-2 text-xs h-8 overflow-hidden">
                 {productData.theme.map(item => item.name).join("، ")}
@@ -157,7 +157,7 @@ const DetailProduct: NextPage<any> = ({ productData }:
             >
               <div className="flex gap-2 items-center">
                 تاریخ انتشار
-                <ArrowTopLeft className="w-2.5 h-2.5 fill-current" />
+                <ArrowTopLeft className="w-3.5 h-3.5 fill-current" />
               </div>
               <b className="block font-semibold mt-2 text-xs h-8 overflow-hidden">
                 {dateDiplayFormat({
@@ -194,7 +194,7 @@ const DetailProduct: NextPage<any> = ({ productData }:
 
         <div className={`mt-6 bg-[#192a39] p-2.5 rounded-xl ${(productData.developer?.name && productData.publisher?.name) ? "grid grid-cols-2 gap-2.5" : ""}`}>
           {!!productData.developer?.name && (
-            <Link href={`/brand/${productData.developer.slug || "unknown"}`} className=" block border border-white/15 p-3 bg-[#011425] rounded-xl text-xs" >
+            <Link href={`/brand/${productData.developer.slug || "unknown"}`} className=" block p-3 bg-[#011425] rounded-xl text-xs" >
               <div className="flex gap-2">
                 {productData.developer.filePath && (
                   <Image
@@ -216,7 +216,7 @@ const DetailProduct: NextPage<any> = ({ productData }:
           )}
 
           {!!productData.publisher?.name && (
-            <Link href={`/brand/${productData.publisher.slug || "unknown"}`} className="block border border-white/15 p-3 bg-[#011425] rounded-xl text-xs" >
+            <Link href={`/brand/${productData.publisher.slug || "unknown"}`} className="block p-3 bg-[#011425] rounded-xl text-xs" >
               <div className="flex gap-2">
                 {productData.publisher.filePath && (
                   <Image

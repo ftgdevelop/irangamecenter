@@ -4,7 +4,6 @@ import Categories from "@/components/home/Categories";
 import Search from "@/components/shared/Search";
 import Slider from "@/components/home/Slider";
 import BannerLinkWides from "@/components/home/BannerLinkWides";
-import Promotion from "@/components/home/Promotion";
 import ColorBannerLinkWides from "@/components/home/ColorBannerLinkWides";
 import BestSellers from "@/components/home/BestSellers";
 import Intro from "@/components/about/Intro";
@@ -20,6 +19,7 @@ import { BlogItemType } from "@/types/blog";
 import BlogsCarousel from "@/components/blog/BlogsCarousel";
 import { getProducts } from "@/actions/commerce";
 import { ProductItem } from "@/types/commerce";
+import SimilarProductsCarousel from "@/components/products/SimilarProductsCarousel";
 
 type HomeAboutDataType = {
   Keyword: "about_intro" | "icons" | "faq" | "telNumber" | "email";
@@ -148,7 +148,7 @@ const Home: NextPage<Props> = props => {
         imageTitle: item.ImageTitle
       }))} />
 
-      <Promotion
+      {/* <Promotion
         items={promotionData?.Items.map(item => ({
           title: item.Title || "",
           url: item.Url,
@@ -159,7 +159,22 @@ const Home: NextPage<Props> = props => {
           imageUrl: item.Image?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}${item.Image.url}` : undefined,
         }))}
         title={promotionData?.Title || ""}
-      />
+      /> */}
+
+      {!!(promotionData?.Items?.length) && <SimilarProductsCarousel 
+        products={promotionData?.Items.map(item => ({
+          id:item.id,
+          name: item.Title || "",
+          url: item.Url,
+          price: item.price,
+          oldPrice: item.oldPrice,
+          imageAlt: item.ImageAlternative,
+          imageTitle: item.ImageTitle,
+          filePath: item.Image?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}${item.Image.url}` : undefined,
+        }))}
+        title={promotionData?.Title || ""}
+      />}
+      <br/>
 
       <ColorBannerLinkWides
         items={banner3Items?.map(item => ({

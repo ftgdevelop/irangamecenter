@@ -1,13 +1,11 @@
 type Props = {
-    width?: number;
-    height?: number;
+    className: string;
 }
 
 const Menu: React.FC<Props> = props => {
     return (
         <svg
-            width={props.width || 24}
-            height={props.height || 24}
+            className={props.className}
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"

@@ -68,7 +68,7 @@ export interface ProductItem {
     shortDescription?: string;
 
     releaseDate?: string;
-    brands: {
+    brands?: {
         "name": "EA Sports",
         "slug": "ea-sports",
         "isDefault": false,
@@ -92,7 +92,7 @@ export interface ProductItem {
         name?: string;
         id?: number;
     }[];
-    tags: {
+    tags?: {
         name?: string;
         slug?: string;
     }[];

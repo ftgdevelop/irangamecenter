@@ -61,7 +61,7 @@ const OtpSendCode: React.FC<Props> = props => {
                                 {props.loading ? (
                                     <Loading className="fill-current w-5 h-5 animate-spin" />
                                 ) : (
-                                    <ArrowTopLeft className="fill-current w-5 h-5" />
+                                    <ArrowTopLeft className="fill-current w-3.5 h-3.5" />
                                 )}
                             </button>
 

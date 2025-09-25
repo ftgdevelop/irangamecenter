@@ -84,7 +84,7 @@ const Wallet = () => {
                         />
                         <div className="grow flex justify-between items-center px-3 py-5 border-b border-white/10 text-xs">
                             {item.label}
-                            <ArrowTopLeft className="w-3 h-3 fill-current" />
+                            <ArrowTopLeft className="w-3.5 h-3.5 fill-current" />
                         </div>
                     </Link>
                 ))}

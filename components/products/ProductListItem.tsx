@@ -25,7 +25,7 @@ const ProductListItem: React.FC<Props> = props => {
 
 
     return (
-        <div className="mb-4 bg-[#011425] rounded-2xl">
+        <div className="mb-[15px] bg-[#011425] rounded-2xl">
             <Link href={`/product/${product.slug}`} className="flex" onClick={()=>{if(props.onClick){props.onClick()}}}>
                 <Image
                     src={product.filePath || "/images/default-game.png"}

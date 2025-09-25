@@ -70,7 +70,7 @@ const BlogsCarousel: React.FC<Props> = props => {
                                     {!!item.subTitle && <div className="text-xs truncate-content-p">
                                         {parse(item.subTitle)}
                                     </div>}
-                                    <ArrowTopLeft className="w-4 h-4 fill-current absolute top-1/2 left-4 -translate-y-1/2" />
+                                    <ArrowTopLeft className="w-3.5 h-3.5 fill-current absolute top-1/2 left-4 -translate-y-1/2" />
                                 </Link>
 
                             </div>
@@ -95,7 +95,7 @@ const BlogsCarousel: React.FC<Props> = props => {
                             {!!items[0]?.subTitle && <div className="text-xs truncate-content-p">
                                 {parse(items[0]?.subTitle)}
                             </div>}
-                            <ArrowTopLeft className="w-4 h-4 fill-current absolute top-1/2 left-4 -translate-y-1/2" />
+                            <ArrowTopLeft className="w-3.5 h-3.5 fill-current absolute top-1/2 left-4 -translate-y-1/2" />
                         </Link>
 
                     </div>

@@ -23,7 +23,7 @@ type Props = {
 const OnlineSupport : React.FC<Props> = props => {
 
     const [open, setOpen] = useState<boolean>(false);
-    const [slideIn, setSlideIn] = useState<boolean>(true);
+    const [slideIn, setSlideIn] = useState<boolean>(false);
 
     useEffect(() => {
         if (open) {

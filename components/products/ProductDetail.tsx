@@ -172,7 +172,7 @@ const ProductDetail: React.FC<Props> = props => {
                 onClick={() => { props.changeActiveTab("descriptions") }}
             >
                 مشاهده جزییات
-                <ArrowTopLeft className="w-3.5 h-3.5 fill-current" />
+                <ArrowTopLeft className="w-2.5 h-2.5 fill-current" />
             </button>
 
             <ModalPortal

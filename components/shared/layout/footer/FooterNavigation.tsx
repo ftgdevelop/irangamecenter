@@ -2,11 +2,15 @@ import { useAppSelector } from "@/hooks/use-store"
 import Image from "next/image";
 import Link from "next/link"
 import Skeleton from "../../Skeleton";
+import { useRouter } from "next/router";
 
 const FooterNavigation = () => {
 
     const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
     const userInfoLoading = useAppSelector(state => state.authentication.getUserLoading);
+
+    const router = useRouter();
+    const {asPath} = router;
 
     const items: {
         label: string;
@@ -19,13 +23,13 @@ const FooterNavigation = () => {
                 label: "فروشگاه",
                 href: "/",
                 imageUrl: "/images/icons/shop.svg",
-                active: false
+                active: asPath === "/"
             },
             {
                 label: "دسته بندی ها",
                 href: "/products",
                 imageUrl: "/images/icons/squares.svg",
-                active: false
+                active: asPath === "/products"
             },
             {
                 label: "سفارش های من",
@@ -37,7 +41,7 @@ const FooterNavigation = () => {
                 label: "پروفایل",
                 href: isAuthenticated ? "/profile" : "/login",
                 imageUrl: "/images/icons/profile.svg",
-                active: true,
+                active: asPath.includes("/profile"),
                 loading:userInfoLoading
             }
         ];
@@ -55,7 +59,7 @@ const FooterNavigation = () => {
                             href={item.href}
                             className={`basis-1/4 rounded-xl py-3  text-2xs text-center ${item.active ? " bg-[#2e3e4b]" : ""} ${item.loading ? "pointer-events-none": ""}`}
                         >
-                            <Image src={item.imageUrl} alt={item.label} className="block mx-auto mb-2" width={30} height={30} />
+                            <Image src={item.imageUrl} alt={item.label} className="block mx-auto mb-2" width={26} height={26} />
                             
                             {item.loading ? <Skeleton className="w-12 h-4 mx-auto" /> :  item.label}
 

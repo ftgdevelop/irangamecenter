@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
 import ModalPortal from "../ModalPortal";
-import Close from "@/components/icons/Close";
+import CloseSimple from "@/components/icons/CloseSimple";
 
 const MainMenu: React.FC = () => {
 
@@ -44,7 +44,7 @@ const MainMenu: React.FC = () => {
                 className="outline-none border-none"
                 onClick={() => { setOpen(true) }}
             >
-                <Menu height={40} width={40} />
+                <Menu className="w-8 h-8 fill-white" />
             </button>
 
             <ModalPortal
@@ -77,7 +77,7 @@ const MainMenu: React.FC = () => {
                                     className=""
                                     onClick={() => { setDelayedOpen(false) }}
                                 >
-                                    <Close className="w-7 h-7 fill-neutral-300" />
+                                    <CloseSimple className=" w-8 h-8 fill-neutral-300" />
                                 </button>
                             </div>
 
