@@ -130,11 +130,11 @@ export interface ProductGalleryItem {
     filePath?:string;
 //   "isActive": true,
 //   "fileUniqKey": "1e5457dc-ce85-f011-bf76-000c29176f1e",
-//   "fileTitleAttribute": null,
+    fileTitleAttribute ?: string,
 //   "fileAltAttribute": null,
 //   "thumbnail": "https://cdn.irangamecenter.com/videos/products/122/elden-ring-trailer-thumbnail-1.webp",
-//   "thumbnailUniqKey": "432755c9-ce85-f011-bf76-000c29176f1e",
-//   "cdnThumbnail": "https://igc1.storage.c2.liara.space/videos/products/122/elden-ring-trailer-thumbnail-1.webp",
+    thumbnailUniqKey ?: string,
+    cdnThumbnail ?: string,
 }
 
 export interface ProductDetailData {

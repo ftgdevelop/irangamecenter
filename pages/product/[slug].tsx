@@ -17,6 +17,7 @@ import AgeRatingDetail from "@/components/products/AgeRatingDetail";
 import ArrowTopLeft from "@/components/icons/ArrowTopLeft";
 import VariantSection from "@/components/products/VariantSection";
 import SimilarProductsCarousel from "@/components/products/SimilarProductsCarousel";
+import ProductGalleryCarousel from "@/components/products/ProductGalleryCarousel";
 
 
 const DetailProduct: NextPage<any> = ({ productData }:
@@ -42,6 +43,12 @@ const DetailProduct: NextPage<any> = ({ productData }:
     })
   }
 
+
+  console.log({
+    productData:productData.galleries
+  });
+  
+
   return (
     <>
       {!!breadcrumbsItems.length && (
@@ -51,6 +58,12 @@ const DetailProduct: NextPage<any> = ({ productData }:
           textColorClass="text-neutral-300"
         />
       )}
+
+
+
+      {
+        productData.galleries && (<ProductGalleryCarousel galleries={productData.galleries}/>)
+      }
 
       {productData.filePath && (
         <div className="p-4">
