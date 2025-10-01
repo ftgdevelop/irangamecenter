@@ -14,8 +14,8 @@ const CalculateAvailableFilters = () => {
         const fetchData = async () => {
 
             const parameters: GetAllProductsParams = {
-                SkipCount: 0,
-                MaxResultCount: 300
+                skipCount: 0,
+                maxResultCount: 300
             }
             const productsResponse: any = await getProducts(parameters);
 
@@ -35,7 +35,7 @@ const CalculateAvailableFilters = () => {
                 slug?: string;
             }[] = [];
 
-            if (allProducts.length) {
+            if (allProducts?.length) {
                 for (const item of allProducts) {
 
                     if (item.variants?.length) {

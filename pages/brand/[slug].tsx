@@ -67,9 +67,9 @@ const Brand: NextPage<Props> = props => {
     setLoading(true);
 
     const productsResponse: any = await getProducts({
-      MaxResultCount: 10,
-      SkipCount: (page - 1) * 10,
-      Brands:slug? [slug] : undefined
+      maxResultCount: 10,
+      skipCount: (page - 1) * 10,
+      brands:slug? [slug] : undefined
     });
     if (productsResponse?.data?.result?.items) {
       setProducts(prevProducts => [...prevProducts, ...productsResponse.data.result.items]);
@@ -161,9 +161,9 @@ export async function getServerSideProps(context: any) {
   const [brandResponse, productsResponse] = await Promise.all<any>([
     getBrandBySlug(context?.query?.slug),
     context?.query?.slug ? getProducts({
-      MaxResultCount: 10,
-      SkipCount: 0,
-      Brands: [context.query.slug]
+      maxResultCount: 10,
+      skipCount: 0,
+      brands: [context.query.slug]
     }) : null
   ]);
 

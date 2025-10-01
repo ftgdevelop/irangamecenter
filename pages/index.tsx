@@ -221,11 +221,11 @@ export const getStaticProps = async (context: any) => {
     getStrapiHighlight('locale=fa&populate[Item][populate]=*'),
     getStrapiPages('filters[Page][$eq]=aboutUs&locale=fa&populate[Sections][populate]=*'),
     getBlogs({page:1,per_page:5}),
-    getProducts({SkipCount:0, MaxResultCount:10, VariantSlug:["playstation-5"]}),
-    getProducts({SkipCount:0, MaxResultCount:10, VariantSlug:["playstation-4"]}),
-    getProducts({SkipCount:0, MaxResultCount:10, VariantSlug:["steam"]}),
-    getProducts({SkipCount:0, MaxResultCount:10, VariantSlug:["xbox-one"]}),
-    getProducts({SkipCount:0, MaxResultCount:10, VariantSlug:["xbox-series-x/s"]})
+    getProducts({skipCount:0, maxResultCount:10, variants:["playstation-5"]}),
+    getProducts({skipCount:0, maxResultCount:10, variants:["playstation-4"]}),
+    getProducts({skipCount:0, maxResultCount:10, variants:["steam"]}),
+    getProducts({skipCount:0, maxResultCount:10, variants:["xbox-one"]}),
+    getProducts({skipCount:0, maxResultCount:10, variants:["xbox-series-x/s"]})
   ]);
 
   return ({

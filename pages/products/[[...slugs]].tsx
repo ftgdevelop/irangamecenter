@@ -54,12 +54,12 @@ const Products: NextPage<Props> = props => {
         });
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         const fff = async () => {
-            const res : any = await getAllForSiteMap({
+            const res: any = await getAllForSiteMap({
                 type: "Video",
-                MaxResultCount:5,
-                SkipCount:0
+                MaxResultCount: 5,
+                SkipCount: 0
             });
             console.dir(res.data?.result?.items);
             debugger;
@@ -67,7 +67,7 @@ const Products: NextPage<Props> = props => {
 
         fff();
 
-    },[]);
+    }, []);
 
     const selectedPage = +(slugs?.find(x => x.includes("page-"))?.split("page-")?.[1] || 0);
 
@@ -109,43 +109,59 @@ const Products: NextPage<Props> = props => {
         }
 
         const parameters: GetAllProductsParams = {
-            SkipCount: 0,
-            MaxResultCount: 10
+            skipCount: 0,
+            maxResultCount: 10
         }
 
         if (selectedSort) {
-            parameters.sort = selectedSort;
+            switch (selectedSort) {
+                case "HighPrice":
+                    parameters.sortBy = "asc";
+                    parameters.orderBy = "Price";
+                    break;
+                case "LowPrice":
+                    parameters.sortBy = "desc";
+                    parameters.orderBy = "Price";
+                    break;
+                case "Sale":
+                    parameters.sortBy = "asc";
+                    parameters.orderBy = "Sale";
+                    break;
+                case "Visitor":
+                    parameters.sortBy = "asc";
+                    parameters.orderBy = "Visitor";
+                    break;
+                default:
+                    break;
+            }
         }
 
         if (filtered_developers?.length) {
-            parameters.Developer = filtered_developers;
+            parameters.developers = filtered_developers;
         }
         if (filtered_esrbs?.length) {
-            parameters.Esrb = filtered_esrbs;
+            parameters.esrbs = filtered_esrbs;
         }
         if (filtered_gameplays?.length) {
-            parameters.Gameplay = filtered_gameplays;
+            parameters.gameplays = filtered_gameplays;
         }
         if (filtered_genres?.length) {
-            parameters.Genres = filtered_genres;
+            parameters.genres = filtered_genres;
         }
         if (filtered_pegis?.length) {
-            parameters.Pegi = filtered_pegis;
+            parameters.pegis = filtered_pegis;
         }
         if (filtered_playerPerspectives?.length) {
-            parameters.PlayerPerspective = filtered_playerPerspectives;
+            parameters.playerPerspectives = filtered_playerPerspectives;
         }
         if (filtered_publishers?.length) {
-            parameters.Publisher = filtered_publishers;
+            parameters.publishers = filtered_publishers;
         }
         if (filtered_themes?.length) {
-            parameters.Theme = filtered_themes;
+            parameters.themes = filtered_themes;
         }
         if (filtered_variants?.length) {
-            parameters.VariantSlug = filtered_variants;
-        }
-        if (filtered_pegis?.length) {
-            parameters.Pegi = filtered_pegis;
+            parameters.variants = filtered_variants;
         }
 
         fetchData(parameters);
@@ -191,44 +207,60 @@ const Products: NextPage<Props> = props => {
         }
         setLoading(true);
 
-        const parameters :GetAllProductsParams = {
-            MaxResultCount: 10,
-            SkipCount: (page - 1) * 10
+        const parameters: GetAllProductsParams = {
+            maxResultCount: 10,
+            skipCount: (page - 1) * 10
         };
 
         if (selectedSort) {
-            parameters.sort = selectedSort;
+            switch (selectedSort) {
+                case "HighPrice":
+                    parameters.sortBy = "asc";
+                    parameters.orderBy = "Price";
+                    break;
+                case "LowPrice":
+                    parameters.sortBy = "desc";
+                    parameters.orderBy = "Price";
+                    break;
+                case "Sale":
+                    parameters.sortBy = "asc";
+                    parameters.orderBy = "Sale";
+                    break;
+                case "Visitor":
+                    parameters.sortBy = "asc";
+                    parameters.orderBy = "Visitor";
+                    break;
+                default:
+                    break;
+            }
         }
 
         if (filtered_developers?.length) {
-            parameters.Developer = filtered_developers;
+            parameters.developers = filtered_developers;
         }
         if (filtered_esrbs?.length) {
-            parameters.Esrb = filtered_esrbs;
+            parameters.esrbs = filtered_esrbs;
         }
         if (filtered_gameplays?.length) {
-            parameters.Gameplay = filtered_gameplays;
+            parameters.gameplays = filtered_gameplays;
         }
         if (filtered_genres?.length) {
-            parameters.Genres = filtered_genres;
+            parameters.genres = filtered_genres;
         }
         if (filtered_pegis?.length) {
-            parameters.Pegi = filtered_pegis;
+            parameters.pegis = filtered_pegis;
         }
         if (filtered_playerPerspectives?.length) {
-            parameters.PlayerPerspective = filtered_playerPerspectives;
+            parameters.playerPerspectives = filtered_playerPerspectives;
         }
         if (filtered_publishers?.length) {
-            parameters.Publisher = filtered_publishers;
+            parameters.publishers = filtered_publishers;
         }
         if (filtered_themes?.length) {
-            parameters.Theme = filtered_themes;
+            parameters.themes = filtered_themes;
         }
         if (filtered_variants?.length) {
-            parameters.VariantSlug = filtered_variants;
-        }
-        if (filtered_pegis?.length) {
-            parameters.Pegi = filtered_pegis;
+            parameters.variants = filtered_variants;
         }
 
         const productsResponse: any = await getProducts(parameters);
@@ -522,43 +554,59 @@ export async function getServerSideProps(context: any) {
 
 
     const parameters: GetAllProductsParams = {
-        SkipCount: selectedPage ? (selectedPage - 1) * 10 : 0,
-        MaxResultCount: 10
+        skipCount: selectedPage ? (selectedPage - 1) * 10 : 0,
+        maxResultCount: 10
     }
 
     if (selectedSort) {
-        parameters.sort = selectedSort;
+        switch (selectedSort) {
+            case "HighPrice":
+                parameters.sortBy = "asc";
+                parameters.orderBy = "Price";
+                break;
+            case "LowPrice":
+                parameters.sortBy = "desc";
+                parameters.orderBy = "Price";
+                break;
+            case "Sale":
+                parameters.sortBy = "asc";
+                parameters.orderBy = "Sale";
+                break;
+            case "Visitor":
+                parameters.sortBy = "asc";
+                parameters.orderBy = "Visitor";
+                break;
+            default:
+                break;
+        }
     }
 
     if (filtered_developers?.length) {
-        parameters.Developer = filtered_developers;
+        parameters.developers = filtered_developers;
     }
     if (filtered_esrbs?.length) {
-        parameters.Esrb = filtered_esrbs;
+        parameters.esrbs = filtered_esrbs;
     }
     if (filtered_gameplays?.length) {
-        parameters.Gameplay = filtered_gameplays;
+        parameters.gameplays = filtered_gameplays;
     }
     if (filtered_genres?.length) {
-        parameters.Genres = filtered_genres;
+        parameters.genres = filtered_genres;
     }
     if (filtered_pegis?.length) {
-        parameters.Pegi = filtered_pegis;
+        parameters.pegis = filtered_pegis;
     }
     if (filtered_playerPerspectives?.length) {
-        parameters.PlayerPerspective = filtered_playerPerspectives;
+        parameters.playerPerspectives = filtered_playerPerspectives;
     }
     if (filtered_publishers?.length) {
-        parameters.Publisher = filtered_publishers;
+        parameters.publishers = filtered_publishers;
     }
     if (filtered_themes?.length) {
-        parameters.Theme = filtered_themes;
+        parameters.themes = filtered_themes;
     }
     if (filtered_variants?.length) {
-        parameters.VariantSlug = filtered_variants;
-    }
-    if (filtered_pegis?.length) {
-        parameters.Pegi = filtered_pegis;
+        parameters.variants = filtered_variants;
     }
 
     const productsResponse: any = await getProducts(parameters);

@@ -71,10 +71,10 @@ export const Payment = {
   }
 
   export const Commerce = {
-    GetAll:"/api/services/app/Product/GetAll",
+    GetAllProducts:"/api/services/app/Product/SearchWithFacets",
     GetBySlug:"/api/services/app/Product/GetBySlug",
     GetBrandBySlug:"/api/services/app/Brand/GetBySlug",
-    GetAllForSiteMap:"/api/services/app/Product/GetAllForSiteMap"
+    GetAllForSiteMap:"/api/services/app/Product/GetAllForSiteMap",
   }
   
 

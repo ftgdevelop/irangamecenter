@@ -235,26 +235,25 @@ export interface ProductDetailData {
 }
 
 export interface GetAllProductsParams {
-    SkipCount: number;
-    MaxResultCount: number;
-    Brands?: string[];
-    Categories?: string[];
-    Tags?: string[];
-    sort?: ProductSortKeywords;
-    VariantSlug?: string[];
-    Search?: string;
+    skipCount: number;
+    maxResultCount: number;
+    brands?: string[];
+    categories?: string[];
+    ids?: number[];
+    search?: string;
+    tags?: string[];
+    pegis?: string[];
+    variants?: string[];
+    esrbs?: string[];
+    themes?: string[];
+    playerPerspectives?: string[];
+    gameplays?: string[];
+    genres?: string[];
+    publishers?: string[];
+    developers?: string[];
 
-    Pegi?: string[];
-    // variants: first child
-
-    Esrb?: string[];
-    Theme?: string[];
-    PlayerPerspective?: string[];
-    Gameplay?: string[];
-    Genres?: string[];
-    Publisher?: string[];
-    Developer?: string[];
-
+    orderBy?: unknown;
+    sortBy?: unknown;
 }
 
 export type FilterItems = "publishers" | "developers" | "gameplays" | "genres" | "themes" | "playerPerspectives" | "pegis" | "esrbs" | "variants";
