@@ -3,7 +3,7 @@
 import { NextPage } from "next";
 import { useEffect, useRef, useState } from "react";
 import { getBrandBySlug, getProducts } from "@/actions/commerce";
-import {ProductItem } from "@/types/commerce";
+import {GetProductsResponseType, ProductItem } from "@/types/commerce";
 import BreadCrumpt from "@/components/shared/BreadCrumpt";
 import Contacts from "@/components/shared/Contacts";
 import Image from "next/image";
@@ -66,13 +66,13 @@ const Brand: NextPage<Props> = props => {
     }
     setLoading(true);
 
-    const productsResponse: any = await getProducts({
+    const productsResponse: GetProductsResponseType = await getProducts({
       maxResultCount: 10,
       skipCount: (page - 1) * 10,
       brands:slug? [slug] : undefined
     });
-    if (productsResponse?.data?.result?.items) {
-      setProducts(prevProducts => [...prevProducts, ...productsResponse.data.result.items]);
+    if (productsResponse?.data?.result?.pagedResult?.items) {
+      setProducts(prevProducts => [...prevProducts, ...productsResponse?.data?.result?.pagedResult?.items || [] ]);
     } else {
       removeListener();
     }
@@ -171,7 +171,7 @@ export async function getServerSideProps(context: any) {
     {
       props: {
         brandData: brandResponse.data?.result || null,
-        productsData: productsResponse.data?.result || null,
+        productsData: productsResponse.data?.result?.pagedResult?.items || null,
         slug: context?.query?.slug || null
       }
     }

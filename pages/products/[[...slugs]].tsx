@@ -5,8 +5,8 @@ import Contacts from "@/components/shared/Contacts";
 import BreadCrumpt from "@/components/shared/BreadCrumpt";
 import { useEffect, useRef, useState } from "react";
 import Skeleton from "@/components/shared/Skeleton";
-import { getAllForSiteMap, getProducts, ProductSortKeywords } from "@/actions/commerce";
-import { GetAllProductsParams, ProductItem } from "@/types/commerce";
+import { getProducts, ProductSortKeywords } from "@/actions/commerce";
+import { GetAllProductsParams, GetProductsResponseType, ProductItem } from "@/types/commerce";
 import ProductListItem from "@/components/products/ProductListItem";
 import SortProducts from "@/components/products/SortProducts";
 import { useRouter } from "next/router";
@@ -17,10 +17,14 @@ import { openFilter } from "@/redux/productsSlice";
 import Filter from "@/components/icons/Filter";
 import { DownCaretThick } from "@/components/icons/DownCaretThick";
 import { selectedFilter } from "@/helpers/productsHelper";
+import CalculateAvailableFilters from "@/components/products/CalculateAvailableFilters";
 
 type ProductsDataType = {
-    totalCount?: number;
-    items?: ProductItem[];
+    facets?:any;
+    pagedResult?:{
+        items?:ProductItem[];
+        totalCount?: number;
+    };
 }
 
 type Props = {
@@ -37,7 +41,7 @@ const Products: NextPage<Props> = props => {
 
     const slugs: string[] = (router?.query?.slugs as string[]) || [];
 
-    const [products, setProducts] = useState<ProductItem[]>(props.productsData?.items || []);
+    const [products, setProducts] = useState<ProductItem[]>(props.productsData?.pagedResult?.items || []);
     const [fetchMode, setFetchMode] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
 
@@ -53,21 +57,6 @@ const Products: NextPage<Props> = props => {
             pathname: newUrl,
         });
     }
-
-    useEffect(() => {
-        const fff = async () => {
-            const res: any = await getAllForSiteMap({
-                type: "Video",
-                MaxResultCount: 5,
-                SkipCount: 0
-            });
-            console.dir(res.data?.result?.items);
-            debugger;
-        }
-
-        fff();
-
-    }, []);
 
     const selectedPage = +(slugs?.find(x => x.includes("page-"))?.split("page-")?.[1] || 0);
 
@@ -99,9 +88,10 @@ const Products: NextPage<Props> = props => {
             setLoading(true);
             setProducts([]);
 
-            const productsResponse: any = await getProducts(params);
-            if (productsResponse?.data?.result?.items) {
-                setProducts(productsResponse.data.result.items);
+            const productsResponse: GetProductsResponseType = await getProducts(params);
+
+            if (productsResponse?.data?.result?.pagedResult?.items) {
+                setProducts(productsResponse.data.result.pagedResult.items);
                 document.addEventListener('scroll', checkIsInView);
                 window.addEventListener("resize", checkIsInView);
             }
@@ -201,7 +191,7 @@ const Products: NextPage<Props> = props => {
 
         const page = Math.ceil(products.length / 10) + 1;
 
-        if (props.productsData?.totalCount && products.length >= props.productsData?.totalCount) {
+        if (props.productsData?.pagedResult?.totalCount && products.length >= props.productsData.pagedResult.totalCount) {
             removeListener();
             return;
         }
@@ -263,10 +253,10 @@ const Products: NextPage<Props> = props => {
             parameters.variants = filtered_variants;
         }
 
-        const productsResponse: any = await getProducts(parameters);
+        const productsResponse: GetProductsResponseType = await getProducts(parameters);
 
-        if (productsResponse?.data?.result?.items) {
-            setProducts(prevProducts => [...prevProducts, ...productsResponse.data.result.items]);
+        if (productsResponse?.data?.result?.pagedResult?.items) {
+            setProducts(prevProducts => [...prevProducts, ...productsResponse?.data?.result?.pagedResult?.items || []]);
         } else {
             removeListener();
         }
@@ -300,7 +290,7 @@ const Products: NextPage<Props> = props => {
 
     // useEffect(() => {
     //     const fetchData = async (params: GetAllProductsParams) => {
-    //         const productsResponse: any = await getProducts(params);
+    //         const productsResponse: GetProductsResponseType = await getProducts(params);
     //         const allProducts: ProductItem[] = productsResponse?.data?.result?.items;
     //     }
     //     const parameters: GetAllProductsParams = {
@@ -490,11 +480,11 @@ const Products: NextPage<Props> = props => {
                     </div>
                 ))}
 
-                {!!(props.productsData?.totalCount && products.length < props.productsData.totalCount) && (
+                {!!(props.productsData?.pagedResult?.totalCount && products.length < props.productsData.pagedResult.totalCount) && (
                     <div ref={loadMoreWrapper}>
                         <Pagination2
                             onChange={e => { changePageHandel(e) }}
-                            totalItems={props.productsData.totalCount}
+                            totalItems={props.productsData.pagedResult.totalCount}
                             itemsPerPage={10}
                             currentPage={selectedPage || 5}
                         />
@@ -517,6 +507,8 @@ const Products: NextPage<Props> = props => {
             <Contacts />
 
             <FilterProducts />
+
+            <CalculateAvailableFilters filters={props.productsData?.facets} />
 
         </>
     )
@@ -609,7 +601,7 @@ export async function getServerSideProps(context: any) {
         parameters.variants = filtered_variants;
     }
 
-    const productsResponse: any = await getProducts(parameters);
+    const productsResponse: GetProductsResponseType = await getProducts(parameters);
 
     return (
         {

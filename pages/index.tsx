@@ -83,8 +83,11 @@ type BannerItemType = {
 }
 
 type ProductsDataType = {
-  totalCount?: number;
-  items?: ProductItem[];
+    facets?:any;
+    pagedResult?:{
+        items?:ProductItem[];
+        totalCount?: number;
+    };
 }
 
 type Props = {
@@ -188,11 +191,11 @@ const Home: NextPage<Props> = props => {
       />
 
       <BestSellers 
-        playstation5Products={playstation5Data?.items}
-        playstation4Products={playstation4Data?.items}
-        steamProducts={steamData?.items}
-        xboxOneProducts={xboxOneData?.items}
-        xboxSeriesXsProducts={xboxSeriesXsData?.items}
+        playstation5Products={playstation5Data?.pagedResult?.items}
+        playstation4Products={playstation4Data?.pagedResult?.items}
+        steamProducts={steamData?.pagedResult?.items}
+        xboxOneProducts={xboxOneData?.pagedResult?.items}
+        xboxSeriesXsProducts={xboxSeriesXsData?.pagedResult?.items}
       />
 
       {!!recentBlogs?.length && <BlogsCarousel blogs={recentBlogs} />}

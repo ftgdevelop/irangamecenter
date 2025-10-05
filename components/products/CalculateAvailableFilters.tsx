@@ -3,11 +3,17 @@
 import { getProducts } from "@/actions/commerce";
 import { useAppDispatch } from "@/hooks/use-store";
 import { setAvailableFilters } from "@/redux/productsSlice";
-import { GetAllProductsParams, ProductItem } from "@/types/commerce";
+import { GetAllProductsParams, GetProductsResponseType, ProductItem } from "@/types/commerce";
 import { useEffect } from "react";
 
-const CalculateAvailableFilters = () => {
+type Props = {
+    filters: any;
+}
 
+const CalculateAvailableFilters: React.FC<Props> = props => {
+
+    console.log(props);
+    
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -17,9 +23,9 @@ const CalculateAvailableFilters = () => {
                 skipCount: 0,
                 maxResultCount: 300
             }
-            const productsResponse: any = await getProducts(parameters);
+            const productsResponse: GetProductsResponseType = await getProducts(parameters);
 
-            const allProducts: ProductItem[] = productsResponse?.data?.result?.items;
+            const allProducts: ProductItem[] = productsResponse?.data?.result?.pagedResult?.items || [];
 
             const publishers: ProductItem["publisher"][] = [];
             const developers: ProductItem["developer"][] = [];

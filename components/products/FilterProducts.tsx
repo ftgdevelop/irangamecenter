@@ -10,7 +10,6 @@ import Accordion from "../shared/Accordion";
 import { openFilter } from "@/redux/productsSlice";
 import { useRouter } from "next/router";
 import { FilterItems } from "@/types/commerce";
-import CalculateAvailableFilters from "./CalculateAvailableFilters";
 
 const FilterProducts = () => {
 
@@ -57,8 +56,6 @@ const FilterProducts = () => {
 
     return (
         <>
-
-            <CalculateAvailableFilters />
 
             <ModalPortal
                 show={!!openedFilter}

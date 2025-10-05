@@ -257,3 +257,17 @@ export interface GetAllProductsParams {
 }
 
 export type FilterItems = "publishers" | "developers" | "gameplays" | "genres" | "themes" | "playerPerspectives" | "pegis" | "esrbs" | "variants";
+
+export interface GetProductsResponseType{
+    data?: {
+        result?: {
+            facets?: {
+
+            }[];
+            pagedResult?: {
+                items?: ProductItem[];
+                totalCount?: number;
+            };
+        }
+    }
+}
