@@ -234,40 +234,36 @@ export interface ProductDetailData {
     galleries?:ProductGalleryItem[]
 }
 
-export interface GetAllProductsParams {
-    skipCount: number;
-    maxResultCount: number;
-    brands?: string[];
-    categories?: string[];
-    ids?: number[];
-    search?: string;
-    tags?: string[];
-    pegis?: string[];
-    variants?: string[];
-    esrbs?: string[];
-    themes?: string[];
-    playerPerspectives?: string[];
-    gameplays?: string[];
-    genres?: string[];
-    publishers?: string[];
-    developers?: string[];
-
-    orderBy?: unknown;
-    sortBy?: unknown;
+export type GetAllProductsParams = {
+  skipCount: number;
+  maxResultCount: number;
+  search?: string;
+  orderBy?: unknown;
+  sortBy?: unknown;
+} & {
+  [key: string]: string[] | number | string | unknown;
 }
 
 export type FilterItems = "publishers" | "developers" | "gameplays" | "genres" | "themes" | "playerPerspectives" | "pegis" | "esrbs" | "variants";
 
-export interface GetProductsResponseType{
+export interface Facet {
+    key: string;
+    label?: string;
+    items?: {
+        count: number;
+        value: string;
+        label?: string;
+    }[]
+}
+export interface GetProductsDataType {
+    facets?: Facet[];
+    pagedResult?: {
+        items?: ProductItem[];
+        totalCount?: number;
+    };
+}
+export interface GetProductsResponseType {
     data?: {
-        result?: {
-            facets?: {
-
-            }[];
-            pagedResult?: {
-                items?: ProductItem[];
-                totalCount?: number;
-            };
-        }
+        result?: GetProductsDataType;
     }
 }

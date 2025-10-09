@@ -18,7 +18,7 @@ import { getBlogs } from "@/actions/blog";
 import { BlogItemType } from "@/types/blog";
 import BlogsCarousel from "@/components/blog/BlogsCarousel";
 import { getProducts } from "@/actions/commerce";
-import { ProductItem } from "@/types/commerce";
+import { GetProductsDataType } from "@/types/commerce";
 import SimilarProductsCarousel from "@/components/products/SimilarProductsCarousel";
 
 type HomeAboutDataType = {
@@ -82,24 +82,16 @@ type BannerItemType = {
   }
 }
 
-type ProductsDataType = {
-    facets?:any;
-    pagedResult?:{
-        items?:ProductItem[];
-        totalCount?: number;
-    };
-}
-
 type Props = {
   homeSections?: HomeSections[];
   homeHighlights?: HighlightItemType[];
   homeAboutData?: HomeAboutDataType;
   recentBlogs?: BlogItemType[];
-  playstation5Data?: ProductsDataType;
-  playstation4Data?: ProductsDataType;
-  steamData?: ProductsDataType;
-  xboxOneData?: ProductsDataType;
-  xboxSeriesXsData?: ProductsDataType;
+  playstation5Data?: GetProductsDataType;
+  playstation4Data?: GetProductsDataType;
+  steamData?: GetProductsDataType;
+  xboxOneData?: GetProductsDataType;
+  xboxSeriesXsData?: GetProductsDataType;
 }
 
 

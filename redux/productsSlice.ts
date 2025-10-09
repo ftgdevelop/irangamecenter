@@ -17,7 +17,7 @@ type Products = {
             slug?: string;
         }[];
     };
-    openedFilter: FilterItems | "" | "all";
+    openedFilter: string | "" | "all";
 };
 
 const initialState: Products = {
@@ -42,7 +42,7 @@ export const productsSlice = createSlice({
         setAvailableFilters: (state, action) => {
             state.availableFilters = action.payload;
         },
-        openFilter: (state, action: PayloadAction<FilterItems | "" | "all">) => {
+        openFilter: (state, action: PayloadAction<string | "" | "all">) => {
             state.openedFilter = action.payload;
         },
     }

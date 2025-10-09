@@ -6,29 +6,20 @@ import BreadCrumpt from "@/components/shared/BreadCrumpt";
 import { useEffect, useRef, useState } from "react";
 import Skeleton from "@/components/shared/Skeleton";
 import { getProducts, ProductSortKeywords } from "@/actions/commerce";
-import { GetAllProductsParams, GetProductsResponseType, ProductItem } from "@/types/commerce";
+import { GetAllProductsParams, GetProductsDataType, GetProductsResponseType, ProductItem } from "@/types/commerce";
 import ProductListItem from "@/components/products/ProductListItem";
 import SortProducts from "@/components/products/SortProducts";
 import { useRouter } from "next/router";
-import FilterProducts from "@/components/products/FilterProducts";
 import Pagination2 from "@/components/shared/Pagination2";
 import { useAppDispatch } from "@/hooks/use-store";
 import { openFilter } from "@/redux/productsSlice";
 import Filter from "@/components/icons/Filter";
 import { DownCaretThick } from "@/components/icons/DownCaretThick";
-import { selectedFilter } from "@/helpers/productsHelper";
-import CalculateAvailableFilters from "@/components/products/CalculateAvailableFilters";
-
-type ProductsDataType = {
-    facets?:any;
-    pagedResult?:{
-        items?:ProductItem[];
-        totalCount?: number;
-    };
-}
+import ProductsFliter from "@/components/products/ProductsFliter";
+import { groupByPrefix } from "@/helpers";
 
 type Props = {
-    productsData?: ProductsDataType;
+    productsData?: GetProductsDataType;
     slugs?: string;
     page?: number;
     parameters___?: any;
@@ -71,15 +62,11 @@ const Products: NextPage<Props> = props => {
 
     const selectedSort = slugs?.find(x => x.includes("sort-"))?.split("sort-")?.[1] as ProductSortKeywords;
 
-    const filtered_developers = selectedFilter(slugs, "developers");
-    const filtered_esrbs = selectedFilter(slugs, "esrbs");
-    const filtered_gameplays = selectedFilter(slugs, "gameplays");
-    const filtered_genres = selectedFilter(slugs, "genres");
-    const filtered_pegis = selectedFilter(slugs, "pegis");
-    const filtered_playerPerspectives = selectedFilter(slugs, "playerPerspectives");
-    const filtered_publishers = selectedFilter(slugs, "publishers");
-    const filtered_themes = selectedFilter(slugs, "themes");
-    const filtered_variants = selectedFilter(slugs, "variants");
+    const selectedFilterSlugs = slugs?.filter(x => (!x.includes("sort-") && !x.includes("page-"))) || [];
+
+    const selectedDynamicFilterSlugs = selectedFilterSlugs?.filter(x => (!x.includes("search-"))) || [];
+
+    const selectedDynamicFiltersArray = groupByPrefix(selectedDynamicFilterSlugs);
 
     useEffect(() => {
 
@@ -126,47 +113,15 @@ const Products: NextPage<Props> = props => {
             }
         }
 
-        if (filtered_developers?.length) {
-            parameters.developers = filtered_developers;
-        }
-        if (filtered_esrbs?.length) {
-            parameters.esrbs = filtered_esrbs;
-        }
-        if (filtered_gameplays?.length) {
-            parameters.gameplays = filtered_gameplays;
-        }
-        if (filtered_genres?.length) {
-            parameters.genres = filtered_genres;
-        }
-        if (filtered_pegis?.length) {
-            parameters.pegis = filtered_pegis;
-        }
-        if (filtered_playerPerspectives?.length) {
-            parameters.playerPerspectives = filtered_playerPerspectives;
-        }
-        if (filtered_publishers?.length) {
-            parameters.publishers = filtered_publishers;
-        }
-        if (filtered_themes?.length) {
-            parameters.themes = filtered_themes;
-        }
-        if (filtered_variants?.length) {
-            parameters.variants = filtered_variants;
+        for (const key in selectedDynamicFiltersArray) {
+            parameters[key] = selectedDynamicFiltersArray[key];
         }
 
         fetchData(parameters);
 
     }, [
         selectedSort,
-        filtered_developers?.length,
-        filtered_esrbs?.length,
-        filtered_gameplays?.length,
-        filtered_genres?.length,
-        filtered_pegis?.length,
-        filtered_playerPerspectives?.length,
-        filtered_publishers?.length,
-        filtered_themes?.length,
-        filtered_variants?.length
+        slugs.length
     ]);
 
 
@@ -225,32 +180,8 @@ const Products: NextPage<Props> = props => {
             }
         }
 
-        if (filtered_developers?.length) {
-            parameters.developers = filtered_developers;
-        }
-        if (filtered_esrbs?.length) {
-            parameters.esrbs = filtered_esrbs;
-        }
-        if (filtered_gameplays?.length) {
-            parameters.gameplays = filtered_gameplays;
-        }
-        if (filtered_genres?.length) {
-            parameters.genres = filtered_genres;
-        }
-        if (filtered_pegis?.length) {
-            parameters.pegis = filtered_pegis;
-        }
-        if (filtered_playerPerspectives?.length) {
-            parameters.playerPerspectives = filtered_playerPerspectives;
-        }
-        if (filtered_publishers?.length) {
-            parameters.publishers = filtered_publishers;
-        }
-        if (filtered_themes?.length) {
-            parameters.themes = filtered_themes;
-        }
-        if (filtered_variants?.length) {
-            parameters.variants = filtered_variants;
+        for (const key in selectedDynamicFiltersArray) {
+            parameters[key] = selectedDynamicFiltersArray[key];
         }
 
         const productsResponse: GetProductsResponseType = await getProducts(parameters);
@@ -273,80 +204,8 @@ const Products: NextPage<Props> = props => {
         }
     }
 
-    // useEffect(() => {
-    //     if (!props.queryPage) {
-    //         document.addEventListener('scroll', checkIsInView);
-    //         window.addEventListener("resize", checkIsInView);
-    //     } else {
-    //         document.removeEventListener('scroll', checkIsInView);
-    //         window.removeEventListener("resize", checkIsInView);
-    //     }
 
-    //     return (() => {
-    //         document.removeEventListener('scroll', checkIsInView);
-    //         window.removeEventListener("resize", checkIsInView);
-    //     });
-    // }, [props.queryPage]);
-
-    // useEffect(() => {
-    //     const fetchData = async (params: GetAllProductsParams) => {
-    //         const productsResponse: GetProductsResponseType = await getProducts(params);
-    //         const allProducts: ProductItem[] = productsResponse?.data?.result?.items;
-    //     }
-    //     const parameters: GetAllProductsParams = {
-    //         SkipCount: props.queryPage ? (props.queryPage - 1) * 10 : 0,
-    //         MaxResultCount: 10
-    //     }
-    //     if (selectedFilters.developers.length) {
-    //         parameters.Developer = selectedFilters.developers;
-    //     }
-    //     if (selectedFilters.esrbs.length) {
-    //         parameters.Esrb = selectedFilters.esrbs;
-    //     }
-    //     if (selectedFilters.gameplays.length) {
-    //         parameters.Gameplay = selectedFilters.gameplays;
-    //     }
-    //     if (selectedFilters.genres.length) {
-    //         parameters.Genres = selectedFilters.genres;
-    //     }
-    //     if (selectedFilters.name.length) {
-    //         parameters.Search = selectedFilters.name;
-    //     }
-
-    //     if (selectedFilters.pegis.length) {
-    //         parameters.Pegi = selectedFilters.pegis;
-    //     }
-    //     if (selectedFilters.playerPerspectives.length) {
-    //         parameters.PlayerPerspective = selectedFilters.playerPerspectives;
-    //     }
-    //     if (selectedFilters.publishers.length) {
-    //         parameters.Publisher = selectedFilters.publishers;
-    //     }
-    //     if (selectedFilters.themes.length) {
-    //         parameters.Theme = selectedFilters.themes;
-    //     }
-    //     if (selectedFilters.variants.length) {
-    //         parameters.VariantSlug = selectedFilters.variants;
-    //     }
-
-    //     fetchData(parameters);
-
-    // }, [
-    //     selectedFilters.developers.length,
-    //     selectedFilters.esrbs.length,
-    //     selectedFilters.gameplays.length,
-    //     selectedFilters.genres.length,
-    //     selectedFilters.name.length,
-    //     selectedFilters.pegis.length,
-    //     selectedFilters.playerPerspectives.length,
-    //     selectedFilters.playerPerspectives.length,
-    //     selectedFilters.publishers.length,
-    //     selectedFilters.themes.length,
-    //     selectedFilters.variants.length
-    // ]);
-
-
-    const isFiltered = filtered_developers?.length || filtered_esrbs?.length || filtered_gameplays?.length || filtered_genres?.length || filtered_pegis?.length || filtered_playerPerspectives?.length || filtered_publishers?.length || filtered_themes?.length || filtered_variants?.length;
+    const isFiltered = !!selectedFilterSlugs.length;
 
 
     const activeFilterColor = "bg-gradient-to-t from-[#fe4c69] to-[#ff9a90]"
@@ -375,86 +234,19 @@ const Products: NextPage<Props> = props => {
                         فیلتر
                     </button>
 
-                    <button
-                        type="button"
-                        className={`inline-flex gap-2 items-center justify-between rounded-full px-5 py-2.5 text-2xs select-none ${filtered_variants?.length ? activeFilterColor : "bg-[#192a39]"}`}
-                        onClick={() => { dispatch(openFilter("variants")) }}
-                    >
-                        Platform
-                        <DownCaretThick className="w-3 h-3 fill-current" />
-                    </button>
-
-                    <button
-                        type="button"
-                        className={`inline-flex gap-2 items-center justify-between rounded-full px-5 py-2.5 text-2xs select-none ${filtered_playerPerspectives?.length ? activeFilterColor : "bg-[#192a39]"}`}
-                        onClick={() => { dispatch(openFilter("playerPerspectives")) }}
-                    >
-                        زاویه دید
-                        <DownCaretThick className="w-3 h-3 fill-current" />
-                    </button>
-
-                    <button
-                        type="button"
-                        className={`inline-flex gap-2 items-center justify-between rounded-full px-5 py-2.5 text-2xs select-none ${filtered_publishers?.length ? activeFilterColor : "bg-[#192a39]"}`}
-                        onClick={() => { dispatch(openFilter("publishers")) }}
-                    >
-                        ناشر
-                        <DownCaretThick className="w-3 h-3 fill-current" />
-                    </button>
-
-                    <button
-                        type="button"
-                        className={`inline-flex gap-2 items-center justify-between rounded-full px-5 py-2.5 text-2xs select-none ${filtered_developers?.length ? activeFilterColor : "bg-[#192a39]"}`}
-                        onClick={() => { dispatch(openFilter("developers")) }}
-                    >
-                        توسعه دهنده
-                        <DownCaretThick className="w-3 h-3 fill-current" />
-                    </button>
-
-                    <button
-                        type="button"
-                        className={`inline-flex gap-2 items-center justify-between rounded-full px-5 py-2.5 text-2xs select-none ${filtered_genres?.length ? activeFilterColor : "bg-[#192a39]"}`}
-                        onClick={() => { dispatch(openFilter("genres")) }}
-                    >
-                        ژانر
-                        <DownCaretThick className="w-3 h-3 fill-current" />
-                    </button>
-
-                    <button
-                        type="button"
-                        className={`inline-flex gap-2 items-center justify-between rounded-full px-5 py-2.5 text-2xs select-none ${filtered_themes?.length ? activeFilterColor : "bg-[#192a39]"}`}
-                        onClick={() => { dispatch(openFilter("themes")) }}
-                    >
-                        تم بازی
-                        <DownCaretThick className="w-3 h-3 fill-current" />
-                    </button>
-
-                    <button
-                        type="button"
-                        className={`inline-flex gap-2 items-center justify-between rounded-full px-5 py-2.5 text-2xs select-none ${filtered_gameplays?.length ? activeFilterColor : "bg-[#192a39]"}`}
-                        onClick={() => { dispatch(openFilter("gameplays")) }}
-                    >
-                        حالت بازی
-                        <DownCaretThick className="w-3 h-3 fill-current" />
-                    </button>
-
-                    <button
-                        type="button"
-                        className={`inline-flex gap-2 items-center justify-between rounded-full px-5 py-2.5 text-2xs select-none ${filtered_pegis?.length ? activeFilterColor : "bg-[#192a39]"}`}
-                        onClick={() => { dispatch(openFilter("pegis")) }}
-                    >
-                        رده بندی سنی اروپا
-                        <DownCaretThick className="w-3 h-3 fill-current" />
-                    </button>
-
-                    <button
-                        type="button"
-                        className={`inline-flex gap-2 items-center justify-between rounded-full px-5 py-2.5 text-2xs select-none ${filtered_esrbs?.length ? activeFilterColor : "bg-[#192a39]"}`}
-                        onClick={() => { dispatch(openFilter("esrbs")) }}
-                    >
-                        رده بندی سنی آمریکا
-                        <DownCaretThick className="w-3 h-3 fill-current" />
-                    </button>
+                    {props.productsData?.facets?.map(facet => (
+                        <button
+                            key={facet.key}
+                            type="button"
+                            className={`inline-flex gap-2 items-center justify-between rounded-full px-5 py-2.5 text-2xs select-none ${slugs.find(x => x.includes(facet.key)) ? activeFilterColor : "bg-[#192a39]"}`}
+                            onClick={() => { 
+                                dispatch(openFilter(facet.key)) 
+                            }}
+                        >
+                            {facet.label}
+                            <DownCaretThick className="w-3 h-3 fill-current" />
+                        </button>
+                    ))}
 
                     <div className="w-1 shrink-0" />
 
@@ -506,9 +298,9 @@ const Products: NextPage<Props> = props => {
 
             <Contacts />
 
-            <FilterProducts />
+            {!!(props.productsData?.facets?.length) && <ProductsFliter filters={props.productsData?.facets} />}
 
-            <CalculateAvailableFilters filters={props.productsData?.facets} />
+            {/* <FilterProducts /> */}
 
         </>
     )
@@ -529,20 +321,15 @@ export async function getServerSideProps(context: any) {
     const { query } = context;
     const slugs = query.slugs as string[];
 
-
     const selectedPage = +(slugs?.find(x => x.includes("page-"))?.split("page-")?.[1] || 0);
 
     const selectedSort = slugs?.find(x => x.includes("sort-"))?.split("sort-")?.[1] as ProductSortKeywords;
 
-    const filtered_developers = selectedFilter(slugs, "developers");
-    const filtered_esrbs = selectedFilter(slugs, "esrbs");
-    const filtered_gameplays = selectedFilter(slugs, "gameplays");
-    const filtered_genres = selectedFilter(slugs, "genres");
-    const filtered_pegis = selectedFilter(slugs, "pegis");
-    const filtered_playerPerspectives = selectedFilter(slugs, "playerPerspectives");
-    const filtered_publishers = selectedFilter(slugs, "publishers");
-    const filtered_themes = selectedFilter(slugs, "themes");
-    const filtered_variants = selectedFilter(slugs, "variants");
+    const selectedFilterSlugs = slugs?.filter(x => (!x.includes("sort-") && !x.includes("page-"))) || [];
+
+    const selectedDynamicFilterSlugs = selectedFilterSlugs?.filter(x => (!x.includes("search-"))) || [];
+
+    const selectedDynamicFiltersArray = groupByPrefix(selectedDynamicFilterSlugs);
 
 
     const parameters: GetAllProductsParams = {
@@ -572,33 +359,9 @@ export async function getServerSideProps(context: any) {
                 break;
         }
     }
-
-    if (filtered_developers?.length) {
-        parameters.developers = filtered_developers;
-    }
-    if (filtered_esrbs?.length) {
-        parameters.esrbs = filtered_esrbs;
-    }
-    if (filtered_gameplays?.length) {
-        parameters.gameplays = filtered_gameplays;
-    }
-    if (filtered_genres?.length) {
-        parameters.genres = filtered_genres;
-    }
-    if (filtered_pegis?.length) {
-        parameters.pegis = filtered_pegis;
-    }
-    if (filtered_playerPerspectives?.length) {
-        parameters.playerPerspectives = filtered_playerPerspectives;
-    }
-    if (filtered_publishers?.length) {
-        parameters.publishers = filtered_publishers;
-    }
-    if (filtered_themes?.length) {
-        parameters.themes = filtered_themes;
-    }
-    if (filtered_variants?.length) {
-        parameters.variants = filtered_variants;
+    
+    for (const key in selectedDynamicFiltersArray) {
+        parameters[key] = selectedDynamicFiltersArray[key];
     }
 
     const productsResponse: GetProductsResponseType = await getProducts(parameters);

@@ -7,9 +7,6 @@ import axios from "axios";
 const apikey = "ACE01BF4-AAEE-45D6-ABE7-F3FF519052DB"
 
 export const getProducts = async (params: GetAllProductsParams, acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
-    
-    debugger;
-
     try {
 
         const response = await axios.post(
