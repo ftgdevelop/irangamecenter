@@ -46,6 +46,7 @@ export interface ProductItem {
     };
 
     variants?: ProductVariant[];
+    minVariant?:Omit<ProductVariant, "children">;
     gameplay?: {
         keyword?: string;
         name?: string;
@@ -231,7 +232,14 @@ export interface ProductDetailData {
     }
     variants?: ProductVariant[];
     similar?:ProductItem[];
-    galleries?:ProductGalleryItem[]
+    galleries?:ProductGalleryItem[];
+    page?:{
+        title?: string;
+        richSnippet?: string;
+        metas?: {
+             [key: string]: string;
+        }
+    }
 }
 
 export type GetAllProductsParams = {

@@ -17,7 +17,7 @@ import AgeRatingDetail from "@/components/products/AgeRatingDetail";
 import ArrowTopLeft from "@/components/icons/ArrowTopLeft";
 import VariantSection from "@/components/products/VariantSection";
 import SimilarProductsCarousel from "@/components/products/SimilarProductsCarousel";
-
+import Head from "next/head";
 
 const DetailProduct: NextPage<any> = ({ productData }:
   { productData: ProductDetailData }) => {
@@ -42,8 +42,31 @@ const DetailProduct: NextPage<any> = ({ productData }:
     })
   }
 
+  const metas: { property: string; content: string }[] = [];
+
+  for (const m in productData.page?.metas) {
+    metas.push({
+      property: m,
+      content: productData.page?.metas[m]
+    })
+  }
+
+
   return (
     <>
+      <Head>
+
+        {productData.page?.title && <title> {productData.page.title} </title>}
+
+        {metas?.map((meta, index) => <meta key={index} property={meta.property} content={meta.content} />)}
+
+        {productData.page?.richSnippet && <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON.parse(productData.page.richSnippet)) }}
+        />}
+
+      </Head>
+
       {!!breadcrumbsItems.length && (
         <BreadCrumpt
           items={breadcrumbsItems}
@@ -52,23 +75,24 @@ const DetailProduct: NextPage<any> = ({ productData }:
         />
       )}
 
-      {productData.filePath && (
-        <div className="p-4">
+      <div className="flex gap-4 p-4">
+
+        {productData.filePath && (
           <Image
             src={productData.filePath}
             alt={productData.fileAltAttribute || productData.name || ""}
             width={400}
             height={200}
-            className="h-auto w-full block"
+            className="h-auto w-24 block rounded-xl"
             title={productData.fileTitleAttribute || productData.name}
           />
-        </div>
-      )}
+        )}
 
+        <h2 className="text-lg font-semibold block pt-3">{productData.name}</h2>
+
+      </div>
 
       <div className="px-4">
-
-        <h2 className="text-2xl font-semibold mb-4"> {productData.name}</h2>
 
         <div className="flex justify-between items-top mb-5">
           <strong className="text-sm"> مشخصات بازی </strong>
@@ -246,7 +270,7 @@ const DetailProduct: NextPage<any> = ({ productData }:
       <VariantSection
         variant={productData.variants}
       />
-      
+
       {/* <hr/><hr/><hr/><hr/><hr/><hr/><hr/>
 
       <label className="text-sm pointer-events-none mb-3 block px-4 mt-7">

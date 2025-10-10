@@ -381,14 +381,14 @@ export function groupByPrefix(items: string[]): Record<string, string[]> {
     const result: Record<string, string[]> = {};
 
     for (const item of items) {
-        const [key, value] = item.split("-");
+        const [key, ...value] = item.split("-");
         if (!key || !value) continue; 
 
         if (!result[key]) {
             result[key] = [];
         }
 
-        result[key].push(value);
+        result[key].push(value.join("-"));
     }
 
     return result;

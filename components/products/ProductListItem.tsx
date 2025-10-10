@@ -12,14 +12,12 @@ const ProductListItem: React.FC<Props> = props => {
 
     const { product } = props;
 
-    //const oldPrice = product.variants?.[0]?.items?.[0]?.regularPrice || 0;
-    const oldPrice = 0;
-    const price = product.variants?.[0]?.items?.[0]?.salePrice || 0;
+    const {salePrice, currencyType, regularPrice} = product.minVariant?.items?.[0] || {};
 
     let discountPercentage = 0;
 
-    if (price && oldPrice) {
-        const discount = ((oldPrice - price) / oldPrice) * 100;
+    if (salePrice && regularPrice) {
+        const discount = ((regularPrice - salePrice) / regularPrice) * 100;
         discountPercentage = Math.floor(discount);
     }
 
@@ -46,12 +44,12 @@ const ProductListItem: React.FC<Props> = props => {
                             </div>
                         )}
 
-                        {price ? (
+                        {salePrice ? (
                             <div className="text-xs text-left">
-                            {!!oldPrice && (
-                                <div className="text-[11px] mb-1 line-through">{numberWithCommas(oldPrice)} تومان </div>
+                            {!!regularPrice && (
+                                <div className="text-[11px] mb-1 line-through">{numberWithCommas(regularPrice)} {currencyType} </div>
                             )}
-                            {numberWithCommas(price)} تومان
+                            {numberWithCommas(salePrice)} {currencyType}
                         </div>
                         ):(
                             <div className="text-red-500 text-xs"> ناموجود </div>
