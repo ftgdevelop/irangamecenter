@@ -1,37 +1,17 @@
 "use client";
 
-import { useRef, useState, useMemo } from "react";
-import SlickSlider, { Settings as SlickSettings } from "react-slick";
+import { useRef } from "react";
+import SlickSlider from "react-slick";
 import type { ProductGalleryItem as ProductGalleryItemType } from "@/types/commerce";
 import ProductGalleryItem from "./ProductGalleryItem";
+import ProductGalleryThumbnail from "./ProductGalleryThumbnail";
 
 interface Props {
   galleries?: ProductGalleryItemType[];
 }
 
 const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-
   const playersRef = useRef<Map<string, HTMLVideoElement>>(new Map());
-
-  const sliderSettings: SlickSettings = useMemo(
-    () => ({
-      speed: 500,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      autoplay: true,
-      arrows: false,
-      afterChange: (current: number) => {
-        playersRef.current.forEach((video, id) => {
-          if (id !== String(galleries[current]?.id)) {
-            video.pause();
-          }
-        });
-        setCurrentSlide(current);
-      },
-    }),
-    [galleries],
-  );
 
   if (galleries.length === 0) {
     return (
@@ -42,17 +22,29 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
   }
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
-      <SlickSlider {...sliderSettings}>
+    <div className="w-full mx-auto">
+      <SlickSlider
+        arrows={false}
+        customPaging={(i) => {
+          return (
+            <div>
+              <ProductGalleryThumbnail item={galleries[i]} />
+            </div>
+          );
+        }}
+        dots={true}
+        dotsClass="overflow-x-scroll overflow-y-hidden !flex h-full gap-2 
+[&_.slick-active]:border [&_.slick-active]:border-white [&_.slick-active]:rounded-md"
+        infinite
+        speed={500}
+        slidesToShow={1}
+        slidesToScroll={1}
+        rtl
+      >
         {galleries.map((item) => {
-          const isActive = galleries[currentSlide]?.id === item.id;
           return (
             <div key={item.id} className="relative h-64">
-              <ProductGalleryItem
-                item={item}
-                playersRef={playersRef}
-                isActive={isActive}
-              />
+              <ProductGalleryItem item={item} playersRef={playersRef} />
             </div>
           );
         })}
