@@ -5,5 +5,8 @@ declare module "video.js" {
     pause(): void;
     play(): Promise<void> | undefined;
     dispose(): void;
+    hlsQualitySelector?: (options?: {
+      displayCurrentQuality?: boolean;
+    }) => void;
   }
 }

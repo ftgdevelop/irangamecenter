@@ -1,22 +1,11 @@
 import type { ProductGalleryItem as ProductGalleryItemType } from "@/types/commerce";
-import React, { useEffect, useRef } from "react";
+import React, { RefObject, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import videojs, { Player } from "video.js";
-import "video.js/dist/video-js.css";
-import "videojs-contrib-quality-levels";
-import "videojs-hls-quality-selector";
-
-declare module "video.js" {
-  interface Player {
-    hlsQualitySelector?: (options?: {
-      displayCurrentQuality?: boolean;
-    }) => void;
-  }
-}
+import Hls, { Events, ErrorTypes, ErrorDetails, type Level } from "hls.js";
 
 interface Props {
   item: ProductGalleryItemType;
-  playersRef: React.RefObject<Map<string, Player>>;
+  playersRef: RefObject<Map<string, HTMLVideoElement>>;
   isActive: boolean;
 }
 
@@ -26,11 +15,14 @@ const ProductGalleryItem: React.FC<Props> = ({
   isActive,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const playerRef = useRef<Player | null>(null);
+  const hlsRef = useRef<Hls | null>(null);
+  const [levels, setLevels] = useState<Level[]>([]);
+  const [currentLevel, setCurrentLevel] = useState<number>(-1);
 
   useEffect(() => {
+    const video = videoRef.current;
     if (
-      !videoRef.current ||
+      !video ||
       !item.cdnPath ||
       !item.cdnPath.includes("video") ||
       item.mediaType !== "Video"
@@ -39,74 +31,136 @@ const ProductGalleryItem: React.FC<Props> = ({
     }
 
     const isHLS = item.cdnPath.endsWith(".m3u8");
-    const sourceType = isHLS ? "application/x-mpegURL" : "video/mp4";
     const sourceUrl = isHLS ? item.cdnPath : item.filePath ?? "";
 
-    const player = videojs(
-      videoRef.current,
-      {
-        controls: true,
-        preload: "auto",
-        fluid: true,
-        poster: item.cdnThumbnail,
-        muted: true,
-        loop: true,
-        sources: [{ src: sourceUrl, type: sourceType }],
-      },
-      () => {
-        console.log("Player is ready");
-        playersRef.current.set(String(item.id), player);
-      },
-    );
+    if (isHLS && Hls.isSupported()) {
+      const hls = new Hls({
+        enableWorker: true,
+        capLevelToPlayerSize: true,
+        autoStartLoad: true,
+        maxBufferLength: 60,
+        maxBufferHole: 0.5,
+      });
 
-    playerRef.current = player;
+      hls.loadSource(sourceUrl);
+      hls.attachMedia(video);
 
-    player.on("error", () => {
-      console.error("Error in video player:", player.error());
-    });
+      hls.on(Events.MANIFEST_PARSED, () => {
+        setLevels([...hls.levels]);
+        setCurrentLevel(-1);
+        playersRef.current?.set(String(item.id), video);
+      });
+
+      hls.on(Events.LEVEL_SWITCHED, (_, data) => {
+        setCurrentLevel(data.level);
+      });
+
+      hls.on(Events.ERROR, (_, data) => {
+        const { type, details, fatal } = data;
+        console.warn("HLS.js error:", type, details, data);
+
+        if (fatal) {
+          switch (type) {
+            case ErrorTypes.NETWORK_ERROR:
+              console.log("Recovering from network error...");
+              hls.startLoad();
+              break;
+            case ErrorTypes.MEDIA_ERROR:
+              console.log("Recovering from media error...");
+              hls.recoverMediaError();
+              break;
+            default:
+              console.log("Destroying HLS instance due to fatal error");
+              hls.destroy();
+              break;
+          }
+        } else if (details === ErrorDetails.BUFFER_STALLED_ERROR) {
+          if (video.paused) {
+            video.play().catch(() => {});
+          }
+        }
+      });
+
+      hlsRef.current = hls;
+    } else {
+      video.src = sourceUrl;
+      playersRef.current?.set(String(item.id), video);
+    }
 
     return () => {
-      if (playerRef.current) {
-        playersRef.current.delete(String(item.id));
-        playerRef.current.dispose();
-        playerRef.current = null;
+      playersRef.current?.delete(String(item.id));
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
       }
     };
   }, [item, playersRef]);
 
   useEffect(() => {
-    const player = playerRef.current;
-    if (item.mediaType === "Video" && player) {
-      if (isActive) {
-        player?.play()?.catch(console.error);
-      } else {
-        player.pause();
-      }
-    }
-  }, [isActive, item.id, item.mediaType]);
+    const video = videoRef.current;
+    if (!video || item.mediaType !== "Video") return;
 
-  const isVideo = item.cdnPath?.includes("video") && item.mediaType === "Video";
+    const playVideo = async () => {
+      try {
+        if (isActive && video.paused) {
+          await video.play();
+        } else if (!isActive && !video.paused) {
+          video.pause();
+        }
+      } catch (err: unknown) {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        console.warn("Autoplay failed:", err);
+      }
+    };
+
+    const timeout = setTimeout(playVideo, 50);
+
+    return () => clearTimeout(timeout);
+  }, [isActive, item.mediaType]);
+
+  const handleQualityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const level = parseInt(e.target.value, 10);
+    setCurrentLevel(level);
+    if (hlsRef.current) {
+      hlsRef.current.currentLevel = level;
+    }
+  };
+
+  const isVideo = item.mediaType === "Video";
   const isImage = item.filePath?.includes("images");
 
   return (
-    <div className="relative w-full aspect-video rounded-xl overflow-hidden shadow">
+    <div className="relative w-full aspect-video  overflow-hidden shadow">
       {isVideo ? (
-        <video
-          ref={videoRef}
-          className="video-js vjs-big-play-centered w-full h-full object-cover"
-          data-setup={JSON.stringify({
-            controls: true,
-            preload: "auto",
-            fluid: true,
-            poster: item.cdnThumbnail,
-            muted: true,
-            loop: true,
-          })}
-        />
+        <div className="relative w-full h-full">
+          <video
+            ref={videoRef}
+            className="w-full h-full object-cover"
+            poster={item.cdnThumbnail}
+            controls
+            playsInline
+          />
+          {levels.length > 1 && (
+            <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded-md">
+              <select
+                value={currentLevel}
+                onChange={handleQualityChange}
+                className="bg-transparent text-white outline-none"
+              >
+                <option value={-1}>Auto</option>
+                {levels.map((level, index) => (
+                  <option key={index} value={index}>
+                    {level.height ? `${level.height}p` : `Level ${index}`}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+        </div>
       ) : isImage && item.filePath ? (
         <Image
           src={item.filePath}
-          alt={"Gallery image"}
+          alt="Gallery image"
           fill
           className="object-cover"
         />

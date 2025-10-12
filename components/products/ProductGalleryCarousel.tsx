@@ -4,16 +4,6 @@ import { useRef, useState, useMemo } from "react";
 import SlickSlider, { Settings as SlickSettings } from "react-slick";
 import type { ProductGalleryItem as ProductGalleryItemType } from "@/types/commerce";
 import ProductGalleryItem from "./ProductGalleryItem";
-import type { Player } from "video.js";
-
-// --- Video.js Player type extension ---
-declare module "video.js" {
-  interface Player {
-    hlsQualitySelector?: (options?: {
-      displayCurrentQuality?: boolean;
-    }) => void;
-  }
-}
 
 interface Props {
   galleries?: ProductGalleryItemType[];
@@ -22,22 +12,19 @@ interface Props {
 const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // keep refs of all players (map: galleryId -> player)
-  const playersRef = useRef<Map<string, Player>>(new Map());
+  const playersRef = useRef<Map<string, HTMLVideoElement>>(new Map());
 
-  // slick settings (memoized)
   const sliderSettings: SlickSettings = useMemo(
     () => ({
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      autoplay: false,
+      autoplay: true,
       arrows: false,
       afterChange: (current: number) => {
-        // pause all videos except current
-        playersRef.current.forEach((player, id) => {
+        playersRef.current.forEach((video, id) => {
           if (id !== String(galleries[current]?.id)) {
-            player.pause();
+            video.pause();
           }
         });
         setCurrentSlide(current);
