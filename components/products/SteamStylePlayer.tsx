@@ -15,6 +15,7 @@ interface Props {
   thumbnail?: string;
   itemId: string | number;
   playersRef?: React.RefObject<Map<string, HTMLVideoElement>>;
+  isActive?: boolean;
 }
 
 const SteamStylePlayer: React.FC<Props> = ({
@@ -22,12 +23,13 @@ const SteamStylePlayer: React.FC<Props> = ({
   thumbnail,
   itemId,
   playersRef,
+  isActive = false,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
 
   const [playing, setPlaying] = useState(false);
-  const [muted, setMuted] = useState(false);
+  const [muted, setMuted] = useState(true);
   const [volume, setVolume] = useState(1);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -43,7 +45,6 @@ const SteamStylePlayer: React.FC<Props> = ({
     const s = Math.floor(seconds % 60);
     return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
   };
-
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -60,10 +61,6 @@ const SteamStylePlayer: React.FC<Props> = ({
         playersRef?.current?.set(String(itemId), video);
       });
 
-      hls.on(Events.LEVEL_SWITCHED, (_, data) => {
-        setCurrentLevel(data.level);
-      });
-
       hlsRef.current = hls;
     } else {
       video.src = src;
@@ -75,30 +72,48 @@ const SteamStylePlayer: React.FC<Props> = ({
       setProgress((video.currentTime / video.duration) * 100);
     };
     const handleLoadedMetadata = () => setDuration(video.duration);
+    const handlePlaying = () => setPlaying(true);
+    const handlePause = () => setPlaying(false);
+    const handleEnded = () => setPlaying(false);
 
     video.addEventListener("timeupdate", handleTimeUpdate);
     video.addEventListener("loadedmetadata", handleLoadedMetadata);
-
-    video.volume = volume;
+    video.addEventListener("playing", handlePlaying);
+    video.addEventListener("pause", handlePause);
+    video.addEventListener("ended", handleEnded);
 
     return () => {
       video.removeEventListener("timeupdate", handleTimeUpdate);
       video.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      video.removeEventListener("playing", handlePlaying);
+      video.removeEventListener("pause", handlePause);
+      video.removeEventListener("ended", handleEnded);
+
       playersRef?.current?.delete(String(itemId));
       hlsRef.current?.destroy();
       hlsRef.current = null;
     };
-  }, [src, itemId, playersRef, volume]);
+  }, [src, itemId, playersRef]);
+
+  // مدیریت active / inactive
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (isActive) {
+      video.play().catch(() => console.log("Autoplay blocked"));
+    } else {
+      video.pause();
+    }
+  }, [isActive]);
 
   const togglePlay = () => {
     const video = videoRef.current;
     if (!video) return;
     if (video.paused) {
-      video.play();
+      video.play().catch(() => console.log("Play blocked"));
       setPlaying(true);
     } else {
       video.pause();
-      setPlaying(false);
     }
   };
 
@@ -154,15 +169,15 @@ const SteamStylePlayer: React.FC<Props> = ({
         className="w-full"
         playsInline
         controls={false}
+        autoPlay
+        muted
       />
 
-      {/* Custom Controls */}
       <div
         className={`absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent transition-opacity duration-300 ${
           showControls ? "opacity-100" : "opacity-0"
         }`}
       >
-        {/* Progress bar */}
         <input
           type="range"
           min="0"
@@ -173,7 +188,6 @@ const SteamStylePlayer: React.FC<Props> = ({
         />
 
         <div className="flex justify-between items-center mt-2 text-white">
-          {/* LEFT: Play + Volume + Timer */}
           <div className="flex items-center gap-3">
             <button onClick={togglePlay}>
               {playing ? <Pause size={26} /> : <Play size={26} />}
@@ -203,13 +217,11 @@ const SteamStylePlayer: React.FC<Props> = ({
             </span>
           </div>
 
-          {/* RIGHT: Settings + Fullscreen */}
           <div className="flex items-center gap-3 relative">
             <button onClick={() => setShowSettings(!showSettings)}>
               <Settings size={22} />
             </button>
 
-            {/* Quality Dropdown */}
             {showSettings && levels.length > 0 && (
               <div className="absolute bottom-10 right-0 bg-black/90 border border-gray-700 rounded-md px-3 py-2 w-28 text-sm space-y-1 z-50">
                 <button

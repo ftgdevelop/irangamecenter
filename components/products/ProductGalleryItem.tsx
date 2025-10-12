@@ -6,9 +6,14 @@ import SteamStylePlayer from "./SteamStylePlayer";
 interface Props {
   item: ProductGalleryItemType;
   playersRef: RefObject<Map<string, HTMLVideoElement>>;
+  isActive?: boolean;
 }
 
-const ProductGalleryItem: React.FC<Props> = ({ item, playersRef }) => {
+const ProductGalleryItem: React.FC<Props> = ({
+  item,
+  playersRef,
+  isActive,
+}) => {
   const isVideo = item.mediaType === "Video";
   const isImage = item.filePath?.includes("images");
 
@@ -20,6 +25,7 @@ const ProductGalleryItem: React.FC<Props> = ({ item, playersRef }) => {
           thumbnail={item.cdnThumbnail}
           itemId={item.id}
           playersRef={playersRef}
+          isActive={isActive}
         />
       </div>
     );
