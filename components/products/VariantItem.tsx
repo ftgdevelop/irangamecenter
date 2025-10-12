@@ -9,18 +9,27 @@ type Props = {
 }
 
 const VariantItem: React.FC<Props> = props => {
+     
+    const initialVariant = props.variant?.children?.find(x => x.items?.[0]?.status !== "OutOfStock");
 
-    const [selectedVariant, setSelectedVariant] = useState<ProductVariant | undefined>(props.variant?.children?.[0]);
+    const [selectedVariantId, setSelectedVariantId] = useState<number | undefined>(initialVariant?.id);
 
+    const [fade, setFade] = useState(false);
+    
     useEffect(() => {
-        setSelectedVariant(props.variant?.children?.[0]);
-    }, [props.variant?.slug]);
+        setSelectedVariantId(initialVariant?.id);
 
+        setFade(true);
+        setTimeout(()=>{setFade(false)}, 100)
+
+    }, [initialVariant]);
+
+    const selectedVariant = props.variant?.children?.find(c => c.id === selectedVariantId);
 
     let childElement: ReactNode = "";
     if (selectedVariant?.children?.length) {
         childElement = <VariantItem variant={selectedVariant} />;
-    } else {
+    } else if (selectedVariant?.items?.[0]?.status !== "OutOfStock") {
         const currency = selectedVariant?.items?.[0]?.currencyType;
         childElement = (
             <SimplePortal
@@ -57,25 +66,52 @@ const VariantItem: React.FC<Props> = props => {
 
     return (
         <>
-            <label className="text-sm pointer-events-none mb-3 block px-4 mt-7">
+            <label className="text-sm pointer-events-none block px-4 mt-7">
                 انتخاب {props.variant?.children?.[0]?.name}
             </label>
 
-            <div className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip pb-3 pl-3">
+            <div className={`max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip pb-3 pl-3 ${fade?"opacity-0":"opacity-100 transition-all duration-100"}`}>
 
-                <div className="flex pr-4">
-                    {props.variant?.children?.map(variantItem => (
-                        <div key={variantItem.slug} className="pl-3 last:pl-4">
-                            <button
-                                type="button"
-                                className={`shrink-0 rounded-xl whitespace-nowrap px-4 h-16 border-0 outline-none font-semibold py-3 ${selectedVariant?.slug === variantItem.slug ? "bg-gradient-green text-neutral-800" : "bg-[#192a39]"}`}
-                                disabled={!variantItem.slug}
-                                onClick={() => { setSelectedVariant(variantItem || undefined) }}
-                            >
-                                {variantItem.value}
-                            </button>
-                        </div>
-                    ))}
+                <div className="flex px-4 gap-3 pt-2">
+                    {props.variant?.children?.map(variantItem => {
+
+                        const variantProperties = variantItem?.items?.[0];
+                        
+                        const isDisabled = variantProperties?.status === "OutOfStock";
+                        const isOnBackOrde = variantProperties?.status === "OnBackOrder";
+
+                        let tag : ReactNode = "";
+                        if (isDisabled){
+                            tag = <span className="absolute top-0 left-3 -mt-2 bg-[#bbbbbb] rounded-full text-black text-[11px] font-normal block px-2"> ناموجود </span>
+                        }
+                        if(isOnBackOrde){
+                            tag = <span className="absolute top-0 left-3 -mt-2 bg-[#a93aff] rounded-full text-white text-[11px] font-normal block px-2"> پیش خرید </span>
+                        }
+
+                        return (                        
+                        <button
+                            key={variantItem.id}
+                            type="button"
+                            className={`relative min-w-40 shrink-0 rounded-xl whitespace-nowrap px-4 min-h-16 outline-none font-semibold py-3 ${isDisabled ? "bg-transparent border border-white/15" : selectedVariantId === variantItem.id ? "bg-gradient-green text-neutral-800 border-0" : "bg-[#192a39] border-0"}`}
+                            disabled={!variantItem.slug || isDisabled}
+                            onClick={() => { 
+                                if(!isDisabled){
+                                    setSelectedVariantId(variantItem.id || undefined) 
+                                }
+                            }}
+                        >   
+                            {tag}
+                            {variantItem.value}
+                            {variantProperties?.salePrice ? (
+                                <div className={`border-t pt-2 mt-2 ${isDisabled? "border-white/15": selectedVariantId === variantItem.id ? "border-neutral-800" : "border-white"}`}>
+                                    {!!variantProperties?.regularPrice && <div className="text-xs line-through"> {numberWithCommas(variantProperties.regularPrice)}  {variantProperties.currencyType} </div>}
+                                    <div className="text-sm"> {numberWithCommas(variantProperties.salePrice)} {variantProperties.currencyType} </div>
+                                </div>
+                            ) : null}
+                        </button>
+                    )
+                    })}
+                    <div className="w-1 h-3 shrink-0" />
                 </div>
             </div>
 

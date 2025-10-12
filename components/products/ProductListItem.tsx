@@ -21,7 +21,6 @@ const ProductListItem: React.FC<Props> = props => {
         discountPercentage = Math.floor(discount);
     }
 
-
     return (
         <div className="mb-[15px] bg-[#011425] rounded-2xl">
             <Link href={`/product/${product.slug}`} className="flex" onClick={()=>{if(props.onClick){props.onClick()}}}>
@@ -34,26 +33,34 @@ const ProductListItem: React.FC<Props> = props => {
                     title={product.fileTitleAttribute || product.name}
                 />
 
-                <div className="px-2.5 py-2">
-                    <h4 className="text-xs mb-3"> {toPersianDigits(product.name || "")} </h4>
-                    <div className="flex gap-3 items-end pb-1">
-                        {!!discountPercentage && (
-                            <div className="w-9 h-9 rounded-full bg-gradient-to-t from-orange-600 to-amber-300 text-center pt-2 font-bold text-sm">
-                                {toPersianDigits(discountPercentage?.toString())}
-                                %
-                            </div>
-                        )}
+                <div className="px-2.5 py-1.5 grow">
+                    <h4 className="text-xs mb-2"> {toPersianDigits(product.name || "")} </h4>
+                    <div className="flex gap-2 items-center justify-between pb-1">
 
-                        {salePrice ? (
-                            <div className="text-xs text-left">
-                            {!!regularPrice && (
-                                <div className="text-[11px] mb-1 line-through">{numberWithCommas(regularPrice)} {currencyType} </div>
+                        <div className="flex gap-3 items-center">
+                            {!!discountPercentage && (
+                                <div className="w-7 h-7 rounded-full bg-gradient-to-t from-orange-600 to-amber-300 text-center pt-1 font-bold text-sm">
+                                    {toPersianDigits(discountPercentage?.toString())}
+                                    %
+                                </div>
                             )}
-                            {numberWithCommas(salePrice)} {currencyType}
+
+                            {salePrice ? (
+                                <div className="text-xs text-left">
+                                {!!regularPrice && (
+                                    <div className="text-[11px] line-through">{numberWithCommas(regularPrice)} {currencyType} </div>
+                                )}
+                                {numberWithCommas(salePrice)} {currencyType}
+                            </div>
+                            ):(
+                                <div className="text-red-500 text-xs"> ناموجود </div>
+                            )}
                         </div>
-                        ):(
-                            <div className="text-red-500 text-xs"> ناموجود </div>
-                        )}
+
+                        <div className="flex gap-1 text-[9px]">
+                            {product.esrb?.image && <Image src={product.esrb?.image} alt={product.esrb.title || ""} title={product.esrb.description || ""} className="w-7 h-7" width={100} height={100} />}
+                            {product.pegi?.image && <Image src={product.pegi?.image} alt={product.pegi.title || ""} title={product.pegi.description || ""} className="w-7 h-7" width={100} height={100} />}
+                        </div>
 
                     </div>
                 </div>

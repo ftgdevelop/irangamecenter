@@ -113,7 +113,7 @@ export interface ProductVariant {
     value?: string;
     children?: ProductVariant[];
     items?: {
-        status?: "";
+        status?:  "InStock" | "OutOfStock" | "OnBackOrder";
         attributes?: {
             value?: string;
         }[];
