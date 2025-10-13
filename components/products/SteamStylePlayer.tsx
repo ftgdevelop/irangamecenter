@@ -16,6 +16,7 @@ interface Props {
   itemId: string | number;
   playersRef?: React.RefObject<Map<string, HTMLVideoElement>>;
   isActive?: boolean;
+  onLoaded: () => void;
 }
 
 const SteamStylePlayer: React.FC<Props> = ({
@@ -24,10 +25,12 @@ const SteamStylePlayer: React.FC<Props> = ({
   itemId,
   playersRef,
   isActive = false,
+  onLoaded,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
 
+  const [loading, setLoading] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
   const [volume, setVolume] = useState(1);
@@ -45,6 +48,7 @@ const SteamStylePlayer: React.FC<Props> = ({
     const s = Math.floor(seconds % 60);
     return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
   };
+
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -61,45 +65,37 @@ const SteamStylePlayer: React.FC<Props> = ({
         playersRef?.current?.set(String(itemId), video);
       });
 
+      hls.on(Events.LEVEL_LOADED, () => {
+        setLoading(false);
+        onLoaded();
+      });
+
       hlsRef.current = hls;
     } else {
       video.src = src;
       playersRef?.current?.set(String(itemId), video);
     }
 
-    const handleTimeUpdate = () => {
-      setCurrentTime(video.currentTime);
-      setProgress((video.currentTime / video.duration) * 100);
+    const handleLoadedMetadata = () => {
+      setDuration(video.duration);
+      setLoading(false);
+      onLoaded();
     };
-    const handleLoadedMetadata = () => setDuration(video.duration);
-    const handlePlaying = () => setPlaying(true);
-    const handlePause = () => setPlaying(false);
-    const handleEnded = () => setPlaying(false);
 
-    video.addEventListener("timeupdate", handleTimeUpdate);
     video.addEventListener("loadedmetadata", handleLoadedMetadata);
-    video.addEventListener("playing", handlePlaying);
-    video.addEventListener("pause", handlePause);
-    video.addEventListener("ended", handleEnded);
-
     return () => {
-      video.removeEventListener("timeupdate", handleTimeUpdate);
       video.removeEventListener("loadedmetadata", handleLoadedMetadata);
-      video.removeEventListener("playing", handlePlaying);
-      video.removeEventListener("pause", handlePause);
-      video.removeEventListener("ended", handleEnded);
-
       playersRef?.current?.delete(String(itemId));
       hlsRef.current?.destroy();
       hlsRef.current = null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src, itemId, playersRef]);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
     if (isActive) {
-      video.currentTime = 0;
       video.play().catch(() => console.log("Autoplay blocked"));
       setPlaying(true);
     } else {
@@ -111,10 +107,10 @@ const SteamStylePlayer: React.FC<Props> = ({
     const video = videoRef.current;
     if (!video) return;
     if (video.paused) {
-      video.currentTime = 0;
       video.play().catch(() => console.log("Autoplay/Play blocked"));
       setPlaying(true);
     } else {
+      setPlaying(false);
       video.pause();
     }
   };
@@ -159,12 +155,19 @@ const SteamStylePlayer: React.FC<Props> = ({
     setShowSettings(false);
   };
 
+  const Loader = () => (
+    <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+      <div className="w-10 h-10 border-4 border-gray-300 border-t-red-500 rounded-full animate-spin" />
+    </div>
+  );
   return (
     <div
       className="relative w-full h-full bg-black group"
       onMouseMove={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >
+      {loading && <Loader />}
+
       <video
         ref={videoRef}
         poster={thumbnail}
