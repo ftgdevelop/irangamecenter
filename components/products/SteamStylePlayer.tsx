@@ -32,7 +32,7 @@ const SteamStylePlayer: React.FC<Props> = ({
 
   const [loading, setLoading] = useState(true);
   const [playing, setPlaying] = useState(false);
-  const [muted, setMuted] = useState(false);
+  const [muted, setMuted] = useState(true);
   const [volume, setVolume] = useState(1);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -54,6 +54,7 @@ const SteamStylePlayer: React.FC<Props> = ({
     if (!video) return;
 
     const isHLS = src.endsWith(".m3u8");
+
     if (isHLS && Hls.isSupported()) {
       const hls = new Hls({ enableWorker: true, capLevelToPlayerSize: true });
       hls.loadSource(src);
@@ -76,15 +77,25 @@ const SteamStylePlayer: React.FC<Props> = ({
       playersRef?.current?.set(String(itemId), video);
     }
 
+    // ✅ زمان و پیشرفت ویدیو
     const handleLoadedMetadata = () => {
       setDuration(video.duration);
       setLoading(false);
       onLoaded();
     };
 
+    const handleTimeUpdate = () => {
+      if (!video.duration) return;
+      setCurrentTime(video.currentTime);
+      setProgress((video.currentTime / video.duration) * 100);
+    };
+
     video.addEventListener("loadedmetadata", handleLoadedMetadata);
+    video.addEventListener("timeupdate", handleTimeUpdate);
+
     return () => {
       video.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      video.removeEventListener("timeupdate", handleTimeUpdate);
       playersRef?.current?.delete(String(itemId));
       hlsRef.current?.destroy();
       hlsRef.current = null;
@@ -100,6 +111,7 @@ const SteamStylePlayer: React.FC<Props> = ({
       setPlaying(true);
     } else {
       video.pause();
+      setPlaying(false);
     }
   }, [isActive]);
 
@@ -107,11 +119,11 @@ const SteamStylePlayer: React.FC<Props> = ({
     const video = videoRef.current;
     if (!video) return;
     if (video.paused) {
-      video.play().catch(() => console.log("Autoplay/Play blocked"));
+      video.play().catch(() => console.log("Play blocked"));
       setPlaying(true);
     } else {
-      setPlaying(false);
       video.pause();
+      setPlaying(false);
     }
   };
 
@@ -138,9 +150,10 @@ const SteamStylePlayer: React.FC<Props> = ({
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const video = videoRef.current;
     if (!video) return;
-    const time = (parseFloat(e.target.value) / 100) * video.duration;
+    const percent = parseFloat(e.target.value);
+    const time = (percent / 100) * video.duration;
     video.currentTime = time;
-    setProgress(parseFloat(e.target.value));
+    setProgress(percent);
     setCurrentTime(time);
   };
 
@@ -160,6 +173,7 @@ const SteamStylePlayer: React.FC<Props> = ({
       <div className="w-10 h-10 border-4 border-gray-300 border-t-red-500 rounded-full animate-spin" />
     </div>
   );
+
   return (
     <div
       className="relative w-full h-full bg-black group"
@@ -175,6 +189,7 @@ const SteamStylePlayer: React.FC<Props> = ({
         playsInline
         controls={false}
         autoPlay
+        muted
       />
 
       <div
