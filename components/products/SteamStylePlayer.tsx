@@ -29,7 +29,7 @@ const SteamStylePlayer: React.FC<Props> = ({
   const hlsRef = useRef<Hls | null>(null);
 
   const [playing, setPlaying] = useState(false);
-  const [muted, setMuted] = useState(true);
+  const [muted, setMuted] = useState(false);
   const [volume, setVolume] = useState(1);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -95,12 +95,13 @@ const SteamStylePlayer: React.FC<Props> = ({
     };
   }, [src, itemId, playersRef]);
 
-  // مدیریت active / inactive
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
     if (isActive) {
+      video.currentTime = 0;
       video.play().catch(() => console.log("Autoplay blocked"));
+      setPlaying(true);
     } else {
       video.pause();
     }
@@ -110,7 +111,8 @@ const SteamStylePlayer: React.FC<Props> = ({
     const video = videoRef.current;
     if (!video) return;
     if (video.paused) {
-      video.play().catch(() => console.log("Play blocked"));
+      video.currentTime = 0;
+      video.play().catch(() => console.log("Autoplay/Play blocked"));
       setPlaying(true);
     } else {
       video.pause();
@@ -159,7 +161,7 @@ const SteamStylePlayer: React.FC<Props> = ({
 
   return (
     <div
-      className="relative w-full h-full bg-black/5 group"
+      className="relative w-full h-full bg-black group"
       onMouseMove={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >
@@ -170,7 +172,6 @@ const SteamStylePlayer: React.FC<Props> = ({
         playsInline
         controls={false}
         autoPlay
-        muted
       />
 
       <div

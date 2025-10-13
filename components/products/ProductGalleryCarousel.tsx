@@ -18,7 +18,6 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
   const dotsRef = useRef<HTMLUListElement | null>(null);
   const sliderRef = useRef<SlickSlider | null>(null);
 
-  // scroll initial dot
   useEffect(() => {
     const dotsContainer = dotsRef.current;
     if (!dotsContainer) return;
@@ -34,7 +33,12 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
     }
   }, []);
 
-  // slide autoplay based on media duration
+  useEffect(() => {
+    if (sliderRef.current && galleries.length > 0) {
+      sliderRef.current.slickGoTo(0, true);
+    }
+  }, [galleries]);
+
   useEffect(() => {
     if (galleries.length === 0) return;
 
@@ -74,22 +78,23 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
       </div>
     );
   }
-
   return (
     <div className="w-full mx-auto">
       <SlickSlider
         ref={sliderRef}
         arrows={false}
         customPaging={(i) => (
-          <div>
+          <div key={i}>
             <ProductGalleryThumbnail item={galleries[i]} />
           </div>
         )}
         dots
-        dotsClass="!flex overflow-x-scroll scrollbar-hide gap-4 [&>li:not(.slick-active)]:opacity-50 [&>li.slick-active]:border [&>li.slick-active]:border-white [&>li.slick-active]:rounded-md"
+        dotsClass="!flex flex-row-reverse overflow-x-scroll scrollbar-hide gap-4 [&>li:not(.slick-active)]:opacity-50 [&>li.slick-active]:border [&>li.slick-active]:border-white [&>li.slick-active]:rounded-md"
         infinite
         slidesToShow={1}
         slidesToScroll={1}
+        initialSlide={0}
+        draggable={false}
         rtl
         beforeChange={(_, next) => {
           const dotsContainer = dotsRef.current;
