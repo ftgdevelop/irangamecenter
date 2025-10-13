@@ -77,7 +77,6 @@ const SteamStylePlayer: React.FC<Props> = ({
       playersRef?.current?.set(String(itemId), video);
     }
 
-    // ✅ زمان و پیشرفت ویدیو
     const handleLoadedMetadata = () => {
       setDuration(video.duration);
       setLoading(false);

@@ -71,6 +71,25 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
     return () => clearTimeout(timeoutId);
   }, [currentSlide, galleries]);
 
+  useEffect(() => {
+    const playerMap = playersRef.current;
+    if (!playerMap || playerMap.size === 0) return;
+
+    const handleEnded = () => {
+      sliderRef.current?.slickNext();
+    };
+
+    playerMap.forEach((video) => {
+      if (video) video.addEventListener("ended", handleEnded);
+    });
+
+    return () => {
+      playerMap.forEach((video) => {
+        if (video) video.removeEventListener("ended", handleEnded);
+      });
+    };
+  }, [galleries, currentSlide]);
+
   if (galleries.length === 0) {
     return (
       <div className="w-full max-w-3xl mx-auto text-center text-gray-500 py-8">
@@ -78,6 +97,7 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
       </div>
     );
   }
+
   return (
     <div className="w-full mx-auto">
       <SlickSlider
