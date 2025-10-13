@@ -188,18 +188,22 @@ const SteamStylePlayer: React.FC<Props> = ({
           className="w-full accent-red-500 cursor-pointer"
         />
 
-        <div className="flex justify-between items-center mt-2 text-white">
-          <div className="flex items-center gap-3">
+        <div className="flex justify-between items-center mt-1 text-white text-sm sm:text-base">
+          <div className="flex items-center gap-2 sm:gap-3">
             <button onClick={togglePlay}>
-              {playing ? <Pause size={26} /> : <Play size={26} />}
+              {playing ? (
+                <Pause className="size-5 sm:size-6" />
+              ) : (
+                <Play className="size-5 sm:size-6" />
+              )}
             </button>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2">
               <button onClick={toggleMute}>
                 {muted || volume === 0 ? (
-                  <VolumeX size={22} />
+                  <VolumeX className="size-4 sm:size-5" />
                 ) : (
-                  <Volume2 size={22} />
+                  <Volume2 className="size-4 sm:size-5" />
                 )}
               </button>
               <input
@@ -209,29 +213,29 @@ const SteamStylePlayer: React.FC<Props> = ({
                 step="0.05"
                 value={muted ? 0 : volume}
                 onChange={handleVolumeChange}
-                className="w-20 accent-red-500 cursor-pointer"
+                className="w-14 sm:w-20 accent-red-500 cursor-pointer"
               />
             </div>
 
-            <span className="text-sm">
+            <span className="text-xs sm:text-sm">
               {formatTime(currentTime)} / {formatTime(duration)}
             </span>
           </div>
 
-          <div className="flex items-center gap-3 relative">
+          <div className="flex items-center gap-2 sm:gap-3 relative">
             <button onClick={() => setShowSettings(!showSettings)}>
-              <Settings size={22} />
+              <Settings className="size-4 sm:size-5" />
             </button>
 
             {showSettings && levels.length > 0 && (
-              <div className="absolute bottom-10 right-0 bg-black/90 border border-gray-700 rounded-md px-3 py-2 w-28 text-sm space-y-1 z-50">
+              <div className="absolute bottom-10 right-0 bg-black/90 border border-gray-700 rounded-md px-3 py-2 w-24 sm:w-28 text-xs sm:text-sm space-y-1 z-50">
                 <button
                   onClick={() => handleQualitySelect(-1)}
                   className={`flex justify-between w-full text-left hover:bg-white/10 px-1 py-1 rounded ${
                     currentLevel === -1 ? "text-red-400" : "text-gray-200"
                   }`}
                 >
-                  Auto {currentLevel === -1 && <Check size={14} />}
+                  Auto {currentLevel === -1 && <Check className="size-3" />}
                 </button>
                 {levels.map((level, index) => (
                   <button
@@ -242,14 +246,14 @@ const SteamStylePlayer: React.FC<Props> = ({
                     }`}
                   >
                     {level.height ? `${level.height}p` : `Level ${index}`}
-                    {currentLevel === index && <Check size={14} />}
+                    {currentLevel === index && <Check className="size-3" />}
                   </button>
                 ))}
               </div>
             )}
 
             <button onClick={toggleFullscreen}>
-              <Maximize2 size={22} />
+              <Maximize2 className="size-4 sm:size-5" />
             </button>
           </div>
         </div>
