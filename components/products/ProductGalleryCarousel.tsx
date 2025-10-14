@@ -112,7 +112,7 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
         centerPadding="20px"
       >
         {galleries.map((item, index) => (
-          <div key={item.id} className="relative h-60 px-1">
+          <div key={item.id} className="relative h-52 px-1">
             <ProductGalleryItem
               item={item}
               playersRef={playersRef}
