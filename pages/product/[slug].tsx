@@ -95,9 +95,7 @@ const DetailProduct: NextPage<any> = ({ productData }:
 
       </div>
       {productData?.galleries && (
-        <div className="p-4 rounded-xl">
           <ProductGalleryCarousel galleries={productData.galleries} />
-        </div>
       )}
       <div className="px-4">
 

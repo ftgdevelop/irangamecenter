@@ -98,7 +98,7 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
   }
 
   return (
-    <div className="w-full mx-auto rounded-xl">
+    <div className="rounded-xl">
       <SlickSlider
         ref={sliderRef}
         arrows={false}
@@ -109,9 +109,10 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
         rtl
         afterChange={(current) => setCurrentSlide(current)}
         centerMode
+        centerPadding="20px"
       >
         {galleries.map((item, index) => (
-          <div key={item.id} className="relative h-64 px-2">
+          <div key={item.id} className="relative h-52 px-1">
             <ProductGalleryItem
               item={item}
               playersRef={playersRef}
