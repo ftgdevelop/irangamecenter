@@ -13,7 +13,7 @@ const ProductGalleryThumbnail: React.FC<Props> = ({ item }) => {
 
   return (
     <div className="relative w-16 h-16 box-border cursor-pointer group">
-      {isVideo ? (
+      {isVideo && item.cdnThumbnail ? (
         <>
           <Image
             src={item.cdnThumbnail}
