@@ -134,7 +134,7 @@ export interface ProductGalleryItem {
 //   "fileAltAttribute": null,
 //   "thumbnail": "https://cdn.irangamecenter.com/videos/products/122/elden-ring-trailer-thumbnail-1.webp",
 //   "thumbnailUniqKey": "432755c9-ce85-f011-bf76-000c29176f1e",
-//   "cdnThumbnail": "https://igc1.storage.c2.liara.space/videos/products/122/elden-ring-trailer-thumbnail-1.webp",
+    cdnThumbnail: string | null,
 }
 
 export interface ProductDetailData {

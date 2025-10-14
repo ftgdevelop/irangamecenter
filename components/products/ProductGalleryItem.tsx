@@ -24,7 +24,7 @@ const ProductGalleryItem: React.FC<Props> = ({
     </div>
   );
 
-  if (isVideo) {
+  if (isVideo && item.cdnThumbnail) {
     return (
       <div className="relative w-full aspect-video overflow-hidden h-full shadow">
         {loading && <Loader />}
