@@ -18,6 +18,7 @@ import ArrowTopLeft from "@/components/icons/ArrowTopLeft";
 import VariantSection from "@/components/products/VariantSection";
 import SimilarProductsCarousel from "@/components/products/SimilarProductsCarousel";
 import Head from "next/head";
+import ProductGalleryCarousel from "@/components/products/ProductGalleryCarousel";
 
 const DetailProduct: NextPage<any> = ({ productData }:
   { productData: ProductDetailData }) => {
@@ -73,6 +74,12 @@ const DetailProduct: NextPage<any> = ({ productData }:
           wrapperClassName="bg-[#192a39] px-4 py-3"
           textColorClass="text-neutral-300"
         />
+      )}
+      
+      {productData?.galleries && (
+        <div className="p-4">
+          <ProductGalleryCarousel galleries={productData.galleries} />
+        </div>
       )}
 
       <div className="flex gap-4 p-4">
