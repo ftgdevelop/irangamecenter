@@ -76,11 +76,7 @@ const DetailProduct: NextPage<any> = ({ productData }:
         />
       )}
       
-      {productData?.galleries && (
-        <div className="p-4">
-          <ProductGalleryCarousel galleries={productData.galleries} />
-        </div>
-      )}
+
 
       <div className="flex gap-4 p-4">
 
@@ -98,7 +94,11 @@ const DetailProduct: NextPage<any> = ({ productData }:
         <h2 className="text-lg font-semibold block pt-3">{productData.name}</h2>
 
       </div>
-
+      {productData?.galleries && (
+        <div className="p-4 rounded-xl">
+          <ProductGalleryCarousel galleries={productData.galleries} />
+        </div>
+      )}
       <div className="px-4">
 
         <div className="flex justify-between items-top mb-5">
