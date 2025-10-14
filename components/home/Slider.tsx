@@ -66,7 +66,7 @@ const Slider: React.FC<Props> = props => {
                         <ClipRadius className="absolute bottom-0 left-full fill-[#011425] w-8 h-8" />
 
                         <Link href={item.Url || "#"} className="w-12 h-12 bg-[#1b2c3b] cursor-pointer select-none rounded-full absolute bottom-1 left-1 flex items-center justify-center">
-                            <ArrowTopLeft className="fill-white w-5 h-5" />
+                            <ArrowTopLeft className="fill-white w-3.5 h-3.5" />
                         </Link>
 
                     </div>
@@ -111,7 +111,7 @@ const Slider: React.FC<Props> = props => {
                                 <ClipRadius className="absolute bottom-0 left-full fill-[#011425] w-8 h-8" />
 
                                 <Link href={item.Url || "#"} className="w-12 h-12 bg-[#1b2c3b] cursor-pointer select-none rounded-full absolute bottom-1 left-1 flex items-center justify-center">
-                                    <ArrowTopLeft className="fill-white w-5 h-5" />
+                                    <ArrowTopLeft className="fill-white w-3.5 h-3.5" />
                                 </Link>
 
                             </div>

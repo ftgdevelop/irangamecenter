@@ -13,7 +13,7 @@ const HightlightItemLink: React.FC<Props> = props => {
             onClick={props.open}
         >
             <div
-                className="inline-block mb-3 p-1 mx-auto bg-gradient-to-tr from-violet-600 from-10% via-green-300 via-50% to-red-500 to-90% rounded-full"
+                className="inline-block mb-.5 p-1 mx-auto bg-gradient-to-tr from-violet-600 from-10% via-green-300 via-50% to-red-500 to-90% rounded-full"
             >
                 <Image
                     src={props.Image || "/images/default-game.png"}

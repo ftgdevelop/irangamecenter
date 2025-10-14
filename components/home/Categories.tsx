@@ -23,7 +23,7 @@ const Categories: React.FC<Props> = props => {
         return (
             <section className="flex gap-2 py-3">
                 <div className="bg-red-600 text-sm writing-tb rotate-180 px-2 py-5 rounded-r-xl flex items-center justify-center gap-3">
-                    <Image src="/images/icons/squares.svg" alt="categories" width={60} height={60} className="w-7 h-7" />
+                    <Image src="/images/icons/squares.svg" alt="categories" width={24} height={24} className="w-6 h-6" />
                     {props.title || "دسته بندی ها"}
                 </div>
                 <div className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 lg:-mb-3 overflow-x-auto overflow-y-clip">

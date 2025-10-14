@@ -26,7 +26,7 @@ const Header: React.FC<Props> = props => {
                     {props.type2Params.backToPrev ? (
                         <button
                             type="button"
-                            className="w-6 h-6"
+                            className="w-8 h-8"
                             onClick={e=>{
                                 e.preventDefault();
                                 router.back()
@@ -35,7 +35,7 @@ const Header: React.FC<Props> = props => {
                             <ArrowRight />
                         </button>
                     ):(
-                        <Link href={props.type2Params.backUrl!} className="w-6 h-6">
+                        <Link href={props.type2Params.backUrl!} className="w-8 h-8">
                             <ArrowRight />
                         </Link>
                     )}

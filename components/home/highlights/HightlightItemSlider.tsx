@@ -210,7 +210,7 @@ const HightlightItemSlider: React.FC<Props> = (props) => {
                   <span className="block w-10" />
                   خرید
                   <span className="block bg-[#a93aff] p-3 rounded-full">
-                    <ArrowTopLeft className="w-4 h-4 fill-current" />
+                    <ArrowTopLeft className="w-3.5 h-3.5 fill-current" />
                   </span>
                 </Link>
               </div>

@@ -18,7 +18,7 @@ export default function Document() {
           href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
         />
       </Head>
-      <body className="antialiased font-iranyekan" >
+      <body className="antialiased font-iranyekan bg-black" >
         <Main />
         <div id="menu_portal" className="fixed top-0 left-0 right-0" />
         <div id="fixed_bottom_portal" />

@@ -4,7 +4,6 @@ import Categories from "@/components/home/Categories";
 import Search from "@/components/shared/Search";
 import Slider from "@/components/home/Slider";
 import BannerLinkWides from "@/components/home/BannerLinkWides";
-import Promotion from "@/components/home/Promotion";
 import ColorBannerLinkWides from "@/components/home/ColorBannerLinkWides";
 import BestSellers from "@/components/home/BestSellers";
 import Intro from "@/components/about/Intro";
@@ -19,7 +18,8 @@ import { getBlogs } from "@/actions/blog";
 import { BlogItemType } from "@/types/blog";
 import BlogsCarousel from "@/components/blog/BlogsCarousel";
 import { getProducts } from "@/actions/commerce";
-import { ProductItem } from "@/types/commerce";
+import { GetProductsDataType } from "@/types/commerce";
+import SimilarProductsCarousel from "@/components/products/SimilarProductsCarousel";
 
 type HomeAboutDataType = {
   Keyword: "about_intro" | "icons" | "faq" | "telNumber" | "email";
@@ -82,21 +82,16 @@ type BannerItemType = {
   }
 }
 
-type ProductsDataType = {
-  totalCount?: number;
-  items?: ProductItem[];
-}
-
 type Props = {
   homeSections?: HomeSections[];
   homeHighlights?: HighlightItemType[];
   homeAboutData?: HomeAboutDataType;
   recentBlogs?: BlogItemType[];
-  playstation5Data?: ProductsDataType;
-  playstation4Data?: ProductsDataType;
-  steamData?: ProductsDataType;
-  xboxOneData?: ProductsDataType;
-  xboxSeriesXsData?: ProductsDataType;
+  playstation5Data?: GetProductsDataType;
+  playstation4Data?: GetProductsDataType;
+  steamData?: GetProductsDataType;
+  xboxOneData?: GetProductsDataType;
+  xboxSeriesXsData?: GetProductsDataType;
 }
 
 
@@ -148,7 +143,7 @@ const Home: NextPage<Props> = props => {
         imageTitle: item.ImageTitle
       }))} />
 
-      <Promotion
+      {/* <Promotion
         items={promotionData?.Items.map(item => ({
           title: item.Title || "",
           url: item.Url,
@@ -159,7 +154,22 @@ const Home: NextPage<Props> = props => {
           imageUrl: item.Image?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}${item.Image.url}` : undefined,
         }))}
         title={promotionData?.Title || ""}
-      />
+      /> */}
+
+      {!!(promotionData?.Items?.length) && <SimilarProductsCarousel 
+        products={promotionData?.Items.map(item => ({
+          id:item.id,
+          name: item.Title || "",
+          url: item.Url,
+          price: item.price,
+          oldPrice: item.oldPrice,
+          imageAlt: item.ImageAlternative,
+          imageTitle: item.ImageTitle,
+          filePath: item.Image?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}${item.Image.url}` : undefined,
+        }))}
+        title={promotionData?.Title || ""}
+      />}
+      <br/>
 
       <ColorBannerLinkWides
         items={banner3Items?.map(item => ({
@@ -173,11 +183,11 @@ const Home: NextPage<Props> = props => {
       />
 
       <BestSellers 
-        playstation5Products={playstation5Data?.items}
-        playstation4Products={playstation4Data?.items}
-        steamProducts={steamData?.items}
-        xboxOneProducts={xboxOneData?.items}
-        xboxSeriesXsProducts={xboxSeriesXsData?.items}
+        playstation5Products={playstation5Data?.pagedResult?.items}
+        playstation4Products={playstation4Data?.pagedResult?.items}
+        steamProducts={steamData?.pagedResult?.items}
+        xboxOneProducts={xboxOneData?.pagedResult?.items}
+        xboxSeriesXsProducts={xboxSeriesXsData?.pagedResult?.items}
       />
 
       {!!recentBlogs?.length && <BlogsCarousel blogs={recentBlogs} />}
@@ -206,11 +216,11 @@ export const getStaticProps = async (context: any) => {
     getStrapiHighlight('locale=fa&populate[Item][populate]=*'),
     getStrapiPages('filters[Page][$eq]=aboutUs&locale=fa&populate[Sections][populate]=*'),
     getBlogs({page:1,per_page:5}),
-    getProducts({SkipCount:0, MaxResultCount:10, VariantSlug:["playstation-5"]}),
-    getProducts({SkipCount:0, MaxResultCount:10, VariantSlug:["playstation-4"]}),
-    getProducts({SkipCount:0, MaxResultCount:10, VariantSlug:["steam"]}),
-    getProducts({SkipCount:0, MaxResultCount:10, VariantSlug:["xbox-one"]}),
-    getProducts({SkipCount:0, MaxResultCount:10, VariantSlug:["xbox-series-x/s"]})
+    getProducts({skipCount:0, maxResultCount:10, variants:["playstation-5"]}),
+    getProducts({skipCount:0, maxResultCount:10, variants:["playstation-4"]}),
+    getProducts({skipCount:0, maxResultCount:10, variants:["steam"]}),
+    getProducts({skipCount:0, maxResultCount:10, variants:["xbox-one"]}),
+    getProducts({skipCount:0, maxResultCount:10, variants:["xbox-series-x/s"]})
   ]);
 
   return ({

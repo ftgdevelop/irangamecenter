@@ -32,7 +32,7 @@ const BannerLinkWideItem:React.FC<Props> = props => {
                     <strong className="font-semibold block text-sm truncate"> {props.title} </strong>
                     {props.subtitle && <span className="text-xs truncate"> {props.subtitle} </span>}
                 </div>
-                <ArrowTopLeft className="w-4 h-4 fill-current" />
+                <ArrowTopLeft className="w-3.5 h-3.5 fill-current" />
             </Link>
 
         </div>
