@@ -19,14 +19,14 @@ const ProductGalleryItem: React.FC<Props> = ({
   const isImage = item.filePath?.includes("images");
 
   const Loader = () => (
-    <div className="absolute inset-0 flex items-center justify-center bg-black/10">
+    <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-black/10">
       <div className="w-8 h-8 border-4 border-gray-300 border-t-red-500 rounded-full animate-spin" />
     </div>
   );
 
   if (isVideo && item.cdnThumbnail) {
     return (
-      <div className="relative w-full aspect-video overflow-hidden h-full shadow">
+      <div className="relative w-full aspect-video overflow-hidden h-full shadow rounded-xl">
         {loading && <Loader />}
         <SteamStylePlayer
           src={item.cdnPath || item.filePath || ""}
@@ -42,13 +42,13 @@ const ProductGalleryItem: React.FC<Props> = ({
 
   if (isImage && item.filePath) {
     return (
-      <div className="relative w-full h-full">
+      <div className="relative w-full h-full rounded-xl">
         {loading && <Loader />}
         <Image
           src={item.filePath}
           alt="Gallery image"
           fill
-          className="object-cover"
+          className="object-cover rounded-xl"
           onLoad={() => setLoading(false)}
           onError={() => setLoading(false)}
         />
@@ -57,7 +57,7 @@ const ProductGalleryItem: React.FC<Props> = ({
   }
 
   return (
-    <p className="text-sm text-red-500">
+    <p className="text-sm text-red-500 rounded-xl">
       فرمت پشتیبانی نشده: {item.cdnPath ?? "Unknown"}
     </p>
   );

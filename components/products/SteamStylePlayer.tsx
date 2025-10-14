@@ -184,7 +184,7 @@ const SteamStylePlayer: React.FC<Props> = ({
       <video
         ref={videoRef}
         poster={thumbnail}
-        className="w-full"
+        className="w-full h-full"
         playsInline
         controls={false}
         autoPlay
