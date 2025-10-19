@@ -106,8 +106,7 @@ const SteamStylePlayer: React.FC<Props> = ({
     const video = videoRef.current;
     if (!video) return;
     if (isActive) {
-      video.play().catch(() => console.log("Autoplay blocked"));
-      setPlaying(true);
+      video.play().then(()=> setPlaying(true)).catch(() => console.log("Autoplay blocked"));
     } else {
       video.pause();
       setPlaying(false);
@@ -118,8 +117,7 @@ const SteamStylePlayer: React.FC<Props> = ({
     const video = videoRef.current;
     if (!video) return;
     if (video.paused) {
-      video.play().catch(() => console.log("Play blocked"));
-      setPlaying(true);
+      video.play().then(()=> setPlaying(true)).catch(() => console.log("Autoplay blocked"));
     } else {
       video.pause();
       setPlaying(false);
