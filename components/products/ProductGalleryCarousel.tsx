@@ -17,7 +17,6 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
   const playersRef = useRef<Map<string, HTMLVideoElement>>(new Map());
   const sliderRef = useRef<SlickSlider | null>(null);
 
-  // Automatically advance slides
   useEffect(() => {
     if (galleries.length === 0 || isFullscreen) return;
 
@@ -50,7 +49,6 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
     return () => clearTimeout(timeoutId);
   }, [currentSlide, galleries, isFullscreen]);
 
-  // Handle video "ended" -> move to next slide
   useEffect(() => {
     const playerMap = playersRef.current;
     if (!playerMap || playerMap.size === 0) return;
