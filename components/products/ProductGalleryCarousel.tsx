@@ -66,6 +66,43 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
     };
   }, [galleries, currentSlide]);
 
+useEffect(() => {
+  const container = document.getElementById('gallery-fullscreen-container');
+  if (!container) return;
+
+  interface FullscreenElement extends HTMLElement {
+    webkitRequestFullscreen?: () => Promise<void>;
+    msRequestFullscreen?: () => Promise<void>;
+  }
+
+  const el = container as FullscreenElement;
+
+  if (isFullscreen) {
+    if (el.requestFullscreen) {
+      el.requestFullscreen();
+    } else if (el.webkitRequestFullscreen) {
+      el.webkitRequestFullscreen(); // Safari
+    } else if (el.msRequestFullscreen) {
+      el.msRequestFullscreen(); // IE/Edge legacy
+    }
+  } else {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    }
+  }
+}, [isFullscreen]);
+
+  // Sync fullscreen state if user presses ESC
+  useEffect(() => {
+    const handleChange = () => {
+      if (!document.fullscreenElement) {
+        setIsFullScreen(false);
+      }
+    };
+    document.addEventListener('fullscreenchange', handleChange);
+    return () => document.removeEventListener('fullscreenchange', handleChange);
+  }, []);
+
   if (galleries.length === 0) {
     return (
       <div className="w-full max-w-3xl mx-auto text-center text-gray-500 py-8">
@@ -75,22 +112,34 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
   }
 
   const sliderSettings = {
-    arrows: isFullscreen,
-    infinite: true,
-    slidesToShow: 1,
-    draggable: true,
-    swipeToSlide: true,
-    rtl: true,
     dots: false,
-    autoplay: false,
-    initialSlide: currentSlide,
-    afterChange: (current: number) => setCurrentSlide(current),
+    arrows: false,
+    slide: '.slick-slideshow__slide',
+    slidesToShow: 1,
     centerMode: !isFullscreen,
-    centerPadding: '20px',
+    centerPadding: isFullscreen ? '0px' : '50px',
+    afterChange: (current: number) => setCurrentSlide(current),
+    initialSlide: currentSlide,
+    rtl: true,
+    responsive: [
+      {
+        breakpoint: 470,
+        settings: {
+          centerPadding: isFullscreen ? '0px' : '20px',
+        },
+      },
+      {
+        breakpoint: 430,
+        settings: {
+          centerPadding: '0px',
+        },
+      },
+    ],
   };
 
   return (
     <div
+      id="gallery-fullscreen-container"
       className={`${
         isFullscreen
           ? 'fixed inset-0 z-50 bg-black/90 flex items-center justify-center'
@@ -107,25 +156,42 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
       )}
 
       <div
-        className={`relative ${
+        className={`${
           isFullscreen
-            ? 'w-screen h-screen px-10 py-10'
-            : 'w-full h-[184px] px-2'
+            ? 'relative w-screen h-svh px-2'
+            : 'w-full h-[184px] px-1'
         }`}
+        ref={(el) => {
+          if (el) {
+            const slickList = el.querySelector<HTMLElement>('.slick-list');
+            if (slickList && !isFullscreen) {
+              slickList.style.paddingLeft = '0px';
+            }
+          }
+        }}
       >
-        <SlickSlider ref={sliderRef} {...sliderSettings}>
+        <SlickSlider
+          className="[&_.slick-slider>div]:w-full"
+          ref={sliderRef}
+          {...sliderSettings}
+        >
           {galleries.map((item, index) => (
             <div
               key={item.id}
               className={`relative ${
-                isFullscreen ? 'h-[80vh]' : 'h-[184px] px-1'
+                isFullscreen ? 'h-svh py-10 w-screen' : 'w-full h-[184px] px-1'
               }`}
             >
               <ProductGalleryItem
                 item={item}
                 playersRef={playersRef}
                 isActive={index === currentSlide}
-                onClick={() => setIsFullScreen((prev) => !prev)}
+                onClick={() => {
+                  if (index === currentSlide) {
+                    setCurrentSlide(index);
+                    setIsFullScreen((prev) => !prev);
+                  }
+                }}
                 isFullscreen={isFullscreen}
               />
             </div>

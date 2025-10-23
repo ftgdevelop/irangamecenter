@@ -1,14 +1,6 @@
-import React, { useRef, useState, useEffect } from "react";
-import {
-  Play,
-  Pause,
-  Volume2,
-  VolumeX,
-  Settings,
-  Maximize2,
-  Check,
-} from "lucide-react";
-import Hls, { Events, Level } from "hls.js";
+import React, { useRef, useState, useEffect } from 'react';
+import { Play, Pause, Volume2, VolumeX, Settings, Check } from 'lucide-react';
+import Hls, { Events, Level } from 'hls.js';
 
 interface Props {
   src: string;
@@ -43,17 +35,17 @@ const SteamStylePlayer: React.FC<Props> = ({
   const [showSettings, setShowSettings] = useState(false);
 
   const formatTime = (seconds: number) => {
-    if (isNaN(seconds) || seconds < 0) return "00:00";
+    if (isNaN(seconds) || seconds < 0) return '00:00';
     const m = Math.floor(seconds / 60);
     const s = Math.floor(seconds % 60);
-    return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   };
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    const isHLS = src.endsWith(".m3u8");
+    const isHLS = src.endsWith('.m3u8');
 
     if (isHLS && Hls.isSupported()) {
       const hls = new Hls({ enableWorker: true, capLevelToPlayerSize: true });
@@ -89,12 +81,12 @@ const SteamStylePlayer: React.FC<Props> = ({
       setProgress((video.currentTime / video.duration) * 100);
     };
 
-    video.addEventListener("loadedmetadata", handleLoadedMetadata);
-    video.addEventListener("timeupdate", handleTimeUpdate);
+    video.addEventListener('loadedmetadata', handleLoadedMetadata);
+    video.addEventListener('timeupdate', handleTimeUpdate);
 
     return () => {
-      video.removeEventListener("loadedmetadata", handleLoadedMetadata);
-      video.removeEventListener("timeupdate", handleTimeUpdate);
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      video.removeEventListener('timeupdate', handleTimeUpdate);
       playersRef?.current?.delete(String(itemId));
       hlsRef.current?.destroy();
       hlsRef.current = null;
@@ -106,7 +98,10 @@ const SteamStylePlayer: React.FC<Props> = ({
     const video = videoRef.current;
     if (!video) return;
     if (isActive) {
-      video.play().then(()=> setPlaying(true)).catch(() => console.log("Autoplay blocked"));
+      video
+        .play()
+        .then(() => setPlaying(true))
+        .catch(() => console.log('Autoplay blocked'));
     } else {
       video.pause();
       setPlaying(false);
@@ -117,7 +112,10 @@ const SteamStylePlayer: React.FC<Props> = ({
     const video = videoRef.current;
     if (!video) return;
     if (video.paused) {
-      video.play().then(()=> setPlaying(true)).catch(() => console.log("Autoplay blocked"));
+      video
+        .play()
+        .then(() => setPlaying(true))
+        .catch(() => console.log('Autoplay blocked'));
     } else {
       video.pause();
       setPlaying(false);
@@ -154,11 +152,6 @@ const SteamStylePlayer: React.FC<Props> = ({
     setCurrentTime(time);
   };
 
-  const toggleFullscreen = () => {
-    const video = videoRef.current;
-    if (video && video.requestFullscreen) video.requestFullscreen();
-  };
-
   const handleQualitySelect = (level: number) => {
     setCurrentLevel(level);
     if (hlsRef.current) hlsRef.current.currentLevel = level;
@@ -191,7 +184,7 @@ const SteamStylePlayer: React.FC<Props> = ({
 
       <div
         className={`absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent transition-opacity duration-300 ${
-          showControls ? "opacity-100" : "opacity-0"
+          showControls ? 'opacity-100' : 'opacity-0'
         }`}
       >
         <input
@@ -233,7 +226,7 @@ const SteamStylePlayer: React.FC<Props> = ({
             </div>
 
             <span className="text-xs sm:text-sm">
-              {formatTime(currentTime)} / {formatTime(duration)}
+              -{formatTime(duration - currentTime)}
             </span>
           </div>
 
@@ -243,11 +236,11 @@ const SteamStylePlayer: React.FC<Props> = ({
             </button>
 
             {showSettings && levels.length > 0 && (
-              <div className="absolute bottom-10 right-0 bg-black/90 border border-gray-700 rounded-md px-3 py-2 w-24 sm:w-28 text-xs sm:text-sm space-y-1 z-50">
+              <div className="absolute max-h-24 overflow-y-auto scroll-smooth styled-scrollbar bottom-6 right-0 bg-black/90 border border-gray-700 rounded-md px-3 py-2 w-24 sm:w-28 text-xs sm:text-sm space-y-1 z-50">
                 <button
                   onClick={() => handleQualitySelect(-1)}
                   className={`flex justify-between w-full text-left hover:bg-white/10 px-1 py-1 rounded ${
-                    currentLevel === -1 ? "text-red-400" : "text-gray-200"
+                    currentLevel === -1 ? 'text-red-400' : 'text-gray-200'
                   }`}
                 >
                   Auto {currentLevel === -1 && <Check className="size-3" />}
@@ -257,7 +250,7 @@ const SteamStylePlayer: React.FC<Props> = ({
                     key={index}
                     onClick={() => handleQualitySelect(index)}
                     className={`flex justify-between w-full text-left hover:bg-white/10 px-1 py-1 rounded ${
-                      currentLevel === index ? "text-red-400" : "text-gray-200"
+                      currentLevel === index ? 'text-red-400' : 'text-gray-200'
                     }`}
                   >
                     {level.height ? `${level.height}p` : `Level ${index}`}
@@ -267,9 +260,9 @@ const SteamStylePlayer: React.FC<Props> = ({
               </div>
             )}
 
-            <button onClick={toggleFullscreen}>
+            {/* <button onClick={toggleFullscreen}>
               <Maximize2 className="size-4 sm:size-5" />
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
