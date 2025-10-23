@@ -358,8 +358,7 @@ const DetailProduct: NextPage<any> = ({
       {!!productData?.rating?.length && (
         <>
           <strong className="px-4 text-lg font-semibold mb-0 mt-8 text-[#ffefb2] block">
-            {' '}
-            امتیاز در وبسایت های معتبر{' '}
+            امتیاز در وبسایت های معتبر
           </strong>
           <div className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip py-3 pl-3">
             <div className="flex gap-3 pr-4">
@@ -375,8 +374,7 @@ const DetailProduct: NextPage<any> = ({
         <>
           <div className="px-4">
             <strong className="text-lg font-semibold mb-3 mt-8 text-[#ffefb2] block">
-              {' '}
-              جوایز و دستاوردها{' '}
+              جوایز و دستاوردها
             </strong>
             {productData.awards.map((award) => (
               <div className="flex items-center gap-2 mb-2 text-sm" key={award}>
@@ -397,7 +395,6 @@ const DetailProduct: NextPage<any> = ({
       {!!productData?.faqs?.length && (
         <>
           <h5 className="px-4 text-lg font-semibold mb-4 mt-8 text-[#ffefb2]">
-            {' '}
             سوالات متداول درباره {productData.name}
           </h5>
           <FAQ

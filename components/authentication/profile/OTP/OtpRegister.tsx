@@ -1,84 +1,81 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { registerOTP } from '@/actions/identity'
-import InfoCircle from '@/components/icons/InfoCircle'
-import Loading from '@/components/icons/Loading'
-import FormikField from '@/components/shared/FormikField'
-import { useAppDispatch } from '@/hooks/use-store'
-import { setReduxNotification } from '@/redux/notificationSlice'
-import { Form, Formik } from 'formik'
-import { useState } from 'react'
+import { registerOTP } from '@/actions/identity';
+import InfoCircle from '@/components/icons/InfoCircle';
+import Loading from '@/components/icons/Loading';
+import FormikField from '@/components/shared/FormikField';
+import { useAppDispatch } from '@/hooks/use-store';
+import { setReduxNotification } from '@/redux/notificationSlice';
+import { Form, Formik } from 'formik';
+import { useState } from 'react';
 
 type Props = {
   code: string;
   phoneNumber: string;
   onSuccessLogin: (response: any) => void;
-}
+};
 
 const OtpRegister: React.FC<Props> = (props) => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
-  const [submitLoading, setSubmitLoading] = useState<boolean>(false)
+  const [submitLoading, setSubmitLoading] = useState<boolean>(false);
 
   const initialValues = {
     newPassword: '',
     repeatPassword: '',
-  }
+  };
 
   const submitHandler = async (parameters: {
-    newPassword: string
-    repeatPassword: string
+    newPassword: string;
+    repeatPassword: string;
   }) => {
-    setSubmitLoading(true)
+    setSubmitLoading(true);
 
     dispatch(
       setReduxNotification({
         status: '',
         message: '',
         isVisible: false,
-      }),
-    )
+      })
+    );
 
     const response: any = await registerOTP({
       code: props.code,
       emailOrPhoneNumber: props.phoneNumber,
       password: parameters.newPassword,
-    })
+    });
 
-    setSubmitLoading(false)
+    setSubmitLoading(false);
 
     if (response.data && response.data.success) {
-        
-        props.onSuccessLogin(response);
-
+      props.onSuccessLogin(response);
     } else {
       dispatch(
         setReduxNotification({
           status: 'error',
           message: 'ارسال اطلاعات ناموفق',
           isVisible: true,
-        }),
-      )
+        })
+      );
     }
-  }
+  };
 
   const validatePassword = (value: string, equalTo?: string) => {
-    let error
+    let error;
     if (!value) {
-      error = 'کلمه عبور را وارد نمایید'
+      error = 'کلمه عبور را وارد نمایید';
     } else if (value.length < 6) {
-      error = 'کلمه عبور باید حداقل 6 حرف باشد'
+      error = 'کلمه عبور باید حداقل 6 حرف باشد';
     } else if (equalTo && value !== equalTo) {
-      error = 'تکرار کلمه عبور با کلمه عبور مطابقت ندارد'
+      error = 'تکرار کلمه عبور با کلمه عبور مطابقت ندارد';
     }
 
-    return error
-  }
+    return error;
+  };
 
   return (
     <div>
       <h3 className="font-semibold text-lg lg:text-xl text-[#ff7189] text-center mb-2">
-        {' '}
         کلمه عبور انتخاب کنید
       </h3>
       <p className="text-xs mb-10 px-5 text-center max-w-96 mx-auto">
@@ -88,7 +85,7 @@ const OtpRegister: React.FC<Props> = (props) => {
 
       <Formik
         validate={() => {
-          return {}
+          return {};
         }}
         initialValues={initialValues}
         onSubmit={submitHandler}
@@ -104,12 +101,12 @@ const OtpRegister: React.FC<Props> = (props) => {
           if (isSubmitting && !isValid) {
             setTimeout(() => {
               const formFirstError = document.querySelector(
-                '.has-validation-error',
-              )
+                '.has-validation-error'
+              );
               if (formFirstError) {
-                formFirstError.scrollIntoView({ behavior: 'smooth' })
+                formFirstError.scrollIntoView({ behavior: 'smooth' });
               }
-            }, 100)
+            }, 100);
           }
           return (
             <Form className="mx-3" autoComplete="off">
@@ -124,9 +121,8 @@ const OtpRegister: React.FC<Props> = (props) => {
                 label={'کلمه عبور '}
                 labelDescription={
                   <div className="pr-5 text-2xs mb-2 mt-1">
-                    {' '}
-                    <InfoCircle className="ml-1 w-4 h-4 fill-current inline-block" />{' '}
-                    رمز عبور باید حداقل شامل 6 حرف باشد{' '}
+                    <InfoCircle className="ml-1 w-4 h-4 fill-current inline-block" />
+                    رمز عبور باید حداقل شامل 6 حرف باشد
                   </div>
                 }
                 validateFunction={(value: string) => validatePassword(value)}
@@ -159,11 +155,11 @@ const OtpRegister: React.FC<Props> = (props) => {
                 ) : null}
               </button>
             </Form>
-          )
+          );
         }}
       </Formik>
     </div>
-  )
-}
+  );
+};
 
-export default OtpRegister
+export default OtpRegister;
