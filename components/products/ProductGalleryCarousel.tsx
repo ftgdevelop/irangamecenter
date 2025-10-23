@@ -75,18 +75,29 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
   }
 
   const sliderSettings = {
-    arrows: isFullscreen,
-    infinite: true,
-    slidesToShow: 1,
-    draggable: true,
-    swipeToSlide: true,
-    rtl: true,
     dots: false,
-    autoplay: false,
-    initialSlide: currentSlide,
-    afterChange: (current: number) => setCurrentSlide(current),
+    arrows: false,
+    slide: '.slick-slideshow__slide',
+    slidesToShow: 1,
     centerMode: !isFullscreen,
-    centerPadding: '20px',
+    centerPadding: isFullscreen ? '0px' : '50px',
+    afterChange: (current: number) => setCurrentSlide(current),
+    initialSlide: currentSlide,
+    rtl: true,
+    responsive: [
+      {
+        breakpoint: 470,
+        settings: {
+          centerPadding: isFullscreen ? '0px' : '20px',
+        },
+      },
+      {
+        breakpoint: 430,
+        settings: {
+          centerPadding: '0px',
+        },
+      },
+    ],
   };
 
   return (
@@ -107,25 +118,42 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
       )}
 
       <div
-        className={`relative ${
+        className={` ${
           isFullscreen
-            ? 'w-screen h-screen px-10 py-10'
-            : 'w-full h-[184px] px-2'
+            ? 'relative w-screen h-svh px-10 '
+            : 'w-full h-[184px] px-1'
         }`}
+        ref={(el) => {
+          if (el) {
+            const slickList = el.querySelector<HTMLElement>('.slick-list');
+            if (slickList && !isFullscreen) {
+              slickList.style.paddingLeft = '0px';
+            }
+          }
+        }}
       >
-        <SlickSlider ref={sliderRef} {...sliderSettings}>
+        <SlickSlider
+          className="[&_.slick-slide>div]:w-full"
+          ref={sliderRef}
+          {...sliderSettings}
+        >
           {galleries.map((item, index) => (
             <div
               key={item.id}
-              className={`relative ${
-                isFullscreen ? 'h-[80vh]' : 'h-[184px] px-1'
+              className={`relative w-full ${
+                isFullscreen ? 'h-svh py-10 ' : 'h-[184px] px-1 '
               }`}
             >
               <ProductGalleryItem
                 item={item}
                 playersRef={playersRef}
                 isActive={index === currentSlide}
-                onClick={() => setIsFullScreen((prev) => !prev)}
+                onClick={() => {
+                  if (index === currentSlide) {
+                    setCurrentSlide(index);
+                    setIsFullScreen((prev) => !prev);
+                  }
+                }}
                 isFullscreen={isFullscreen}
               />
             </div>
