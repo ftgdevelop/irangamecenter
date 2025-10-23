@@ -17,6 +17,7 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
   const playersRef = useRef<Map<string, HTMLVideoElement>>(new Map());
   const sliderRef = useRef<SlickSlider | null>(null);
 
+  // Automatically advance slides
   useEffect(() => {
     if (galleries.length === 0 || isFullscreen) return;
 
@@ -49,6 +50,7 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
     return () => clearTimeout(timeoutId);
   }, [currentSlide, galleries, isFullscreen]);
 
+  // Handle video "ended" -> move to next slide
   useEffect(() => {
     const playerMap = playersRef.current;
     if (!playerMap || playerMap.size === 0) return;
@@ -65,6 +67,43 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
       });
     };
   }, [galleries, currentSlide]);
+
+useEffect(() => {
+  const container = document.getElementById('gallery-fullscreen-container');
+  if (!container) return;
+
+  interface FullscreenElement extends HTMLElement {
+    webkitRequestFullscreen?: () => Promise<void>;
+    msRequestFullscreen?: () => Promise<void>;
+  }
+
+  const el = container as FullscreenElement;
+
+  if (isFullscreen) {
+    if (el.requestFullscreen) {
+      el.requestFullscreen();
+    } else if (el.webkitRequestFullscreen) {
+      el.webkitRequestFullscreen(); // Safari
+    } else if (el.msRequestFullscreen) {
+      el.msRequestFullscreen(); // IE/Edge legacy
+    }
+  } else {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    }
+  }
+}, [isFullscreen]);
+
+  // Sync fullscreen state if user presses ESC
+  useEffect(() => {
+    const handleChange = () => {
+      if (!document.fullscreenElement) {
+        setIsFullScreen(false);
+      }
+    };
+    document.addEventListener('fullscreenchange', handleChange);
+    return () => document.removeEventListener('fullscreenchange', handleChange);
+  }, []);
 
   if (galleries.length === 0) {
     return (
@@ -102,6 +141,7 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
 
   return (
     <div
+      id="gallery-fullscreen-container"
       className={`${
         isFullscreen
           ? 'fixed inset-0 z-50 bg-black/90 flex items-center justify-center'
@@ -118,9 +158,9 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
       )}
 
       <div
-        className={` ${
+        className={`${
           isFullscreen
-            ? 'relative w-screen h-svh px-10 '
+            ? 'relative w-screen h-svh px-2'
             : 'w-full h-[184px] px-1'
         }`}
         ref={(el) => {
@@ -133,15 +173,15 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
         }}
       >
         <SlickSlider
-          className="[&_.slick-slide>div]:w-full"
+          className="[&_.slick-slider>div]:w-full"
           ref={sliderRef}
           {...sliderSettings}
         >
           {galleries.map((item, index) => (
             <div
               key={item.id}
-              className={`relative w-full ${
-                isFullscreen ? 'h-svh py-10 ' : 'h-[184px] px-1 '
+              className={`relative ${
+                isFullscreen ? 'h-svh py-10 w-screen' : 'w-full h-[184px] px-1'
               }`}
             >
               <ProductGalleryItem

@@ -48,7 +48,7 @@ const ProductGalleryItem: React.FC<Props> = ({
       src={item.filePath || ''}
       alt={`gallery-image-${item.id}`}
       fill
-      className={`rounded-xl object-fill w-[327px] ${
+      className={`rounded-xl object-cover w-[327px] ${
         fullscreen ? '' : 'transition-transform'
       }`}
       onLoad={handleLoad}
