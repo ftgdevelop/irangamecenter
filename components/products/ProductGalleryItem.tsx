@@ -43,17 +43,25 @@ const ProductGalleryItem: React.FC<Props> = ({
       />
     );
 
-  const renderImage = (fullscreen = false) => (
-    <Image
-      src={item.filePath || ''}
-      alt={`gallery-image-${item.id}`}
-      fill
-      className={`rounded-xl object-cover w-[327px] ${
-        fullscreen ? '' : 'transition-transform'
-      }`}
-      onLoad={handleLoad}
-      onError={handleLoad}
-    />
+  const renderImage = () => (
+    <div className="w-full h-full flex justify-center items-center rounded-xl bg-black">
+      <div
+        className={`relative rounded-xl overflow-hidden w-full h-full ${
+          isFullscreen ? ' max-w-[800px] max-h-[450px] aspect-[16/9]' : ''
+        }`}
+      >
+        <Image
+          src={item.filePath || ''}
+          alt={`gallery-image-${item.id}`}
+          fill
+          className={`h-full w-[327px] ${
+            isFullscreen ? 'object-contain' : 'object-cover'
+          } transition-transform`}
+          onLoad={handleLoad}
+          onError={handleLoad}
+        />
+      </div>
+    </div>
   );
 
   if (isVideo && item.cdnThumbnail) {

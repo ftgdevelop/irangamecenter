@@ -81,9 +81,9 @@ useEffect(() => {
     if (el.requestFullscreen) {
       el.requestFullscreen();
     } else if (el.webkitRequestFullscreen) {
-      el.webkitRequestFullscreen(); // Safari
+      el.webkitRequestFullscreen(); 
     } else if (el.msRequestFullscreen) {
-      el.msRequestFullscreen(); // IE/Edge legacy
+      el.msRequestFullscreen(); 
     }
   } else {
     if (document.fullscreenElement) {
@@ -92,7 +92,6 @@ useEffect(() => {
   }
 }, [isFullscreen]);
 
-  // Sync fullscreen state if user presses ESC
   useEffect(() => {
     const handleChange = () => {
       if (!document.fullscreenElement) {
@@ -143,7 +142,7 @@ useEffect(() => {
       className={`${
         isFullscreen
           ? 'fixed inset-0 z-50 bg-black/90 flex items-center justify-center'
-          : ''
+          : 'mb-5'
       }`}
     >
       {isFullscreen && (
