@@ -19,7 +19,7 @@ export const numberWithCommas = (x: number) => {
     }
 }
 
-export const dateDiplayFormat = ({ date, format, locale }: { date: string; format?: "timeAgo" | "weekDayNumber" | "m" | "d" | "HH:mm"|"HH:mm:ss"| "dd mm"| "ddd dd mm"| "ddd dd mm yyyy" | "dd mm yyyy" | "yyyy/mm/dd" | "YYYY-MM-DD" | "yyyy/mm/dd h:m" | "yyyy MMM" , locale?: string }): string => {
+export const dateDiplayFormat = ({ date, format, locale }: { date: string; format?: "ISO" | "timeAgo" | "weekDayNumber" | "m" | "d" | "HH:mm"|"HH:mm:ss"| "dd mm"| "ddd dd mm"| "ddd dd mm yyyy" | "dd mm yyyy" | "yyyy/mm/dd" | "YYYY-MM-DD" | "yyyy/mm/dd h:m" | "yyyy MMM" , locale?: string }): string => {
 
     if (!date) return "";
 
@@ -34,6 +34,7 @@ export const dateDiplayFormat = ({ date, format, locale }: { date: string; forma
 
     const h = dateObject.getHours().toString().padStart(2, '0');
     const m = dateObject.getMinutes().toString().padStart(2, '0');
+    const s = dateObject.getSeconds().toString().padStart(2, '0');
 
     if (format === "HH:mm"){
         const h1 = dateObject.toLocaleString(locale, { hour: "2-digit" }).padStart(2, '0');
@@ -110,6 +111,10 @@ export const dateDiplayFormat = ({ date, format, locale }: { date: string; forma
            return(`${month} ${year}`)
         }
 
+    }
+
+    if(format === "ISO"){
+        return `${year}-${month2digit}-${day2digit}T${h}:${m}:${s}+00:00`;
     }
 
     return date;
