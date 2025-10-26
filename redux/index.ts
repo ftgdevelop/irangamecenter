@@ -5,6 +5,7 @@ import authenticationSlice from "./authenticationSlice";
 import stylesSlice from "./stylesSlice";
 import pagesSlice from "./pages";
 import productsSlice from "./productsSlice";
+import cartSlice from "./cartSlice";
 
 export const store = configureStore({
     reducer: {
@@ -13,7 +14,8 @@ export const store = configureStore({
         authentication: authenticationSlice,
         styles: stylesSlice,
         pages: pagesSlice,
-        products:productsSlice
+        products: productsSlice,
+        cart: cartSlice, 
     }
 })
 

@@ -83,3 +83,11 @@ export const ServerStatus = {
   Error: 2,
   SummaryError: 3,
 };
+
+  export const Cart = {
+    GetCurrentCart:"/api/services/app/Cart/GetCurrentCart",
+    AddItem:"/api/services/app/Cart/AddItem",
+    RemoveItem:"/api/services/app/Cart/RemoveItem",
+    ClearCart:"/api/services/app/Cart/Clear",
+  }
+  
