@@ -3,9 +3,9 @@
 import React, { useEffect, useState } from 'react'
 import CartCard from '@/components/cart/CartCard'
 import Tabs from '@/components/ui/Tabs'
-import { useAppDispatch, useAppSelector } from '@/hooks/use-store'
-import { removeFromCart, clearCart } from '@/redux/cartSlice'
-import type { CartState } from '@/redux/cartSlice' 
+// import { useAppDispatch, useAppSelector } from '@/hooks/use-store'
+// import { removeFromCart, clearCart } from '@/redux/cartSlice'
+// import type { CartState } from '@/redux/cartSlice' 
 import { getCart } from '@/actions/cart'
 
 
@@ -35,6 +35,15 @@ interface TabItem {
   component: React.ReactNode
 }
 
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+
+
 
 const tabItems: TabItem[] = [
   { value: 'cart', label: 'سبد خرید', component: <CartSection /> },
@@ -44,35 +53,43 @@ const tabItems: TabItem[] = [
 
 
 const CartPage: React.FC = () => {
-  const [cartData, setCartData] = useState([]);
-  const dispatch = useAppDispatch()
-  const cart = useAppSelector((state) => state.cart) as CartState
-  const { items } = cart;
+const [cartData, setCartData] = useState<CartItem[]>([]); 
+  // const cart = useAppSelector((state) => state.cart) as CartState
+  // const { items } = cart;
 
 
-    useEffect(()=>{
-        const fetchCart = async () => {
-          const response: any = await getCart();
-          setCartData(response)
-            
-        }
-        fetchCart();
-    }, []);
+useEffect(() => {
+  const fetchCart = async () => {
+    try {
+      const result = await getCart();
+
+      if ('data' in result) {
+        setCartData(result.data.items);
+      } else {
+        console.error("Failed to fetch cart:");
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+    }
+  };
+
+  fetchCart();
+}, []);
   
   console.log({cartData});
   
 
-  const total = items.reduce(
-    (sum, item) => sum + (item?.product?.items[0]?.regularPrice && 0) * item.quantity,
-    0
-  )
+  // const total = items.reduce(
+  //   (sum, item) => sum + (item?.product?.items[0]?.regularPrice && 0) * item.quantity,
+  //   0
+  // )
 
   return (
     <>
       <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
         <Tabs items={tabItems} defaultActive="cart" />
       </div>
-      <div className="p-6 max-w-3xl mx-auto">
+      {/* <div className="p-6 max-w-3xl mx-auto">
         <h1 className="text-2xl font-bold mb-4">سبد خرید شما</h1>
         {items.length === 0 ? (
           <p>سبد خرید شما خالی است.</p>
@@ -108,7 +125,7 @@ const CartPage: React.FC = () => {
             </div>
           </div>
         )}
-      </div>
+      </div> */}
     </>
   )
 }

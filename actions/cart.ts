@@ -20,18 +20,16 @@ export interface ApiError {
   data?: unknown;
 }
 
-export const getCart = async (): Promise<AxiosResponse<CartResponse> | ApiError> => {
+export const getCart = async (): Promise<AxiosResponse<CartResponse>> => {
   try {
-    const res = await axios.get<CartResponse>(`${ServerAddress.Type}${ServerAddress.Commerce}${Cart.GetCurrentCart}`);
+    const res = await axios.get<CartResponse>(
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.GetCurrentCart}`
+    );
     return res;
   } catch (error) {
     const err = error as AxiosError<ApiError>;
     console.error("getCart error:", err);
-    return {
-      message: err.message,
-      statusCode: err.response?.status,
-      data: err.response?.data,
-    };
+    throw err; 
   }
 };
 
