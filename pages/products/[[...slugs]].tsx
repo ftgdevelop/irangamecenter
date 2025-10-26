@@ -20,9 +20,9 @@ import { groupByPrefix } from "@/helpers";
 
 type Props = {
     productsData?: GetProductsDataType;
-    slugs?: string;
+    slugs?: string[];
     page?: number;
-    parameters___?: any;
+    parameters: GetAllProductsParams;
 }
 const Products: NextPage<Props> = props => {
 
@@ -30,18 +30,20 @@ const Products: NextPage<Props> = props => {
 
     const dispatch = useAppDispatch();
 
-    const slugs: string[] = (router?.query?.slugs as string[]) || [];
-
     const [products, setProducts] = useState<ProductItem[]>(props.productsData?.pagedResult?.items || []);
     const [fetchMode, setFetchMode] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
 
-    // useEffect(() => {
-    //     setProducts(props.productsData?.items || []);
-    // }, [props.queryPage]);
+    useEffect(() => {
+        setProducts(props.productsData?.pagedResult?.items || []);
+        if (props.productsData?.pagedResult?.items) {
+            document.addEventListener('scroll', checkIsInView);
+            window.addEventListener("resize", checkIsInView);
+        }
+    }, [props.page, props.parameters?.orderBy, props.parameters?.sortBy, props.slugs]);
 
     const changePageHandel = (p: number) => {
-        const otherSlugs = slugs?.filter(item => !(item.includes("page-")));
+        const otherSlugs = props.slugs?.filter(item => !(item.includes("page-"))) || [];
         const segments = ["/products", ...otherSlugs, `page-${p}`];
         const newUrl = segments.join("/");
         router.push({
@@ -49,10 +51,10 @@ const Products: NextPage<Props> = props => {
         });
     }
 
-    const selectedPage = +(slugs?.find(x => x.includes("page-"))?.split("page-")?.[1] || 0);
+    const selectedPage = +(props.slugs?.find(x => x.includes("page-"))?.split("page-")?.[1] || 0);
 
     const changeSortHandel = (val: ProductSortKeywords) => {
-        const otherSlugs = slugs?.filter(item => !(item.includes("sort-")));
+        const otherSlugs = props.slugs?.filter(item => !(item.includes("sort-"))) || [];
         const segments = ["/products", ...otherSlugs, `sort-${val}`];
         const newUrl = segments.join("/");
         router.push({
@@ -60,70 +62,9 @@ const Products: NextPage<Props> = props => {
         });
     }
 
-    const selectedSort = slugs?.find(x => x.includes("sort-"))?.split("sort-")?.[1] as ProductSortKeywords;
+    const selectedSort = props.slugs?.find(x => x.includes("sort-"))?.split("sort-")?.[1] as ProductSortKeywords;
 
-    const selectedFilterSlugs = slugs?.filter(x => (!x.includes("sort-") && !x.includes("page-"))) || [];
-
-    const selectedDynamicFilterSlugs = selectedFilterSlugs?.filter(x => (!x.includes("search-"))) || [];
-
-    const selectedDynamicFiltersArray = groupByPrefix(selectedDynamicFilterSlugs);
-
-    useEffect(() => {
-
-        const fetchData = async (params: GetAllProductsParams) => {
-
-            setLoading(true);
-            setProducts([]);
-
-            const productsResponse: GetProductsResponseType = await getProducts(params);
-
-            if (productsResponse?.data?.result?.pagedResult?.items) {
-                setProducts(productsResponse.data.result.pagedResult.items);
-                document.addEventListener('scroll', checkIsInView);
-                window.addEventListener("resize", checkIsInView);
-            }
-            setLoading(false);
-        }
-
-        const parameters: GetAllProductsParams = {
-            skipCount: 0,
-            maxResultCount: 10
-        }
-
-        if (selectedSort) {
-            switch (selectedSort) {
-                case "HighPrice":
-                    parameters.sortBy = "asc";
-                    parameters.orderBy = "Price";
-                    break;
-                case "LowPrice":
-                    parameters.sortBy = "desc";
-                    parameters.orderBy = "Price";
-                    break;
-                case "Sale":
-                    parameters.sortBy = "asc";
-                    parameters.orderBy = "Sale";
-                    break;
-                case "Visitor":
-                    parameters.sortBy = "asc";
-                    parameters.orderBy = "Visitor";
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        for (const key in selectedDynamicFiltersArray) {
-            parameters[key] = selectedDynamicFiltersArray[key];
-        }
-
-        fetchData(parameters);
-
-    }, [
-        selectedSort,
-        slugs.length
-    ]);
-
+    const selectedFilterSlugs = props.slugs?.filter(x => (!x.includes("sort-") && !x.includes("page-"))) || [];
 
     const loadMoreWrapper = useRef<HTMLDivElement>(null);
 
@@ -150,39 +91,10 @@ const Products: NextPage<Props> = props => {
             removeListener();
             return;
         }
-        setLoading(true);
+        setLoading(true);      
 
-        const parameters: GetAllProductsParams = {
-            maxResultCount: 10,
-            skipCount: (page - 1) * 10
-        };
-
-        if (selectedSort) {
-            switch (selectedSort) {
-                case "HighPrice":
-                    parameters.sortBy = "asc";
-                    parameters.orderBy = "Price";
-                    break;
-                case "LowPrice":
-                    parameters.sortBy = "desc";
-                    parameters.orderBy = "Price";
-                    break;
-                case "Sale":
-                    parameters.sortBy = "asc";
-                    parameters.orderBy = "Sale";
-                    break;
-                case "Visitor":
-                    parameters.sortBy = "asc";
-                    parameters.orderBy = "Visitor";
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        for (const key in selectedDynamicFiltersArray) {
-            parameters[key] = selectedDynamicFiltersArray[key];
-        }
+        const parameters = {...props.parameters};
+        parameters.skipCount =  (page - 1) * 10;
 
         const productsResponse: GetProductsResponseType = await getProducts(parameters);
 
@@ -197,6 +109,7 @@ const Products: NextPage<Props> = props => {
     }
 
     const checkIsInView = () => {
+
         const targetTop = loadMoreWrapper.current?.getBoundingClientRect().top;
         const screenHeight = screen.height;
         if (targetTop && targetTop < (3 * screenHeight / 5) && !fetchMode) {
@@ -238,7 +151,7 @@ const Products: NextPage<Props> = props => {
                         <button
                             key={facet.key}
                             type="button"
-                            className={`inline-flex gap-2 items-center justify-between rounded-full px-5 py-2.5 text-2xs select-none ${slugs.find(x => x.includes(facet.key)) ? activeFilterColor : "bg-[#192a39]"}`}
+                            className={`inline-flex gap-2 items-center justify-between rounded-full px-5 py-2.5 text-2xs select-none ${props.slugs?.find(x => x.includes(facet.key)) ? activeFilterColor : "bg-[#192a39]"}`}
                             onClick={() => { 
                                 dispatch(openFilter(facet.key)) 
                             }}
@@ -262,45 +175,37 @@ const Products: NextPage<Props> = props => {
                 {!!loading && [1, 2, 3, 4, 5].map(item => (
                     <div className="flex gap-3 mb-4" key={item}>
                         <Skeleton
+                            dark
                             type="image"
                             className="w-18 h-18 block shrink-0 rounded-2xl"
                         />
                         <div className="w-full">
-                            <Skeleton className="h-4 w-full mt-2 mb-4" />
-                            <Skeleton className="w-1/2" />
+                            <Skeleton className="h-4 w-full mt-2 mb-4" dark />
+                            <Skeleton className="w-1/2" dark />
                         </div>
                     </div>
                 ))}
 
                 {!!(props.productsData?.pagedResult?.totalCount && products.length < props.productsData.pagedResult.totalCount) && (
                     <div ref={loadMoreWrapper}>
-                        <Pagination2
-                            onChange={e => { changePageHandel(e) }}
-                            totalItems={props.productsData.pagedResult.totalCount}
-                            itemsPerPage={10}
-                            currentPage={selectedPage || 5}
-                        />
+                        {products.length < 50 && !selectedPage ? (
+                            <br/>
+                        ):(
+                            <Pagination2
+                                onChange={e => { changePageHandel(e) }}
+                                totalItems={props.productsData.pagedResult.totalCount}
+                                itemsPerPage={10}
+                                currentPage={selectedPage || 5}
+                            />
+                        )}
                     </div>
                 )}
-
-
-                {/* {!!(props.productsData?.totalCount && products.length < props.productsData.totalCount) && <button
-                    ref={loadMoreWrapper}
-                    type="button"
-                    className="text-sm text-[#ca54ff] bg-[#161b39] w-full px-5 py-3 flex rounded-full justify-center gap-3"
-                    onClick={addItems}
-                >
-                    <Add />
-                    مطالب بیشتر
-                </button>} */}
 
             </div>
 
             <Contacts />
 
             {!!(props.productsData?.facets?.length) && <ProductsFliter filters={props.productsData?.facets} />}
-
-            {/* <FilterProducts /> */}
 
         </>
     )
@@ -372,7 +277,7 @@ export async function getServerSideProps(context: any) {
                 productsData: productsResponse?.data?.result || null,
                 slugs: slugs || null,
                 page: selectedPage || null,
-                parameters___: parameters || null
+                parameters: parameters || null
             }
         }
     )

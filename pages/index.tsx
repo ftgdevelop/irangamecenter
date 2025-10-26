@@ -17,9 +17,10 @@ import Contacts from "@/components/shared/Contacts";
 import { getBlogs } from "@/actions/blog";
 import { BlogItemType } from "@/types/blog";
 import BlogsCarousel from "@/components/blog/BlogsCarousel";
-import { getProducts } from "@/actions/commerce";
+import { getAllForSiteMap, getProducts } from "@/actions/commerce";
 import { GetProductsDataType } from "@/types/commerce";
 import SimilarProductsCarousel from "@/components/products/SimilarProductsCarousel";
+import { useEffect } from "react";
 
 type HomeAboutDataType = {
   Keyword: "about_intro" | "icons" | "faq" | "telNumber" | "email";
@@ -117,6 +118,30 @@ const Home: NextPage<Props> = props => {
   const SupportNumberUrl = homeAboutData?.find(item => item.Keyword === "telNumber")?.Url;
   const SupportNumberSubtitle = homeAboutData?.find(item => item.Keyword === "telNumber")?.Subtitle;
   const emailAddress = homeAboutData?.find(item => item.Keyword === "email")?.Description;
+
+
+
+
+
+
+// This useEffect should be removed:
+  useEffect(()=>{
+    const fetchD = async () => {    
+      await getAllForSiteMap({
+        type:"Video",
+        MaxResultCount:100,
+        SkipCount: 0
+      });
+    }
+    fetchD()
+  },[]);
+
+
+
+
+
+
+  
 
   return (
     <>

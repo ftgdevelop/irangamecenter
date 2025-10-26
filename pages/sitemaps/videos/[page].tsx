@@ -1,6 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { getAllForSiteMap } from "@/actions/commerce";
+import { dateDiplayFormat } from "@/helpers";
 
 type VideosData = {
   slug?: string;
@@ -9,14 +10,12 @@ type VideosData = {
     id: number,
     filePath: string,
     thumbnail: string,
-    // cdnPath: "https://igc1.storage.c2.liara.space/videos/products/122/elden-ring-official-trailer-2",
-    // cdnThumbnail: "https://igc1.storage.c2.liara.space/videos/products/122/elden-ring-trailer-thumbnail-2.webp",
-    // fileAltAttribute: null,
-    // fileTitleAttribute: null,
-    // fileUniqKey: "60fe571c-cf85-f011-bf76-000c29176f1e",
-    // isActive: true,
-    // mediaType: "Video",
-    // thumbnailUniqKey: "6f0a4b15-cf85-f011-bf76-000c29176f1e",
+    fileTitleAttribute?: string;
+    fileAltAttribute?: string;
+    creationTime?: string;
+    duration?: number;
+    category?: string;
+    tags?: string;
   }[];
 }[];
 
@@ -33,14 +32,40 @@ function creareSiteMap(items:VideosData){
       if(videos?.length){
         for(let j = 0 ; j < videos.length ; j++ ){
           const video = videos[j];
+
+          const tags : string[] = video.tags?.split(",") || [];
+          let tagsPart = "";
+          
+          if(tags.length){
+            for (const tag of tags) {
+              tagsPart += `
+               <video:tag><![CDATA[${tag}]]></video:tag>
+              `
+            }
+          }
+
+          let timePart = "";
+          if(video.creationTime){
+            timePart = `
+              <video:publication_date>${dateDiplayFormat({
+                date: video.creationTime,
+                format:"ISO",
+                locale:"en"
+              })}</video:publication_date>
+            `
+          }
+
           videosPart += `
             <video:video>
               <video:thumbnail_loc>${video.thumbnail}</video:thumbnail_loc>
               <video:content_loc>${video.filePath}</video:content_loc>
-              <video:title>${items[i].name}</video:title>
-              <video:description>توضیح کوتاه درباره ویدئو</video:description>
-              <video:duration>120</video:duration>
-              <video:publication_date>2023-05-01T08:00:00+00:00</video:publication_date>
+              <video:title><![CDATA[${video.fileTitleAttribute}]]></video:title>
+              <video:description><![CDATA[${video.fileAltAttribute}]]></video:description>
+              <video:duration>${video.duration}</video:duration>
+              <video:category><![CDATA[${video.category}]]></video:category>
+              ${timePart}
+              ${tagsPart}
+              <video:family_friendly>yes</video:family_friendly>
             </video:video>
           `;
         }
@@ -59,7 +84,6 @@ function creareSiteMap(items:VideosData){
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
       ${contents}
     </urlset>`;
-
 }
 
 function SiteMap() {
@@ -84,7 +108,7 @@ export const getServerSideProps = async ({ res, query }:{res:any, query:any}) =>
     sitemap = creareSiteMap([]);
   }
 
-  res.setHeader('Content-Type', 'text/xml');
+  res.setHeader('Content-Type', 'application/xml');
   res.write(sitemap);
   res.end();
 

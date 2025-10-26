@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 type Props = {
     content: React.ReactNode;
     title: React.ReactNode;
+    extraInTitle?: React.ReactNode;
     WrapperClassName?: string;
     initiallyOpen?: boolean;
     updateContent?: string;
@@ -16,7 +17,7 @@ const Accordion: React.FC<Props> = props => {
 
     const [open, setOpen] = useState<boolean>(props.initiallyOpen || false);
 
-    const { content, title, WrapperClassName, withArrowIcon } = props;
+    const { content, title, WrapperClassName, withArrowIcon, extraInTitle } = props;
 
     const toggle = () => { setOpen(prevState => !prevState) }
 
@@ -37,10 +38,22 @@ const Accordion: React.FC<Props> = props => {
 
     return (
         <div className={`text-sm ${WrapperClassName || ""}`}>
-            <div onClick={toggle} className={`leading-5 relative font-semibold select-none cursor-pointer py-2 pl-12`}>
-                {title}
-                <div className={`absolute left-0 top-2.5 ${expandIconClass}`} />
-            </div>
+            {extraInTitle ?(
+                <div className={`leading-5 relative font-semibold select-none cursor-pointer py-2 pl-12`}>
+                    <div className="flex items-center gap-2">
+                        <div onClick={toggle} >
+                            {title}
+                        </div>
+                        {extraInTitle}
+                    </div>
+                    <div onClick={toggle} className={`absolute left-0 top-2.5 ${expandIconClass}`} />
+                </div>
+            ):(
+                <div onClick={toggle} className={`leading-5 relative font-semibold select-none cursor-pointer py-2 pl-12`}>
+                    {title}
+                    <div className={`absolute left-0 top-2.5 ${expandIconClass}`} />
+                </div>
+            )}
             <div
                 ref={contentRef}
                 className="overflow-hidden transition-all duration-300"
