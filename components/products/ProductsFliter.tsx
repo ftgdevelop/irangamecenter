@@ -10,6 +10,7 @@ import Accordion from "../shared/Accordion";
 import { openFilter } from "@/redux/productsSlice";
 import { useRouter } from "next/router";
 import { Facet } from "@/types/commerce";
+import Checkbox from "../shared/Checkbox";
 
 type Props = {
     filters: Facet[];
@@ -84,9 +85,6 @@ const ProductsFliter: React.FC<Props> = props => {
 
     const openedFilterIsActive = (type: string) => !!(selectedFilterSlugs.find(item => item.includes(type)));
 
-
-    console.log(selectedFilterSlugs.join(" * "), new Date().toLocaleString());
-
     return (
 
         <ModalPortal
@@ -115,14 +113,51 @@ const ProductsFliter: React.FC<Props> = props => {
                         </button>
                     </div>
 
+                    <Checkbox
+                        className="mb-5"
+                        block
+                        label="فقط محصولات موجود"
+                        onChange={(checked: boolean) => {
+                            const otherSlugs = slugs?.filter(item => !(item.includes("onlyAvailable")));
+                            const segments = ["/products", ...otherSlugs];
+                            if(checked){
+                                segments.push("onlyAvailable")
+                            }
+                            const newUrl = segments.join("/");
+                            router.push({
+                                pathname: newUrl,
+                            });
+                        }}
+                        value="OnlyAvailable"
+                        checked={!!slugs.find(s => s.includes("onlyAvailable"))}
+                    />
+                    
+                    <Checkbox
+                        className="mb-5"
+                        block
+                        label="فقط پیش فروش"
+                        onChange={(checked: boolean) => {
+                            const otherSlugs = slugs?.filter(item => !(item.includes("onBackOrder")));
+                            const segments = ["/products", ...otherSlugs];
+                            if(checked){
+                                segments.push("onBackOrder")
+                            }
+                            const newUrl = segments.join("/");
+                            router.push({
+                                pathname: newUrl,
+                            });
+                        }}
+                        value="OnBackOrder "
+                        checked={!!slugs.find(s => s.includes("onBackOrder"))}
+                    />
 
                     {props.filters?.filter(item => ([item.key, "all"].includes(openedFilter))).map(filter => (
                         <Accordion
                             key={filter.key}
                             updateContent={filter.items?.join("-")}
                             title={(
-                                <h5 className="font-semibold text-sm"> فیلتر بر اساس {filter.label} 
-                                {/* {!!selectedFilter(filter.key)?.length && <span className={activeClass} />}  */}
+                                <h5 className="font-semibold text-sm"> فیلتر بر اساس {filter.label}
+                                    {/* {!!selectedFilter(filter.key)?.length && <span className={activeClass} />}  */}
                                 </h5>
                             )}
 

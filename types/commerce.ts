@@ -247,6 +247,7 @@ export type GetAllProductsParams = {
   search?: string;
   orderBy?: unknown;
   sortBy?: unknown;
+  onlyAvailable?: boolean;  
 } & {
   [key: string]: string[] | number | string | unknown;
 }

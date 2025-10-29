@@ -1,5 +1,6 @@
 import CheckboxGroup from "@/components/shared/CheckboxGroup";
 import DatePickerMobiscroll from "@/components/shared/DatePickerMobiscroll";
+//import DatePickerMulti from "@/components/shared/DatePickerMulti";
 import { Field, Form, Formik } from "formik";
 import { useState } from "react";
 
@@ -85,6 +86,16 @@ const TransactionsFilter: React.FC<Props> = props => {
                                         />
                                     </div>
                                 </div>
+
+{/* 
+                                <hr/>
+                                <label className="mb-2 block text-sm">
+                                    بازه زمانی
+                                </label>
+
+                                <DatePickerMulti 
+                                    range
+                                /> */}
 
                                 <label className="mb-2 block text-sm">
                                     نوع تراکنش

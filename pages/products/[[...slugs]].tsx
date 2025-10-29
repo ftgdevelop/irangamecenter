@@ -17,6 +17,8 @@ import Filter from "@/components/icons/Filter";
 import { DownCaretThick } from "@/components/icons/DownCaretThick";
 import ProductsFliter from "@/components/products/ProductsFliter";
 import { groupByPrefix } from "@/helpers";
+import AvailableFilterTag from "@/components/products/AvailableFilterTag";
+import BackOrderFilterTag from "@/components/products/BackOrderFilterTag";
 
 type Props = {
     productsData?: GetProductsDataType;
@@ -34,13 +36,24 @@ const Products: NextPage<Props> = props => {
     const [fetchMode, setFetchMode] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
 
+
+    //TODO: remove this useEffect:
+    useEffect(() => {
+        const fetchDatas = async () => {
+            const parameters = { ...props.parameters };
+            await getProducts(parameters);
+        }
+        fetchDatas();
+    }, [router.asPath]);
+
+
     useEffect(() => {
         setProducts(props.productsData?.pagedResult?.items || []);
         if (props.productsData?.pagedResult?.items) {
             document.addEventListener('scroll', checkIsInView);
             window.addEventListener("resize", checkIsInView);
         }
-    }, [props.page, props.parameters?.orderBy, props.parameters?.sortBy, props.slugs]);
+    }, [router.asPath]);
 
     const changePageHandel = (p: number) => {
         const otherSlugs = props.slugs?.filter(item => !(item.includes("page-"))) || [];
@@ -91,10 +104,10 @@ const Products: NextPage<Props> = props => {
             removeListener();
             return;
         }
-        setLoading(true);      
+        setLoading(true);
 
-        const parameters = {...props.parameters};
-        parameters.skipCount =  (page - 1) * 10;
+        const parameters = { ...props.parameters };
+        parameters.skipCount = (page - 1) * 10;
 
         const productsResponse: GetProductsResponseType = await getProducts(parameters);
 
@@ -147,13 +160,17 @@ const Products: NextPage<Props> = props => {
                         فیلتر
                     </button>
 
+                    <AvailableFilterTag />
+
+                    <BackOrderFilterTag />
+
                     {props.productsData?.facets?.map(facet => (
                         <button
                             key={facet.key}
                             type="button"
                             className={`inline-flex gap-2 items-center justify-between rounded-full px-5 py-2.5 text-2xs select-none ${props.slugs?.find(x => x.includes(facet.key)) ? activeFilterColor : "bg-[#192a39]"}`}
-                            onClick={() => { 
-                                dispatch(openFilter(facet.key)) 
+                            onClick={() => {
+                                dispatch(openFilter(facet.key))
                             }}
                         >
                             {facet.label}
@@ -189,8 +206,8 @@ const Products: NextPage<Props> = props => {
                 {!!(props.productsData?.pagedResult?.totalCount && products.length < props.productsData.pagedResult.totalCount) && (
                     <div ref={loadMoreWrapper}>
                         {products.length < 50 && !selectedPage ? (
-                            <br/>
-                        ):(
+                            <br />
+                        ) : (
                             <Pagination2
                                 onChange={e => { changePageHandel(e) }}
                                 totalItems={props.productsData.pagedResult.totalCount}
@@ -232,7 +249,7 @@ export async function getServerSideProps(context: any) {
 
     const selectedFilterSlugs = slugs?.filter(x => (!x.includes("sort-") && !x.includes("page-"))) || [];
 
-    const selectedDynamicFilterSlugs = selectedFilterSlugs?.filter(x => (!x.includes("search-"))) || [];
+    const selectedDynamicFilterSlugs = selectedFilterSlugs?.filter(x => (!x.includes("search-") && !x.includes("onlyAvailable") && !x.includes("onBackOrder"))) || [];
 
     const selectedDynamicFiltersArray = groupByPrefix(selectedDynamicFilterSlugs);
 
@@ -264,9 +281,16 @@ export async function getServerSideProps(context: any) {
                 break;
         }
     }
-    
+
     for (const key in selectedDynamicFiltersArray) {
         parameters[key] = selectedDynamicFiltersArray[key];
+    }
+
+    if (selectedFilterSlugs.find(x => x.includes("onlyAvailable"))) {
+        parameters.onlyAvailable = true;
+    }
+    if (selectedFilterSlugs.find(x => x.includes("onBackOrder"))) {
+        parameters.statuses = ["OnBackOrder"];
     }
 
     const productsResponse: GetProductsResponseType = await getProducts(parameters);

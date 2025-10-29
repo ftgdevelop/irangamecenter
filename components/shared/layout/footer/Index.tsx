@@ -60,13 +60,23 @@ const Footer = () => {
             <div className="py-5 border-t border-white/15">
                 <strong className="block text-center font-semibold mb-4"> نمادهای اعتماد </strong>
                 <div className="flex gap-4 bg-[#f0eff2] rounded-xl p-5">
-                    <Image
-                        src="/mock-images/enamad.jpg"
-                        alt="نماد اعتماد"
-                        width={100}
-                        height={100}
-                        className="h-24 w-auto"
-                    />
+
+                    <a 
+                        referrerPolicy="origin" 
+                        target="_blank" 
+                        href="https://trustseal.enamad.ir/?id=665612&Code=KA7pgQKtQ7wh1GDHIjmy2QSoVfv9WZou"
+                    >
+                        <Image
+                            referrerPolicy="origin"
+
+                            src="/mock-images/enamad.jpg"
+                            alt="نماد اعتماد"
+                            width={100}
+                            height={100}
+                            className="h-24 w-auto"
+                        />
+                    </a>
+
                     <Image
                         src="/mock-images/resaneh.jpg"
                         alt="ساماندهی"
