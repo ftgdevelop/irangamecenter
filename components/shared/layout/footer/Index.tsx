@@ -68,11 +68,10 @@ const Footer = () => {
                     >
                         <Image
                             referrerPolicy="origin"
-
-                            src="/mock-images/enamad.jpg"
+                            src="/images/enamad.png"
                             alt="نماد اعتماد"
-                            width={100}
-                            height={100}
+                            width={80}
+                            height={96}
                             className="h-24 w-auto"
                         />
                     </a>
@@ -80,8 +79,8 @@ const Footer = () => {
                     <Image
                         src="/mock-images/resaneh.jpg"
                         alt="ساماندهی"
-                        width={100}
-                        height={100}
+                        width={81}
+                        height={96}
                         className="h-24 w-auto"
                     />
 
