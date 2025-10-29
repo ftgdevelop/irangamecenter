@@ -9,7 +9,7 @@ interface Props {
   galleries?: ProductGalleryItemType[];
 }
 
-const DEFAULT_IMAGE_DURATION = 2000;
+const DEFAULT_IMAGE_DURATION = 20000;
 
 const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
