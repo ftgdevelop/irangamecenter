@@ -184,7 +184,6 @@ const CartFooter = ({
 }) => {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state) => state.cart.items);
-  const total = useAppSelector((state) => state.cart.totalQuantity);
 
   if (!selectedVariant?.items?.[0]) return null;
 
@@ -198,7 +197,6 @@ const CartFooter = ({
   const totalQuantityThisProduct = cartItem.reduce((sum, item) => sum + item.quantity, 0);
   
   
-  console.log({ cartItems, cartItem, total, product });
   
 
   return (
