@@ -12,7 +12,8 @@ export type SelectedVariantLevel = {
 };
 
 const VariantSection: React.FC<Props> = ({ productData }) => {
-  const [selectedVariants, setSelectedVariants] = useState<SelectedVariantLevel[]>([]);
+  const [selectedVariants, setSelectedVariants] =
+    useState<SelectedVariantLevel[]>([]);
 
   useEffect(() => {
     if (productData.variants?.length) {
@@ -21,24 +22,28 @@ const VariantSection: React.FC<Props> = ({ productData }) => {
     }
   }, [productData]);
 
-const handleSelectVariant = useCallback((variant: ProductVariant, level: number) => {
-  setSelectedVariants(prev => {
-    const existingLevelIndex = prev.findIndex(v =>  v.variant.name === variant.name);
+  const handleSelectVariant = useCallback(
+    (variant: ProductVariant, level: number) => {
+      setSelectedVariants((prev) => {
+        const existingLevelIndex = prev.findIndex(
+          (v) => v.variant.name === variant.name
+        );
 
-    if (existingLevelIndex !== -1) {
-      const updated = [...prev];
-      updated[existingLevelIndex] = { variant, level: level.toString() };
-      return updated;
-    } else {
-      return [...prev, { variant, level: level.toString() }];
-    }
-  });
-}, []);
+        if (existingLevelIndex !== -1) {
+          const updated = [...prev];
+          updated[existingLevelIndex] = { variant, level: level.toString() };
+          return updated;
+        } else {
+          return [...prev, { variant, level: level.toString() }];
+        }
+      });
+    },
+    []
+  );
 
-    const selectedVariant = selectedVariants[0]?.variant;
-    
-console.log({selectedVariants});
-
+  const selectedVariant = selectedVariants[0]?.variant;
+  const selectedVariantIds = selectedVariants.map(s => s.variant.id)
+  
 
   return (
     <>
@@ -54,8 +59,11 @@ console.log({selectedVariants});
               <div key={variantItem.slug} className="pl-3 last:pl-4">
                 <button
                   type="button"
-                  className={`shrink-0 rounded-xl whitespace-nowrap px-4 h-16 border-0 outline-none font-semibold py-3 
-                    ${isSelected ? "bg-gradient-green text-neutral-800" : "bg-[#192a39]"}`}
+                  className={`shrink-0 rounded-xl whitespace-nowrap px-4 h-16 border-0 outline-none font-semibold py-3 ${
+                    isSelected
+                      ? "bg-gradient-green text-neutral-800"
+                      : "bg-[#192a39]"
+                  }`}
                   disabled={!variantItem.slug}
                   onClick={() => handleSelectVariant(variantItem, 0)}
                 >
@@ -69,11 +77,13 @@ console.log({selectedVariants});
 
       {selectedVariant && (
         <VariantItem
-            variant={selectedVariant}
-            level={"1"}
-            setSelectedVariants={setSelectedVariants}
-            onSelectVariant={handleSelectVariant}
-            selectedVariants={selectedVariants}
+          variant={selectedVariant}
+          level="1"
+          setSelectedVariants={setSelectedVariants}
+          onSelectVariant={handleSelectVariant}
+          selectedVariants={selectedVariants}
+          selectedVariantIds={selectedVariantIds}
+          productData={productData}
         />
       )}
     </>

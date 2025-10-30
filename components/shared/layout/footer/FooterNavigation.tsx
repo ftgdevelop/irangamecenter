@@ -7,8 +7,7 @@ import { useRouter } from "next/router";
 const FooterNavigation = () => {
   const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
   const userInfoLoading = useAppSelector(state => state.authentication.getUserLoading);
-  const cartItems = useAppSelector(state => state.cart.items);
-  const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const cartCount = useAppSelector(state => state.cart.totalQuantity);
 
   const router = useRouter();
   const { asPath } = router;

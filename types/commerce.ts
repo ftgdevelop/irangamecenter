@@ -239,6 +239,7 @@ export interface ProductDetailData {
              [key: string]: string;
         }
     }
+    id: number;
 }
 
 export type GetAllProductsParams = {

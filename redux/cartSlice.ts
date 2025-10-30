@@ -1,72 +1,41 @@
-import { ProductVariant } from "@/types/commerce";
+import { ProductDetailData } from "@/types/commerce";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface CartItem {
-  id: string; 
-  product: ProductVariant;
+  productId: string;
+  product: ProductDetailData;
+  variants?: ProductDetailData["variants"];
+  variantIDs?: string[];
   quantity: number;
-  attributes?: Record<string, string | string[]>; 
 }
 
 export interface CartState {
   items: CartItem[];
+  totalQuantity: number;
 }
 
 const initialState: CartState = {
   items: [],
+  totalQuantity: 0,
 };
 
-/**
- * Normalize attribute record to a consistent string for comparison
- */
-const serializeAttributes = (attributes?: Record<string, string | string[]>) => {
-  if (!attributes) return "";
-  return Object.entries(attributes)
-    .map(([key, value]) => {
-      const normalized =
-        Array.isArray(value) ? value.sort().join(",") : String(value);
-      return `${key}:${normalized}`;
-    })
-    .sort((a, b) => a.localeCompare(b))
-    .join("|");
-};
-
-/**
- * Generates unique cart ID from base id + attributes
- */
-const generateCartId = (
-  baseId: string,
-  attributes?: Record<string, string | string[]>
-) => {
-  const attrString = serializeAttributes(attributes);
-  return attrString ? `${baseId}_${attrString}` : baseId;
-};
-
-/**
- * Deep attribute equality checker (for merge logic)
- */
-const areAttributesEqual = (
-  a?: Record<string, string | string[]>,
-  b?: Record<string, string | string[]>
-): boolean => {
+export const areVariantIDsEqual = (a?: string[], b?: string[]): boolean => {
   if (!a && !b) return true;
   if (!a || !b) return false;
+  if (a.length !== b.length) return false;
+  return [...a].sort().every((id, i) => id === [...b].sort()[i]);
+};
 
-  const aKeys = Object.keys(a);
-  const bKeys = Object.keys(b);
-  if (aKeys.length !== bKeys.length) return false;
+const generateCartId = (baseId: string, variantIDs?: string[]) => {
+  if (!variantIDs || variantIDs.length === 0) return baseId;
+  return `${baseId}_${variantIDs.sort().join("-")}`;
+};
 
-  return aKeys.every((key) => {
-    const aVal = a[key];
-    const bVal = b[key];
-    if (Array.isArray(aVal) && Array.isArray(bVal)) {
-      return (
-        aVal.length === bVal.length &&
-        aVal.every((v) => bVal.includes(v))
-      );
-    }
-    return aVal === bVal;
-  });
+const recalcTotalQuantity = (state: CartState) => {
+  state.totalQuantity = state.items.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
 };
 
 const cartSlice = createSlice({
@@ -76,47 +45,70 @@ const cartSlice = createSlice({
     addToCart(
       state,
       action: PayloadAction<{
-        id: string;
-        product: ProductVariant;
-        quantity: number;
-        attributes?: Record<string, string | string[]>;
+        product: ProductDetailData;
+        variants?: ProductDetailData["variants"];
+        variantIDs?: string[];
+        quantity?: number;
       }>
     ) {
-      const { id, product, quantity, attributes } = action.payload;
+      const { product, variants, variantIDs, quantity = 1 } = action.payload;
 
-      const existing = state.items.find(
+      const generatedId = generateCartId(String(product.id), variantIDs);
+
+      const existingItem = state.items.find(
         (item) =>
-          item.product.id === product.id &&
-          areAttributesEqual(item.attributes, attributes)
+          item.productId === generatedId &&
+          areVariantIDsEqual(item.variantIDs, variantIDs)
       );
 
-      if (existing) {
-        existing.quantity += quantity;
+      if (existingItem) {
+        existingItem.quantity += quantity;
       } else {
-        const cartId = generateCartId(id, attributes);
         state.items.push({
-          id: cartId,
+          productId: generatedId,
           product,
+          variants,
+          variantIDs,
           quantity,
-          attributes,
         });
       }
+
+      recalcTotalQuantity(state);
     },
 
-    removeFromCart(state, action: PayloadAction<string>) {
-      state.items = state.items.filter((item) => item.id !== action.payload);
+    removeFromCart(
+      state,
+      action: PayloadAction<{ product: ProductDetailData }>
+    ) {
+      const { product } = action.payload;
+
+      state.items = state.items.filter(
+        (item) =>
+          !(
+            item.product.name === product.name
+          )
+      );
+
+      recalcTotalQuantity(state);
     },
 
     updateQuantity(
       state,
-      action: PayloadAction<{ id: string; quantity: number }>
+      action: PayloadAction<{ productId: string; quantity: number }>
     ) {
-      const item = state.items.find((i) => i.id === action.payload.id);
-      if (item) item.quantity = Math.max(1, action.payload.quantity);
+      const { productId, quantity } = action.payload;
+
+      const item = state.items.find((i) => i.productId === productId);
+      if (item) {
+        item.quantity = Math.max(1, quantity);
+      }
+
+      recalcTotalQuantity(state);
     },
 
     clearCart(state) {
       state.items = [];
+      state.totalQuantity = 0;
     },
   },
 });
