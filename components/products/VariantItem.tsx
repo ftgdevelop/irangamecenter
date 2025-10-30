@@ -16,6 +16,7 @@ import { numberWithCommas } from "@/helpers";
 import { SelectedVariantLevel } from "./VariantSection";
 import { addToCart, removeFromCart } from "@/redux/cartSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
+import { addItem, removeItem } from "@/actions/cart";
 
 type Props = {
   variant?: ProductVariant;
@@ -197,7 +198,35 @@ const CartFooter = ({
   const totalQuantityThisProduct = cartItem.reduce((sum, item) => sum + item.quantity, 0);
   
   
-  
+  const handleAddItem = async () => {
+    const targetItem = variants.filter(v => v.items && v.items?.length > 0)[0].id
+    const quantity = cartItem[0]?.quantity
+    if (targetItem) {
+      await addItem({ variantId: targetItem, quantity:   quantity ? quantity + 1 :  0}).then(() => {
+        dispatch(
+          addToCart({
+            product,
+            variants,
+            variantIDs,
+            quantity: 1,
+          })
+        )
+      })
+    }
+  }
+
+  const handleDeleteItem = async () => {
+    const targetItem = cartItem[0].product.id
+    if (targetItem) {
+      await removeItem({ Id: targetItem}).then(() => {
+        dispatch(
+          removeFromCart({
+            product,
+          })
+        );
+      })
+    }
+  }
 
   return (
     <SimplePortal selector="fixed_bottom_portal">
@@ -207,13 +236,7 @@ const CartFooter = ({
             <button
               className="bg-gradient-to-t from-green-600 to-green-300 hover:opacity-90 flex justify-center items-center p-2 h-10 w-10 rounded-full transition-all"
               onClick={() =>
-                dispatch(
-                  addToCart({
-                  product,
-                  variants,
-                  variantIDs,
-                })
-                )
+                handleAddItem()
               }
             >
               <Plus size={18} />
@@ -226,11 +249,7 @@ const CartFooter = ({
             <button
               className="bg-gray-700 hover:bg-gray-600 flex justify-center items-center p-2 h-10 w-10 rounded-full transition-all"
               onClick={() => {
-                  dispatch(
-                    removeFromCart({
-                      product,
-                    })
-                  );
+                handleDeleteItem()
               }}
             >
               <Trash2 size={18} className="text-white/70" />
@@ -239,15 +258,9 @@ const CartFooter = ({
         ) : (
           <button
             type="button"
-            onClick={() =>
-              dispatch(
-                addToCart({
-                  product,
-                  variants,
-                  variantIDs,
-                  quantity: 1,
-                })
-              )
+              onClick={() => {
+                handleAddItem()
+              }
             }
             className="bg-violet-500 hover:bg-violet-600 text-white rounded-full px-4 py-3 text-xs flex gap-2 items-center font-semibold transition-all duration-200"
           >
@@ -262,7 +275,6 @@ const CartFooter = ({
           </button>
         )}
 
-        {/* Price Info */}
         <div className="text-left text-white">
           {!!item?.regularPrice && (
             <div className="flex flex-wrap gap-2 mb-1">

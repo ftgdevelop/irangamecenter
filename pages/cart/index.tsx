@@ -1,15 +1,12 @@
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
-import CartCard from "@/components/cart/CartCard";
+import CartCard, { CartGeneralInfo } from "@/components/cart/CartCard";
 import Tabs from "@/components/ui/Tabs";
-import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
-import { removeFromCart, clearCart, CartItem } from "@/redux/cartSlice";
-import { getCart } from "@/actions/cart";
-import { RootState } from "@/redux";
+import { clearCart } from "@/redux/cartSlice";
+import { getCart, removeItem } from "@/actions/cart";
+import { ProductDetailData } from "@/types/commerce";
 
-const CartSection = ({ items }: { items: CartItem[] }) => {
-  return items.map((item) => <CartCard key={item.productId} item={item} />);
-};
+
 
 const PaymentSection = () => (
   <div>
@@ -25,12 +22,21 @@ const ConfirmationSection = () => (
 );
 
 const CartPage = () => {
-  const dispatch = useAppDispatch();
-  const items = useAppSelector((state: RootState) => state.cart.items);
-  const [cartData, setCartData] = useState<unknown[]>([]);
+  const [cartData, setCartData] = useState<CartGeneralInfo | null>(null);
 
+
+  const CartSection = ({ items }: { items: ProductDetailData[] }) => {
+  return items.map((item) => item && cartData && <CartCard key={item.id} item={item} cartGeneralInfo={cartData}/>);
+};
   const tabItems = [
-    { value: "cart", label: "سبد خرید", component: <CartSection items={items} /> },
+    {
+      value: "cart",
+      label: "سبد خرید",
+      component:
+        cartData && cartData.items?.length > 0 ? (
+          <CartSection items={cartData.items} />
+        ) : null,
+    },
     { value: "payment", label: "پرداخت", component: <PaymentSection /> },
     { value: "confirmation", label: "تایید سفارش", component: <ConfirmationSection /> },
   ];
@@ -42,7 +48,7 @@ const CartPage = () => {
       try {
         const result = await getCart();
         if ("data" in result) {
-          setCartData(result.data.items);
+          setCartData(result.data.result);
         }
       } catch (error) {
         console.error("Unexpected error:", error);
@@ -52,14 +58,19 @@ const CartPage = () => {
     fetchCart();
   }, []);
 
-  const total = items.reduce((sum, item) => {
-    const priceInfo =  item.variants?.filter(v => v.items && v.items?.length > 0) 
-    const price = priceInfo?.[0]?.items?.[0]?.regularPrice ?? 0;
-    return sum + price * item.quantity;
-  }, 0);
 
-  console.log({cartData});
-  
+
+  const handleClearCart = async () => {
+    await clearCart()
+  };
+
+  const handleDeleteItem = async () => {
+    const targetItem = cartData && cartData.items?.[0]?.id
+    if (targetItem) {
+      await removeItem({ Id: targetItem });
+    }
+  };
+
 
   return (
     <>
@@ -75,43 +86,35 @@ const CartPage = () => {
       <div className="p-6 max-w-3xl mx-auto">
         <h1 className="text-2xl font-bold mb-4">سبد خرید شما</h1>
 
-        {items.length === 0 ? (
+        {!cartData || !cartData.items.length ? (
           <p>سبد خرید شما خالی است.</p>
         ) : (
           <div>
-            {items.map((item) => {
-              const regularPrice =
-                item.variants
-                  ?.filter((v) => v.items && v.items.length > 0)?.[0]
-                  ?.items?.[0].regularPrice ?? 0;
+            {cartData.items?.length > 0 &&
+              cartData.items.map((item: ProductDetailData) => {
 
-              return (
-                <div
-                  key={item.productId}
-                  className="flex justify-between items-center border-b py-2"
-                >
-                  <div>
-                    <p>{item.product.name}</p>
-                    <p>
-                      {regularPrice.toLocaleString()} × {item.quantity} تومان
-                    </p>
-                  </div>
-                  <button
-                    onClick={() =>
-                      dispatch(removeFromCart({ product: item.product }))
-                    }
-                    className="text-red-500"
+                return (
+                  <div
+                    key={item?.id}
+                    className="flex justify-between items-center border-b py-2"
                   >
-                    حذف
-                  </button>
-                </div>
-              );
-            })}
+                    <div>
+                      <p>{item?.name}</p>
+                      <p>
+                        {item.toLocaleString()} × {cartData.payableAmount} تومان
+                      </p>
+                    </div>
+                    <button onClick={handleDeleteItem} className="text-red-500">
+                      حذف
+                    </button>
+                  </div>
+                );
+              })}
 
             <div className="mt-4 flex justify-between">
-              <strong>مجموع: {total.toLocaleString()} تومان</strong>
+              <strong>مجموع: {cartData.totalItemsPrice?? 0} تومان</strong>
               <button
-                onClick={() => dispatch(clearCart())}
+                onClick={handleClearCart}
                 className="bg-red-500 text-white px-3 py-1 rounded"
               >
                 خالی کردن سبد
