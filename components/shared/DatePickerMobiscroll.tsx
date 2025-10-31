@@ -1,8 +1,8 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-// import '@mobiscroll/react/dist/css/mobiscroll.min.css';
-// import { Datepicker as MobiscrollDatepicker, setOptions, localeFa } from '@mobiscroll/react';
-// import { useEffect, useState } from 'react';
+import '@mobiscroll/react/dist/css/mobiscroll.min.css';
+import { Datepicker as MobiscrollDatepicker, setOptions, localeFa } from '@mobiscroll/react';
+import { useEffect, useState } from 'react';
 
 type Props = {
     onChange: (args: any, inst: any) => void;
@@ -13,59 +13,59 @@ type Props = {
     maxDate?: string;
 }
 
-// type DatePickerValue = {
-//     value: string;
-//     valueText: string;
-// }
+type DatePickerValue = {
+    value: string;
+    valueText: string;
+}
 
-// setOptions({
-//     theme: 'ios',
-//     themeVariant: 'light'
-// });
+setOptions({
+    theme: 'ios',
+    themeVariant: 'light'
+});
 
-const DatePickerMobiscroll: React.FC<Props> = () => {
+const DatePickerMobiscroll: React.FC<Props> = props => {
 
-    // const [value, setValue] = useState<string>(props.value || "");
+    const [value, setValue] = useState<string>(props.value || "");
 
     // const [instance, setInstance] = useState<any>(null);
 
-    // const [isMobile, setIsMobile] = useState<boolean>(false);
+    const [isMobile, setIsMobile] = useState<boolean>(false);
 
-    // useEffect(() => {
-    //     if (window && window.innerWidth < 1000) {
-    //         setIsMobile(true);
-    //     }
-    // }, []);
+    useEffect(() => {
+        if (window && window.innerWidth < 1000) {
+            setIsMobile(true);
+        }
+    }, []);
 
-    // const onChange = (args: DatePickerValue, inst: any) => {
-    //     setValue(args.value);
-    //     props.onChange(args, inst);
-    // }
+    const onChange = (args: DatePickerValue, inst: any) => {
+        setValue(args.value);
+        props.onChange(args, inst);
+    }
 
-    // const fridays: string[] = [
-    //     '2023-11-24',
-    //     '2023-12-01',
-    //     '2023-12-08',
-    //     '2023-12-15',
-    //     '2023-12-17',
-    //     '2023-12-22',
-    //     '2023-12-29',
-    //     '2024-01-05',
-    //     '2024-01-12',
-    //     '2024-01-19',
-    //     '2024-01-25',
-    //     '2024-01-26'
-    // ];
+    const fridays: string[] = [
+        '2023-11-24',
+        '2023-12-01',
+        '2023-12-08',
+        '2023-12-15',
+        '2023-12-17',
+        '2023-12-22',
+        '2023-12-29',
+        '2024-01-05',
+        '2024-01-12',
+        '2024-01-19',
+        '2024-01-25',
+        '2024-01-26'
+    ];
 
-    // const marked = fridays.map(item => ({
-    //     date: item,
-    //     cellCssClass: "red"
-    // }));
+    const marked = fridays.map(item => ({
+        date: item,
+        cellCssClass: "red"
+    }));
 
     return (
         <div className="mobiscroll-datepicker-wrapper persian-datepicker-wrapper" >
 
-            {/* <MobiscrollDatepicker
+            <MobiscrollDatepicker
                 cancelText='بستن'
                 // onInit={(_, inst) => { setInstance(inst) }}
                 cssClass="mobi-date-picker persian-date-picker"
@@ -86,7 +86,7 @@ const DatePickerMobiscroll: React.FC<Props> = () => {
                 onChange={onChange}
                 value={value}
             >
-            </MobiscrollDatepicker> */}
+            </MobiscrollDatepicker>
 
         </div>
     )
