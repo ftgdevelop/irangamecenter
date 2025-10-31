@@ -308,7 +308,7 @@ const DetailProduct: NextPage<any> = ({
         <AgeRatingDetail productData={productData} />
       </div>
 
-      <VariantSection variant={productData?.variants} />
+      <VariantSection productData={productData} />
 
       {/* <hr/><hr/><hr/><hr/><hr/><hr/><hr/>
 

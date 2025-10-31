@@ -1,5 +1,5 @@
 import Layout from "@/components/shared/layout/Layout";
-import { store } from "@/redux";
+import { persistor, store } from "@/redux";
 import '@mantine/core/styles.css';
 import '@/styles/mobiscroll.scss';
 import '@/styles/rmdp.scss';
@@ -8,6 +8,7 @@ import { createTheme, MantineProvider } from "@mantine/core";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 
 export default function App({ Component, pageProps }: AppProps) {
 
@@ -18,6 +19,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <MantineProvider theme={theme}>
       <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
           <Head>
             <title> Iran Game Center </title>
             <meta name="robots" content="noindex,nofollow" />
@@ -33,6 +35,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Layout>
             <Component {...pageProps} />
           </Layout>
+        </PersistGate>
       </Provider>
     </MantineProvider>
   )

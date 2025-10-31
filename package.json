@@ -28,6 +28,7 @@
     "react-multi-date-picker": "^4.5.2",
     "react-redux": "^9.2.0",
     "react-slick": "^0.31.0",
+    "redux-persist": "^6.0.0",
     "sass": "^1.83.4",
     "sharp": "^0.33.5"
   },
