@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { Cart, ServerAddress } from "@/enum/url";
 import { ProductDetailData } from "@/types/commerce";
 
@@ -10,30 +10,61 @@ export interface CartItem {
 }
 
 export interface CartResponse {
-  result: {
-    deviceId: string,
-    id : string
-    items: ProductDetailData[],
-    payableAmount: number,
-    profitAmount : number,
-    totalItemsPrice : number,
-    totalQuantity : number
-  }
+    result?:{
+      deviceId?: string,
+      id : string
+      items: ProductDetailData[],
+      payableAmount: number,
+      profitAmount : number,
+      totalItemsPrice : number,
+      totalQuantity: number
+    };
 
 }
 
 export interface ApiError {
   message: string;
   statusCode?: number;
-  data?: unknown;
+  data?: {
+      result?: {
+      deviceId?: string,
+      id : string
+      items: ProductDetailData[],
+      payableAmount: number,
+      profitAmount : number,
+      totalItemsPrice : number,
+      totalQuantity: number
+    }
+  }
 }
 
-export const getCart = async (): Promise<AxiosResponse<CartResponse>> => {
+export const getCart = async (deviceId?: string): Promise<CartResponse> => {
   try {
     const res = await axios.get<CartResponse>(
-      `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.GetCurrentCart}`
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.GetCurrentCart}`,{
+        headers: {
+          "X-Device-Id": deviceId,
+        },
+      }
     );
-    return res;
+    return res.data;
+  } catch (error) {
+    const err = error as AxiosError<ApiError>;
+    console.error("getCart error:", err);
+    throw err; 
+  }
+};
+
+export const getCartByProductId = async (deviceId : string, productId:number): Promise<CartResponse> => {
+  try {
+    const res = await axios.get<CartResponse>(
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.GetCartByProductId}?ProductId=${productId}`,{
+        headers: {
+          "X-Device-Id": deviceId,
+        },
+      }
+    );
+    return res.data;
   } catch (error) {
     const err = error as AxiosError<ApiError>;
     console.error("getCart error:", err);
@@ -42,11 +73,15 @@ export const getCart = async (): Promise<AxiosResponse<CartResponse>> => {
 };
 
 export const addItem = async (
-  params: { variantId: number; quantity: number }
-): Promise<AxiosResponse<CartResponse> | ApiError> => {
+  params: { variantId: number; quantity: number }, deviceId?: string
+): Promise<CartResponse> => {
   try {
-    const res = await axios.post<CartResponse>(`${ServerAddress.Type}${ServerAddress.Commerce}${Cart.AddItem}`, params);
-    return res;
+    const res = await axios.post<CartResponse>(`${ServerAddress.Type}${ServerAddress.Commerce}${Cart.AddItem}`, params, {
+      headers: {
+        "X-Device-Id": deviceId,
+      },
+    });
+    return res.data;
   } catch (error) {
     const err = error as AxiosError<ApiError>;
     throw err
@@ -54,23 +89,32 @@ export const addItem = async (
 };
 
 export const removeItem = async (
-  params: { Id: number }
-): Promise<AxiosResponse<CartResponse> | ApiError> => {
+  params: { Id: number },
+  deviceId?: string
+): Promise<CartResponse> => {
   try {
     const res = await axios.delete<CartResponse>(
       `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.RemoveItem}`
-, { data: params });
-    return res;
+      , {
+      headers: {
+        "X-Device-Id": deviceId,
+      },
+    });
+    return res.data;
   } catch (error) {
     const err = error as AxiosError<ApiError>;
     throw err
   }
 };
 
-export const clearCart = async (): Promise<AxiosResponse<CartResponse> | ApiError> => {
+export const clearCart = async (deviceId : string): Promise<CartResponse> => {
   try {
-    const res = await axios.post<CartResponse>(`${ServerAddress.Type}${ServerAddress.Commerce}${Cart.ClearCart}`);
-    return res;
+    const res = await axios.post<CartResponse>(`${ServerAddress.Type}${ServerAddress.Commerce}${Cart.ClearCart}`, {}, {
+      headers: {
+        "X-Device-Id": deviceId,
+      },
+    });
+    return res.data;
   } catch (error) {
     const err = error as AxiosError<ApiError>;
     throw err
