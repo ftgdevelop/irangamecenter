@@ -151,7 +151,7 @@ const VariantItem: React.FC<Props> = ({
                     }`}
                   >
                     {!!item?.regularPrice && (
-                      <div className="text-xs line-through text-white/70">
+                      <div className="text-xs line-through">
                         {numberWithCommas(item.regularPrice)} {item.currencyType}
                       </div>
                     )}
