@@ -46,9 +46,12 @@ const VariantItem: React.FC<Props> = ({
   const [selectedVariantId, setSelectedVariantId] = useState<number | undefined>(
     initialVariant?.id
   );
+    const [fade, setFade] = useState(false);
 
   useEffect(() => {
     setSelectedVariantId(initialVariant?.id);
+        setFade(true);
+    setTimeout(() => { setFade(false) }, 100)
   }, [initialVariant]);
 
   const selectedVariant = variant?.children?.find(
@@ -103,11 +106,12 @@ const VariantItem: React.FC<Props> = ({
 
   return (
     <>
-      <label className="text-sm block px-4 mt-7 text-white/80">
+      <label className="text-sm pointer-events-none block px-4 mt-7">
         انتخاب {variant?.children?.[0]?.name}
       </label>
 
-      <div className="overflow-x-auto overflow-y-clip pb-3 pl-3 lg:pb-2">
+        <div className={`max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip pb-3 pl-3 ${fade?"opacity-0":"opacity-100 transition-all duration-100"}`}>
+
         <div className="flex px-4 gap-3 pt-2">
           {variant?.children?.map((variantItem) => {
             const item = variantItem?.items?.[0];
@@ -121,13 +125,12 @@ const VariantItem: React.FC<Props> = ({
                 type="button"
                 disabled={isDisabled}
                 onClick={() => !isDisabled && setSelectedVariantId(variantItem.id)}
-                className={`relative min-w-40 shrink-0 rounded-xl whitespace-nowrap px-4 min-h-16 outline-none font-semibold py-3 transition-all duration-200
-                  ${
+                className={`relative min-w-40 shrink-0 rounded-xl whitespace-nowrap px-4 min-h-16 outline-none font-semibold py-3 ${
                     isDisabled
-                      ? "bg-transparent border border-white/15 text-gray-500 cursor-not-allowed"
+                      ? "bg-transparent border border-white/15 cursor-not-allowed"
                       : isSelected
-                      ? "bg-green-400 text-neutral-800"
-                      : "bg-[#192a39] hover:bg-[#21394f] text-white"
+                      ? "bg-gradient-green text-neutral-800 border-0"
+                      : "bg-[#192a39] border-0"
                   }`}
               >
                 {isDisabled && (
