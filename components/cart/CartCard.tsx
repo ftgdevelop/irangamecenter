@@ -5,7 +5,7 @@ import { addItem, removeItem } from "@/actions/cart";
 import { ProductDetailData } from "@/types/commerce";
 
 export interface CartGeneralInfo {
-    deviceId: string,
+    deviceId?: string,
     id : string
     items: ProductDetailData[],
     payableAmount: number,

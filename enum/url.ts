@@ -85,7 +85,8 @@ export const ServerStatus = {
 };
 
   export const Cart = {
-    GetCurrentCart:"/api/services/app/Cart/GetCurrentCart",
+    GetCurrentCart: "/api/services/app/Cart/GetCurrentCart",
+    GetCartByProductId: "/api/services/app/Cart/GetCartByProductId",
     AddItem:"/api/services/app/Cart/AddItem",
     RemoveItem:"/api/services/app/Cart/RemoveItem",
     ClearCart:"/api/services/app/Cart/Clear",

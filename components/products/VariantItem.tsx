@@ -14,9 +14,9 @@ import { Plus, Trash2 } from "lucide-react";
 import SimplePortal from "../shared/layout/SimplePortal";
 import { numberWithCommas } from "@/helpers";
 import { SelectedVariantLevel } from "./VariantSection";
-import { addToCart, removeFromCart } from "@/redux/cartSlice";
+import { addDeviceId, addQuantity,  removeQuantity } from "@/redux/cartSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
-import { addItem, removeItem } from "@/actions/cart";
+import { addItem, getCartByProductId, removeItem } from "@/actions/cart";
 
 type Props = {
   variant?: ProductVariant;
@@ -178,63 +178,68 @@ export default VariantItem;
 const CartFooter = ({
   selectedVariant,
   selectedVariants,
-  selectedVariantIds,
   product
 }: {
   selectedVariant?: ProductVariant;
   selectedVariants: SelectedVariantLevel[];
     selectedVariantIds: number[] | [];
   product: ProductDetailData;
-}) => {
+  }) => {
+  const [cartInfo, setCartInfo] = useState<ProductDetailData | null>(null);
+
   const dispatch = useAppDispatch();
-  const cartItems = useAppSelector((state) => state.cart.items);
+  const deviceId = useAppSelector((state) => state.cart.deviceId);
+  const currentClickQuantity = useAppSelector((state) => state.cart.quantity);
+
+  const fetchCartByProductId = () => {
+    getCartByProductId(deviceId || "", product.id).then(res => {
+      setCartInfo(res?.result?.items?.[0] || null)
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
+  useEffect(() => {
+    fetchCartByProductId()
+  }, [])
 
   if (!selectedVariant?.items?.[0]) return null;
 
   const item = selectedVariant.items[0];
   const currency = item.currencyType;
-
-  const variantIDs = selectedVariantIds.map(String);
   const variants = selectedVariants.map((v) => v.variant);
 
-  const cartItem = cartItems.filter(c => c.product.name === product.name)
-  const totalQuantityThisProduct = cartItem.reduce((sum, item) => sum + item.quantity, 0);
-  
   
   const handleAddItem = async () => {
     const targetItem = variants.filter(v => v.items && v.items?.length > 0)[0].id
-    const quantity = cartItem[0]?.quantity
+    dispatch(addQuantity())
     if (targetItem) {
-      await addItem({ variantId: targetItem, quantity:   quantity ? quantity + 1 :  0}).then(() => {
+      await addItem({ variantId: targetItem, quantity: currentClickQuantity }, deviceId).then(res => {         
         dispatch(
-          addToCart({
-            product,
-            variants,
-            variantIDs,
-            quantity: 1,
-          })
+          addDeviceId(res?.result?.deviceId || "" )
         )
+        dispatch(
+          removeQuantity(currentClickQuantity)
+        )
+        fetchCartByProductId()
+      }).catch(err => { console.log(err);
       })
     }
   }
 
   const handleDeleteItem = async () => {
-    const targetItem = cartItem[0].product.id
-    if (targetItem) {
-      await removeItem({ Id: targetItem}).then(() => {
+    await removeItem({ Id: product.id }, deviceId).then(( ) => { 
         dispatch(
-          removeFromCart({
-            product,
-          })
-        );
+          removeQuantity(1)
+        )
+      fetchCartByProductId()
       })
-    }
   }
 
   return (
     <SimplePortal selector="fixed_bottom_portal">
       <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 bg-[#192a39] px-4 py-3 flex flex-wrap justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
-        {!!cartItem.length ? (
+        {!!cartInfo? (
           <div className="flex items-center gap-2 h-10 bg-[#1e3246] rounded-full transition-all duration-300">
             <button
               className="bg-gradient-to-t from-green-600 to-green-300 hover:opacity-90 flex justify-center items-center p-2 h-10 w-10 rounded-full transition-all"
@@ -246,7 +251,7 @@ const CartFooter = ({
             </button>
 
             <span className="text-base w-4 text-center font-medium text-white">
-              {totalQuantityThisProduct}
+              {currentClickQuantity}
             </span>
 
             <button

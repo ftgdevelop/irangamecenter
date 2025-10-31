@@ -2,9 +2,9 @@ import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import CartCard, { CartGeneralInfo } from "@/components/cart/CartCard";
 import Tabs from "@/components/ui/Tabs";
-import { clearCart } from "@/redux/cartSlice";
-import { getCart, removeItem } from "@/actions/cart";
+import { getCart } from "@/actions/cart";
 import { ProductDetailData } from "@/types/commerce";
+import { useAppSelector } from "@/hooks/use-store";
 
 
 
@@ -22,19 +22,21 @@ const ConfirmationSection = () => (
 );
 
 const CartPage = () => {
-  const [cartData, setCartData] = useState<CartGeneralInfo | null>(null);
+  const [cartData, setCartData] = useState<ProductDetailData[] | undefined>(undefined);
+  const [cartGeneralInfo, setCartGeneralInfo] = useState<CartGeneralInfo | undefined>(undefined);
+  const deviceId = useAppSelector((state) => state.cart.deviceId);
 
 
   const CartSection = ({ items }: { items: ProductDetailData[] }) => {
-  return items.map((item) => item && cartData && <CartCard key={item.id} item={item} cartGeneralInfo={cartData}/>);
+  return items.map((item) => item && cartGeneralInfo && <CartCard key={item.id} item={item} cartGeneralInfo={cartGeneralInfo}/>);
 };
   const tabItems = [
     {
       value: "cart",
       label: "سبد خرید",
       component:
-        cartData && cartData.items?.length > 0 ? (
-          <CartSection items={cartData.items} />
+        cartData && cartData?.length > 0 ? (
+          <CartSection items={cartData} />
         ) : null,
     },
     { value: "payment", label: "پرداخت", component: <PaymentSection /> },
@@ -46,9 +48,10 @@ const CartPage = () => {
   useEffect(() => {
     const fetchCart = async () => {
       try {
-        const result = await getCart();
+        const result = await getCart(deviceId);
         if ("data" in result) {
-          setCartData(result.data.result);
+          setCartGeneralInfo(result?.result);
+          setCartData(result?.result?.items);
         }
       } catch (error) {
         console.error("Unexpected error:", error);
@@ -61,14 +64,11 @@ const CartPage = () => {
 
 
   const handleClearCart = async () => {
-    await clearCart()
+    return null
   };
 
   const handleDeleteItem = async () => {
-    const targetItem = cartData && cartData.items?.[0]?.id
-    if (targetItem) {
-      await removeItem({ Id: targetItem });
-    }
+      return null
   };
 
 
@@ -86,13 +86,13 @@ const CartPage = () => {
       <div className="p-6 max-w-3xl mx-auto">
         <h1 className="text-2xl font-bold mb-4">سبد خرید شما</h1>
 
-        {!cartData || !cartData.items.length ? (
+        {!cartData || !cartData.length ? (
           <p>سبد خرید شما خالی است.</p>
         ) : (
           <div>
-            {cartData.items?.length > 0 &&
-              cartData.items.map((item: ProductDetailData) => {
-
+            {cartData?.length > 0 &&
+              cartData.map((item: ProductDetailData) => {
+                const targetItem = item.variants?.filter(v=>v.items)?.[0].items?.[0]
                 return (
                   <div
                     key={item?.id}
@@ -101,7 +101,7 @@ const CartPage = () => {
                     <div>
                       <p>{item?.name}</p>
                       <p>
-                        {item.toLocaleString()} × {cartData.payableAmount} تومان
+                        {item.toLocaleString()} × {targetItem?.salePrice ?? 0} تومان
                       </p>
                     </div>
                     <button onClick={handleDeleteItem} className="text-red-500">
@@ -112,7 +112,7 @@ const CartPage = () => {
               })}
 
             <div className="mt-4 flex justify-between">
-              <strong>مجموع: {cartData.totalItemsPrice?? 0} تومان</strong>
+              <strong>مجموع: {cartGeneralInfo?.totalItemsPrice?? 0} تومان</strong>
               <button
                 onClick={handleClearCart}
                 className="bg-red-500 text-white px-3 py-1 rounded"
