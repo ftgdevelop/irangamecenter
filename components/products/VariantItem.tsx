@@ -1,4 +1,3 @@
-"use client";
 
 import {  ProductDetailData, ProductVariant } from "@/types/commerce";
 import {
