@@ -53,7 +53,12 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         removeLoading();
 
         document.querySelectorAll('a').forEach(item => {
-            item.addEventListener('click', () => { addLoading(item.getAttribute("href") || "") })
+            
+            const target = item.getAttribute('target');
+
+            if (!target || target.toLowerCase() !== '_blank'){
+                item.addEventListener('click', () => { addLoading(item.getAttribute("href") || "") })
+            }
         });
 
         return (() => {

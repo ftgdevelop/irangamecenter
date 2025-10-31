@@ -88,10 +88,10 @@ const Transactions = () => {
                     <>
                         {[1, 2, 3, 4, 5, 6].map(item => (
                             <div className="grid grid-cols-6 gap-2 items-center" key={item}>
-                                <Skeleton type="image" className="rounded-full w-12 h-12" />
+                                <Skeleton type="image" className="rounded-full w-12 h-12" dark />
                                 <div className="col-span-5 w-full border-b py-6 border-white/25">
-                                    <Skeleton className="h-3 w-full mb-3" />
-                                    <Skeleton className="h-3 w-full" />
+                                    <Skeleton className="h-3 w-full mb-3" dark />
+                                    <Skeleton className="h-3 w-full" dark />
                                 </div>
                             </div>
                         ))}

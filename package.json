@@ -6,12 +6,14 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "analyze": "set ANALYZE=true && next build"
   },
   "dependencies": {
     "@mantine/core": "^7.17.0",
     "@mantine/hooks": "^7.17.0",
     "@mobiscroll/react": "npm:@mobiscroll/datepicker-react-next@^5.30.0",
+    "@next/bundle-analyzer": "^16.0.0",
     "@reduxjs/toolkit": "^2.5.1",
     "axios": "^1.7.9",
     "formik": "^2.4.6",
@@ -21,7 +23,9 @@
     "next": "15.1.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-element-popper": "^2.1.7",
     "react-markdown": "^10.1.0",
+    "react-multi-date-picker": "^4.5.2",
     "react-redux": "^9.2.0",
     "react-slick": "^0.31.0",
     "redux-persist": "^6.0.0",
