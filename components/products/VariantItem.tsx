@@ -1,5 +1,5 @@
 
-import {  ProductDetailData, ProductVariant } from "@/types/commerce";
+import {   GetCartByProductIdType, ProductDetailData, ProductVariant } from "@/types/commerce";
 import {
   Dispatch,
   ReactNode,
@@ -179,12 +179,12 @@ const CartFooter = ({
   selectedVariants,
   product
 }: {
-  selectedVariant?: ProductVariant;
-  selectedVariants: SelectedVariantLevel[];
+    selectedVariant?: ProductVariant;
+    selectedVariants: SelectedVariantLevel[];
     selectedVariantIds: number[] | [];
-  product: ProductDetailData;
+    product: ProductDetailData;
   }) => {
-  const [cartInfo, setCartInfo] = useState<ProductDetailData | null>(null);
+  const [cartInfo, setCartInfo] = useState<GetCartByProductIdType | null>(null);
 
   const dispatch = useAppDispatch();
   const deviceId = useAppSelector((state) => state.cart.deviceId);
@@ -192,7 +192,7 @@ const CartFooter = ({
 
   const fetchCartByProductId = () => {
     getCartByProductId(deviceId || "", product.id).then(res => {
-      setCartInfo(res?.result?.items?.[0] || null)
+      setCartInfo(res?.result || null)
     }).catch(err => {
       console.log(err);
     })
@@ -200,23 +200,25 @@ const CartFooter = ({
 
   useEffect(() => {
     fetchCartByProductId()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (!selectedVariant?.items?.[0]) return null;
 
-  const item = selectedVariant.items[0];
-  const currency = item.currencyType;
+  const currency = cartInfo?.items?.[0]?.variant.currencyType;
   const variants = selectedVariants.map((v) => v.variant);  
   console.log({
-  variants
+  cartInfo
 });
 
   
   const handleAddItem = async () => {
     const targetItem = variants.filter(v => v.items && v.items?.length > 0)[0].items?.[0]?.id
+    
     dispatch(addQuantity())
     if (targetItem) {
-      await addItem({ variantId: targetItem, quantity: currentClickQuantity }, deviceId).then(res => {         
+      await addItem({ variantId: targetItem, quantity: currentClickQuantity }, deviceId).then(res => {    
+
         dispatch(
           addDeviceId(res?.result?.deviceId || "" )
         )
@@ -253,7 +255,7 @@ const CartFooter = ({
             </button>
 
             <span className="text-base w-4 text-center font-medium text-white">
-              {currentClickQuantity}
+              {cartInfo.totalQuantity}
             </span>
 
             <button
@@ -286,21 +288,19 @@ const CartFooter = ({
         )}
 
         <div className="text-left text-white">
-          {!!item?.regularPrice && (
+          {!!cartInfo && cartInfo.profitAmount && (
             <div className="flex flex-wrap gap-2 mb-1">
-              {!!item?.profitPercentage && (
-                <span className="text-[#fe9f00] text-2xs font-semibold">
-                  {item.profitPercentage}% تخفیف
+              <span className="text-[#fe9f00] text-2xs font-semibold">
+                  {cartInfo.profitAmount}% تخفیف
                 </span>
-              )}
               <span className="text-xs text-white/70">
-                {numberWithCommas(item.regularPrice)} {currency}
+                {numberWithCommas(cartInfo.totalQuantity)} {currency}
               </span>
             </div>
           )}
-          {!!item?.salePrice && (
+          {cartInfo && cartInfo.payableAmount && (
             <b className="text-base font-semibold block">
-              {numberWithCommas(item.salePrice)} {currency}
+              {numberWithCommas(cartInfo.payableAmount)} {currency}
             </b>
           )}
         </div>

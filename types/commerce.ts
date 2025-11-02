@@ -277,3 +277,54 @@ export interface GetProductsResponseType {
         result?: GetProductsDataType;
     }
 }
+
+
+export interface GetCartByProductIdType {
+    deviceId?: string,
+    id: string;
+    items: {
+        id: number;
+        quantity: number;
+        strikePrice: number;
+        unitDiscountAmount: number;
+        unitPrice: number;
+        variantId: number;
+        variant: {
+            id: number;
+            creationTime: string;
+            creatorUserId: number | null;
+            currencyType: string;
+            deleterUserId: number | null;
+            deletionTime: string | null;
+            description: string | null;
+            fileAltAttribute: string | null;
+            filePath: string | null;
+            fileTitleAttribute: string | null;
+            fileUniqKey: string | null;
+            isActive: boolean;
+            isDeleted: boolean;
+            isDownloadable: boolean;
+            isVirtual: boolean;
+            lastModificationTime: string | null;
+            lastModifierUserId: number | null;
+            name: string | null;
+            netPrice: number;
+            productId: number;
+            regularPrice: number;
+            salePrice: number;
+            status: string;
+            stockQuantity: number;
+            product: ProductItem;
+            variantAttributeValues: ProductVariant[];
+        };
+    }[];
+    payableAmount: number,
+    profitAmount : number,
+    totalItemsPrice : number,
+    totalQuantity: number
+}
+
+export interface GetCartByProductIdResponseType {
+    result?: GetCartByProductIdType
+}
+
