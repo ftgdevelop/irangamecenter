@@ -2,45 +2,21 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { Trash2, Plus } from "lucide-react";
 import { addItem, removeItem } from "@/actions/cart";
-import { ProductDetailData } from "@/types/commerce";
+import {  GetCurrentProductType } from "@/types/commerce";
 
-export interface CartGeneralInfo {
-    deviceId?: string,
-    id : string
-    items: ProductDetailData[],
-    payableAmount: number,
-    profitAmount : number,
-    totalItemsPrice : number,
-    totalQuantity : number
-}
 
-const CartCard = ({ item, cartGeneralInfo } : { item: ProductDetailData, 
-  cartGeneralInfo : CartGeneralInfo
-}) => {
+
+const CartCard = ({ item } : { item: GetCurrentProductType['items'][number]}) => {
   const [isLoadingAddItem, setIsLoadingAddItem] = useState(false);
   const [isLoadingDeleteItem, setIsLoadingDeleteItem] = useState(false);
 
-  const variants = item?.variants;
-  const currency =
-    item?.variants
-      ?.filter((v) => v.items && v.items?.length > 0)?.[0]
-      ?.items?.[0].currencyType ?? "";
-  const regularPrice =
-    item?.variants
-      ?.filter((v) => v.items && v.items?.length > 0)?.[0]
-      ?.items?.[0].regularPrice ?? 0;
-  const salePrice =
-    item?.variants
-      ?.filter((v) => v.items && v.items?.length > 0)?.[0]
-      ?.items?.[0].salePrice ?? 0;
-  const profitPercentage =
-    item?.variants
-      ?.filter((v) => v.items && v.items?.length > 0)?.[0]
-      ?.items?.[0].profitPercentage ?? 0;
+  const variants = item?.variant;
+  const currency = item?.variant.currencyType;
+
 
   const handleAddItem = async () => {
     setIsLoadingAddItem(true);
-    const targetItem = variants && variants.filter(v => v.items && v.items?.length > 0)[0].items?.[0]?.id
+    const targetItem = item?.variant?.variantAttributeValues && item?.variant?.variantAttributeValues?.[0]?.variantId
     if (targetItem && variants) {
       await addItem({ variantId: targetItem, quantity: 1 }).finally(() => {
         setIsLoadingAddItem(false);
@@ -50,8 +26,7 @@ const CartCard = ({ item, cartGeneralInfo } : { item: ProductDetailData,
 
   const handleDeleteItem = async () => {
     setIsLoadingDeleteItem(true);
-    const targetItem =
-      variants && variants.filter((v) => v.items && v.items?.length > 0)[0].id;
+    const targetItem = item?.variant?.variantAttributeValues && item?.variant?.variantAttributeValues?.[0]?.variantId
     if (targetItem && variants) {
       await removeItem({ Id: targetItem }).finally(() => {
         setIsLoadingDeleteItem(false);
@@ -59,31 +34,25 @@ const CartCard = ({ item, cartGeneralInfo } : { item: ProductDetailData,
     }
   };
 
-  console.log({
-    v: item?.variants,
-    isLoadingAddItem,
-    isLoadingDeleteItem,
-    cartGeneralInfo
-  });
 
   return (
     <div className="text-white flex flex-col gap-6 pt-4 justify-between items-center pb-4 border-b border-[#192b39]/50 w-full">
       <div className="flex w-full items-center min-h-28 gap-4">
         <div className="relative w-28 h-28 bg-black/25 rounded-lg overflow-hidden">
           <Image
-            src={item?.filePath || "/placeholder.png"}
-            alt={item?.fileTitleAttribute || "محصول"}
+            src={item?.variant.product.filePath || "/placeholder.png"}
+            alt={item?.variant.product.fileTitleAttribute || "محصول"}
             fill
             className="object-cover"
           />
         </div>
         <div className="flex flex-col justify-between h-full">
           <h2 className="font-semibold text-sm md:text-base mt-4">
-            {item?.name || "محصول"}
+            {item?.variant.product.name || "محصول"}
           </h2>
           <div className="flex flex-col gap-1">
-            {item?.variants && item?.variants.length > 0 ? (
-              item?.variants.map((variant) => (
+            {item?.variant.variantAttributeValues && item?.variant.variantAttributeValues.length > 0 ? (
+              item?.variant.variantAttributeValues.map((variant) => (
                 <p key={variant.id} className="text-xs text-gray-400">
                   {variant.name}
                 </p>
@@ -97,14 +66,14 @@ const CartCard = ({ item, cartGeneralInfo } : { item: ProductDetailData,
 
       <div className="flex w-full justify-between">
         <div className="flex flex-col gap-1">
-          {profitPercentage && (
+          {item.variant.regularPrice > item.variant.salePrice && (
             <p className="text-xs text-gray-400 mb-1">
-              مبلغ با {profitPercentage} تومان تخفیف
+              مبلغ با {item.variant.regularPrice - item.variant.salePrice} {currency} تخفیف
             </p>
           )}
-          {regularPrice && (
+          {item.variant.salePrice && (
             <p className="font-bold text-sm">
-              {salePrice} {currency}
+              {item.variant.salePrice} {currency}
             </p>
           )}
         </div>
@@ -118,7 +87,7 @@ const CartCard = ({ item, cartGeneralInfo } : { item: ProductDetailData,
             <Plus size={18} />
           </button>
           <span className="text-base w-4 text-center font-medium">
-            {cartGeneralInfo?.totalQuantity}
+            {item.quantity}
           </span>
           <button
             onClick={handleDeleteItem}

@@ -289,39 +289,67 @@ export interface GetCartByProductIdType {
         unitDiscountAmount: number;
         unitPrice: number;
         variantId: number;
-        variant: {
-            id: number;
-            creationTime: string;
-            creatorUserId: number | null;
-            currencyType: string;
-            deleterUserId: number | null;
-            deletionTime: string | null;
-            description: string | null;
-            fileAltAttribute: string | null;
-            filePath: string | null;
-            fileTitleAttribute: string | null;
-            fileUniqKey: string | null;
-            isActive: boolean;
-            isDeleted: boolean;
-            isDownloadable: boolean;
-            isVirtual: boolean;
-            lastModificationTime: string | null;
-            lastModifierUserId: number | null;
-            name: string | null;
-            netPrice: number;
-            productId: number;
-            regularPrice: number;
-            salePrice: number;
-            status: string;
-            stockQuantity: number;
-            product: ProductItem;
-            variantAttributeValues: ProductVariant[];
-        };
+        variant: VariantType;
     }[];
     payableAmount: number,
     profitAmount : number,
     totalItemsPrice : number,
     totalQuantity: number
+}
+
+type VariantAttributeValue = {
+  id: number;
+  variantId: number;
+attributeValueId: number;
+  name:string
+};
+type VariantType = {
+  id: number;
+  creationTime: string;
+  creatorUserId: number | null;
+  currencyType: string;
+  deleterUserId: number | null;
+  deletionTime: string | null;
+  description: string | null;
+  fileAltAttribute: string | null;
+  filePath: string | null;
+  fileTitleAttribute: string | null;
+  fileUniqKey: string | null;
+  isActive: boolean;
+  isDeleted: boolean;
+  isDownloadable: boolean;
+  isVirtual: boolean;
+  lastModificationTime: string | null;
+  lastModifierUserId: number | null;
+  name: string | null;
+  netPrice: number;
+  productId: number;
+    product: ProductItem;
+  regularPrice: number;
+  salePrice: number;
+  status: string;
+    stockQuantity: number;
+  variantAttributeValues?:VariantAttributeValue[]
+};
+export interface GetCurrentProductType {
+id: number;
+  deviceId: string;
+  payableAmount: number;
+  profitAmount: number;
+  totalItemsPrice: number;
+  totalQuantity: number;
+  items: {
+    id: number;
+    quantity: number;
+    strikePrice: number;
+    unitDiscountAmount: number;
+    unitPrice: number;
+    variantId: number;
+    variant: VariantType;
+  }[]
+}
+export interface GetCurrentProductResponseType {
+    result?: GetCurrentProductType;
 }
 
 export interface GetCartByProductIdResponseType {
