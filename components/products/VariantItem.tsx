@@ -206,11 +206,14 @@ const CartFooter = ({
 
   const item = selectedVariant.items[0];
   const currency = item.currencyType;
-  const variants = selectedVariants.map((v) => v.variant);
+  const variants = selectedVariants.map((v) => v.variant);  
+  console.log({
+  variants
+});
 
   
   const handleAddItem = async () => {
-    const targetItem = variants.filter(v => v.items && v.items?.length > 0)[0].id
+    const targetItem = variants.filter(v => v.items && v.items?.length > 0)[0].items?.[0]?.id
     dispatch(addQuantity())
     if (targetItem) {
       await addItem({ variantId: targetItem, quantity: currentClickQuantity }, deviceId).then(res => {         

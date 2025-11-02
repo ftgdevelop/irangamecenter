@@ -120,6 +120,7 @@ export interface ProductVariant {
         salePrice?: number;
         profitPercentage?: number;
         currencyType?: string;
+        id: number;
     }[];
 }
 

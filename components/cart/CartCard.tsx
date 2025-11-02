@@ -40,8 +40,7 @@ const CartCard = ({ item, cartGeneralInfo } : { item: ProductDetailData,
 
   const handleAddItem = async () => {
     setIsLoadingAddItem(true);
-    const targetItem =
-      variants && variants.filter((v) => v.items && v.items?.length > 0)[0].id;
+    const targetItem = variants && variants.filter(v => v.items && v.items?.length > 0)[0].items?.[0]?.id
     if (targetItem && variants) {
       await addItem({ variantId: targetItem, quantity: 1 }).finally(() => {
         setIsLoadingAddItem(false);
