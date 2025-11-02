@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { Cart, ServerAddress } from "@/enum/url";
-import { ProductDetailData } from "@/types/commerce";
+import { GetCartByProductIdResponseType, GetCurrentProductResponseType, ProductDetailData } from "@/types/commerce";
 
 export interface CartItem {
   id: string;
@@ -38,9 +38,9 @@ export interface ApiError {
   }
 }
 
-export const getCart = async (deviceId?: string): Promise<CartResponse> => {
+export const getCart = async (deviceId?: string): Promise<GetCurrentProductResponseType> => {
   try {
-    const res = await axios.get<CartResponse>(
+    const res = await axios.get<GetCurrentProductResponseType>(
       `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.GetCurrentCart}`,{
         headers: {
           "X-Device-Id": deviceId,
@@ -55,9 +55,9 @@ export const getCart = async (deviceId?: string): Promise<CartResponse> => {
   }
 };
 
-export const getCartByProductId = async (deviceId : string, productId:number): Promise<CartResponse> => {
+export const getCartByProductId = async (deviceId : string, productId:number): Promise<GetCartByProductIdResponseType> => {
   try {
-    const res = await axios.get<CartResponse>(
+    const res = await axios.get<GetCartByProductIdResponseType>(
       `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.GetCartByProductId}?ProductId=${productId}`,{
         headers: {
           "X-Device-Id": deviceId,
@@ -76,6 +76,8 @@ export const addItem = async (
   params: { variantId: number; quantity: number }, deviceId?: string
 ): Promise<CartResponse> => {
   try {
+    console.log({params, deviceId});
+    
     const res = await axios.post<CartResponse>(`${ServerAddress.Type}${ServerAddress.Commerce}${Cart.AddItem}`, params, {
       headers: {
         "X-Device-Id": deviceId,

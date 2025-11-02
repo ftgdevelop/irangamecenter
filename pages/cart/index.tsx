@@ -1,9 +1,9 @@
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
-import CartCard, { CartGeneralInfo } from "@/components/cart/CartCard";
+import CartCard from "@/components/cart/CartCard";
 import Tabs from "@/components/ui/Tabs";
 import { getCart } from "@/actions/cart";
-import { ProductDetailData } from "@/types/commerce";
+import { GetCurrentProductType, ProductDetailData } from "@/types/commerce";
 import { useAppSelector } from "@/hooks/use-store";
 
 
@@ -22,21 +22,21 @@ const ConfirmationSection = () => (
 );
 
 const CartPage = () => {
-  const [cartData, setCartData] = useState<ProductDetailData[] | undefined>(undefined);
-  const [cartGeneralInfo, setCartGeneralInfo] = useState<CartGeneralInfo | undefined>(undefined);
+ const [cartGeneralInfo, setCartGeneralInfo] = useState<GetCurrentProductType | undefined>(undefined);
   const deviceId = useAppSelector((state) => state.cart.deviceId);
 
+  const currency = cartGeneralInfo?.items?.[0]?.variant.currencyType;
 
-  const CartSection = ({ items }: { items: ProductDetailData[] }) => {
-  return items.map((item) => item && cartGeneralInfo && <CartCard key={item.id} item={item} cartGeneralInfo={cartGeneralInfo}/>);
+  const CartSection = ({ items }: { items: GetCurrentProductType['items'] }) => {
+  return items.map((item) => item && cartGeneralInfo && <CartCard key={item.id} item={item} />);
 };
   const tabItems = [
     {
       value: "cart",
       label: "سبد خرید",
       component:
-        cartData && cartData?.length > 0 ? (
-          <CartSection items={cartData} />
+        cartGeneralInfo && cartGeneralInfo?.items.length > 0 ? (
+          <CartSection items={cartGeneralInfo.items} />
         ) : null,
     },
     { value: "payment", label: "پرداخت", component: <PaymentSection /> },
@@ -47,18 +47,16 @@ const CartPage = () => {
 
   useEffect(() => {
     const fetchCart = async () => {
-      try {
-        const result = await getCart(deviceId);
-        if ("data" in result) {
-          setCartGeneralInfo(result?.result);
-          setCartData(result?.result?.items);
-        }
-      } catch (error) {
-        console.error("Unexpected error:", error);
-      }
+
+      await getCart(deviceId).then(data => {
+        setCartGeneralInfo(data?.result);
+      }).catch(err => console.log(err)
+      )
+   
     };
 
     fetchCart();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 
@@ -70,6 +68,9 @@ const CartPage = () => {
   const handleDeleteItem = async () => {
       return null
   };
+  console.log({
+  cartGeneralInfo
+});
 
 
   return (
@@ -86,12 +87,12 @@ const CartPage = () => {
       <div className="p-6 max-w-3xl mx-auto">
         <h1 className="text-2xl font-bold mb-4">سبد خرید شما</h1>
 
-        {!cartData || !cartData.length ? (
+        {!cartGeneralInfo || !cartGeneralInfo.items.length ? (
           <p>سبد خرید شما خالی است.</p>
         ) : (
           <div>
-            {cartData?.length > 0 &&
-              cartData.map((item: ProductDetailData) => {
+            {cartGeneralInfo?.items.length > 0 &&
+              cartGeneralInfo.items.map((item: ProductDetailData) => {
                 const targetItem = item.variants?.filter(v=>v.items)?.[0].items?.[0]
                 return (
                   <div
@@ -112,7 +113,7 @@ const CartPage = () => {
               })}
 
             <div className="mt-4 flex justify-between">
-              <strong>مجموع: {cartGeneralInfo?.totalItemsPrice?? 0} تومان</strong>
+                <strong>مجموع: {cartGeneralInfo?.payableAmount ?? 0} {currency}</strong>
               <button
                 onClick={handleClearCart}
                 className="bg-red-500 text-white px-3 py-1 rounded"
