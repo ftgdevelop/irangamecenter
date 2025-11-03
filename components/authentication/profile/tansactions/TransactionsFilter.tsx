@@ -1,25 +1,27 @@
 import CheckboxGroup from "@/components/shared/CheckboxGroup";
-//import DatePickerMulti from "@/components/shared/DatePickerMulti";
+import DatePickerM from "@/components/shared/DatePicker";
 import { Form, Formik } from "formik";
 import { useState } from "react";
 
 type Props = {
     wrapperClassName?: string;
     onFilter: (values: {
-        types: string[];
         startDate: string;
         endDate: string;
+        types: string[];
     }) => void;
-    close: () => void
+    close: () => void;
+    filterStartDate:string;
+    filterEndDate:string;
+    filterType: string[];
 }
 
 const TransactionsFilter: React.FC<Props> = props => {
 
     const formInitialValue = {
-        startDate: "",
-        endDate: "",
+        dates: ["", ""]
     }
-    const [filteredTypes, setFilteredTypes] = useState<string[]>([]);
+    const [filteredTypes, setFilteredTypes] = useState<string[]>(props.filterType || []);
 
     const availableTransactionTypes = ["IncreaseDepositByPaymentGateway", "DecreaseDepositBySale", "IncreaseDepositByRefund", "IncreaseDepositByReverse", "DecreaseDepositByWithdraw", "IncreaseDeposit", "DecreaseDeposit", "ManualIncreaseDeposit", "ManualDecreaseDeposit", "ManualIncreaseDepositByRefund"];
 
@@ -31,13 +33,13 @@ const TransactionsFilter: React.FC<Props> = props => {
                 initialValues={formInitialValue}
                 onSubmit={values => {
                     props.onFilter({
-                        startDate: values.startDate,
-                        endDate: values.endDate,
+                        startDate: values.dates[0],
+                        endDate: values.dates[1],
                         types: filteredTypes
                     })
                 }}
             >
-                {({isValid, isSubmitting }) => {
+                {({isValid, isSubmitting, setFieldValue }) => {
 
                     if (isSubmitting && !isValid) {
                         setTimeout(() => {
@@ -52,15 +54,21 @@ const TransactionsFilter: React.FC<Props> = props => {
 
                         <Form autoComplete='off' className="py-5" >
                             <div className="overflow-auto max-h-[70vh]">
-{/* 
-                                <hr/>
+
                                 <label className="mb-2 block text-sm">
                                     بازه زمانی
                                 </label>
 
-                                <DatePickerMulti 
+                                <DatePickerM
+                                    placeholder="بازه زمانی"
                                     range
-                                /> */}
+                                    modalLabel="انتخاب بازه زمانی تراکنش"
+                                    initialValue={[props.filterStartDate || "",  props.filterEndDate || ""]}
+                                    onChange={v => {
+                                         setFieldValue('dates', v, true)
+                                    }}
+                                    className="mb-6"
+                                />
 
                                 <label className="mb-2 block text-sm">
                                     نوع تراکنش

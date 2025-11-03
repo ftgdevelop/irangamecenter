@@ -78,10 +78,11 @@ const Transactions = () => {
             <div className="px-3.5 pb-5">
                 <button
                     type="button"
-                    className="inline-flex gap-3 border border-white/25 rounded-full px-4 py-1.5 text-xs"
+                    className="inline-flex gap-3 border border-white/25 rounded-full px-4 py-1.5 text-sm"
                     onClick={() => { setOpenFilters(true) }}
                 >
                     <Filter className="w-5 h-5 fill-current" />
+                    فیلترها
                 </button>
 
                 {loading && (
@@ -138,7 +139,12 @@ const Transactions = () => {
                         </Fragment>
                     )
                 })}
-
+                
+                {!transactions.length && (
+                    <div className="text-sm p-4">
+                        تراکنشی یافت نشد.
+                    </div>
+                )}
                 {totalCount > 10 && <Pagination
                     onChange={setPage}
                     totalItems={totalCount}
@@ -158,6 +164,9 @@ const Transactions = () => {
                 <div className={`bg-[#192a39] text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full md:max-w-lg safePadding-b transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2 ${slideInFilters ? "bottom-0" : "-bottom-[80vh]"}`}>
 
                     <TransactionsFilter
+                        filterType={filterType}
+                        filterEndDate={filterEndDate}
+                        filterStartDate={filterStartDate}
                         onFilter={values => {
                             setFilterStartDate(values.startDate);
                             setFilterEndDate(values.endDate);
