@@ -4,24 +4,22 @@ import Link from "next/link"
 import Skeleton from "../../Skeleton";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { CartGeneralInfo } from "@/components/cart/CartCard";
 import { getCart } from "@/actions/cart";
+import {  GetCurrentProductType } from "@/types/commerce";
 
 const FooterNavigation = () => {
-  const [cartGeneralInfo, setCartGeneralInfo] = useState<CartGeneralInfo | undefined>(undefined);
+  const [cartGeneralInfo, setCartGeneralInfo] = useState<GetCurrentProductType | undefined>(undefined);
   const deviceId = useAppSelector((state) => state.cart.deviceId);
 
     useEffect(() => {
-      const fetchCart = async () => {
-        try {
-          const result = await getCart(deviceId);
-          if ("data" in result) {
-            setCartGeneralInfo(result?.result);
-          }
-        } catch (error) {
-          console.error("Unexpected error:", error);
-        }
-      };
+    const fetchCart = async () => {
+
+      await getCart(deviceId).then(data => {
+        setCartGeneralInfo(data?.result);
+      }).catch(err => console.log(err)
+      )
+   
+    };
   
       fetchCart();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -55,7 +53,7 @@ const FooterNavigation = () => {
                 <Image src={item.imageUrl} alt={item.label} className="block mx-auto mb-2" width={26} height={26} />
                 {item.label === "سفارش های من" &&cartGeneralInfo?.totalQuantity &&  cartGeneralInfo?.totalQuantity  > 0 && (
                   <span className="absolute -top-1 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
-                    {cartGeneralInfo?.totalQuantity ?? 0 > 9 ? "9+" : cartGeneralInfo?.totalQuantity}
+                    {cartGeneralInfo?.totalQuantity > 9 ? "9+" : cartGeneralInfo?.totalQuantity}
                   </span>
                 )}
               </div>
