@@ -75,9 +75,7 @@ export const getCartByProductId = async (deviceId : string, productId:number): P
 export const addItem = async (
   params: { variantId: number; quantity: number }, deviceId?: string
 ): Promise<CartResponse> => {
-  try {
-    console.log({params, deviceId});
-    
+  try {    
     const res = await axios.post<CartResponse>(`${ServerAddress.Type}${ServerAddress.Commerce}${Cart.AddItem}`, params, {
       headers: {
         "X-Device-Id": deviceId,
@@ -96,7 +94,7 @@ export const removeItem = async (
 ): Promise<CartResponse> => {
   try {
     const res = await axios.delete<CartResponse>(
-      `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.RemoveItem}`
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.RemoveItem}?Id=${params.Id}`
       , {
       headers: {
         "X-Device-Id": deviceId,

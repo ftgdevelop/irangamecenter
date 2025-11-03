@@ -288,6 +288,7 @@ export interface GetCartByProductIdType {
         strikePrice: number;
         unitDiscountAmount: number;
         unitPrice: number;
+        totalPrice: number;
         variantId: number;
         variant: VariantType;
     }[];

@@ -309,3 +309,10 @@ body {
     }
   }
 }
+
+.text-gradient-logo-linear {
+  background: linear-gradient(90deg, #FE4968, #FF9B90);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+}
