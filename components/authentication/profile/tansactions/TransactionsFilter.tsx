@@ -62,7 +62,6 @@ const TransactionsFilter: React.FC<Props> = props => {
                                 <DatePickerM
                                     placeholder="بازه زمانی"
                                     range
-                                    modalLabel="انتخاب بازه زمانی تراکنش"
                                     initialValue={[props.filterStartDate || "",  props.filterEndDate || ""]}
                                     onChange={v => {
                                          setFieldValue('dates', v, true)

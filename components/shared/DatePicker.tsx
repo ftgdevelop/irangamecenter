@@ -115,11 +115,11 @@ const DatePickerM: React.FC<Props> = props => {
 
                 <div className={`bg-[#fff] rounded-t-2xl fixed w-full md:max-w-lg safePadding-b overflow-y-auto max-h-[90vh] transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2  bottom-0 ${slideIn ? "translate-y-0" : "translate-y-[80vh]"}`}>
 
-                    <div className="flex justify-between p-4">
-                        {props.modalLabel ? <label className="font-semibold text-base block"> {props.modalLabel} </label> : <div />}
+                    <div className="flex justify-between items-center p-4 text-neutral-800">
+                        {props.modalLabel ? <label className="font-semibold text-base block"> {props.modalLabel} </label> : <label className="font-semibold text-sm block" > {text} </label>}
                         <button
                             type="button"
-                            className="text-sm flex gap-1 items-center font-semibold"
+                            className="text-sm text-[#a93aff] flex gap-1 items-center font-semibold"
                             onClick={toggleLocale}
                         >
                             <CalendarIcon className="w-5 h-5 fill-current" />
@@ -136,20 +136,20 @@ const DatePickerM: React.FC<Props> = props => {
                         monthYearSeparator="  "
                         value={value}
                         onChange={setValue}
-                        weekDays={['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج']}
+                        weekDays={localeFa ? ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'] : undefined}
                     //weekDays ={ ['شنبه', 'یکشنبه', 'دوشنبه', 'سه شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه']}
                     />
                     <div className="flex gap-4 mt-7 py-2 pb-5 px-4">
                         <button
                             type="button"
-                            className="shrink-0 w-24 rounded-full px-5 py-2.5 bg-[#bbbbbb] text-sm"
+                            className="shrink-0 w-24 rounded-full px-5 py-2.5 bg-[#bbbbbb] text-sm font-semibold"
                             onClick={() => { setSlideIn(false) }}
                         >
                             بستن
                         </button>
                         <button
                             type="button"
-                            className="w-full rounded-full px-5 py-2.5 bg-[#a93aff] text-sm text-white"
+                            className="w-full rounded-full px-5 py-2.5 bg-[#a93aff] text-sm text-white font-semibold"
                             onClick={() => {
                                 if (Array.isArray(value)) {
                                     const formatted = value.map((d) => dateFormat(new Date(d)));
