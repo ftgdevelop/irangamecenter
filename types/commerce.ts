@@ -288,6 +288,7 @@ export interface GetCartByProductIdType {
         strikePrice: number;
         unitDiscountAmount: number;
         unitPrice: number;
+        totalPrice: number;
         variantId: number;
         variant: VariantType;
     }[];
@@ -329,10 +330,11 @@ type VariantType = {
   salePrice: number;
   status: string;
     stockQuantity: number;
-  variantAttributeValues?:VariantAttributeValue[]
+    variantAttributeValues?: VariantAttributeValue[];
+    attributes?:string[]
 };
 export interface GetCurrentProductType {
-id: number;
+  id: number;
   deviceId: string;
   payableAmount: number;
   profitAmount: number;
@@ -340,11 +342,14 @@ id: number;
   totalQuantity: number;
   items: {
     id: number;
-    quantity: number;
-    strikePrice: number;
-    unitDiscountAmount: number;
-    unitPrice: number;
     variantId: number;
+    quantity: number;
+    profitPercent: number;
+    unitPrice: number;            
+    unitDiscountAmount: number;   
+    strikePrice: number;          
+    totalPrice: number;           
+    totalDiscountAmount: number; 
     variant: VariantType;
   }[]
 }
