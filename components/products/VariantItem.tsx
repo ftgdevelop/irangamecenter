@@ -7,7 +7,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import Image from "next/image";
 import {  ChevronLeft, Plus, Trash2 } from "lucide-react";
 
 import SimplePortal from "../shared/layout/SimplePortal";
@@ -19,6 +18,7 @@ import { addItem, getCartByProductId, removeItem } from "@/actions/cart";
 import Loading from "../icons/Loading";
 import Alert from "../shared/Alert";
 import Link from "next/link";
+import Image from "next/image";
 
 type Props = {
   variant?: ProductVariant;
@@ -333,6 +333,11 @@ const CartFooter = ({
               </button>
             </div>
           ) : (
+            isRemoving || isAdding || isFetching ? (
+              <div className="h-10 flex justify-center items-center px-6 bg-gradient-to-t from-green-600 to-green-300 rounded-full">
+                <Loading className="fill-current w-5 h-5 animate-spin" />
+              </div>
+            ) : (
             <button
               type="button"
               onClick={handleAddToCart}
@@ -347,7 +352,7 @@ const CartFooter = ({
               />
               افزودن به سبد خرید
             </button>
-          )}
+          ))}
 
           {((variantItem && variantItem.salePrice && variantItem.regularPrice) ||
             (currentCartItem && currentCartItem.unitPrice)) && (
