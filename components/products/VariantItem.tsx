@@ -309,15 +309,15 @@ const CartFooter = ({
           {!!cartData?.items.length &&
           cartData.totalQuantity &&
           currentCartItem?.quantity ? (
-            <div className="flex items-center gap-2 h-10 bg-[#1e3246] rounded-full transition-all duration-300">
+        <div className="flex items-center gap-2 h-13 bg-[#EFEFF0]/10 rounded-full">
               <button
-                className="bg-gradient-to-t from-green-600 to-green-300 hover:opacity-90 flex justify-center items-center p-2 h-10 w-10 rounded-full transition-all"
+            className="bg-gradient-to-t from-green-600 to-green-300 hover:bg-gradient-to-tr flex justify-center items-center p-2 h-13 w-13 rounded-full"
                 onClick={handleAddToCart}
               >
-                <Plus size={18} />
+                <Plus size={24} />
               </button>
 
-              <span className="text-base w-4 text-center font-medium text-white">
+          <span className="flex justify-center items-center w-[67px]  font-medium">
                 {isAdding || isRemoving || isFetching ? (
                   <Loading className="fill-current w-5 h-5 animate-spin" />
                 ) : (
@@ -326,10 +326,10 @@ const CartFooter = ({
               </span>
 
               <button
-                className="bg-gray-700 hover:bg-gray-600 flex justify-center items-center p-2 h-10 w-10 rounded-full transition-all"
+            className="bg-gradient-to-r from-[#00B59C]/10 to-[#9CFFAC]/10 flex justify-center items-center p-2 h-13 w-13 rounded-full hover:bg-gray-600"
                 onClick={handleRemoveFromCart}
               >
-                <Trash2 size={18} className="text-white/70" />
+                <Trash2 size={24} className="text-white/70" />
               </button>
             </div>
           ) : (
