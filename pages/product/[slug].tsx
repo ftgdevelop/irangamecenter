@@ -19,6 +19,7 @@ import VariantSection from '@/components/products/VariantSection';
 import SimilarProductsCarousel from '@/components/products/SimilarProductsCarousel';
 import Head from 'next/head';
 import ProductGalleryCarousel from '@/components/products/ProductGalleryCarousel';
+import ProductTabs from '@/components/products/ProductTabs';
 
 const DetailProduct: NextPage<any> = ({
   productData,
@@ -74,11 +75,21 @@ const DetailProduct: NextPage<any> = ({
           />
         )}
       </Head>
+      <ProductTabs
+      tabs={[
+        { id: 'specs', label: 'مشخصات', isActive: !!productData },
+        { id: 'description', label: 'توضیحات', isActive: !!productData?.shortDescription },
+        { id: 'ratings', label: 'امتیازها', isActive: !!productData?.rating?.length },
+        { id: 'awards', label: 'جوایز', isActive: !!productData?.awards?.length },
+        { id: 'faq', label: 'سوالات متداول', isActive: !!productData?.faqs?.length },
+        { id: 'similar', label: 'محصولات مشابه', isActive: !!productData?.similar?.length },
+      ]}
+    />
 
       {!!breadcrumbsItems.length && (
         <BreadCrumpt
           items={breadcrumbsItems}
-          wrapperClassName="bg-[#192a39] px-4 py-3"
+          wrapperClassName="bg-[#192a39] mt-[84px] px-4 py-3"
           textColorClass="text-neutral-300"
         />
       )}
@@ -102,7 +113,7 @@ const DetailProduct: NextPage<any> = ({
       {productData?.galleries && (
         <ProductGalleryCarousel galleries={productData.galleries} />
       )}
-      <div className="px-4">
+      <div id="specs" className="px-4">
         <div className="flex justify-between items-top mb-5">
           <strong className="text-sm"> مشخصات بازی </strong>
           <ProductDetail
@@ -218,7 +229,7 @@ const DetailProduct: NextPage<any> = ({
       </div>
 
       {!!productData?.shortDescription && (
-        <div className="mt-7 px-4">
+        <div id="description" className="pt-7 px-4">
           <h3 className="text-lg font-semibold mb-4"> {productData.name}</h3>
           <div className="inserted-content">
             {parse(productData.shortDescription)}
@@ -356,8 +367,8 @@ const DetailProduct: NextPage<any> = ({
       </div> */}
 
       {!!productData?.rating?.length && (
-        <>
-          <strong className="px-4 text-lg font-semibold mb-0 mt-8 text-[#ffefb2] block">
+        <section id="ratings" className='pt-8'>
+          <strong  className="px-4 text-lg font-semibold mb-0 text-[#ffefb2] block">
             امتیاز در وبسایت های معتبر
           </strong>
           <div className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip py-3 pl-3">
@@ -368,12 +379,11 @@ const DetailProduct: NextPage<any> = ({
               <div className="h-2 w-1 shrink-0" />
             </div>
           </div>
-        </>
+        </section>
       )}
       {!!productData?.awards?.length && (
-        <>
-          <div className="px-4">
-            <strong className="text-lg font-semibold mb-3 mt-8 text-[#ffefb2] block">
+        <section id="awards" className="px-4 pt-8">
+            <strong className="text-lg font-semibold mb-3  text-[#ffefb2] block">
               جوایز و دستاوردها
             </strong>
             {productData.awards.map((award) => (
@@ -388,13 +398,13 @@ const DetailProduct: NextPage<any> = ({
                 {award}
               </div>
             ))}
-          </div>
-        </>
+        </section>
       )}
 
       {!!productData?.faqs?.length && (
-        <>
-          <h5 className="px-4 text-lg font-semibold mb-4 mt-8 text-[#ffefb2]">
+          <section id="faq">
+
+          <h5  className="px-4 text-lg font-semibold mb-4 mt-8 text-[#ffefb2]">
             سوالات متداول درباره {productData.name}
           </h5>
           <FAQ
@@ -405,12 +415,13 @@ const DetailProduct: NextPage<any> = ({
               Question: faq.questions,
             }))}
           />
-        </>
+        </section>
       )}
 
       {!!productData?.similar?.length && (
-        <SimilarProductsCarousel products={productData.similar} />
-      )}
+          <section id="similar">
+            <SimilarProductsCarousel products={productData.similar} />
+          </section>      )}
 
       <Contacts />
     </>
