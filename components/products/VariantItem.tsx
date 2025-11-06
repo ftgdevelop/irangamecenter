@@ -7,7 +7,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import {  ChevronLeft, Plus, Trash2 } from "lucide-react";
+import {  ChevronLeft, Minus, Plus, Trash2 } from "lucide-react";
 
 import SimplePortal from "../shared/layout/SimplePortal";
 import { numberWithCommas } from "@/helpers";
@@ -17,8 +17,9 @@ import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import { addItem, getCartByProductId, removeItem } from "@/actions/cart";
 import Loading from "../icons/Loading";
 import Alert from "../shared/Alert";
-import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { setProgressLoading } from "@/redux/stylesSlice";
 
 type Props = {
   variant?: ProductVariant;
@@ -190,6 +191,7 @@ const CartFooter = ({
   const [isRemoving, setIsRemoving] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const router = useRouter();
 
   const dispatch = useAppDispatch();
   const deviceId = useAppSelector((state) => state.cart.deviceId);
@@ -295,10 +297,20 @@ const CartFooter = ({
               <span className="text-gradient-logo-linear">
                 کالا به سبد اضافه شد!
               </span>
-              <Link href="/cart" className="text-white flex items-end">
-                <span>برو به سبد خرید</span>
-                <ChevronLeft className="inline-block mr-1" size={16} />
-              </Link>
+            <button
+              type="button"
+              className="w-fit h-full text-white flex items-end"
+              onClick={async (e) => {
+                e.preventDefault();
+                dispatch(setProgressLoading(true)); 
+                setShowSuccessAlert(false);
+                await router.push("/cart");
+                dispatch(setProgressLoading(false));
+              }}
+            >
+              <span>برو به سبد خرید</span>
+              <ChevronLeft className="inline-block mr-1" size={16} />
+            </button>
             </div>
           </Alert>
         </div>
@@ -326,10 +338,12 @@ const CartFooter = ({
               </span>
 
               <button
-            className="bg-gradient-to-r from-[#00B59C]/10 to-[#9CFFAC]/10 flex justify-center items-center p-2 h-13 w-13 rounded-full hover:bg-gray-600"
+                className="bg-gradient-to-r from-[#00B59C]/10 to-[#9CFFAC]/10 flex justify-center items-center p-2 h-13 w-13 rounded-full hover:bg-gray-600"
                 onClick={handleRemoveFromCart}
-              >
-                <Trash2 size={24} className="text-white/70" />
+                >
+                  {
+                    currentCartItem?.quantity  > 1 ? <Minus size={24} className="text-white/70" /> : <Trash2 size={24} className="text-white/70" />
+                  }
               </button>
             </div>
           ) : (
