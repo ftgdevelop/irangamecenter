@@ -317,19 +317,19 @@ const CartFooter = ({
       )}
 
       <SimplePortal selector="fixed_bottom_portal">
-        <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 bg-[#192a39] px-4 py-3 flex flex-wrap justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
+        <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 bg-[#192a39] px-4 py-3 flex flex-wrap max-[390px]:justify-center justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
           {!!cartData?.items.length &&
           cartData.totalQuantity &&
           currentCartItem?.quantity ? (
-        <div className="flex items-center gap-2 h-13 bg-[#EFEFF0]/10 rounded-full">
+          <div className="flex items-center gap-2 h-13 bg-[#EFEFF0]/10 rounded-full max-[390px]:w-full max-[390px]:justify-between">
               <button
-            className="bg-gradient-to-t from-green-600 to-green-300 hover:bg-gradient-to-tr flex justify-center items-center p-2 h-13 w-13 rounded-full"
+              className="bg-gradient-to-t from-green-600 to-green-300 hover:bg-gradient-to-tr flex justify-center items-center p-2 h-13 w-13 rounded-full"
                 onClick={handleAddToCart}
               >
                 <Plus size={24} />
               </button>
 
-          <span className="flex justify-center items-center w-[67px]  font-medium">
+              <span className="flex justify-center items-center w-[67px]  font-medium">
                 {isAdding || isRemoving || isFetching ? (
                   <Loading className="fill-current w-5 h-5 animate-spin" />
                 ) : (
@@ -370,7 +370,7 @@ const CartFooter = ({
 
           {((variantItem && variantItem.salePrice && variantItem.regularPrice) ||
             (currentCartItem && currentCartItem.unitPrice)) && (
-            <div className="text-left text-white">
+            <div className="text-left text-white max-[390px]:w-full">
               {variantItem && variantItem.profitPercentage && (
                 <div className="flex flex-wrap gap-2 mb-1">
                   <span className="text-[#fe9f00] text-2xs font-semibold">
