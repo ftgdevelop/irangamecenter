@@ -1,10 +1,10 @@
 import Head from "next/head";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import CartCard from "@/components/cart/CartCard";
 import Tabs from "@/components/ui/Tabs";
-import { getCart } from "@/actions/cart";
 import { GetCurrentProductType, ProductDetailData } from "@/types/commerce";
 import { useAppSelector } from "@/hooks/use-store";
+import Loading from "@/components/icons/Loading";
 
 
 
@@ -22,8 +22,7 @@ const ConfirmationSection = () => (
 );
 
 const CartPage = () => {
- const [cartGeneralInfo, setCartGeneralInfo] = useState<GetCurrentProductType | undefined>(undefined);
-  const deviceId = useAppSelector((state) => state.cart.deviceId);
+  const { cartGeneralInfo, loading } = useAppSelector((state) => state.cart);
 
   const currency = cartGeneralInfo?.items?.[0]?.variant.currencyType;
 
@@ -44,20 +43,6 @@ const CartPage = () => {
   ];
 
   const pageTitle = `سبد خرید | فروشگاه`;
-
-  useEffect(() => {
-    const fetchCart = async () => {
-
-      await getCart(deviceId).then(data => {
-        setCartGeneralInfo(data?.result);
-      }).catch(err => console.log(err)
-      )
-   
-    };
-
-    fetchCart();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
 
 
@@ -87,7 +72,9 @@ const CartPage = () => {
       <div className="p-6 max-w-3xl mx-auto">
         <h1 className="text-2xl font-bold mb-4">سبد خرید شما</h1>
 
-        {!cartGeneralInfo || !cartGeneralInfo.items.length ? (
+        {loading ?  <Loading className="fill-current w-32 h-32 animate-spin" />
+          :
+          !cartGeneralInfo || !cartGeneralInfo.items.length ? (
           <p>سبد خرید شما خالی است.</p>
         ) : (
           <div>
