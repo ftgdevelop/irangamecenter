@@ -253,7 +253,10 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             <Notification />
             <div className={`bg-[#011425] text-white md:max-w-lg mx-auto ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`}>
                 <PageLoadingBar active={loading} />
-                {showHeader && <Header type2Params={headertype2} />}
+                {showHeader && <>
+                    <Header type2Params={headertype2} />
+                    <div className="mt-[84px]" />
+                </>}
                 <main 
                     className={showFooter ? "" : showFixedNav ? "min-h-screen-nav" : "min-h-screen"}
                     style={{

@@ -138,7 +138,7 @@ const Products: NextPage<Props> = props => {
     return (
         <>
             <BreadCrumpt
-                wrapperClassName="bg-[#192a39] px-4 py-3 mb-4 mt-[76px]"
+                wrapperClassName="bg-[#192a39] px-4 py-3 mb-4"
                 textColorClass="text-neutral-300"
                 items={[{ label: "محصولات", link: "" }]}
             />
