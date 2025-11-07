@@ -5,7 +5,6 @@ import ArrowRight from "@/components/icons/ArrowRight";
 import Share from "./Share";
 import { useRouter } from "next/router";
 import { useAppSelector } from "@/hooks/use-store";
-import { ShoppingCart } from "lucide-react";
 import Loading from "@/components/icons/Loading";
 
 type Props = {
@@ -69,16 +68,16 @@ const Header: React.FC<Props> = props => {
 
             {
                 props.type2Params?.isCart && <Link href='/cart' className="relative w-fit">
-                <ShoppingCart size={32}/>
+                <Image src='/images/icons/shopping-cart.svg' alt="shopping-cart" width={42} height={42}/>
                         
                 {     
                     cartGeneralInfo?.totalQuantity && cartGeneralInfo?.totalQuantity > 0 ?
                     (
-                    <span className="absolute -top-1 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
-                                        {
-                                             loading ?   <Loading className="fill-current w-4 h-4 animate-spin" /> :                                         cartGeneralInfo?.totalQuantity > 9 ? "9+" : cartGeneralInfo?.totalQuantity
-
-                                        }
+                    <span className="absolute bottom-[-15px] right-[-15px] bg-gradient-to-t from-green-600 to-green-300 text-[#011425] font-bold rounded-full w-[30px] h-[30px] flex items-center justify-center">
+                        {
+                            loading ? <Loading className="fill-current w-4 h-4 animate-spin" /> :
+                            cartGeneralInfo?.totalQuantity > 9 ? "9+" : cartGeneralInfo?.totalQuantity
+                        }
                     </span>
                     )
                     :
