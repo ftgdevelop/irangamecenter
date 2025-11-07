@@ -36,11 +36,11 @@ const FooterNavigation = () => {
                 <Image src={item.imageUrl} alt={item.label} className="block mx-auto mb-2" width={26} height={26} />
 
                 {
-                   item.label === "سفارش های من" &&cartGeneralInfo?.totalQuantity &&  cartGeneralInfo?.totalQuantity  > 0 && (
+                   item.label === "سفارش های من" &&cartGeneralInfo?.totalQuantity &&  cartGeneralInfo?.totalQuantity  > 0 ? (
                   <span className="absolute -top-1 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
                     {loading ?  <Loading className="fill-current w-4 h-4 animate-spin" />  : cartGeneralInfo?.totalQuantity > 9 ? "9+" : cartGeneralInfo?.totalQuantity}
                   </span>
-                )
+                ) : null
                 }
               </div>
               {item.loading ? <Skeleton className="w-12 h-4 mx-auto" /> : item.label}

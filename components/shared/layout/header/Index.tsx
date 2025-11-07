@@ -64,10 +64,10 @@ const Header: React.FC<Props> = props => {
                     <Image src="/logo.svg" alt="irangamecenter" width={50} height={50} />
                 </Link>
             )}
-            <div className="flex gap-4 items-center">
+            <div className="flex gap-[30px] items-center">
 
             {
-                props.type2Params?.isCart && <Link href='/cart' className="relative w-fit">
+                props.type2Params?.isCart && <Link href='/cart' className="relative w-fit cursor-pointer">
                 <Image src='/images/icons/shopping-cart.svg' alt="shopping-cart" width={42} height={42}/>
                         
                 {     
