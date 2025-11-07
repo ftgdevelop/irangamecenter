@@ -13,6 +13,7 @@ import FooterNavigation from "./footer/FooterNavigation";
 import { getUserBalance } from "@/actions/payment";
 import PageLoadingBar from "./PageLoadingBar";
 import { setProgressLoading } from "@/redux/stylesSlice";
+import { fetchCart } from "@/redux/cartSlice";
 
 type Props = {
     className?: string;
@@ -28,6 +29,13 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
     const isBodyScrollable = useAppSelector(state => state?.styles?.bodyScrollable);
     const lastScrollPosition = useAppSelector(state => state?.styles?.lastScrollPosition);
+    const deviceId = useAppSelector((state) => state.cart.deviceId);
+
+  useEffect(() => {
+    if (deviceId) {
+      dispatch(fetchCart(deviceId));
+    }
+  }, [deviceId]);
 
     useEffect(() => {
         if (isBodyScrollable && lastScrollPosition) {
@@ -79,6 +87,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         backToPrev?: boolean;
         withShare?: boolean;
         withLogo?: boolean;
+        isCart?: boolean;
     } | undefined = undefined;
 
     if (
@@ -163,7 +172,8 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             title: "",
             withShare: true,
             withLogo: true,
-            backUrl: "/products"
+            backUrl: "/products",
+            isCart: true
         };
         showFooter = true;
         showHeader = true;

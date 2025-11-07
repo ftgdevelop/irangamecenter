@@ -12,7 +12,7 @@ import {  ChevronLeft, Minus, Plus, Trash2 } from "lucide-react";
 import SimplePortal from "../shared/layout/SimplePortal";
 import { numberWithCommas } from "@/helpers";
 import { SelectedVariantLevel } from "./VariantSection";
-import { addDeviceId, addQuantity,  removeQuantity } from "@/redux/cartSlice";
+import { addDeviceId, addQuantity,  fetchCart,  removeQuantity } from "@/redux/cartSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import { addItem, getCartByProductId, removeItem } from "@/actions/cart";
 import Loading from "../icons/Loading";
@@ -197,6 +197,11 @@ const CartFooter = ({
   const deviceId = useAppSelector((state) => state.cart.deviceId);
   const tempQuantity = useAppSelector((state) => state.cart.quantity);
 
+
+  const refreshCart = () => {
+    dispatch(fetchCart(deviceId));
+  };
+
   const loadCartByProductId = (
     callbackOrObj?: (() => void) | { finallyAction?: () => void }
   ) => {
@@ -248,8 +253,10 @@ const CartFooter = ({
       loadCartByProductId(() => {
         setIsAdding(false);
         setShowSuccessAlert(true);
+        refreshCart()
         setTimeout(() => setShowSuccessAlert(false), 4000);
       });
+
     } catch (err) {
       console.error(err);
       setIsAdding(false);
@@ -266,6 +273,7 @@ const CartFooter = ({
     try {
       await removeItem({ Id: lastCartItem.id }, deviceId);
       dispatch(removeQuantity(1));
+      refreshCart()
       loadCartByProductId();
     } catch (err) {
       console.error(err);

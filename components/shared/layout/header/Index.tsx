@@ -4,6 +4,9 @@ import MainMenu from './MainMenu';
 import ArrowRight from "@/components/icons/ArrowRight";
 import Share from "./Share";
 import { useRouter } from "next/router";
+import { useAppSelector } from "@/hooks/use-store";
+import { ShoppingCart } from "lucide-react";
+import Loading from "@/components/icons/Loading";
 
 type Props = {
     type2Params?: {
@@ -12,10 +15,12 @@ type Props = {
         backToPrev?: boolean;
         withShare?: boolean;
         withLogo?: boolean;
+        isCart?: boolean;
     }
 }
 
 const Header: React.FC<Props> = props => {
+    const { cartGeneralInfo, loading } = useAppSelector((state) => state.cart);
 
     const router = useRouter();
 
@@ -60,13 +65,35 @@ const Header: React.FC<Props> = props => {
                     <Image src="/logo.svg" alt="irangamecenter" width={50} height={50} />
                 </Link>
             )}
+            <div className="flex gap-4 items-center">
 
+            {
+                props.type2Params?.isCart && <Link href='/cart' className="relative w-fit">
+                <ShoppingCart size={32}/>
+                        
+                {     
+                    cartGeneralInfo?.totalQuantity && cartGeneralInfo?.totalQuantity > 0 ?
+                    (
+                    <span className="absolute -top-1 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                                        {
+                                             loading ?   <Loading className="fill-current w-4 h-4 animate-spin" /> :                                         cartGeneralInfo?.totalQuantity > 9 ? "9+" : cartGeneralInfo?.totalQuantity
+
+                                        }
+                    </span>
+                    )
+                    :
+                     null
+                }
+                </Link>
+            }    
             {props.type2Params?.withShare ? (
                 <Share />
             ):(
                 <MainMenu />
             )}
 
+
+            </div>
 
 
         </header>
