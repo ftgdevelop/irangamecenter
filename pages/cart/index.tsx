@@ -8,6 +8,7 @@ import Image from "next/image";
 import SimplePortal from "@/components/shared/layout/SimplePortal";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { numberWithCommas } from "@/helpers";
 
 
 
@@ -118,7 +119,7 @@ const CartPage = () => {
                 قیمت کالاها ({cartGeneralInfo?.totalQuantity})
               </span>
               <span className="font-bold">
-                {cartGeneralInfo.totalItemsPrice} {currency}
+                {numberWithCommas(cartGeneralInfo.totalItemsPrice)} {currency}
               </span>
             </div>
 
@@ -127,7 +128,7 @@ const CartPage = () => {
                 مبلغ قابل پرداخت
               </span>
               <span className="font-bold">
-                {cartGeneralInfo.payableAmount} {currency}
+                {numberWithCommas(cartGeneralInfo.payableAmount)} {currency}
               </span>
             </div>
 
@@ -136,7 +137,7 @@ const CartPage = () => {
                 سود شما از خرید
               </span>
               <span className="bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent font-bold drop-shadow">
-                {cartGeneralInfo.profitAmount} {currency}
+                {numberWithCommas(cartGeneralInfo.profitAmount)} {currency}
               </span>
             </div>
           </div>
@@ -156,7 +157,7 @@ const CartPage = () => {
           <div className="flex flex-col gap-2">
             <span className="text-sm text-gray-300 ml-2">مبلغ قابل پرداخت</span>
             <span className="font-bold text-lg">
-              {cartGeneralInfo?.payableAmount || 0} {currency}
+              {numberWithCommas(cartGeneralInfo?.payableAmount) || 0} {currency}
             </span>
           </div>
         </footer>

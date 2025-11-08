@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import { addDeviceId, addQuantity, fetchCart, removeQuantity, setLastItemChangedId } from "@/redux/cartSlice";
 import Link from "next/link";
 import Loading from "../icons/Loading";
+import { numberWithCommas } from "@/helpers";
 
 
 
@@ -136,12 +137,12 @@ const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][num
         <div className="flex flex-col gap-1">
           {item.totalDiscountAmount > 0 && (
             <p className="text-xs text-gray-400 mb-1">
-              مبلغ با {item.totalDiscountAmount} {currency} تخفیف
+              مبلغ با {numberWithCommas(item.totalDiscountAmount)} {currency} تخفیف
             </p>
           )}
           {item.totalPrice && (
             <p className="font-bold text-sm">
-              {item.totalPrice} {currency}
+              {numberWithCommas(item.totalPrice)} {currency}
             </p>
           )}
         </div>
