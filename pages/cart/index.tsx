@@ -4,7 +4,6 @@ import CartCard from "@/components/cart/CartCard";
 import Tabs from "@/components/ui/Tabs";
 import { GetCurrentProductType } from "@/types/commerce";
 import { useAppSelector } from "@/hooks/use-store";
-import Loading from "@/components/icons/Loading";
 import Image from "next/image";
 import SimplePortal from "@/components/shared/layout/SimplePortal";
 import { useRouter } from "next/router";
@@ -92,39 +91,44 @@ const CartPage = () => {
 
       <div className="p-6 max-w-3xl  mx-auto">
 
-        {loading ?  <Loading className="fill-current w-32 h-32 animate-spin" />
-          :
-          !cartGeneralInfo || !cartGeneralInfo.items.length ? (
+      <div
+        className={`transition-opacity duration-700 ease-in-out ${
+          loading ? "opacity-0" : "opacity-100"
+        }`}
+      >
+        {!cartGeneralInfo || !cartGeneralInfo.items.length ? (
           <p>سبد خرید شما خالی است.</p>
         ) : (
-            <div className="mt-4 flex flex-col gap-[30px] justify-between">
-               
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold text-sm text-[#BBBBBB]">
-                    قیمت کالاها ({cartGeneralInfo?.totalQuantity})
-                  </span>
-                  <span className="font-bold">
-                    {cartGeneralInfo.totalItemsPrice} {currency}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold text-sm text-[#BBBBBB]">
-                    مبلغ قابل پرداخت
-                  </span>
-                  <span className="font-bold">
-                    {cartGeneralInfo.payableAmount} {currency}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent font-bold drop-shadow">
-                    سود شما از خرید
-                  </span>
-                  <span className="bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent font-bold drop-shadow">
-                    {cartGeneralInfo.profitAmount} {currency}
-                  </span>
-                </div>
+          <div className="mt-4 flex flex-col gap-[30px] justify-between">
+            <div className="flex items-center justify-between">
+              <span className="font-semibold text-sm text-[#BBBBBB]">
+                قیمت کالاها ({cartGeneralInfo?.totalQuantity})
+              </span>
+              <span className="font-bold">
+                {cartGeneralInfo.totalItemsPrice} {currency}
+              </span>
             </div>
+
+            <div className="flex items-center justify-between">
+              <span className="font-semibold text-sm text-[#BBBBBB]">
+                مبلغ قابل پرداخت
+              </span>
+              <span className="font-bold">
+                {cartGeneralInfo.payableAmount} {currency}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <span className="bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent font-bold drop-shadow">
+                سود شما از خرید
+              </span>
+              <span className="bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent font-bold drop-shadow">
+                {cartGeneralInfo.profitAmount} {currency}
+              </span>
+            </div>
+          </div>
         )}
+      </div>
       </div>
         <SimplePortal selector="fixed_bottom_portal">
         <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 bg-[#192a39] px-4 py-3 flex flex-wrap justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">

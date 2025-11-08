@@ -113,7 +113,7 @@ const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][num
           </button>
           <span className="flex justify-center items-center w-[67px]  font-medium">
             {isAdding || isRemoving || (loading && lastProductId === productId) ? (
-                  <Loading className="fill-current w-5 h-5 animate-spin" />
+                  <Loading className="fill-current text-[#A93AFF] w-5 h-5 animate-spin" />
                 ) : (
               item?.quantity || 0
             )}
