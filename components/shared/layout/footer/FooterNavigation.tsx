@@ -3,28 +3,11 @@ import Image from "next/image";
 import Link from "next/link"
 import Skeleton from "../../Skeleton";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { getCart } from "@/actions/cart";
-import {  GetCurrentProductType } from "@/types/commerce";
+import Loading from "@/components/icons/Loading";
 
 const FooterNavigation = () => {
-  const [cartGeneralInfo, setCartGeneralInfo] = useState<GetCurrentProductType | undefined>(undefined);
-  const deviceId = useAppSelector((state) => state.cart.deviceId);
+  const { cartGeneralInfo, loading } = useAppSelector((state) => state.cart);
 
-    useEffect(() => {
-    const fetchCart = async () => {
-
-      await getCart(deviceId).then(data => {
-        setCartGeneralInfo(data?.result);
-      }).catch(err => console.log(err)
-      )
-   
-    };
-  
-      fetchCart();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-  
   const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
   const userInfoLoading = useAppSelector(state => state.authentication.getUserLoading);
 
@@ -51,11 +34,14 @@ const FooterNavigation = () => {
             >
               <div className="relative w-fit">
                 <Image src={item.imageUrl} alt={item.label} className="block mx-auto mb-2" width={26} height={26} />
-                {item.label === "سفارش های من" &&cartGeneralInfo?.totalQuantity &&  cartGeneralInfo?.totalQuantity  > 0 && (
+
+                {
+                   item.label === "سفارش های من" &&cartGeneralInfo?.totalQuantity &&  cartGeneralInfo?.totalQuantity  > 0 ? (
                   <span className="absolute -top-1 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
-                    {cartGeneralInfo?.totalQuantity > 9 ? "9+" : cartGeneralInfo?.totalQuantity}
+                    {loading ?  <Loading className="fill-current w-4 h-4 animate-spin" />  : cartGeneralInfo?.totalQuantity > 9 ? "9+" : cartGeneralInfo?.totalQuantity}
                   </span>
-                )}
+                ) : null
+                }
               </div>
               {item.loading ? <Skeleton className="w-12 h-4 mx-auto" /> : item.label}
             </Link>

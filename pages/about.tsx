@@ -62,7 +62,6 @@ const AboutUs: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
 
   return (
     <>
-
       {!!aboutDescription && <Intro description={aboutDescription} />}
 
       {!!icons && <AboutIcons items={icons} />}

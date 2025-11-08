@@ -13,6 +13,7 @@ import FooterNavigation from "./footer/FooterNavigation";
 import { getUserBalance } from "@/actions/payment";
 import PageLoadingBar from "./PageLoadingBar";
 import { setProgressLoading } from "@/redux/stylesSlice";
+import { fetchCart } from "@/redux/cartSlice";
 
 type Props = {
     className?: string;
@@ -28,6 +29,14 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
     const isBodyScrollable = useAppSelector(state => state?.styles?.bodyScrollable);
     const lastScrollPosition = useAppSelector(state => state?.styles?.lastScrollPosition);
+    const deviceId = useAppSelector((state) => state.cart.deviceId);
+
+  useEffect(() => {
+    if (deviceId) {
+      dispatch(fetchCart(deviceId));
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deviceId]);
 
     useEffect(() => {
         if (isBodyScrollable && lastScrollPosition) {
@@ -66,6 +75,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
                 item.removeEventListener('click', () => { addLoading("") })
             });
         })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [router.asPath]);
 
     const headerType2ParamsFromRedux = useAppSelector(state => state.pages.headerType2Params);
@@ -79,6 +89,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         backToPrev?: boolean;
         withShare?: boolean;
         withLogo?: boolean;
+        isCart?: boolean;
     } | undefined = undefined;
 
     if (
@@ -163,7 +174,8 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             title: "",
             withShare: true,
             withLogo: true,
-            backUrl: "/products"
+            backUrl: "/products",
+            isCart: true
         };
         showFooter = true;
         showHeader = true;
@@ -180,6 +192,17 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         showFooter = false;
         showHeader = true;
         showFixedNav = true;
+    }
+    if (router.pathname === '/cart') {
+        headerType2Params = {
+            title: "",
+            withShare: true,
+            withLogo: true,
+            backUrl: "/",
+        };
+        showFooter = false;
+        showHeader = true;
+        showFixedNav = false;
     }
 
     useEffect(() => {
@@ -211,6 +234,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             }
             getUserData();
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -230,11 +254,12 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         if (isAuthenticated) {
             fetchBalance();
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAuthenticated]);
 
-    let headertype2 = headerType2Params;
+    let headerType2 = headerType2Params;
     if (headerType2ParamsFromRedux.backUrl) {
-        headertype2 = headerType2ParamsFromRedux;
+        headerType2 = headerType2ParamsFromRedux;
     }
 
     return (
@@ -243,7 +268,10 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             <Notification />
             <div className={`bg-[#011425] text-white md:max-w-lg mx-auto ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`}>
                 <PageLoadingBar active={loading} />
-                {showHeader && <Header type2Params={headertype2} />}
+                {showHeader && <>
+                    <Header type2Params={headerType2} />
+                    <div className="mt-[84px]" />
+                </>}
                 <main 
                     className={showFooter ? "" : showFixedNav ? "min-h-screen-nav" : "min-h-screen"}
                     style={{

@@ -1,55 +1,90 @@
 import Image from "next/image";
 import React, { useState } from "react";
-import { Trash2, Plus } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
 import { addItem, removeItem } from "@/actions/cart";
 import {  GetCurrentProductType } from "@/types/commerce";
+import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
+import { addDeviceId, addQuantity, fetchCart, removeQuantity, setLastItemChangedId } from "@/redux/cartSlice";
+import Link from "next/link";
+import Loading from "../icons/Loading";
 
 
 
-const CartCard = ({ item } : { item: GetCurrentProductType['items'][number]}) => {
-  const [isLoadingAddItem, setIsLoadingAddItem] = useState(false);
-  const [isLoadingDeleteItem, setIsLoadingDeleteItem] = useState(false);
+const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][number], loading: boolean }) => {
+  const [isAdding, setIsAdding] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
 
-  const variants = item?.variant;
+
+    const dispatch = useAppDispatch();
+    const deviceId = useAppSelector((state) => state.cart.deviceId);
+    const lastProductId = useAppSelector((state) => state.cart.lastItemIsChangedId);
+    const tempQuantity = useAppSelector((state) => state.cart.quantity);
+
+  const variantItem = item?.variant;
   const currency = item?.variant.currencyType;
+  const productId = item?.id;
 
 
-  const handleAddItem = async () => {
-    setIsLoadingAddItem(true);
-    const targetItem = item?.variant?.variantAttributeValues && item?.variant?.variantAttributeValues?.[0]?.variantId
-    if (targetItem && variants) {
-      await addItem({ variantId: targetItem, quantity: 1 }).finally(() => {
-        setIsLoadingAddItem(false);
-      });
+    const refreshCart = () => {
+      dispatch(fetchCart(deviceId));
+      setIsAdding(false);
+    };
+
+
+  const handleAddToCart = async () => {
+    const variantId = variantItem?.id;
+    if (!variantId) return;
+
+    dispatch(addQuantity());
+    setIsAdding(true);
+
+    try {
+      const res = await addItem(
+        { variantId, quantity: tempQuantity },
+        deviceId
+      );
+      dispatch(addDeviceId(res?.result?.deviceId || ""));
+      dispatch(removeQuantity(tempQuantity));
+      dispatch(setLastItemChangedId(productId));
+      refreshCart()
+
+    } catch (err) {
+      setIsAdding(false);
+      throw err
+    } finally {
+      setIsAdding(false);
     }
   };
 
-  const handleDeleteItem = async () => {
-    setIsLoadingDeleteItem(true);
-    const targetItem = item?.variant?.variantAttributeValues && item?.variant?.variantAttributeValues?.[0]?.variantId
-    if (targetItem && variants) {
-      await removeItem({ Id: targetItem }).finally(() => {
-        setIsLoadingDeleteItem(false);
-      });
+  const handleRemoveFromCart = async () => {
+
+    setIsRemoving(true);
+    try {
+      await removeItem({ Id: productId}, deviceId);
+      dispatch(removeQuantity(1));
+      dispatch(setLastItemChangedId(productId));
+      refreshCart()
+    } catch (err) {
+      console.error(err);
+      setIsRemoving(false);
+    } finally {
+      setIsRemoving(false);
     }
   };
-  console.log({
-  item
-});
 
 
   return (
-    <div className="text-white flex flex-col gap-6 pt-4 justify-between items-center pb-4 border-b border-[#192b39]/50 w-full">
-      <div className="flex w-full items-center min-h-[140px] gap-4">
-        <div className="relative w-[140px] h-[140px] bg-black/25  rounded-[20px]  overflow-hidden">
-          <Image
+    <div className="text-white flex flex-col gap-5 pt-4 justify-between items-center pb-4 border-b border-[#192b39]/50 w-full">
+      <div className="flex w-full items-center min-h-[120px] gap-5">
+        <Link href={`/product/${item.variant.product.slug}`} className="relative w-[120px] h-[120px] bg-black/25  rounded-[20px]  overflow-hidden" >
+                    <Image
             src={item?.variant.product.filePath || "/placeholder.png"}
             alt={item?.variant.product.fileTitleAttribute || "محصول"}
             fill
             className="object-cover rounded-[20px]"
           />
-        </div>
-        <div className="flex flex-col justify-between min-h-[140px]">
+        </Link>
+        <div className="flex flex-col justify-between min-h-[120px]">
           <h2 className="font-semibold text-sm md:text-base mt-4">
             {item?.variant.product.name || "محصول"}
           </h2>
@@ -67,7 +102,37 @@ const CartCard = ({ item } : { item: GetCurrentProductType['items'][number]}) =>
         </div>
       </div>
 
-      <div className="flex w-full justify-between">
+      <div className="flex flex-wrap gap-5 w-full justify-between">
+          <div className="flex items-center h-[42px] bg-[#EFEFF0]/10 rounded-full">
+          <button
+            onClick={handleAddToCart}
+            className="bg-gradient-to-t from-green-600 to-green-300 hover:bg-gradient-to-tr flex justify-center items-center p-2 h-[42px] w-[42px] rounded-full"
+            disabled={isAdding}
+          >
+            <Plus size={18} />
+          </button>
+          <span className="flex justify-center items-center w-[67px]  font-medium">
+            {isAdding || isRemoving || (loading && lastProductId === productId) ? (
+                  <Loading className="fill-current w-5 h-5 animate-spin" />
+                ) : (
+              item?.quantity || 0
+            )}
+          </span>
+          <button
+            onClick={handleRemoveFromCart}
+            className="bg-gradient-to-r from-[#00B59C]/10 to-[#9CFFAC]/10 flex justify-center items-center p-2 h-[42px] w-[42px] rounded-full hover:bg-gray-600"
+            disabled={isRemoving}
+          >
+          {
+              item.quantity > 1
+                ?
+              <Minus size={18} className="text-white/70" />
+                :
+              <Image alt='decrease-item' src='/images/icons/trash.svg' width={18} height={18} />
+          }
+          </button>
+        </div>
+
         <div className="flex flex-col gap-1">
           {item.totalDiscountAmount > 0 && (
             <p className="text-xs text-gray-400 mb-1">
@@ -81,25 +146,7 @@ const CartCard = ({ item } : { item: GetCurrentProductType['items'][number]}) =>
           )}
         </div>
 
-        <div className="flex items-center gap-2 h-13 bg-[#EFEFF0]/10 rounded-full">
-          <button
-            onClick={handleAddItem}
-            className="bg-gradient-to-t from-green-600 to-green-300 hover:bg-gradient-to-tr flex justify-center items-center p-2 h-13 w-13 rounded-full"
-            disabled={isLoadingAddItem}
-          >
-            <Plus size={24} />
-          </button>
-          <span className="inline-block w-[67px] text-center font-medium">
-            {item.quantity}
-          </span>
-          <button
-            onClick={handleDeleteItem}
-            className="bg-gradient-to-r from-[#00B59C]/10 to-[#9CFFAC]/10 flex justify-center items-center p-2 h-13 w-13 rounded-full hover:bg-gray-600"
-            disabled={isLoadingDeleteItem}
-          >
-            <Trash2 size={24} className="text-white/70" />
-          </button>
-        </div>
+
       </div>
     </div>
   );
