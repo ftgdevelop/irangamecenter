@@ -1,8 +1,9 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+ 
 
 import ArrowTopLeft from "@/components/icons/ArrowTopLeft";
 import Loading from "@/components/icons/Loading";
-import PhoneInput from "@/components/shared/PhoneInput"
+import FormikField from "@/components/shared/FormikField";
+import { validateRequired } from "@/helpers/formik-validation";
 import { Form, Formik } from "formik"
 import Link from "next/link";
 
@@ -28,19 +29,12 @@ const OtpSendCode: React.FC<Props> = props => {
                 {({ errors, touched, values, setFieldValue }) => {
                     return (
 
-                        <Form className='p-5 text-sm flex flex-col items-center justify-center gap-5 leading-6' autoComplete='off' >
-                            <div className="self-stretch mb-5">
-                                <PhoneInput
+                        <Form className='px-5 text-sm flex flex-col items-center justify-center gap-[60px] leading-6' autoComplete='off' >
+                            <div className="self-stretch ">
+                                <FormikField
                                     placeholder="شماره موبایل را وارد نمایید"
-                                    heightClass="h-14"
                                     label='شماره موبایل'
-                                    defaultCountry={
-                                        {
-                                            countryCode: "ir",
-                                            dialCode: "98",
-                                            format: "... ... ...."
-                                        }
-                                    }
+                                    setFieldValue={setFieldValue}
                                     onChange={(v: string) => {
                                         setFieldValue('phoneNumber', v)
                                     }}
@@ -49,12 +43,18 @@ const OtpSendCode: React.FC<Props> = props => {
                                     isTouched={touched.phoneNumber}
                                     errorText={errors.phoneNumber}
                                     className="mb-5"
+                                    fieldClassName="py-[22px] h-auto"
+                                    validateFunction={(value: string) => validateRequired(value,  ' شماره موبایل را وارد کنید.')}
                                 />
+                                <p>
+                                مثلا: ۰۹۱۲۱۲۳۴۵۶۷۸۹
+                                </p>          
                             </div>
-
-                            <button
+    
+                            <div className=" text-white w-full rounded-2xl  space-y-2">
+                             <button
                                 type="submit"
-                                className="flex gap-4 items-center justify-center mb-5 h-14 w-full text-center bg-[#aa3aff] rounded-full text-sm"
+                                className="flex gap-4 items-center mb-2.5 justify-center h-14 w-full bg-[#aa3aff] rounded-full text-sm"
                             >
                                 تایید و دریافت کد
 
@@ -64,7 +64,25 @@ const OtpSendCode: React.FC<Props> = props => {
                                     <ArrowTopLeft className="fill-current w-3.5 h-3.5" />
                                 )}
                             </button>
+                                <p className=" text-[10px]">
+                                    ورود شما به معناى پذيرش
+                                    {' '}
+                                    <Link
+                                    href="/terms"
+                                    className=" text-[#A93AFF]  hover:text-[#A93AFF]/50 transition"
+                                    >
 
+                                     شرايط ايران كيم 
+                                    </Link> و  <Link
+                                    href="/privacy"
+                                    className=" text-[#A93AFF] hover:text-[#A93AFF]/50 transition"
+                                    >
+                                    قوانين حريم خصوصى
+                                    </Link> است.
+                                </p>
+           
+                            </div>
+                            <div className="flex flex-col gap-[30px]">
                             <button
                                 type="button"
                                 className="text-[#2ac99f] font-semibold text-sm"
@@ -79,6 +97,9 @@ const OtpSendCode: React.FC<Props> = props => {
                             >
                                 فراموشی رمز عبور
                             </Link>
+
+                            </div>
+
 
                         </Form>
                     )
