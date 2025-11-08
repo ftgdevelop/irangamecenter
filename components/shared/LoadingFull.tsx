@@ -13,7 +13,7 @@ const LoadingFull = () => {
     return (
         <ModalPortal
             show={open}
-            selector='modal_portal'
+            selector='notification_modal_portal'
         >
             <div className="fixed top-0 left-0 right-0 bottom-0 flex z-50 justify-center items-center">
 
