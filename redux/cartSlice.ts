@@ -26,6 +26,7 @@ export interface CartState {
   cartGeneralInfo?: GetCurrentProductType;
   loading: boolean;
   error?: string;
+  lastItemIsChangedId: number | null
 }
 
 const initialState: CartState = {
@@ -34,6 +35,7 @@ const initialState: CartState = {
   cartGeneralInfo: undefined,
   loading: false,
   error: undefined,
+  lastItemIsChangedId: null
 };
 
 const cartSlice = createSlice({
@@ -58,6 +60,9 @@ const cartSlice = createSlice({
       state.quantity = (state.quantity || 0) - action.payload;
       if (state.quantity < 1) state.quantity = 1;
     },
+    setLastItemChangedId(state, action: PayloadAction<number | null>) {
+      state.lastItemIsChangedId = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -81,6 +86,7 @@ export const {
   removeDeviceId,
   addQuantity,
   removeQuantity,
+  setLastItemChangedId
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

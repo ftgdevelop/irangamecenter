@@ -73,7 +73,7 @@ const Header: React.FC<Props> = props => {
                 {     
                     cartGeneralInfo?.totalQuantity && cartGeneralInfo?.totalQuantity > 0 ?
                     (
-                    <span className="absolute bottom-[-15px] right-[-15px] bg-gradient-to-t from-green-600 to-green-300 text-[#011425] font-bold rounded-full w-[30px] h-[30px] flex items-center justify-center">
+                    <span className="absolute bottom-[-10px] right-[-10px] bg-gradient-to-t from-green-600 to-green-300 text-[#011425] font-bold rounded-full w-[30px] h-[30px] flex items-center justify-center">
                         {
                             loading ? <Loading className="fill-current w-4 h-4 animate-spin" /> :
                             cartGeneralInfo?.totalQuantity > 9 ? "9+" : cartGeneralInfo?.totalQuantity
