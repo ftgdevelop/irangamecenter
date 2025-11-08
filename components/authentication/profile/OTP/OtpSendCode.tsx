@@ -2,8 +2,7 @@
 
 import ArrowTopLeft from "@/components/icons/ArrowTopLeft";
 import Loading from "@/components/icons/Loading";
-import FormikField from "@/components/shared/FormikField";
-import { validateRequired } from "@/helpers/formik-validation";
+import PhoneInput from "@/components/shared/PhoneInput";
 import { Form, Formik } from "formik"
 import Link from "next/link";
 
@@ -31,10 +30,17 @@ const OtpSendCode: React.FC<Props> = props => {
 
                         <Form className='px-5 text-sm flex flex-col items-center justify-center gap-[60px] leading-6' autoComplete='off' >
                             <div className="self-stretch ">
-                                <FormikField
+                                <PhoneInput
                                     placeholder="شماره موبایل را وارد نمایید"
+                                    heightClass="h-14"
                                     label='شماره موبایل'
-                                    setFieldValue={setFieldValue}
+                                    defaultCountry={
+                                        {
+                                            countryCode: "ir",
+                                            dialCode: "98",
+                                            format: "... ... ...."
+                                        }
+                                    }
                                     onChange={(v: string) => {
                                         setFieldValue('phoneNumber', v)
                                     }}
@@ -43,8 +49,6 @@ const OtpSendCode: React.FC<Props> = props => {
                                     isTouched={touched.phoneNumber}
                                     errorText={errors.phoneNumber}
                                     className="mb-5"
-                                    fieldClassName="py-[22px] h-auto"
-                                    validateFunction={(value: string) => validateRequired(value,  ' شماره موبایل را وارد کنید.')}
                                 />
                                 <p>
                                 مثلا: ۰۹۱۲۱۲۳۴۵۶۷۸۹
