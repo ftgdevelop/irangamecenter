@@ -66,7 +66,6 @@ const CartPage = () => {
   const pageTitle = `سبد خرید | فروشگاه`;
 
 
-
   return (
     <>
       <Head>
@@ -115,8 +114,19 @@ const CartPage = () => {
         )}
       </div>
         <SimplePortal selector="fixed_bottom_portal">
-        <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 bg-[#192a39] px-4 py-3 flex flex-wrap max-[390px]:justify-center justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
-          BUTTON
+        <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 bg-[#192a39] px-4 py-3 flex flex-wrap justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
+          <button
+            type="button"
+            className="bg-violet-500 hover:bg-violet-600 text-white rounded-full px-[30px] py-[17px] max-[390px]:px-3 max-[390px]:text-sm  flex gap-2 items-center font-semibold transition-all duration-200"
+          >
+            تایید و ثبت سفارش
+          </button>
+          <div className="flex flex-col gap-2">
+            <span className="text-sm text-gray-300 ml-2">مبلغ قابل پرداخت</span>
+            <span className="font-bold text-lg">
+              {cartGeneralInfo?.payableAmount || 0} {currency}
+            </span>
+          </div>
         </footer>
         <div className="h-20" />
       </SimplePortal>
