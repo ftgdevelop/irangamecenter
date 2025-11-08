@@ -7,6 +7,7 @@ import { useAppSelector } from "@/hooks/use-store";
 import Image from "next/image";
 import SimplePortal from "@/components/shared/layout/SimplePortal";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 
 
@@ -76,7 +77,21 @@ const CartPage = () => {
       router.push("/login")
     }
   }
+  const emptySection = (
+    <div className="flex flex-col justify-center items-center ">
+      <Image width={90} height={90} src='/images/icons/2color/empty-cart.svg' alt="empty"/>
+      <p className="font-extrabold text-xl text-[#FF163E] mt-5">
+        سبد خرید شما خالی است!
+      </p>
+      <Link href={'/'} className="w-full">
+      <button className="bg-gradient-to-r from-[#FE4968] to-[#FF9B90] py-[22px] w-full rounded-[100px] mt-[60px] flex gap-3 items-center justify-center">
+        <Image width={24} height={24} src='/images/icons/shop-outline.svg' alt="empty"/>
+        بازگشت به فروشگاه
+      </button>
+      </Link>
 
+    </div>
+  )
 
   return (
     <>
@@ -96,9 +111,7 @@ const CartPage = () => {
           loading ? "opacity-0" : "opacity-100"
         }`}
       >
-        {!cartGeneralInfo || !cartGeneralInfo.items.length ? (
-          <p>سبد خرید شما خالی است.</p>
-        ) : (
+        {!cartGeneralInfo || !cartGeneralInfo.items.length ? emptySection : (
           <div className="mt-4 flex flex-col gap-[30px] justify-between">
             <div className="flex items-center justify-between">
               <span className="font-semibold text-sm text-[#BBBBBB]">
@@ -130,7 +143,8 @@ const CartPage = () => {
         )}
       </div>
       </div>
-        <SimplePortal selector="fixed_bottom_portal">
+      {
+        cartGeneralInfo && cartGeneralInfo.items && cartGeneralInfo.items.length &&  <SimplePortal selector="fixed_bottom_portal">
         <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 bg-[#192a39] px-4 py-3 flex flex-wrap justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
           <button
             type="button"
@@ -148,6 +162,8 @@ const CartPage = () => {
         </footer>
         <div className="h-20" />
       </SimplePortal>
+      }
+
     </>
   );
 };
