@@ -7,6 +7,7 @@ import { useAppSelector } from "@/hooks/use-store";
 import Loading from "@/components/icons/Loading";
 import Image from "next/image";
 import SimplePortal from "@/components/shared/layout/SimplePortal";
+import { useRouter } from "next/router";
 
 
 
@@ -25,6 +26,10 @@ const ConfirmationSection = () => (
 
 const CartPage = () => {
   const { cartGeneralInfo, loading } = useAppSelector((state) => state.cart);
+  const isAuthenticated = useAppSelector(
+      (state) => state.authentication.isAuthenticated,
+  );
+  const router = useRouter();
 
   const currency = cartGeneralInfo?.items?.[0]?.variant.currencyType;
 
@@ -64,6 +69,14 @@ const CartPage = () => {
   ];
 
   const pageTitle = `سبد خرید | فروشگاه`;
+
+  const handleCart = () => {
+    if (isAuthenticated) {
+      return null
+    } else {
+      router.push("/login")
+    }
+  }
 
 
   return (
@@ -118,6 +131,7 @@ const CartPage = () => {
           <button
             type="button"
             className="bg-violet-500 hover:bg-violet-600 text-white rounded-full px-[30px] py-[17px] max-[390px]:px-3 max-[390px]:text-sm  flex gap-2 items-center font-semibold transition-all duration-200"
+            onClick={handleCart}
           >
             تایید و ثبت سفارش
           </button>
