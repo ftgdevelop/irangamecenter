@@ -8,6 +8,7 @@ import Link from "next/link";
 import Loading from "../icons/Loading";
 import { numberWithCommas } from "@/helpers";
 import { useCartApi } from "@/actions/cart";
+import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 
 
 
@@ -22,7 +23,7 @@ const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][num
   const {  addItem, removeItem } = useCartApi();
   
   const variantItem = item?.variant;
-  const currency = item?.variant.currencyType;
+  const currency = getCurrencyLabelFa(item?.variant.currencyType);
   const productId = item?.id;
 
 
@@ -134,7 +135,7 @@ const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][num
         <div className="flex flex-col gap-1">
           {item.totalDiscountAmount > 0 && (
             <p className="text-xs text-gray-400 mb-1">
-              مبلغ با {numberWithCommas(item.totalDiscountAmount)} {currency} تخفیف
+              مبلغ با {numberWithCommas(item.totalDiscountAmount)} {(currency)} تخفیف
             </p>
           )}
           {item.totalPrice && (

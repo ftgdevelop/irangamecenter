@@ -20,6 +20,7 @@ import Alert from "../shared/Alert";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { setProgressLoading } from "@/redux/stylesSlice";
+import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 
 type Props = {
   variant?: ProductVariant;
@@ -154,11 +155,11 @@ const VariantItem: React.FC<Props> = ({
                   >
                     {!!item?.regularPrice && (
                       <div className="text-xs line-through">
-                        {numberWithCommas(item.regularPrice)} {item.currencyType}
+                        {numberWithCommas(item.regularPrice)} {getCurrencyLabelFa(item.currencyType)}
                       </div>
                     )}
                     <div className="text-sm">
-                      {numberWithCommas(item.salePrice)} {item.currencyType}
+                      {numberWithCommas(item.salePrice)} {getCurrencyLabelFa(item.currencyType)}
                     </div>
                   </div>
                 )}
@@ -197,6 +198,7 @@ const CartFooter = ({
 
   const dispatch = useAppDispatch();
   const tempQuantity = useAppSelector((state) => state.cart.quantity);
+  const currencyStore = useAppSelector((state) => state.cart.currency);
 
 
   const refreshCart = () => {
@@ -231,10 +233,10 @@ const CartFooter = ({
   const variantList = selectedVariants.map((v) => v.variant);
   const activeVariant = variantList.find((v) => v.items?.length);
   const variantItem = activeVariant?.items?.[0];
+
   const currency =
-    cartData?.items?.[0]?.variant.currencyType ||
-    variantItem?.currencyType ||
-    "تومان";
+    getCurrencyLabelFa(cartData?.items?.[0]?.variant.currencyType )||
+    getCurrencyLabelFa(variantItem?.currencyType) || getCurrencyLabelFa(currencyStore)
 
   const handleAddToCart = async () => {
     const variantId = variantItem?.id;

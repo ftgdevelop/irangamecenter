@@ -9,6 +9,7 @@ import SimplePortal from "@/components/shared/layout/SimplePortal";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { numberWithCommas } from "@/helpers";
+import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 
 
 
@@ -30,9 +31,11 @@ const CartPage = () => {
   const isAuthenticated = useAppSelector(
       (state) => state.authentication.isAuthenticated,
   );
+  const currencyStore = useAppSelector((state) => state.cart.currency);
+
   const router = useRouter();
 
-  const currency = cartGeneralInfo?.items?.[0]?.variant.currencyType;
+  const currency = getCurrencyLabelFa(cartGeneralInfo?.items?.[0]?.variant.currencyType) || getCurrencyLabelFa(currencyStore);
 
   const CartSection = ({ items }: { items: GetCurrentProductType['items'] }) => {
     const renderCards = items.map((item) => item && cartGeneralInfo && <CartCard key={item.id} item={item} loading={loading} />);
