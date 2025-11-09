@@ -26,7 +26,7 @@ const Header: React.FC<Props> = props => {
     return (
         <header className="fixed top-0 h-[84px] left-1/2 -translate-x-1/2 bg-[#011425] z-40 w-full md:max-w-lg flex justify-between p-3">
             {(props.type2Params?.backUrl || props.type2Params?.backToPrev)  ? (
-                <div className="flex items-center py-3.5 gap-4">
+                <div className="flex items-center py-3.5 gap-4 w-[104px]">
                     {props.type2Params.backToPrev ? (
                         <button
                             type="button"
@@ -64,32 +64,32 @@ const Header: React.FC<Props> = props => {
                     <Image src="/logo.svg" alt="irangamecenter" width={50} height={50} />
                 </Link>
             )}
-            <div className="flex gap-[30px] items-center">
+            <div className="flex gap-[30px] w-[104px] justify-end items-center">
 
-            {
-                props.type2Params?.isCart && <Link href='/cart' className="relative w-fit cursor-pointer">
-                <Image src='/images/icons/shopping-cart.svg' alt="shopping-cart" width={42} height={42}/>
-                        
-                {     
-                    cartGeneralInfo?.totalQuantity && cartGeneralInfo?.totalQuantity > 0 ?
-                    (
-                    <span className="absolute bottom-[-10px] right-[-10px] bg-gradient-to-t from-green-600 to-green-300 text-[#011425] font-bold rounded-full w-[30px] h-[30px] flex items-center justify-center">
-                        {
-                            loading ? <Loading className="fill-current w-4 h-4 animate-spin" /> :
-                            cartGeneralInfo?.totalQuantity > 9 ? "9+" : cartGeneralInfo?.totalQuantity
-                        }
-                    </span>
-                    )
-                    :
-                     null
-                }
-                </Link>
-            }    
-            {props.type2Params?.withShare ? (
-                <Share />
-            ):(
-                <MainMenu />
-            )}
+                {
+                    props.type2Params?.isCart && <Link href='/cart' className="relative w-fit cursor-pointer">
+                    <Image src='/images/icons/shopping-cart.svg' alt="shopping-cart" width={42} height={42}/>
+                            
+                    {     
+                        cartGeneralInfo?.totalQuantity && cartGeneralInfo?.totalQuantity > 0 ?
+                        (
+                        <span className="absolute bottom-[-10px] right-[-10px] bg-gradient-to-t from-green-600 to-green-300 text-[#011425] font-bold rounded-full w-[30px] h-[30px] flex items-center justify-center">
+                            {
+                                loading ? <Loading className="fill-current w-4 h-4 animate-spin" /> :
+                                cartGeneralInfo?.totalQuantity > 9 ? "9+" : cartGeneralInfo?.totalQuantity
+                            }
+                        </span>
+                        )
+                        :
+                        null
+                    }
+                    </Link>
+                }    
+                {props.type2Params?.withShare ? (
+                    <Share />
+                ):(
+                    <MainMenu />
+                )}
 
 
             </div>
