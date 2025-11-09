@@ -17,7 +17,7 @@ const BannerLinks: React.FC<Props> = props => {
     return (
         <div className="p-3">
             {props.items?.map(item => (
-                <Link href={item.url} className="relative block mb-4">
+                <Link href={item.url} className="relative block mb-4" key={item.title}>
                     <Image
                         src={item.imageUrl || "/images/default-game.png"}
                         alt={item.title || item.imageAlt || item.imageTitle || ""}

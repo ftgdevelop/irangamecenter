@@ -14,6 +14,8 @@ import { setReduxError } from "@/redux/errorSlice";
 import Link from "next/link";
 import { toPersianDigits } from "@/helpers";
 import Skeleton from "./Skeleton";
+import History from "../icons/History";
+import ArrowTopLeft from "../icons/ArrowTopLeft";
 
 const Search = () => {
 
@@ -50,13 +52,34 @@ const Search = () => {
         }
     }, [slideIn]);
 
+
+    const [recentSearchList, setRecentSearchList] = useState<string[]>([]);
+
+    useEffect(() => {
+        const stored = localStorage.getItem("recentSearch");
+        const items = stored ? JSON.parse(stored) : [];
+        setRecentSearchList(items);
+    }, []);
+
     const searchInputRef = useRef<HTMLInputElement>(null)
 
     const source = axios.CancelToken.source();
 
+    function saveRecentSearch(value: string) {
+        const key = "recentSearch";
+        const stored = localStorage.getItem(key);
+        let list: string[] = stored ? JSON.parse(stored) : [];
+        list = list.filter(item => item !== value);
+        list.unshift(value);
+        list = list.slice(0, 6);
+        localStorage.setItem(key, JSON.stringify(list));
+    }
+
     const fetchData = async (val: string) => {
         setLoading(true);
         setErrorText("");
+
+        saveRecentSearch(val);
 
         try {
 
@@ -90,7 +113,12 @@ const Search = () => {
             }
 
         } finally {
-            setLoading(false);
+            setTimeout(() => { setLoading(false) }, 800);
+
+            const stored = localStorage.getItem("recentSearch");
+            const items = stored ? JSON.parse(stored) : [];
+            setRecentSearchList(items);
+
         }
 
     };
@@ -180,9 +208,10 @@ const Search = () => {
 
                                 <div className="search-result-max-h styled-scrollbar overflow-auto px-3">
                                     {loading ? (
-                                        [1, 2, 3, 4, 5].map(item => (
+                                        [1, 2, 3, 4].map(item => (
                                             <div className="flex gap-3 items-center border-b border-white/30 py-3" key={item}>
                                                 <Skeleton
+                                                    key={item}
                                                     dark
                                                     type="image"
                                                     className="w-18 h-18 block shrink-0 rounded-2xl"
@@ -193,7 +222,7 @@ const Search = () => {
                                     ) : errorText ? (
                                         <div className="text-sm py-5"> {errorText} </div>
                                     ) : products.map(product => (
-                                        <Link href={`/product/${product.slug}`} target="_blank" className="flex items-center gap-4 border-b border-white/30 py-3" >
+                                        <Link key={product.id} href={`/product/${product.slug}`} target="_blank" className="flex items-center gap-4 border-b border-white/30 py-3" >
                                             <Image
                                                 src={product.filePath || "/images/default-game.png"}
                                                 alt={product.fileAltAttribute || product.name || ""}
@@ -204,6 +233,22 @@ const Search = () => {
                                             />
                                             <h4 className="text-xs mb-2"> {toPersianDigits(product.name || "")} </h4>
                                         </Link>
+                                    ))}
+                                </div>
+
+                                <div>
+                                    {recentSearchList?.map(item => (
+                                        <button
+                                            key={item}
+                                            type="button"
+                                            onClick={() => { setText(item) }}
+                                            className="py-3 flex items-center w-full px-3 justify-between gap-2"
+                                        >
+                                            <span className="flex items-center gap-2">
+                                                <History className="w-5 h-5 fill-current" /> {item}
+                                            </span>
+                                            <ArrowTopLeft className="w-4 h-4 fill-current" />
+                                        </button>
                                     ))}
                                 </div>
                             </div>
