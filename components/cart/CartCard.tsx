@@ -1,13 +1,13 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import { Minus, Plus } from "lucide-react";
-import { addItem, removeItem } from "@/actions/cart";
 import {  GetCurrentProductType } from "@/types/commerce";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import { addDeviceId, addQuantity, fetchCart, removeQuantity, setLastItemChangedId } from "@/redux/cartSlice";
 import Link from "next/link";
 import Loading from "../icons/Loading";
 import { numberWithCommas } from "@/helpers";
+import { useCartApi } from "@/actions/cart";
 
 
 
@@ -16,19 +16,18 @@ const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][num
   const [isRemoving, setIsRemoving] = useState(false);
 
 
-    const dispatch = useAppDispatch();
-    const deviceId = useAppSelector((state) => state.cart.deviceId);
-    const lastProductId = useAppSelector((state) => state.cart.lastItemIsChangedId);
-    const tempQuantity = useAppSelector((state) => state.cart.quantity);
-
+  const dispatch = useAppDispatch();
+  const lastProductId = useAppSelector((state) => state.cart.lastItemIsChangedId);
+  const tempQuantity = useAppSelector((state) => state.cart.quantity);
+  const {  addItem, removeItem } = useCartApi();
+  
   const variantItem = item?.variant;
   const currency = item?.variant.currencyType;
   const productId = item?.id;
 
 
-    const refreshCart = () => {
-      dispatch(fetchCart(deviceId));
-      setIsAdding(false);
+  const refreshCart = () => {      
+      dispatch(fetchCart());
     };
 
 
@@ -41,9 +40,7 @@ const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][num
 
     try {
       const res = await addItem(
-        { variantId, quantity: tempQuantity },
-        deviceId
-      );
+        { variantId, quantity: tempQuantity } );
       dispatch(addDeviceId(res?.result?.deviceId || ""));
       dispatch(removeQuantity(tempQuantity));
       dispatch(setLastItemChangedId(productId));
@@ -61,7 +58,7 @@ const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][num
 
     setIsRemoving(true);
     try {
-      await removeItem({ Id: productId}, deviceId);
+      await removeItem({ Id: productId});
       dispatch(removeQuantity(1));
       dispatch(setLastItemChangedId(productId));
       refreshCart()

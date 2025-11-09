@@ -31,12 +31,10 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     const lastScrollPosition = useAppSelector(state => state?.styles?.lastScrollPosition);
     const deviceId = useAppSelector((state) => state.cart.deviceId);
 
-  useEffect(() => {
-    if (deviceId) {
-      dispatch(fetchCart(deviceId));
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [deviceId]);
+    useEffect(() => {
+        dispatch(fetchCart());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [deviceId]);
 
     useEffect(() => {
         if (isBodyScrollable && lastScrollPosition) {

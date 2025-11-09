@@ -14,7 +14,7 @@ import { numberWithCommas } from "@/helpers";
 import { SelectedVariantLevel } from "./VariantSection";
 import { addDeviceId, addQuantity,  fetchCart,  removeQuantity } from "@/redux/cartSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
-import { addItem, getCartByProductId, removeItem } from "@/actions/cart";
+import {  useCartApi } from "@/actions/cart";
 import Loading from "../icons/Loading";
 import Alert from "../shared/Alert";
 import Image from "next/image";
@@ -192,14 +192,15 @@ const CartFooter = ({
   const [isFetching, setIsFetching] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const router = useRouter();
+  const { getCartByProductId, addItem, removeItem } = useCartApi();
+
 
   const dispatch = useAppDispatch();
-  const deviceId = useAppSelector((state) => state.cart.deviceId);
   const tempQuantity = useAppSelector((state) => state.cart.quantity);
 
 
   const refreshCart = () => {
-    dispatch(fetchCart(deviceId));
+    dispatch(fetchCart());
   };
 
   const loadCartByProductId = (
@@ -212,7 +213,7 @@ const CartFooter = ({
 
     setIsFetching(true);
 
-    getCartByProductId(deviceId || "", product.id)
+    getCartByProductId( product.id)
       .then((res) => setCartData(res?.result || null))
       .catch(console.error)
       .finally(() => {
@@ -244,9 +245,7 @@ const CartFooter = ({
 
     try {
       const res = await addItem(
-        { variantId, quantity: tempQuantity },
-        deviceId
-      );
+        { variantId, quantity: tempQuantity });
       dispatch(addDeviceId(res?.result?.deviceId || ""));
       dispatch(removeQuantity(tempQuantity));
 
@@ -271,7 +270,7 @@ const CartFooter = ({
 
     setIsRemoving(true);
     try {
-      await removeItem({ Id: lastCartItem.id }, deviceId);
+      await removeItem({ Id: lastCartItem.id });
       dispatch(removeQuantity(1));
       refreshCart()
       loadCartByProductId();

@@ -1,18 +1,32 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { getCart } from "@/actions/cart";
-import { GetCurrentProductType } from "@/types/commerce";
+import { GetCurrentProductResponseType, GetCurrentProductType } from "@/types/commerce";
+import { RootState } from ".";
+import axios from "axios";
+import { Cart, ServerAddress } from "@/enum/url";
 
 export const fetchCart = createAsyncThunk(
   "cart/fetchCart",
-  async (deviceId: string | undefined, { rejectWithValue }) => {
-    if (!deviceId) return undefined;
+  async (_, { getState, rejectWithValue }) => {
+    const state = getState() as RootState;
+    const deviceId = state.cart.deviceId;
+    const currency = state.cart.currency;
+
+    if (!deviceId) {
+      return rejectWithValue("Device ID missing");
+    }
+
     try {
-      const data = await getCart(deviceId)
-        .then(res => res?.result as GetCurrentProductType)
-        .catch(err => {
-          throw new Error(err?.message || "Failed to fetch cart");
-        });
-      return data;
+      const res = await axios.get<GetCurrentProductResponseType>(
+        `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.GetCurrentCart}`,
+        {
+          headers: {
+            "X-Device-Id": deviceId,
+            ...(currency && { Currency: currency }),
+          },
+        }
+      );
+
+      return res.data.result;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       return rejectWithValue(err.message);
@@ -26,7 +40,8 @@ export interface CartState {
   cartGeneralInfo?: GetCurrentProductType;
   loading: boolean;
   error?: string;
-  lastItemIsChangedId: number | null
+  lastItemIsChangedId: number | null;
+  currency?: string;
 }
 
 const initialState: CartState = {
@@ -35,7 +50,8 @@ const initialState: CartState = {
   cartGeneralInfo: undefined,
   loading: false,
   error: undefined,
-  lastItemIsChangedId: null
+  lastItemIsChangedId: null,
+  currency: "IRR"
 };
 
 const cartSlice = createSlice({
@@ -62,6 +78,9 @@ const cartSlice = createSlice({
     },
     setLastItemChangedId(state, action: PayloadAction<number | null>) {
       state.lastItemIsChangedId = action.payload;
+    },
+    setCurrency(state, action: PayloadAction<string>) {
+      state.currency = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -86,7 +105,8 @@ export const {
   removeDeviceId,
   addQuantity,
   removeQuantity,
-  setLastItemChangedId
+  setLastItemChangedId,
+  setCurrency
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
