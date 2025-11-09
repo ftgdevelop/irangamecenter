@@ -148,7 +148,7 @@ const CartPage = () => {
       </div>
       </div>
       {
-        cartGeneralInfo && cartGeneralInfo.items && cartGeneralInfo.items.length &&  <SimplePortal selector="fixed_bottom_portal">
+        cartGeneralInfo && cartGeneralInfo.items && cartGeneralInfo.items.length ? <SimplePortal selector="fixed_bottom_portal">
         <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 bg-[#192a39] px-4 py-3 flex flex-wrap justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
           <button
             type="button"
@@ -166,7 +166,7 @@ const CartPage = () => {
         </footer>
         <div className="h-20" />
       </SimplePortal>
-      }
+      : null}
 
     </>
   );
