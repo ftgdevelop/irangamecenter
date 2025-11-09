@@ -6,6 +6,8 @@ import Share from "./Share";
 import { useRouter } from "next/router";
 import { useAppSelector } from "@/hooks/use-store";
 import Loading from "@/components/icons/Loading";
+import CartIcon from "@/components/icons/CartIcon";
+import { toPersianDigits } from "@/helpers";
 
 type Props = {
     type2Params?: {
@@ -64,27 +66,22 @@ const Header: React.FC<Props> = props => {
                     <Image src="/logo.svg" alt="irangamecenter" width={50} height={50} />
                 </Link>
             )}
-            <div className="flex gap-[30px] w-[104px] justify-end items-center">
+            <div className="flex gap-5 w-[104px] justify-end items-center">
 
-                {
-                    props.type2Params?.isCart && <Link href='/cart' className="relative w-fit cursor-pointer">
-                    <Image src='/images/icons/shopping-cart.svg' alt="shopping-cart" width={42} height={42}/>
-                            
-                    {     
-                        cartGeneralInfo?.totalQuantity && cartGeneralInfo?.totalQuantity > 0 ?
-                        (
-                        <span className="absolute bottom-[-10px] right-[-10px] bg-gradient-to-t from-green-600 to-green-300 text-[#011425] font-bold rounded-full w-[30px] h-[30px] flex items-center justify-center">
-                            {
-                                loading ? <Loading className="fill-current w-4 h-4 animate-spin" /> :
-                                cartGeneralInfo?.totalQuantity > 9 ? "9+" : cartGeneralInfo?.totalQuantity
-                            }
-                        </span>
-                        )
-                        :
-                        null
-                    }
+                { props.type2Params?.isCart && (
+                    <Link href='/cart' className="relative w-fit cursor-pointer">
+                        <CartIcon className="w-8 h-8 fill-current" />
+                        {!!cartGeneralInfo?.totalQuantity && (
+                            <span className="absolute bottom-[-10px] right-[-10px] bg-gradient-to-t from-green-600 to-green-300 text-[#011425] font-bold rounded-full w-6 h-6 flex items-center justify-center">
+                                {loading ? (
+                                    <Loading className="fill-current w-4 h-4 animate-spin" /> 
+                                ):(
+                                    cartGeneralInfo.totalQuantity > 9 ? toPersianDigits("9+") : toPersianDigits(cartGeneralInfo.totalQuantity.toString())
+                                )}
+                            </span>
+                        )}
                     </Link>
-                }    
+                )}    
                 {props.type2Params?.withShare ? (
                     <Share />
                 ):(
