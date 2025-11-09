@@ -4,10 +4,12 @@ import CartCard from "@/components/cart/CartCard";
 import Tabs from "@/components/ui/Tabs";
 import { GetCurrentProductType } from "@/types/commerce";
 import { useAppSelector } from "@/hooks/use-store";
-import Loading from "@/components/icons/Loading";
 import Image from "next/image";
 import SimplePortal from "@/components/shared/layout/SimplePortal";
 import { useRouter } from "next/router";
+import Link from "next/link";
+import { numberWithCommas } from "@/helpers";
+import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 
 
 
@@ -29,9 +31,11 @@ const CartPage = () => {
   const isAuthenticated = useAppSelector(
       (state) => state.authentication.isAuthenticated,
   );
+  const currencyStore = useAppSelector((state) => state.cart.currency);
+
   const router = useRouter();
 
-  const currency = cartGeneralInfo?.items?.[0]?.variant.currencyType;
+  const currency = getCurrencyLabelFa(cartGeneralInfo?.items?.[0]?.variant.currencyType) || getCurrencyLabelFa(currencyStore);
 
   const CartSection = ({ items }: { items: GetCurrentProductType['items'] }) => {
     const renderCards = items.map((item) => item && cartGeneralInfo && <CartCard key={item.id} item={item} loading={loading} />);
@@ -77,7 +81,21 @@ const CartPage = () => {
       router.push("/login")
     }
   }
+  const emptySection = (
+    <div className="flex flex-col justify-center items-center ">
+      <Image width={90} height={90} src='/images/icons/2color/empty-cart.svg' alt="empty"/>
+      <p className="font-extrabold text-xl text-[#FF163E] mt-5">
+        سبد خرید شما خالی است!
+      </p>
+      <Link href={'/'} className="w-full">
+      <button className="bg-gradient-to-r from-[#FE4968] to-[#FF9B90] py-[22px] w-full rounded-[100px] mt-[60px] flex gap-3 items-center justify-center">
+        <Image width={24} height={24} src='/images/icons/shop-outline.svg' alt="empty"/>
+        بازگشت به فروشگاه
+      </button>
+      </Link>
 
+    </div>
+  )
 
   return (
     <>
@@ -92,41 +110,45 @@ const CartPage = () => {
 
       <div className="p-6 max-w-3xl  mx-auto">
 
-        {loading ?  <Loading className="fill-current w-32 h-32 animate-spin" />
-          :
-          !cartGeneralInfo || !cartGeneralInfo.items.length ? (
-          <p>سبد خرید شما خالی است.</p>
-        ) : (
-            <div className="mt-4 flex flex-col gap-[30px] justify-between">
-               
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold text-sm text-[#BBBBBB]">
-                    قیمت کالاها ({cartGeneralInfo?.totalQuantity})
-                  </span>
-                  <span className="font-bold">
-                    {cartGeneralInfo.totalItemsPrice} {currency}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold text-sm text-[#BBBBBB]">
-                    مبلغ قابل پرداخت
-                  </span>
-                  <span className="font-bold">
-                    {cartGeneralInfo.payableAmount} {currency}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent font-bold drop-shadow">
-                    سود شما از خرید
-                  </span>
-                  <span className="bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent font-bold drop-shadow">
-                    {cartGeneralInfo.profitAmount} {currency}
-                  </span>
-                </div>
+      <div
+        className={`transition-opacity duration-700 ease-in-out ${
+          loading ? "opacity-0" : "opacity-100"
+        }`}
+      >
+        {!cartGeneralInfo || !cartGeneralInfo.items.length ? emptySection : (
+          <div className="mt-4 flex flex-col gap-[30px] justify-between">
+            <div className="flex items-center justify-between">
+              <span className="font-semibold text-sm text-[#BBBBBB]">
+                قیمت کالاها ({cartGeneralInfo?.totalQuantity})
+              </span>
+              <span className="font-bold">
+                {numberWithCommas(cartGeneralInfo.totalItemsPrice)} {currency}
+              </span>
             </div>
+
+            <div className="flex items-center justify-between">
+              <span className="font-semibold text-sm text-[#BBBBBB]">
+                مبلغ قابل پرداخت
+              </span>
+              <span className="font-bold">
+                {numberWithCommas(cartGeneralInfo.payableAmount)} {currency}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <span className="bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent font-bold drop-shadow">
+                سود شما از خرید
+              </span>
+              <span className="bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent font-bold drop-shadow">
+                {numberWithCommas(cartGeneralInfo.profitAmount)} {currency}
+              </span>
+            </div>
+          </div>
         )}
       </div>
-        <SimplePortal selector="fixed_bottom_portal">
+      </div>
+      {
+        cartGeneralInfo && cartGeneralInfo.items && cartGeneralInfo.items.length ? <SimplePortal selector="fixed_bottom_portal">
         <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 bg-[#192a39] px-4 py-3 flex flex-wrap justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
           <button
             type="button"
@@ -138,12 +160,14 @@ const CartPage = () => {
           <div className="flex flex-col gap-2">
             <span className="text-sm text-gray-300 ml-2">مبلغ قابل پرداخت</span>
             <span className="font-bold text-lg">
-              {cartGeneralInfo?.payableAmount || 0} {currency}
+              {numberWithCommas(cartGeneralInfo?.payableAmount) || 0} {currency}
             </span>
           </div>
         </footer>
         <div className="h-20" />
       </SimplePortal>
+      : null}
+
     </>
   );
 };
