@@ -58,7 +58,7 @@ const ProductTabs = ({ tabs }: ProductTabsProps) => {
   return (
     <div
       ref={tabRef}
-      className={`w-full backdrop-blur-md md:max-w-lg bg-[#0f1f2e]/80 z-40 transition-all duration-300 ${
+      className={`w-full backdrop-blur-md md:max-w-lg bg-[#0f1f2e]/80 z-[10] transition-all duration-300 ${
         isSticky ? "fixed top-[77px] shadow-md" : "hidden"
       }`}
     >

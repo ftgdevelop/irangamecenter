@@ -24,7 +24,7 @@ const Header: React.FC<Props> = props => {
     const router = useRouter();
 
     return (
-        <header className="fixed top-0 h-[84px] left-1/2 -translate-x-1/2 bg-[#011425] z-40 w-full md:max-w-lg flex justify-between p-3">
+        <header className="fixed top-0 h-[84px] left-1/2 -translate-x-1/2 bg-[#011425] z-10 w-full md:max-w-lg flex justify-between p-3">
             {(props.type2Params?.backUrl || props.type2Params?.backToPrev)  ? (
                 <div className="flex items-center py-3.5 gap-4 w-[104px]">
                     {props.type2Params.backToPrev ? (

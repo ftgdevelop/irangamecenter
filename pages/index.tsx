@@ -3,8 +3,6 @@
 import Categories from "@/components/home/Categories";
 import Search from "@/components/shared/Search";
 import Slider from "@/components/home/Slider";
-import BannerLinkWides from "@/components/home/BannerLinkWides";
-import ColorBannerLinkWides from "@/components/home/ColorBannerLinkWides";
 import BestSellers from "@/components/home/BestSellers";
 import Intro from "@/components/about/Intro";
 import FAQ from "@/components/shared/FAQ";
@@ -21,6 +19,7 @@ import { getAllForSiteMap, getProducts } from "@/actions/commerce";
 import { GetProductsDataType } from "@/types/commerce";
 import SimilarProductsCarousel from "@/components/products/SimilarProductsCarousel";
 import { useEffect } from "react";
+import BannerLinks from "@/components/home/BannerLinks";
 
 type HomeAboutDataType = {
   Keyword: "about_intro" | "icons" | "faq" | "telNumber" | "email";
@@ -145,7 +144,9 @@ const Home: NextPage<Props> = props => {
 
   return (
     <>
-      <Search />
+      <div className="p-3">
+        <Search />
+      </div>
 
       {homeHighlights && <Highlights
         direction="rtl"
@@ -159,7 +160,7 @@ const Home: NextPage<Props> = props => {
 
       <Slider items={sliderItems} />
 
-      <BannerLinkWides items={banner2Items?.map(item => ({
+      <BannerLinks items={banner2Items?.map(item => ({
         title: item.Title || "",
         url: item.Url || "#",
         subtitle: item.Subtitle,
@@ -196,7 +197,7 @@ const Home: NextPage<Props> = props => {
       />}
       <br/>
 
-      <ColorBannerLinkWides
+      <BannerLinks
         items={banner3Items?.map(item => ({
           title: item.Title || "",
           url: item.Url || "#",
