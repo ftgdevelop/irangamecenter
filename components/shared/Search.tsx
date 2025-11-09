@@ -8,7 +8,7 @@ import { useAppDispatch } from "@/hooks/use-store";
 import { setBodiScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
 import ArrowRight from "../icons/ArrowRight";
 import axios from "axios";
-import { Commerce, ServerAddress } from "@/enum/url";
+import { Blog, Commerce, ServerAddress } from "@/enum/url";
 import { ProductItem } from "@/types/commerce";
 import { setReduxError } from "@/redux/errorSlice";
 import Link from "next/link";
@@ -16,6 +16,7 @@ import { toPersianDigits } from "@/helpers";
 import Skeleton from "./Skeleton";
 import History from "../icons/History";
 import ArrowTopLeft from "../icons/ArrowTopLeft";
+import { BlogItemType } from "@/types/blog";
 
 const Search = () => {
 
@@ -26,13 +27,13 @@ const Search = () => {
     const [open, setOpen] = useState<boolean>(false);
     const [slideIn, setSlideIn] = useState<boolean>(false);
 
-    const [products, setProducts] = useState<ProductItem[]>([]);
-
-    const [errorText, setErrorText] = useState<string>("");
+    const [products, setProducts] = useState<ProductItem[]>();
+    const [blogs, setBlogs] = useState<BlogItemType[]>();
 
     const [text, setText] = useState<string>("");
 
     const [loading, setLoading] = useState<boolean>(false);
+    const [blogLoading, setBlogLoading] = useState<boolean>(false);
 
     useEffect(() => {
         if (open) {
@@ -76,8 +77,6 @@ const Search = () => {
     }
 
     const fetchData = async (val: string) => {
-        setLoading(true);
-        setErrorText("");
 
         saveRecentSearch(val);
 
@@ -98,9 +97,8 @@ const Search = () => {
 
             if (response?.data?.result?.pagedResult?.items?.length) {
                 setProducts(response.data.result.pagedResult.items);
-            } else {
+            } else if (response?.data?.result?.pagedResult?.items) {
                 setProducts([]);
-                setErrorText("نتیجه ای یافت نشد");
             }
 
         } catch (error: any) {
@@ -123,15 +121,55 @@ const Search = () => {
 
     };
 
+    const fetchBlogs = async (val: string) => {
+
+        try {
+
+            const axiosParams = {
+                method: "get",
+                url: `${ServerAddress.Type}${ServerAddress.Blog}${Blog.getPosts}?search=${val}&per_page=${25}&page=1`,
+                cancelToken: source.token
+            }
+
+            const response = await axios(axiosParams);
+
+            if (response?.data?.length) {
+                setBlogs(response.data);
+            } else if (response?.data) {
+                setBlogs([]);
+            }
+
+        } catch (error: any) {
+            if (error.message && error.message !== "canceled") {
+                dispatch(setReduxError({
+                    title: "خطا",
+                    message: error.message,
+                    isVisible: true
+                }))
+            }
+
+        } finally {
+            setTimeout(() => { setBlogLoading(false) }, 800);
+
+        }
+
+    };
+
+
     useEffect(() => {
 
-        setProducts([]);
-        setErrorText("");
+        setProducts(undefined);
+        setBlogs(undefined);
+        setLoading(true);
+        setBlogLoading(true);
 
         let fetchTimeout: ReturnType<typeof setTimeout>;
 
         if (text.length >= min) {
-            fetchTimeout = setTimeout(() => { fetchData(text) }, 300);
+            fetchTimeout = setTimeout(() => {
+                fetchData(text);
+                fetchBlogs(text);
+            }, 300);
         }
 
         return () => {
@@ -198,45 +236,79 @@ const Search = () => {
                             </div>
 
                             <div className="bg-white/10 rounded-3xl py-5 px-2 grow">
-                                {text.length ? (
+                                {!!text.length && (
                                     <div className="flex gap-4 mx-4 items-center border-b border-white/30 pb-5 text-xs">
                                         <Image src="/images/icons/search.svg" alt="search" className="" width={30} height={30} />
                                         <span> جستجوی “{text}” </span>
                                     </div>
-                                ) : null
-                                }
+                                )}
 
                                 <div className="search-result-max-h styled-scrollbar overflow-auto px-3">
-                                    {loading ? (
-                                        [1, 2, 3, 4].map(item => (
-                                            <div className="flex gap-3 items-center border-b border-white/30 py-3" key={item}>
-                                                <Skeleton
-                                                    key={item}
-                                                    dark
-                                                    type="image"
-                                                    className="w-18 h-18 block shrink-0 rounded-2xl"
-                                                />
-                                                <Skeleton className="h-4 w-full" dark />
-                                            </div>
-                                        ))
-                                    ) : errorText ? (
-                                        <div className="text-sm py-5"> {errorText} </div>
-                                    ) : products.map(product => (
-                                        <Link key={product.id} href={`/product/${product.slug}`} target="_blank" className="flex items-center gap-4 border-b border-white/30 py-3" >
-                                            <Image
-                                                src={product.filePath || "/images/default-game.png"}
-                                                alt={product.fileAltAttribute || product.name || ""}
-                                                width={72}
-                                                height={72}
-                                                className="block w-18 h-18 rounded-2xl"
-                                                title={product.fileTitleAttribute || product.name}
-                                            />
-                                            <h4 className="text-xs mb-2"> {toPersianDigits(product.name || "")} </h4>
-                                        </Link>
-                                    ))}
-                                </div>
+                                    {!!text.length && (
+                                        <>
+                                            <label className="block font-semibold mt-5 mb-3"> جستجو در محصولات </label>
+                                            {loading ? (
+                                                [1, 2, 3].map(item => (
+                                                    <div className="flex gap-3 items-center border-b border-white/30 py-3" key={item}>
+                                                        <Skeleton
+                                                            key={item}
+                                                            dark
+                                                            type="image"
+                                                            className="w-18 h-18 block shrink-0 rounded-2xl"
+                                                        />
+                                                        <Skeleton className="h-4 w-full" dark />
+                                                    </div>
+                                                ))
+                                            ) : products?.length ? products.map(product => (
+                                                <Link key={product.id} href={`/product/${product.slug}`} target="_blank" className="flex items-center gap-4 border-b border-white/30 py-3" >
+                                                    <Image
+                                                        src={product.filePath || "/images/default-game.png"}
+                                                        alt={product.fileAltAttribute || product.name || ""}
+                                                        width={72}
+                                                        height={72}
+                                                        className="block w-18 h-18 rounded-2xl"
+                                                        title={product.fileTitleAttribute || product.name}
+                                                    />
+                                                    <h4 className="text-xs"> {toPersianDigits(product.name || "")} </h4>
+                                                </Link>
+                                            )) : products ? (
+                                                <div className="text-sm py-5 mb-5"> محصولی یافت نشد </div>
+                                            ) : <div className="h-13"/>}
 
-                                <div>
+                                            <label className="block font-semibold mt-5 mb-3"> جستجو در مقالات </label>
+
+                                            {blogLoading ? (
+                                                [1, 2].map(item => (
+                                                    <div className="flex gap-3 items-center border-b border-white/30 py-3" key={item}>
+                                                        <Skeleton
+                                                            key={item}
+                                                            dark
+                                                            type="image"
+                                                            className="w-18 h-18 block shrink-0 rounded-2xl"
+                                                        />
+                                                        <Skeleton className="h-4 w-full" dark />
+                                                    </div>
+                                                ))
+                                            ) : blogs?.length ? blogs.map(blog => (
+                                                <Link key={blog.id} href={`/blog/${blog.slug}`} target="_blank" className="flex items-center gap-4 border-b border-white/30 py-3" >
+                                                    <Image
+                                                        src={blog.jetpack_featured_media_url || "/images/no-image.jpg"}
+                                                        alt={blog.title?.rendered || ""}
+                                                        width={72}
+                                                        height={72}
+                                                        className="block w-18 h-18 rounded-2xl"
+                                                        title={blog.title?.rendered || ""}
+                                                    />
+                                                    <h4 className="text-xs"> {toPersianDigits(blog.title?.rendered || "")} </h4>
+                                                </Link>
+                                            )) : blogs ? (
+                                                <div className="text-sm py-5 mb-5"> مطلبی یافت نشد </div>
+                                            ) : <div className="h-13"/>}
+                                        </>
+                                    )}
+
+                                    <br />
+
                                     {recentSearchList?.map(item => (
                                         <button
                                             key={item}
