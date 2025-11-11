@@ -1,6 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { sendOtp } from "@/actions/identity";
 import { setReduxError } from "@/redux/errorSlice";
 import { useAppDispatch } from "@/hooks/use-store";
@@ -11,6 +11,7 @@ import OtpSendCode from "./OtpSendCode";
 
 type Props = {
     toggleLoginType: () => void;
+    title?: ReactNode;
 }
 
 const Otp: React.FC<Props> = props => {
@@ -121,6 +122,7 @@ const Otp: React.FC<Props> = props => {
                     setverificationMode(true);
                 });
             }}
+            title={props.title}
         />
     )
 }

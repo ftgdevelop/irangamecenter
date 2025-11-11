@@ -2,7 +2,7 @@
 
 import { Field } from 'formik';
 import Image from 'next/image';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, ReactNode } from 'react';
 import { CountryCodes } from '@/enum/models';
 import { validateMobileNumberId } from '@/helpers/formik-validation';
 import { persianNumbersToEnglish } from '@/helpers';
@@ -15,7 +15,7 @@ type Props = {
     disabled?:boolean;
     errorText?: string;
     isTouched?: boolean;
-    label?: string;
+    label?: ReactNode;
     name?: string;
     value?: string;
     className?: string;
@@ -165,7 +165,7 @@ const PhoneInput: React.FC<Props> = props => {
         inputClassNames.push(`border-red-500`);
     }
 
-    const inputClassNames2 : string[] = [`${props.heightClass||"h-11"} placeholder:text-right placeholder:tracking-normal px-5 col-span-4 rounded-r-full outline-none bg-[#192a39] tracking-widest`];
+    const inputClassNames2 : string[] = [`${props.heightClass||"h-11"} text-right placeholder:text-right placeholder:tracking-normal px-5 col-span-4 rounded-r-full outline-none bg-[#192a39] tracking-widest`];
 
     if(errorText && isTouched){
         inputClassNames2.push(`border-red-500`);
@@ -187,11 +187,11 @@ const PhoneInput: React.FC<Props> = props => {
 
                 <div className='flex justify-between items-center px-5 mb-2'>
 
-                    <div className='flex items-center gap-2'>
+                    <div className='w-full flex items-center gap-2'>
                         {!!props.label && (
-                            <label className="select-none pointer-events-none inline-block text-sm" >
+                            typeof props.label === 'string' ?<label className="select-none pointer-events-none inline-block text-sm" >
                             {props.label}
-                            </label>
+                            </label> : props.label
                         )}
                         {props.showConfirmedBadge && !validationMessage && (
                             <Image

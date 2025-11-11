@@ -18,9 +18,8 @@ const Tabs: React.FC<TabsProps> = ({ items, defaultActive }) => {
   return (
     <div className="w-full">
       <div className="text-sm font-medium text-center text-gray-500  bg-[#192b39] dark:text-gray-400 ">
-        <ul className="flex flex-wrap -mb-px">
-          {items.map((item) => (
-            <li key={item.value} className="me-2">
+        <ul className="flex styled-scrollbar overflow-x-auto overflow-y-clip -mb-px">
+          {items.map((item) => <li key={item.value} className="me-2 min-w-28">
               <button
                 onClick={() => setActiveTab(item.value)}
                 className={`inline-block p-4 border-b-2 rounded-t-lg transition-all ${
@@ -31,8 +30,7 @@ const Tabs: React.FC<TabsProps> = ({ items, defaultActive }) => {
               >
                 {item.label || item.value}
               </button>
-            </li>
-          ))}
+            </li>)}
         </ul>
       </div>
 

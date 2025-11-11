@@ -1,15 +1,14 @@
 import Head from "next/head";
 import React from "react";
-import CartCard from "@/components/cart/CartCard";
 import Tabs from "@/components/ui/Tabs";
-import { GetCurrentProductType } from "@/types/commerce";
 import { useAppSelector } from "@/hooks/use-store";
-import Image from "next/image";
 import SimplePortal from "@/components/shared/layout/SimplePortal";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { numberWithCommas } from "@/helpers";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
+import ProfileSection from "@/components/cart/ProfileSection";
+import CartSection from "@/components/cart/CartSection";
+import LoginSection from "@/components/cart/LoginSection";
 
 
 
@@ -26,6 +25,8 @@ const ConfirmationSection = () => (
   </div>
 );
 
+
+
 const CartPage = () => {
   const { cartGeneralInfo, loading } = useAppSelector((state) => state.cart);
   const isAuthenticated = useAppSelector(
@@ -37,39 +38,15 @@ const CartPage = () => {
 
   const currency = getCurrencyLabelFa(cartGeneralInfo?.items?.[0]?.variant.currencyType) || getCurrencyLabelFa(currencyStore);
 
-  const CartSection = ({ items }: { items: GetCurrentProductType['items'] }) => {
-    const renderCards = items.map((item) => item && cartGeneralInfo && <CartCard key={item.id} item={item} loading={loading} />);
-    return <>
-      <div className="flex items-center justify-between gap-2.5">
-
-        <div className="flex items-center gap-2.5">
-        <span className="bg-gradient-to-b from-[#FFE59A] to-[#FFFFD5] bg-clip-text text-transparent leading-8 font-bold">
-        سبد خرید شما
-      </span>
-      {
-        items.length && <span className="text-[13px] font-medium">
-          {cartGeneralInfo?.totalQuantity}
-          محصول
-        </span>
-      }
-      </div>
-
-        <Image src='/images/icons/2color/menu.svg' alt='menu' width='24' height='24' />
-      </div>
-      {renderCards}
-    </>
-};
   const tabItems = [
     {
       value: "cart",
       label: "سبد خرید",
-      component:
-        cartGeneralInfo && cartGeneralInfo?.items.length > 0 ? (
-          <CartSection items={cartGeneralInfo.items} />
-        ) : null,
+      component:<CartSection />
     },
-    { value: "payment", label: "پرداخت", component: <PaymentSection /> },
-    { value: "confirmation", label: "تایید سفارش", component: <ConfirmationSection /> },
+    { value: "profile", label: "اطلاعات کاربر", component: isAuthenticated ? <ProfileSection /> : <LoginSection />}  ,
+    { value: "payment", label: "پرداخت", component: <PaymentSection />},
+    { value: "confirmation", label: "تایید سفارش", component: <ConfirmationSection />},
   ];
 
   const pageTitle = `سبد خرید | فروشگاه`;
@@ -81,21 +58,6 @@ const CartPage = () => {
       router.push("/login")
     }
   }
-  const emptySection = (
-    <div className="flex flex-col justify-center items-center ">
-      <Image width={90} height={90} src='/images/icons/2color/empty-cart.svg' alt="empty"/>
-      <p className="font-extrabold text-xl text-[#FF163E] mt-5">
-        سبد خرید شما خالی است!
-      </p>
-      <Link href={'/'} className="w-full">
-      <button className="bg-gradient-to-r from-[#FE4968] to-[#FF9B90] py-[22px] w-full rounded-[100px] mt-[60px] flex gap-3 items-center justify-center">
-        <Image width={24} height={24} src='/images/icons/shop-outline.svg' alt="empty"/>
-        بازگشت به فروشگاه
-      </button>
-      </Link>
-
-    </div>
-  )
 
   return (
     <>
@@ -115,7 +77,7 @@ const CartPage = () => {
           loading ? "opacity-0" : "opacity-100"
         }`}
       >
-        {!cartGeneralInfo || !cartGeneralInfo.items.length ? emptySection : (
+        {!cartGeneralInfo || !cartGeneralInfo.items.length ? null : (
           <div className="mt-4 flex flex-col gap-[30px] justify-between">
             <div className="flex items-center justify-between">
               <span className="font-semibold text-sm text-[#BBBBBB]">
