@@ -37,6 +37,22 @@ export const getStrapiHighlight = async (query: string , acceptLanguage: "fa-IR"
         return error
     }
 }
+export const getStrapiCategories = async (query: string , acceptLanguage: "fa-IR"|"en-US"|"ar-AE" = "fa-IR") => {
+
+    try {
+        const response = await axios({
+            method: "get",
+               url: `${ServerAddress.Type}${ServerAddress.Strapi}${Strapi.Categories}?${query}`,
+            headers: {
+                "Accept-Language": acceptLanguage,
+                Authorization: `bearer ${strapiToken}`
+            }
+        });
+        return (response)
+    } catch (error: any) {
+        return error
+    }
+}
 
 export const getStrapiContact = async (query: string , acceptLanguage: "fa-IR"|"en-US"|"ar-AE" = "fa-IR") => {
 
