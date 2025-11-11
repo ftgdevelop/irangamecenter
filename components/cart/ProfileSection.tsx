@@ -1,6 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { getCurrentUserProfile, sendEmailActivation, updateCurrentUserProfile } from "@/actions/identity";
+import { getCurrentUserProfile, updateCurrentUserProfile } from "@/actions/identity";
 import Loading from "@/components/icons/Loading";
 import FormikField from "@/components/shared/FormikField";
 import { validateEmail, validateRequiedPersianAndEnglish } from "@/helpers/formik-validation";
@@ -8,14 +8,12 @@ import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import { setReduxUser } from "@/redux/authenticationSlice";
 import { setReduxNotification } from "@/redux/notificationSlice";
 import { Form, Formik } from "formik"
-import { useRouter } from "next/router";
 import {  useState } from "react";
 import PhoneInput from "../shared/PhoneInput";
 import Image from "next/image";
 
 const ProfileSection = () => {
 
-    const router = useRouter();
 
     const dispatch = useAppDispatch();
 
@@ -26,10 +24,7 @@ const ProfileSection = () => {
 
 
     const [submitLoading, setSubmitLoading] = useState<boolean>(false);
-    const [sendActivationLoading, setSendActivationLoading] = useState<boolean>(false);
 
-
-    const [requestStatus, setRequestStatus] = useState<undefined | "activation-success" | "activation-error" | "change-success" | "change-error">();
 
     const submitHandler = async (parameters: {
         firstname?: string;
@@ -104,24 +99,7 @@ const ProfileSection = () => {
         }
     }
 
-    
-    const emailActivationLink = async (emailAddress: string) => {
 
-        const token = localStorage.getItem('Token');
-        if (!token || sendActivationLoading) return;
-
-        setSendActivationLoading(true);
-
-        const response: any = await sendEmailActivation(emailAddress, token);
-
-        setSendActivationLoading(false);
-
-        if (response.data && response.data.success) {
-            setRequestStatus("activation-success");
-        } else {
-            setRequestStatus("activation-error");
-        }
-    }
     return (
         <Formik
             validate={() => {
@@ -245,15 +223,7 @@ const ProfileSection = () => {
     
                         </div>
                         <FormikField
-                                labelLeft={values.emailAddress && !userInfo?.isEmailConfirmed ? (
-                                    <button
-                                        type="button"
-                                        className="rtl:mr-3 ltr:ml-3 text-2xs text-[#aa3aff] cursor-pointer font-semibold outline-none"
-                                        onClick={() => { emailActivationLink(values.emailAddress) }}
-                                    >
-                                        ارسال مجدد لینک تایید {sendActivationLoading && <Loading className="w-5 h-5 animate-spin fill-[#aa3aff] inline-block align-middle rtl:mr-1 ltr:ml-1" />}
-                                    </button>
-                                ) : null}
+
                                 inputWarningIcon={!!(userInfo?.emailAddress && !userInfo.isEmailConfirmed)}
                                 showConfirmedBadge={!validateEmail({
                                     value: values.emailAddress,
