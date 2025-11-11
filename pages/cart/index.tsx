@@ -34,6 +34,8 @@ const CartPage = () => {
   );
   const userInfo = useAppSelector((state) => state.authentication.user);
 
+  const getUserLoading = useAppSelector((state) => state.authentication.getUserLoading);
+
   const currencyStore = useAppSelector((state) => state.cart.currency);
 
   const router = useRouter();
@@ -72,8 +74,8 @@ const CartPage = () => {
         <meta key="description" name="description" content="سبد خرید فروشگاه" />
       </Head>
 
-      <div className=" text-gray-900 dark:text-gray-100">
-        <Tabs items={tabItems} defaultActive="cart" />
+      <div className="text-gray-900 dark:text-gray-100">
+        <Tabs items={tabItems} defaultActive="cart" loading={getUserLoading} />
       </div>
 
       <div className="p-6 max-w-3xl  mx-auto">
