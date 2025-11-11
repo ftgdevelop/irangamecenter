@@ -32,6 +32,8 @@ const CartPage = () => {
   const isAuthenticated = useAppSelector(
       (state) => state.authentication.isAuthenticated,
   );
+  const userInfo = useAppSelector((state) => state.authentication.user);
+
   const currencyStore = useAppSelector((state) => state.cart.currency);
 
   const router = useRouter();
@@ -42,11 +44,15 @@ const CartPage = () => {
     {
       value: "cart",
       label: "سبد خرید",
-      component:<CartSection />
+      component: <CartSection />,
+      show:true,
     },
-    { value: "profile", label: "اطلاعات کاربر", component: isAuthenticated ? <ProfileSection /> : <LoginSection />}  ,
-    { value: "payment", label: "پرداخت", component: <PaymentSection />},
-    { value: "confirmation", label: "تایید سفارش", component: <ConfirmationSection />},
+    {
+      value: "profile", label: "اطلاعات کاربر", component: isAuthenticated ? <ProfileSection /> : <LoginSection />, show: !!(userInfo && !userInfo?.firstName && !userInfo?.lastName) || !isAuthenticated,
+    }  ,
+    { value: "payment", label: "پرداخت", component: <PaymentSection />, show:true},
+    { value: "confirmation", label: "تایید سفارش", component: <ConfirmationSection />, show:true,
+    },
   ];
 
   const pageTitle = `سبد خرید | فروشگاه`;

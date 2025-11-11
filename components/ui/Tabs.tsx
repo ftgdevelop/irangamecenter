@@ -5,6 +5,7 @@ interface TabItem {
   value: string
   label?: string
   component: ReactNode
+  show: boolean
 }
 
 interface TabsProps {
@@ -13,13 +14,13 @@ interface TabsProps {
 }
 
 const Tabs: React.FC<TabsProps> = ({ items, defaultActive }) => {
-  const [activeTab, setActiveTab] = useState<string>(defaultActive || items[0]?.value)
+  const [activeTab, setActiveTab] = useState<string>(defaultActive || items[0]?.value);
 
   return (
     <div className="w-full">
       <div className="text-sm font-medium text-center text-gray-500  bg-[#192b39] dark:text-gray-400 ">
         <ul className="flex styled-scrollbar overflow-x-auto overflow-y-clip -mb-px">
-          {items.map((item) => <li key={item.value} className="me-2 min-w-28">
+          {items.map((item) => item.show ? <li key={item.value} className="me-2 min-w-28">
               <button
                 onClick={() => setActiveTab(item.value)}
                 className={`inline-block p-4 border-b-2 rounded-t-lg transition-all ${
@@ -30,18 +31,18 @@ const Tabs: React.FC<TabsProps> = ({ items, defaultActive }) => {
               >
                 {item.label || item.value}
               </button>
-            </li>)}
+            </li> : null)}
         </ul>
       </div>
 
       <div className="p-6">
         {items.map(
           (item) =>
-            activeTab === item.value && (
+            activeTab === item.value && item.show ?  (
               <div key={item.value} className="animate-fade-in">
                 {item.component}
               </div>
-            )
+            ): null
         )}
       </div>
     </div>
