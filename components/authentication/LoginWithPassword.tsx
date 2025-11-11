@@ -2,7 +2,7 @@
 
 import { validateRequired } from "@/helpers/formik-validation"
 import { Form, Formik } from "formik"
-import { useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import ArrowTopLeft from "../icons/ArrowTopLeft";
 import Link from "next/link";
 import Loading from "../icons/Loading";
@@ -17,6 +17,7 @@ import { setReduxError } from "@/redux/errorSlice";
 type Props = {
     toggleLoginType: () => void;
     initialPhoneNumber?: string;
+    title?: ReactNode;
 }
 
 const LoginWithPassword: React.FC<Props> = props => {
@@ -107,7 +108,10 @@ const LoginWithPassword: React.FC<Props> = props => {
 
     return (
         <>
-            <h3 className="font-semibold text-lg lg:text-xl text-[#ff7189] text-center mb-10"> ورود یا ثبت نام</h3>
+            {
+                props.title ? props.title : <h3 className="font-semibold text-lg lg:text-xl text-[#ff7189] text-center mb-10"> ورود یا ثبت نام</h3>
+
+            }
 
             <Formik
                 validate={() => { return {} }}

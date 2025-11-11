@@ -5,18 +5,23 @@ import Loading from "@/components/icons/Loading";
 import PhoneInput from "@/components/shared/PhoneInput";
 import { Form, Formik } from "formik"
 import Link from "next/link";
+import { ReactNode } from "react";
 
 type Props = {
     loading: boolean;
     toggleLoginType: () => void;
-    submitHandler : (phoneNumber: string) => void
+    submitHandler: (phoneNumber: string) => void
+    title?: ReactNode;
 }
 
 const OtpSendCode: React.FC<Props> = props => {
 
     return (
         <>
-            <h3 className="font-semibold text-lg lg:text-xl text-[#ff7189] text-center mb-10"> ورود یا ثبت نام</h3>
+            {
+                props.title ? props.title : <h3 className="font-semibold text-lg lg:text-xl text-[#ff7189] text-center mb-10"> ورود یا ثبت نام</h3>
+
+            }
 
             <Formik
                 validate={() => { return {} }}
