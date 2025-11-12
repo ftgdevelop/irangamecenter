@@ -91,5 +91,6 @@ export const ServerStatus = {
     AddItem:"/api/services/app/Cart/AddItem",
     RemoveItem:"/api/services/app/Cart/RemoveItem",
     ClearCart:"/api/services/app/Cart/Clear",
+    CreateOrder:"/api/services/app/Order/Create",
   }
   
