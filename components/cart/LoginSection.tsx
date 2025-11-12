@@ -1,12 +1,13 @@
-import { useAppSelector } from "@/hooks/use-store";
 import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import LoginWithPassword from "../authentication/LoginWithPassword";
 import Otp from "../authentication/profile/OTP";
 
+type LoginSectionProps = {
+  onLoginSuccess?: () => void;
+}
 
-const LoginSection = () => {
+const LoginSection = ({ onLoginSuccess }: LoginSectionProps) => {
 
  const searchParams = useSearchParams();
   
@@ -20,18 +21,7 @@ const LoginSection = () => {
     }
   },[mode])
 
-  const router = useRouter()
 
-
-  const isAuthenticated = useAppSelector(
-    (state) => state.authentication.isAuthenticated,
-  )
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push('/profile')
-    }
-  }, [isAuthenticated, router])
 
   return (
     <>
@@ -41,16 +31,18 @@ const LoginSection = () => {
         <Otp
           toggleLoginType={() => {
             setLoginType('password')
-                  }}
-                  title={<h3 className="font-semibold text-lg lg:text-xl text-[#ff7189] text-center mb-10"> برای ادامه فرآیند خرید،<br /> ورود یا ثبت‌نام در حساب کاربری لازم است.</h3>}
-              />
+          }}
+          title={<h3 className="font-semibold text-lg lg:text-xl text-[#ff7189] text-center mb-10"> برای ادامه فرآیند خرید،<br /> ورود یا ثبت‌نام در حساب کاربری لازم است.</h3>}
+          onLoginSuccess={onLoginSuccess}
+          />
       ) : (
         <LoginWithPassword
           initialPhoneNumber={phoneNumber?("+98"+phoneNumber) : undefined}
           toggleLoginType={() => {
             setLoginType('otp')
           }}
-                                        title={<h3 className="font-semibold text-lg lg:text-xl text-[#ff7189] text-center mb-10"> برای ادامه فرآیند خرید،<br /> ورود یا ثبت‌نام در حساب کاربری لازم است.</h3>}
+         title={<h3 className="font-semibold text-lg lg:text-xl text-[#ff7189] text-center mb-10"> برای ادامه فرآیند خرید،<br /> ورود یا ثبت‌نام در حساب کاربری لازم است.</h3>}
+         onLoginSuccess={onLoginSuccess}
         />
       )}
       </>

@@ -18,6 +18,7 @@ type Props = {
     toggleLoginType: () => void;
     initialPhoneNumber?: string;
     title?: ReactNode;
+    onLoginSuccess?: () => void;
 }
 
 const LoginWithPassword: React.FC<Props> = props => {
@@ -53,6 +54,10 @@ const LoginWithPassword: React.FC<Props> = props => {
                 message: userFirstName + '  عزیز،  خوش آمدید.',
                 isVisible: true
             }));
+
+            if (props.onLoginSuccess) {
+                props.onLoginSuccess();
+            }
 
         } else {
             dispatch(setReduxUser({

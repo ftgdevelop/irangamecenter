@@ -44,23 +44,6 @@ const CartPage = () => {
 
   const currency = getCurrencyLabelFa(cartGeneralInfo?.items?.[0]?.variant.currencyType) || getCurrencyLabelFa(currencyStore);
 
-  const tabItems = [
-    {
-      value: "cart",
-      label: "سبد خرید",
-      component: <CartSection />,
-      show:true,
-    },
-    {
-      value: "profile", label: "اطلاعات کاربر", component: isAuthenticated ? <ProfileSection /> : <LoginSection />, show: !!(userInfo && !userInfo?.firstName && !userInfo?.lastName) || !isAuthenticated,
-    }  ,
-    { value: "payment", label: "پرداخت", component: <PaymentSection />, show:true},
-    { value: "confirmation", label: "تایید سفارش", component: <ConfirmationSection />, show:true,
-    },
-  ];
-
-  const pageTitle = `سبد خرید | فروشگاه`;
-
   const handleCart = async () => {
     if (isAuthenticated) {
       try {
@@ -75,6 +58,27 @@ const CartPage = () => {
       setActiveTab("profile");
     }
   }
+
+  const handleLoginSuccess = async () => {
+    setActiveTab("cart");
+  };
+
+  const tabItems = [
+    {
+      value: "cart",
+      label: "سبد خرید",
+      component: <CartSection />,
+      show:true,
+    },
+    {
+      value: "profile", label: "اطلاعات کاربر", component: isAuthenticated ? <ProfileSection /> : <LoginSection onLoginSuccess={handleLoginSuccess} />, show: !!(userInfo && !userInfo?.firstName && !userInfo?.lastName) || !isAuthenticated,
+    }  ,
+    { value: "payment", label: "پرداخت", component: <PaymentSection />, show:true},
+    { value: "confirmation", label: "تایید سفارش", component: <ConfirmationSection />, show:true,
+    },
+  ];
+
+  const pageTitle = `سبد خرید | فروشگاه`;
 
   return (
     <>
