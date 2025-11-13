@@ -1,17 +1,18 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { ReactNode, useState } from "react";
 import { sendOtp } from "@/actions/identity";
-import { setReduxError } from "@/redux/errorSlice";
 import { useAppDispatch } from "@/hooks/use-store";
 import { setReduxUser } from "@/redux/authenticationSlice";
+import { setReduxError } from "@/redux/errorSlice";
 import { setReduxNotification } from "@/redux/notificationSlice";
-import OtpVerification from "./OtpVerification";
+import { ReactNode, useState } from "react";
 import OtpSendCode from "./OtpSendCode";
+import OtpVerification from "./OtpVerification";
 
 type Props = {
     toggleLoginType: () => void;
     title?: ReactNode;
+    onLoginSuccess?: () => void;
 }
 
 const Otp: React.FC<Props> = props => {
@@ -87,6 +88,10 @@ const Otp: React.FC<Props> = props => {
                 isVisible: true
             }));
 
+            if (props.onLoginSuccess) {
+                props.onLoginSuccess();
+            }
+
         } else {
             dispatch(setReduxUser({
                 isAuthenticated: false,
@@ -108,6 +113,7 @@ const Otp: React.FC<Props> = props => {
                 }}
                 onSuccessLogin={onSuccessLogin}
                 sendCodeMoment={sendCodeMoment}
+                onLoginSuccess={props.onLoginSuccess}
             />
         )
     }

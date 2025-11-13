@@ -1,10 +1,15 @@
-import Image from "next/image";
-import CartCard from "./CartCard";
+import { numberWithCommas } from "@/helpers";
+import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 import { useAppSelector } from "@/hooks/use-store";
+import Image from "next/image";
 import Link from "next/link";
+import CartCard from "./CartCard";
 
 const CartSection = () => {
     const { cartGeneralInfo, loading } = useAppSelector((state) => state.cart);
+    const currencyStore = useAppSelector((state) => state.cart.currency);
+    
+    const currency = getCurrencyLabelFa(cartGeneralInfo?.items?.[0]?.variant.currencyType) || getCurrencyLabelFa(currencyStore);
     
       const emptySection = (
         <div className="flex flex-col justify-center items-center ">
@@ -44,6 +49,43 @@ const CartSection = () => {
         <Image src='/images/icons/2color/menu.svg' alt='menu' width='24' height='24' />
       </div>
       {renderCards}
+      
+      <div
+        className={`transition-opacity duration-700 ease-in-out ${
+          loading ? "opacity-0" : "opacity-100"
+        }`}
+      >
+        {!cartGeneralInfo || !cartGeneralInfo.items.length ? null : (
+          <div className="mt-4 flex flex-col gap-[30px] justify-between">
+            <div className="flex items-center justify-between">
+              <span className="font-semibold text-sm text-[#BBBBBB]">
+                قیمت کالاها ({cartGeneralInfo?.totalQuantity})
+              </span>
+              <span className="font-bold">
+                {numberWithCommas(cartGeneralInfo.totalItemsPrice)} {currency}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <span className="font-semibold text-sm text-[#BBBBBB]">
+                مبلغ قابل پرداخت
+              </span>
+              <span className="font-bold">
+                {numberWithCommas(cartGeneralInfo.payableAmount)} {currency}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <span className="bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent font-bold drop-shadow">
+                سود شما از خرید
+              </span>
+              <span className="bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent font-bold drop-shadow">
+                {numberWithCommas(cartGeneralInfo.profitAmount)} {currency}
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
     </> : emptySection
 };
 

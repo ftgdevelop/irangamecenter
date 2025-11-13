@@ -21,6 +21,7 @@ type Props = {
     loading: boolean;
     onSuccessLogin: (response: any) => void;
     sendCodeMoment?: number;
+    onLoginSuccess?: () => void;
 }
 
 const OtpVerification: React.FC<Props> = props => {
@@ -112,6 +113,9 @@ const OtpVerification: React.FC<Props> = props => {
 
             if (response.status == 200) {
                 props.onSuccessLogin(response);
+                if (props.onLoginSuccess) {
+                    props.onLoginSuccess();
+                }
                 setStatus("success");
             } else {
                 const errorMessage = response?.response?.data?.error?.message;
@@ -153,6 +157,7 @@ const OtpVerification: React.FC<Props> = props => {
                 onSuccessLogin={props.onSuccessLogin}
                 code={verificationCode}
                 phoneNumber={props.savedPhoneNumber}
+                onLoginSuccess={props.onLoginSuccess}
             />
         )
     }

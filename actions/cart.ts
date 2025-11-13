@@ -1,11 +1,12 @@
-import axios, { AxiosError } from "axios";
 import { Cart, ServerAddress } from "@/enum/url";
+import { useAppSelector } from "@/hooks/use-store";
 import {
+  CreateOrderResponseType,
   GetCartByProductIdResponseType,
   GetCurrentProductResponseType,
   ProductDetailData,
 } from "@/types/commerce";
-import { useAppSelector } from "@/hooks/use-store";
+import axios, { AxiosError } from "axios";
 
 export interface CartResponse {
   result?: {
@@ -115,11 +116,26 @@ export const useCartApi = () => {
     }
   };
 
+  const createOrder = async (params?: Record<string, unknown>): Promise<CreateOrderResponseType> => {
+    try {
+      const res = await axios.post<CreateOrderResponseType>(
+        `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.CreateOrder}`,
+        params || {},
+        { headers: getHeaders() }
+      );
+      return res.data;
+    } catch (error) {
+      handleError(error, "createOrder");
+      throw error;
+    }
+  };
+
   return {
     getCart,
     getCartByProductId,
     addItem,
     removeItem,
     clearCart,
+    createOrder,
   };
 };

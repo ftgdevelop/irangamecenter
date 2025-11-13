@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 
 interface TabItem {
   value: string;
@@ -10,13 +10,25 @@ interface TabItem {
 interface TabsProps {
   items: TabItem[];
   defaultActive?: string;
+  active?: string;
+  onChange?: (value: string) => void;
   loading?: boolean;
 }
 
-const Tabs: React.FC<TabsProps> = ({ items, defaultActive, loading }) => {
-  const [activeTab, setActiveTab] = useState<string>(
+const Tabs: React.FC<TabsProps> = ({ items, defaultActive, active, onChange, loading }) => {
+  const [internalActiveTab, setInternalActiveTab] = useState<string>(
     defaultActive || items[0]?.value
   );
+
+  const activeTab = active !== undefined ? active : internalActiveTab;
+
+  const handleTabChange = (value: string) => {
+    if (onChange) {
+      onChange(value);
+    } else {
+      setInternalActiveTab(value);
+    }
+  };
 
   const visibleItems = items.filter((item) => item.show);
 
@@ -30,7 +42,7 @@ const Tabs: React.FC<TabsProps> = ({ items, defaultActive, loading }) => {
                 <div className="inline-block p-4 rounded-t-lg bg-gray-700/40 animate-pulse w-24 h-10" />
               ) : (
                 <button
-                  onClick={() => setActiveTab(item.value)}
+                  onClick={() => handleTabChange(item.value)}
                   disabled={loading}
                   className={`inline-block p-4 border-b-2 rounded-t-lg transition-all ${
                     activeTab === item.value

@@ -361,3 +361,10 @@ export interface GetCartByProductIdResponseType {
     result?: GetCartByProductIdType
 }
 
+export interface CreateOrderResponseType {
+  result?: {
+    id?: string;
+    orderNumber?: string;
+    [key: string]: unknown;
+  };
+}

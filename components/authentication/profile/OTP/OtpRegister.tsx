@@ -13,6 +13,7 @@ type Props = {
   code: string;
   phoneNumber: string;
   onSuccessLogin: (response: any) => void;
+  onLoginSuccess?: () => void;
 };
 
 const OtpRegister: React.FC<Props> = (props) => {
@@ -49,6 +50,9 @@ const OtpRegister: React.FC<Props> = (props) => {
 
     if (response.data && response.data.success) {
       props.onSuccessLogin(response);
+      if (props.onLoginSuccess) {
+        props.onLoginSuccess();
+      }
     } else {
       dispatch(
         setReduxNotification({
