@@ -1,10 +1,10 @@
 import { numberWithCommas, toPersianDigits } from "@/helpers";
-import { ProductItem } from "@/types/commerce";
+import { ProductItemExtented } from "@/types/commerce";
 import Image from "next/image";
 import Link from "next/link";
 
 type Props = {
-    product: ProductItem;
+    product: ProductItemExtented;
     onClick?: ()=> void;
 }
 
@@ -12,7 +12,15 @@ const ProductListItem: React.FC<Props> = props => {
 
     const { product } = props;
 
-    const {salePrice, currencyType, regularPrice} = product.minVariant?.items?.[0] || {};
+    const {currencyType} = product.minVariant?.items?.[0] || {};
+    let {salePrice, regularPrice} = product.minVariant?.items?.[0] || {};
+    if(product.strapiProductProperties?.price && !salePrice){
+        salePrice = product.strapiProductProperties?.price;
+    }
+
+    if(product.strapiProductProperties?.oldPrice && !regularPrice){
+        regularPrice = product.strapiProductProperties?.oldPrice;
+    }
 
     let discountPercentage = 0;
 
@@ -23,7 +31,7 @@ const ProductListItem: React.FC<Props> = props => {
 
     return (
         <div className="mb-[15px] bg-[#011425] rounded-2xl">
-            <Link href={`/product/${product.slug}`} className="flex" onClick={()=>{if(props.onClick){props.onClick()}}}>
+            <Link href={product.slug ? `/product/${product.slug}`:product.strapiProductProperties?.url || ""} className="flex" onClick={()=>{if(props.onClick){props.onClick()}}}>
                 <Image
                     src={product.filePath || "/images/default-game.png"}
                     alt={product.fileAltAttribute || product.name || ""}
