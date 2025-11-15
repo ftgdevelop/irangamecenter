@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode } from "react";
 
 interface TabItem {
   value: string;
@@ -15,20 +15,20 @@ interface TabsProps {
   loading?: boolean;
 }
 
-const Tabs: React.FC<TabsProps> = ({ items, defaultActive, active, onChange, loading }) => {
-  const [internalActiveTab, setInternalActiveTab] = useState<string>(
-    defaultActive || items[0]?.value
-  );
+const Tabs: React.FC<TabsProps> = ({ items, defaultActive, active, loading }) => {
+  // const [internalActiveTab, setInternalActiveTab] = useState<string>(
+  //   defaultActive || items[0]?.value
+  // );
 
-  const activeTab = active !== undefined ? active : internalActiveTab;
+  const activeTab = active !== undefined ? active : defaultActive || items[0]?.value;
 
-  const handleTabChange = (value: string) => {
-    if (onChange) {
-      onChange(value);
-    } else {
-      setInternalActiveTab(value);
-    }
-  };
+  // const handleTabChange = (value: string) => {
+  //   if (onChange) {
+  //     onChange(value);
+  //   } else {
+  //     setInternalActiveTab(value);
+  //   }
+  // };
 
   const visibleItems = items.filter((item) => item.show);
 
@@ -42,7 +42,7 @@ const Tabs: React.FC<TabsProps> = ({ items, defaultActive, active, onChange, loa
                 <div className="inline-block p-4 rounded-t-lg bg-gray-700/40 animate-pulse w-24 h-10" />
               ) : (
                 <button
-                  onClick={() => handleTabChange(item.value)}
+                  // onClick={() => handleTabChange(item.value)}
                   disabled={loading}
                   className={`inline-block p-4 border-b-2 rounded-t-lg transition-all ${
                     activeTab === item.value
