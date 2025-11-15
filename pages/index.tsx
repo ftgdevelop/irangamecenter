@@ -184,11 +184,13 @@ const Home: NextPage<Props> = props => {
 
       {!!(promotionData?.Items?.length) && <SimilarProductsCarousel 
         products={promotionData?.Items.map(item => ({
+          strapiProductProperties:{
+            price: item.price,
+            oldPrice: item.oldPrice,
+            url: item.Url,
+          },
           id:item.id,
           name: item.Title || "",
-          url: item.Url,
-          price: item.price,
-          oldPrice: item.oldPrice,
           imageAlt: item.ImageAlternative,
           imageTitle: item.ImageTitle,
           filePath: item.Image?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}${item.Image.url}` : undefined,

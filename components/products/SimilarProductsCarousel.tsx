@@ -1,11 +1,11 @@
 import Image from "next/image";
 import SlickSlider from "react-slick";
 
-import { ProductItem } from "@/types/commerce";
+import { ProductItemExtented } from "@/types/commerce";
 import ProductListItem from "./ProductListItem";
 
 type Props = {
-    products: ProductItem[];
+    products: ProductItemExtented[];
     title?: string;
 };
 const SimilarProductsCarousel: React.FC<Props> = props => {
@@ -18,7 +18,7 @@ const SimilarProductsCarousel: React.FC<Props> = props => {
         return result;
     }
 
-    const products: ProductItem[][] = chunkArray(props.products, 3);
+    const products: ProductItemExtented[][] = chunkArray(props.products, 3);
 
     const settings = {
         dots: true,

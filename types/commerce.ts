@@ -98,6 +98,14 @@ export interface ProductItem {
     }[];
 }
 
+export interface ProductItemExtented extends ProductItem {
+    strapiProductProperties?:{
+        url?: string;    
+        price?: number;
+        oldPrice?: number; 
+    }
+}
+
 export interface RatingItemType {
     id: number;
     total: number;
