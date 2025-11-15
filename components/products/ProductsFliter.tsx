@@ -14,6 +14,7 @@ import Checkbox from "../shared/Checkbox";
 
 type Props = {
     filters: Facet[];
+    branName?: string;
 }
 
 const ProductsFliter: React.FC<Props> = props => {
@@ -60,7 +61,7 @@ const ProductsFliter: React.FC<Props> = props => {
 
     const changeFilterHandel = (values: string[], type: string) => {
         const otherSlugs = slugs?.filter(item => !(item.includes(`${type}-`)));
-        const segments = ["/products", ...otherSlugs, ...(values.map(x => `${type}-${x}`))];
+        const segments = [props.branName ? `/brand/${props.branName}` :"/products", ...otherSlugs, ...(values.map(x => `${type}-${x}`))];
         const newUrl = segments.join("/");
         router.push({
             pathname: newUrl,
@@ -69,7 +70,7 @@ const ProductsFliter: React.FC<Props> = props => {
 
     const recetAllFilters = () => {
         const otherSlugs = slugs?.filter(x => (x.includes("sort-") || x.includes("page-"))) || [];
-        const segments = ["/products", ...otherSlugs];
+        const segments = [props.branName ? `/brand/${props.branName}` :"/products", ...otherSlugs];
         const newUrl = segments.join("/");
         router.push({
             pathname: newUrl,
@@ -113,13 +114,14 @@ const ProductsFliter: React.FC<Props> = props => {
                         </button>
                     </div>
 
-                    <Checkbox
+                    { openedFilter === "all" && (
+                        <Checkbox
                         className="mb-5"
                         block
                         label="فقط محصولات موجود"
                         onChange={(checked: boolean) => {
                             const otherSlugs = slugs?.filter(item => !(item.includes("onlyAvailable")));
-                            const segments = ["/products", ...otherSlugs];
+                            const segments = [props.branName ? `/brand/${props.branName}` :"/products", ...otherSlugs];
                             if(checked){
                                 segments.push("onlyAvailable")
                             }
@@ -131,25 +133,28 @@ const ProductsFliter: React.FC<Props> = props => {
                         value="OnlyAvailable"
                         checked={!!slugs.find(s => s.includes("onlyAvailable"))}
                     />
+                    )}
                     
-                    <Checkbox
-                        className="mb-5"
-                        block
-                        label="فقط پیش فروش"
-                        onChange={(checked: boolean) => {
-                            const otherSlugs = slugs?.filter(item => !(item.includes("onBackOrder")));
-                            const segments = ["/products", ...otherSlugs];
-                            if(checked){
-                                segments.push("onBackOrder")
-                            }
-                            const newUrl = segments.join("/");
-                            router.push({
-                                pathname: newUrl,
-                            });
-                        }}
-                        value="OnBackOrder "
-                        checked={!!slugs.find(s => s.includes("onBackOrder"))}
-                    />
+                   { openedFilter === "all" && (
+                        <Checkbox
+                            className="mb-5"
+                            block
+                            label="فقط پیش فروش"
+                            onChange={(checked: boolean) => {
+                                const otherSlugs = slugs?.filter(item => !(item.includes("onBackOrder")));
+                                const segments = [props.branName ? `/brand/${props.branName}` :"/products", ...otherSlugs];
+                                if(checked){
+                                    segments.push("onBackOrder")
+                                }
+                                const newUrl = segments.join("/");
+                                router.push({
+                                    pathname: newUrl,
+                                });
+                            }}
+                            value="OnBackOrder "
+                            checked={!!slugs.find(s => s.includes("onBackOrder"))}
+                        />
+                    )}
 
                     {props.filters?.filter(item => ([item.key, "all"].includes(openedFilter))).map(filter => (
                         <Accordion
