@@ -1,7 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { NextPage } from 'next';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { getProductBySlug } from '@/actions/commerce';
 import { ProductDetailData } from '@/types/commerce';
 import BreadCrumpt from '@/components/shared/BreadCrumpt';
@@ -20,6 +20,7 @@ import SimilarProductsCarousel from '@/components/products/SimilarProductsCarous
 import Head from 'next/head';
 import ProductGalleryCarousel from '@/components/products/ProductGalleryCarousel';
 import ProductTabs from '@/components/products/ProductTabs';
+import Star from '@/components/icons/Star';
 
 const DetailProduct: NextPage<any> = ({
   productData,
@@ -55,6 +56,27 @@ const DetailProduct: NextPage<any> = ({
       property: m,
       content: productData.page?.metas[m],
     });
+  }
+
+  let firstRatingTag: ReactNode = null;
+  if (productData?.rating?.length) {
+    firstRatingTag = (
+      <div className='text-xs flex items-center gap-2'>
+        <Star className='fill-[#ff9800] w-6 h-6' />
+        {productData.rating[0].value} از {productData.rating[0].total} <b className='font-semibold'> ({productData.rating[0].type}) </b>
+      </div>
+    )
+  }
+
+  let brandTag: ReactNode = null;
+  if (productData.publisher?.name) {
+    brandTag = (
+      <Link className='block text-xs text-[#68cedb] mt-1.5' href={`/brand/${productData.publisher.slug}`}> {productData.publisher.name} </Link>
+    )
+  } else if (productData.developer?.name) {
+    brandTag = (
+      <Link className='block text-xs text-[#68cedb] mt-1.5' href={`/brand/${productData.developer.slug}`}> {productData.developer.name} </Link>
+    )
   }
 
   return (
@@ -105,14 +127,15 @@ const DetailProduct: NextPage<any> = ({
             title={productData.fileTitleAttribute || productData.name}
           />
         )}
-
-        <h2 className="text-lg font-semibold block pt-3">
-          {productData?.name}
-        </h2>
+        <div>
+          <h2 className="text-lg font-semibold block pt-3">
+            {productData?.name}
+          </h2>
+          {firstRatingTag}
+          {brandTag}
+        </div>
       </div>
-      {productData?.galleries && (
-        <ProductGalleryCarousel galleries={productData.galleries} />
-      )}
+
       <div id="specs" className="px-4">
         <div className="flex justify-between items-top mb-5">
           <strong className="text-sm"> مشخصات بازی </strong>
@@ -126,7 +149,7 @@ const DetailProduct: NextPage<any> = ({
         </div>
       </div>
 
-      <div className="max-lg:hidden-scrollbar lg:styled-scrollbar pb-3 overflow-x-auto overflow-y-clip py-3 pl-3">
+      <div className="mb-5 max-lg:hidden-scrollbar lg:styled-scrollbar pb-3 overflow-x-auto overflow-y-clip py-3 pl-3">
         <div className="flex gap-3 pr-4">
           {!!productData?.genres?.[0]?.name && (
             <button
@@ -228,8 +251,12 @@ const DetailProduct: NextPage<any> = ({
         </div>
       </div>
 
+      {productData?.galleries && (
+        <ProductGalleryCarousel galleries={productData.galleries} />
+      )}
+
       {!!productData?.shortDescription && (
-        <div id="description" className="pt-7 px-4">
+        <div id="description" className="pt-2 px-4">
           <h3 className="text-lg font-semibold mb-4"> {productData.name}</h3>
           <div className="inserted-content">
             {parse(productData.shortDescription)}
