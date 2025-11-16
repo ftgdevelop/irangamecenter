@@ -104,9 +104,7 @@ useEffect(() => {
 
   if (galleries.length === 0) {
     return (
-      <div className="w-full max-w-3xl mx-auto text-center text-gray-500 py-8">
-        داده‌ای برای نمایش وجود ندارد
-      </div>
+      null
     );
   }
 
