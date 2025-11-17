@@ -46,9 +46,11 @@ const CartPage = () => {
 
   const handleCart = async () => {
     if (isAuthenticated) {
+      const token = localStorage.getItem('Token');
+    if (!token) return;
       try {
         setIsSubmitting(true);
-        await createOrder();
+        await createOrder(token, userInfo);
       } catch (error) {
         console.error("Error creating order:", error);
       } finally {
