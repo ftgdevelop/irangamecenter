@@ -2,8 +2,8 @@ import ClipRadius from "@/public/images/icons/ClipRadius";
 import Image from "next/image";
 import ArrowTopLeft from "../icons/ArrowTopLeft";
 import Link from "next/link";
-import SlickSlider from "react-slick";
 import { ServerAddress } from "@/enum/url";
+import Carousel from "../shared/Carousel";
 
 type Props = {
     items: {
@@ -21,15 +21,6 @@ type Props = {
 }
 
 const Slider: React.FC<Props> = props => {
-
-    const settings = {
-        dots: true,
-        arrows: false,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-    };
 
     if (props.items.length === 1) {
 
@@ -78,11 +69,13 @@ const Slider: React.FC<Props> = props => {
 
     if (props.items.length) {
         return (
-            <section className="py-3 px-3">
-
-                <SlickSlider {...settings}>
-                    {props.items.map(item => (
-                        <div className="relative" key={item.id} dir="rtl">
+            <Carousel
+                wrapperClassName="py-3 px-3"
+                showDots
+                items={props.items.map(item => ({
+                    key: item.id,
+                    content: (
+                        <div className="relative">
                             <Image
                                 src={ServerAddress.Type! + ServerAddress.Strapi + item.Image!.url!}
                                 alt={item.ImageAlternative || item.Title || ""}
@@ -117,10 +110,10 @@ const Slider: React.FC<Props> = props => {
                             </div>
 
                         </div>
-                    ))}
-                </SlickSlider>
-
-            </section>
+                    )
+                }
+                ))}
+            />
         )
     }
 

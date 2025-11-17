@@ -1,7 +1,4 @@
-'use client';
-
 import { useRef, useEffect, useState } from 'react';
-import SlickSlider from 'react-slick';
 import type { ProductGalleryItem as ProductGalleryItemType } from '@/types/commerce';
 import ProductGalleryItem from './ProductGalleryItem';
 
@@ -167,11 +164,11 @@ useEffect(() => {
           }
         }}
       >
-        <SlickSlider
+        {/* <SlickSlider
           className="[&_.slick-slider>div]:w-full"
           ref={sliderRef}
           {...sliderSettings}
-        >
+        > */}
           {galleries.map((item, index) => (
             <div
               key={item.id}
@@ -193,7 +190,7 @@ useEffect(() => {
               />
             </div>
           ))}
-        </SlickSlider>
+        {/* </SlickSlider> */}
       </div>
     </div>
   );
