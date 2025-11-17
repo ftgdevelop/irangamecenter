@@ -8,12 +8,64 @@ interface Props {
   galleries?: ProductGalleryItemType[];
 }
 
-function ProductGalleryCarousel({ galleries = [] }: Props) {
+const DEFAULT_IMAGE_DURATION = 200000;
+
+function ProductGalleryCarouselCopy({ galleries = [] }: Props) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isFullscreen, setIsFullScreen] = useState(false);
 
   const playersRef = useRef<Map<string, HTMLVideoElement>>(new Map());
   const emblaRef = useRef<EmblaCarouselType | null>(null);
+
+  useEffect(() => {
+    if (!galleries.length || isFullscreen || !emblaRef.current) return;
+
+    const currentItem = galleries[currentSlide];
+    if (!currentItem) return;
+
+    let duration = DEFAULT_IMAGE_DURATION;
+
+    if (currentItem.mediaType === "Video") {
+      const video = playersRef.current.get(String(currentItem.id));
+
+      if (video) {
+        if (!video.duration || isNaN(video.duration)) {
+          const handleLoaded = () => {
+            const d = video.duration * 1000;
+            setTimeout(() => emblaRef.current?.scrollNext(), d);
+            video.removeEventListener("loadedmetadata", handleLoaded);
+          };
+          video.addEventListener("loadedmetadata", handleLoaded);
+          return;
+        } else {
+          duration = video.duration * 1000;
+        }
+      }
+    }
+
+    const timeout = setTimeout(() => {
+      emblaRef.current?.scrollNext();
+    }, duration);
+
+    return () => clearTimeout(timeout);
+  }, [currentSlide, galleries, isFullscreen]);
+
+
+  useEffect(() => {
+    const playerMap = playersRef.current;
+    if (!playerMap.size || !emblaRef.current) return;
+
+    const handleEnded = () => emblaRef.current?.scrollNext();
+
+    playerMap.forEach((video) => video?.addEventListener("ended", handleEnded));
+
+    return () => {
+      playerMap.forEach((video) =>
+        video?.removeEventListener("ended", handleEnded)
+      );
+    };
+  }, [galleries, currentSlide]);
+
 
   useEffect(() => {
     const container = document.getElementById("gallery-fullscreen-container");
@@ -65,7 +117,6 @@ function ProductGalleryCarousel({ galleries = [] }: Props) {
     >
       {isFullscreen && (
         <button
-          type="button"
           onClick={() => setIsFullScreen(false)}
           className="absolute top-4 right-4 z-50 text-white text-3xl"
         >
@@ -77,7 +128,7 @@ function ProductGalleryCarousel({ galleries = [] }: Props) {
         wrapperClassName={
           isFullscreen
             ? "relative w-svw h-svh px-2"
-            : "w-full h-auto pr-2"
+            : "w-full h-[184px] px-2"
         }
         items={galleries.map((item, index) => ({
           key: item.id,
@@ -86,7 +137,7 @@ function ProductGalleryCarousel({ galleries = [] }: Props) {
               className={`relative ${
                 isFullscreen
                   ? "h-svh py-10 px-5 w-svw"
-                  : "w-full h-auto px-2"
+                  : "w-full h-[184px] px-2"
               }`}
             >
               <ProductGalleryItem
@@ -107,10 +158,10 @@ function ProductGalleryCarousel({ galleries = [] }: Props) {
         infinite
         onSlideChange={(i) => setCurrentSlide(i)}
         emblaApiRef={emblaRef}
-        peek={isFullscreen ? 0 : 15}
+        peek={15}
       />
     </div>
   );
 }
 
-export default ProductGalleryCarousel;
+export default ProductGalleryCarouselCopy;
