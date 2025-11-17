@@ -1,6 +1,7 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, Settings, Check } from 'lucide-react';
 import Hls, { Events, Level } from 'hls.js';
+import { Check, Pause, Play, Settings, Volume2, VolumeX } from 'lucide-react';
+import Image from 'next/image';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface Props {
   src: string;
@@ -158,11 +159,6 @@ const SteamStylePlayer: React.FC<Props> = ({
     setShowSettings(false);
   };
 
-  const Loader = () => (
-    <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-      <div className="w-10 h-10 border-4 border-gray-300 border-t-red-500 rounded-full animate-spin" />
-    </div>
-  );
 
   return (
     <div
@@ -170,8 +166,25 @@ const SteamStylePlayer: React.FC<Props> = ({
       onMouseMove={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >
-      {loading && <Loader />}
+  
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center z-20">
 
+          <Image
+            src={thumbnail || ""}
+            alt="thumbnail"
+            className="object-cover absolute inset-0 h-full w-[327px]"
+            fill
+          />
+
+          <div className="absolute inset-0" />
+
+          <div className="absolute flex items-center justify-center inset-0">
+            <div className="w-10 h-10 border-4 border-gray-300 border-t-red-500 rounded-full animate-spin" />
+          </div>
+
+        </div>
+      )}
       <video
         ref={videoRef}
         poster={thumbnail}
@@ -181,7 +194,6 @@ const SteamStylePlayer: React.FC<Props> = ({
         autoPlay
         muted
       />
-
       <div
         className={`absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent transition-opacity duration-300 ${
           showControls ? 'opacity-100' : 'opacity-0'
@@ -194,46 +206,12 @@ const SteamStylePlayer: React.FC<Props> = ({
           value={progress}
           onChange={handleSeek}
           className="w-full accent-red-500 cursor-pointer"
+          dir='ltr'
         />
 
         <div className="flex justify-between items-center mt-1 text-white text-sm sm:text-base">
-          <div className="flex items-center gap-2 sm:gap-3">
-            <button onClick={togglePlay}>
-              {playing ? (
-                <Pause className="size-5 sm:size-6" />
-              ) : (
-                <Play className="size-5 sm:size-6" />
-              )}
-            </button>
-
-            <div className="flex items-center gap-1 sm:gap-2">
-              <button onClick={toggleMute}>
-                {muted || volume === 0 ? (
-                  <VolumeX className="size-4 sm:size-5" />
-                ) : (
-                  <Volume2 className="size-4 sm:size-5" />
-                )}
-              </button>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.05"
-                value={muted ? 0 : volume}
-                onChange={handleVolumeChange}
-                className="w-14 sm:w-20 accent-red-500 cursor-pointer"
-              />
-            </div>
-
-            <span className="text-xs sm:text-sm">
-              -{formatTime(duration - currentTime)}
-            </span>
-          </div>
 
           <div className="flex items-center gap-2 sm:gap-3 relative">
-            <button onClick={() => setShowSettings(!showSettings)}>
-              <Settings className="size-4 sm:size-5" />
-            </button>
 
             {showSettings && levels.length > 0 && (
               <div className="absolute max-h-24 overflow-y-auto scroll-smooth styled-scrollbar bottom-6 right-0 bg-black/90 border border-gray-700 rounded-md px-3 py-2 w-24 sm:w-28 text-xs sm:text-sm space-y-1 z-50">
@@ -259,13 +237,50 @@ const SteamStylePlayer: React.FC<Props> = ({
                 ))}
               </div>
             )}
+            <button onClick={() => setShowSettings(!showSettings)}>
+              <Settings className="size-4 sm:size-5" />
+            </button>
 
-            {/* <button onClick={toggleFullscreen}>
-              <Maximize2 className="size-4 sm:size-5" />
-            </button> */}
+
+
+          </div>
+          <div className="flex items-center gap-2 sm:gap-3">
+
+            <span className="text-xs sm:text-sm">
+            {formatTime(duration - currentTime)}-
+            </span>
+            <div className="flex items-center gap-1 sm:gap-2">
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value={muted ? 0 : volume}
+                onChange={handleVolumeChange}
+                className="w-14 sm:w-20 accent-red-500 cursor-pointer"
+                dir='ltr'
+
+              />
+              <button onClick={toggleMute}>
+                {muted || volume === 0 ? (
+                  <VolumeX className="size-4 sm:size-5" />
+                ) : (
+                  <Volume2 className="size-4 sm:size-5" />
+                )}
+              </button>
+
+            </div>
+            <button onClick={togglePlay}>
+              {playing ? (
+                <Pause className="size-5 sm:size-6" />
+              ) : (
+                <Play className="size-5 sm:size-6" />
+              )}
+            </button>
+
           </div>
         </div>
-      </div>
+    </div>
     </div>
   );
 };

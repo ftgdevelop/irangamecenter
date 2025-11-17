@@ -79,6 +79,13 @@ const DetailProduct: NextPage<any> = ({
     )
   }
 
+  const galleryItems = productData.galleries;
+
+  galleryItems?.sort((a, b) => {
+    if (a.mediaType === 'Image' && b.mediaType === 'Video') return 1;
+    return -1
+  });
+
   return (
     <>
       <Head>
@@ -251,8 +258,8 @@ const DetailProduct: NextPage<any> = ({
         </div>
       </div>
 
-      {productData?.galleries && (
-        <ProductGalleryCarousel galleries={productData.galleries} />
+      {galleryItems && (
+        <ProductGalleryCarousel galleries={galleryItems} />
       )}
 
       {!!productData?.shortDescription && (

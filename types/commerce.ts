@@ -135,7 +135,7 @@ export interface ProductVariant {
 export interface ProductGalleryItem {
     id:number;
     cdnPath?: string;
-    mediaType?: 0 | "Video";
+    mediaType?: "Image" | "Video";
     filePath?:string;
 //   "isActive": true,
 //   "fileUniqKey": "1e5457dc-ce85-f011-bf76-000c29176f1e",

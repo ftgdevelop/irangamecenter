@@ -44,23 +44,22 @@ const ProductGalleryItem: React.FC<Props> = ({
     );
 
   const renderImage = () => (
-    <div className="w-full h-full flex justify-center items-center rounded-xl bg-black">
-      <div
-        className={`relative rounded-xl overflow-hidden w-full h-full ${
-          isFullscreen ? ' max-w-[800px] max-h-[450px] aspect-[16/9]' : ''
-        }`}
-      >
-        <Image
-          src={item.filePath || ''}
-          alt={`gallery-image-${item.id}`}
-          fill
-          className={`h-full w-[327px] ${
-            isFullscreen ? 'object-contain' : 'object-cover'
-          } transition-transform`}
-          onLoad={handleLoad}
-          onError={handleLoad}
-        />
-      </div>
+    <div
+      className={`relative rounded-xl w-full ${
+        isFullscreen ? 'aspect-[16/9] flex items-center justify-center' : ''
+      }`}
+    >
+      <Image
+        src={item.filePath || ''}
+        alt={`gallery-image-${item.id}`}
+        className={`aspect-[16/9] w-full rounded-xl ${
+          isFullscreen ? 'object-contain max-w-[1000px]' : 'object-cover'
+        } transition-transform`}
+        onLoad={handleLoad}
+        onError={handleLoad}
+        width={450}
+        height={250}
+      />
     </div>
   );
 
@@ -83,7 +82,7 @@ const ProductGalleryItem: React.FC<Props> = ({
   if (isImage && item.filePath) {
     return (
       <div
-        className="relative h-full w-full cursor-pointer rounded-xl"
+        className="relative cursor-pointer rounded-xl"
         onClick={isFullscreen ? undefined : onClick}
       >
         {loading && <Loader />}
