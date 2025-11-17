@@ -1,37 +1,41 @@
-import { useRef, useEffect, useState } from 'react';
-import type { ProductGalleryItem as ProductGalleryItemType } from '@/types/commerce';
-import ProductGalleryItem from './ProductGalleryItem';
+import type { ProductGalleryItem as ProductGalleryItemType } from "@/types/commerce";
+import type { EmblaCarouselType } from "embla-carousel";
+import { useEffect, useRef, useState } from "react";
+import Carousel from "../shared/Carousel";
+import ProductGalleryItem from "./ProductGalleryItem";
 
 interface Props {
   galleries?: ProductGalleryItemType[];
 }
 
-const DEFAULT_IMAGE_DURATION = 2000;
+const DEFAULT_IMAGE_DURATION = 200000;
 
-const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
+function ProductGalleryCarousel({ galleries = [] }: Props) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isFullscreen, setIsFullScreen] = useState(false);
+
   const playersRef = useRef<Map<string, HTMLVideoElement>>(new Map());
-  const sliderRef = useRef<SlickSlider | null>(null);
+  const emblaRef = useRef<EmblaCarouselType | null>(null);
 
   useEffect(() => {
-    if (galleries.length === 0 || isFullscreen) return;
+    if (!galleries.length || isFullscreen || !emblaRef.current) return;
 
     const currentItem = galleries[currentSlide];
     if (!currentItem) return;
 
     let duration = DEFAULT_IMAGE_DURATION;
 
-    if (currentItem.mediaType === 'Video') {
+    if (currentItem.mediaType === "Video") {
       const video = playersRef.current.get(String(currentItem.id));
+
       if (video) {
-        if (isNaN(video.duration) || video.duration === 0) {
+        if (!video.duration || isNaN(video.duration)) {
           const handleLoaded = () => {
-            const dur = video.duration * 1000;
-            setTimeout(() => sliderRef.current?.slickNext(), dur);
-            video.removeEventListener('loadedmetadata', handleLoaded);
+            const d = video.duration * 1000;
+            setTimeout(() => emblaRef.current?.scrollNext(), d);
+            video.removeEventListener("loadedmetadata", handleLoaded);
           };
-          video.addEventListener('loadedmetadata', handleLoaded);
+          video.addEventListener("loadedmetadata", handleLoaded);
           return;
         } else {
           duration = video.duration * 1000;
@@ -39,106 +43,77 @@ const ProductGalleryCarousel: React.FC<Props> = ({ galleries = [] }) => {
       }
     }
 
-    const timeoutId = setTimeout(() => {
-      sliderRef.current?.slickNext();
+    const timeout = setTimeout(() => {
+      emblaRef.current?.scrollNext();
     }, duration);
 
-    return () => clearTimeout(timeoutId);
+    return () => clearTimeout(timeout);
   }, [currentSlide, galleries, isFullscreen]);
+
 
   useEffect(() => {
     const playerMap = playersRef.current;
-    if (!playerMap || playerMap.size === 0) return;
+    if (!playerMap.size || !emblaRef.current) return;
 
-    const handleEnded = () => sliderRef.current?.slickNext();
+    const handleEnded = () => emblaRef.current?.scrollNext();
 
-    playerMap.forEach((video) => {
-      if (video) video.addEventListener('ended', handleEnded);
-    });
+    playerMap.forEach((video) => video?.addEventListener("ended", handleEnded));
 
     return () => {
-      playerMap.forEach((video) => {
-        if (video) video.removeEventListener('ended', handleEnded);
-      });
+      playerMap.forEach((video) =>
+        video?.removeEventListener("ended", handleEnded)
+      );
     };
   }, [galleries, currentSlide]);
 
-useEffect(() => {
-  const container = document.getElementById('gallery-fullscreen-container');
-  if (!container) return;
-
-  interface FullscreenElement extends HTMLElement {
-    webkitRequestFullscreen?: () => Promise<void>;
-    msRequestFullscreen?: () => Promise<void>;
-  }
-
-  const el = container as FullscreenElement;
-
-  if (isFullscreen) {
-    if (el.requestFullscreen) {
-      el.requestFullscreen();
-    } else if (el.webkitRequestFullscreen) {
-      el.webkitRequestFullscreen(); 
-    } else if (el.msRequestFullscreen) {
-      el.msRequestFullscreen(); 
-    }
-  } else {
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
-    }
-  }
-}, [isFullscreen]);
 
   useEffect(() => {
-    const handleChange = () => {
+    const container = document.getElementById("gallery-fullscreen-container");
+    if (!container) return;
+
+    const el = container as HTMLElement & {
+      webkitRequestFullscreen?: () => Promise<void>;
+      msRequestFullscreen?: () => Promise<void>;
+    };
+
+    if (isFullscreen) {
+      if (el.requestFullscreen) {
+        el.requestFullscreen();
+      } else if (el.webkitRequestFullscreen) {
+        el.webkitRequestFullscreen();
+      } else if (el.msRequestFullscreen) {
+        el.msRequestFullscreen();
+      }
+    } else {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      }
+
+    }
+    }
+  , [isFullscreen]);
+
+
+  useEffect(() => {
+    const handler = () => {
       if (!document.fullscreenElement) {
         setIsFullScreen(false);
       }
     };
-    document.addEventListener('fullscreenchange', handleChange);
-    return () => document.removeEventListener('fullscreenchange', handleChange);
+    document.addEventListener("fullscreenchange", handler);
+    return () => document.removeEventListener("fullscreenchange", handler);
   }, []);
 
-  if (galleries.length === 0) {
-    return (
-      null
-    );
-  }
-
-  const sliderSettings = {
-    dots: false,
-    arrows: false,
-    slide: '.slick-slideshow__slide',
-    slidesToShow: 1,
-    centerMode: !isFullscreen,
-    centerPadding: isFullscreen ? '0px' : '50px',
-    afterChange: (current: number) => setCurrentSlide(current),
-    initialSlide: currentSlide,
-    rtl: true,
-    responsive: [
-      {
-        breakpoint: 470,
-        settings: {
-          centerPadding: isFullscreen ? '0px' : '20px',
-        },
-      },
-      {
-        breakpoint: 430,
-        settings: {
-          centerPadding: '0px',
-        },
-      },
-    ],
-  };
+  if (!galleries.length) return null;
 
   return (
     <div
       id="gallery-fullscreen-container"
-      className={`${
+      className={
         isFullscreen
-          ? 'fixed inset-0 z-50 bg-black/90 flex items-center justify-center'
-          : 'mb-5'
-      }`}
+          ? "fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+          : "mb-5"
+      }
     >
       {isFullscreen && (
         <button
@@ -149,31 +124,20 @@ useEffect(() => {
         </button>
       )}
 
-      <div
-        className={`${
+      <Carousel
+        wrapperClassName={
           isFullscreen
-            ? 'relative w-screen h-svh px-2'
-            : 'w-full h-[184px] px-1'
-        }`}
-        ref={(el) => {
-          if (el) {
-            const slickList = el.querySelector<HTMLElement>('.slick-list');
-            if (slickList && !isFullscreen) {
-              slickList.style.paddingLeft = '0px';
-            }
-          }
-        }}
-      >
-        {/* <SlickSlider
-          className="[&_.slick-slider>div]:w-full"
-          ref={sliderRef}
-          {...sliderSettings}
-        > */}
-          {galleries.map((item, index) => (
+            ? "relative w-svw h-svh px-2"
+            : "w-full h-[184px] px-1"
+        }
+        items={galleries.map((item, index) => ({
+          key: item.id,
+          content: (
             <div
-              key={item.id}
               className={`relative ${
-                isFullscreen ? 'h-svh py-10 w-screen' : 'w-full h-[184px] px-1'
+                isFullscreen
+                  ? "h-svh py-10 px-5 w-svw"
+                  : "w-full h-[184px] px-1"
               }`}
             >
               <ProductGalleryItem
@@ -182,18 +146,21 @@ useEffect(() => {
                 isActive={index === currentSlide}
                 onClick={() => {
                   if (index === currentSlide) {
-                    setCurrentSlide(index);
-                    setIsFullScreen((prev) => !prev);
+                    setIsFullScreen((p) => !p);
                   }
                 }}
                 isFullscreen={isFullscreen}
               />
             </div>
-          ))}
-        {/* </SlickSlider> */}
-      </div>
+          ),
+        }))}
+        showDots={false}
+        infinite
+        onSlideChange={(i) => setCurrentSlide(i)}
+        emblaApiRef={emblaRef}
+      />
     </div>
   );
-};
+}
 
 export default ProductGalleryCarousel;
