@@ -2,7 +2,11 @@ import Image from "next/image";
 
 import { ProductItemExtented } from "@/types/commerce";
 import ProductListItem from "./ProductListItem";
-import Carousel from "../shared/Carousel";
+import dynamic from "next/dynamic";
+
+const Carousel = dynamic(() => import("../shared/Carousel"), {
+  ssr: false,
+});
 
 type Props = {
     products: ProductItemExtented[];

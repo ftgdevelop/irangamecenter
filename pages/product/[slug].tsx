@@ -1,7 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { NextPage } from 'next';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 import { getProductBySlug } from '@/actions/commerce';
 import { ProductDetailData } from '@/types/commerce';
 import BreadCrumpt from '@/components/shared/BreadCrumpt';
@@ -33,6 +33,20 @@ const DetailProduct: NextPage<any> = ({
     label: string;
     link?: string;
   }[] = [];
+
+  const sortedGalleryItems = useMemo(() => {
+    if (!productData?.galleries) return [];
+    return [...productData.galleries].sort((a, b) => {
+      if (a.mediaType === 'Image' && b.mediaType === 'Video') return 1;
+      return -1;
+    });
+  }, [productData?.galleries]);
+
+  const parsedShortDescription = useMemo(() => {
+    if (!productData?.shortDescription) return null;
+    return parse(productData.shortDescription);
+  }, [productData?.shortDescription]);
+
 
   if (productData?.breadcrumbs?.length) {
     breadcrumbsItems.push(
@@ -78,13 +92,6 @@ const DetailProduct: NextPage<any> = ({
       <Link className='block text-xs text-[#68cedb] mt-1.5' href={`/brand/${productData.developer.slug}`}> {productData.developer.name} </Link>
     )
   }
-
-  const galleryItems = productData.galleries;
-
-  galleryItems?.sort((a, b) => {
-    if (a.mediaType === 'Image' && b.mediaType === 'Video') return 1;
-    return -1
-  });
 
   return (
     <>
@@ -258,15 +265,15 @@ const DetailProduct: NextPage<any> = ({
         </div>
       </div>
 
-      {galleryItems && (
-        <ProductGalleryCarousel galleries={galleryItems} />
+      {sortedGalleryItems && (
+        <ProductGalleryCarousel galleries={sortedGalleryItems} />
       )}
 
       {!!productData?.shortDescription && (
         <div id="description" className="pt-2 px-4">
           <h3 className="text-lg font-semibold mb-4"> {productData.name}</h3>
           <div className="inserted-content">
-            {parse(productData.shortDescription)}
+            {parsedShortDescription}
 
             {!!productData.description && (
               <button

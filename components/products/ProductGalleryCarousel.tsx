@@ -1,8 +1,12 @@
 import type { ProductGalleryItem as ProductGalleryItemType } from "@/types/commerce";
 import type { EmblaCarouselType } from "embla-carousel";
 import { useEffect, useRef, useState } from "react";
-import Carousel from "../shared/Carousel";
 import ProductGalleryItem from "./ProductGalleryItem";
+import dynamic from "next/dynamic";
+
+const Carousel = dynamic(() => import("../shared/Carousel"), {
+  ssr: false,
+});
 
 interface Props {
   galleries?: ProductGalleryItemType[];
