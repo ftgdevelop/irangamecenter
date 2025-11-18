@@ -28,13 +28,15 @@ const Slider: React.FC<Props> = props => {
 
         return (
             <section className="py-3 px-3">
-                <div className="relative" dir="rtl">
+                <div className="relative uyy">
                     <Image
                         src={ServerAddress.Type! + ServerAddress.Strapi + item.Image!.url!}
                         alt={item.ImageAlternative || item.Title || ""}
                         title={item.ImageTitle}
                         width={500}
                         height={300}
+                        priority
+                        fetchPriority="high"
                         className="rounded-large w-full min-h-52 object-cover"
                     />
                     <span className="absolute top-0 right-0 pt-2 pb-3 pr-3 pl-5 block rounded-bl-large rounded-tr-large text-xs bg-[#011425]/75" >
@@ -56,7 +58,7 @@ const Slider: React.FC<Props> = props => {
                         <ClipRadius className="absolute bottom-full left-0 fill-[#011425] w-8 h-8" />
                         <ClipRadius className="absolute bottom-0 left-full fill-[#011425] w-8 h-8" />
 
-                        <Link href={item.Url || "#"} className="w-12 h-12 bg-[#1b2c3b] cursor-pointer select-none rounded-full absolute bottom-1 left-1 flex items-center justify-center">
+                        <Link prefetch={false} href={item.Url || "#"} className="w-12 h-12 bg-[#1b2c3b] cursor-pointer select-none rounded-full absolute bottom-1 left-1 flex items-center justify-center">
                             <ArrowTopLeft className="fill-white w-3.5 h-3.5" />
                         </Link>
 
@@ -72,11 +74,13 @@ const Slider: React.FC<Props> = props => {
             <Carousel
                 wrapperClassName="py-3 px-3"
                 showDots
-                items={props.items.map(item => ({
+                items={props.items.map((item, index) => ({
                     key: item.id,
                     content: (
-                        <div className="relative">
+                        <div className="relative ggh">
                             <Image
+                                priority={!index}
+                                fetchPriority={index ? "low" :"high"}
                                 src={ServerAddress.Type! + ServerAddress.Strapi + item.Image!.url!}
                                 alt={item.ImageAlternative || item.Title || ""}
                                 title={item.ImageTitle}
@@ -103,7 +107,7 @@ const Slider: React.FC<Props> = props => {
                                 <ClipRadius className="absolute bottom-full left-0 fill-[#011425] w-8 h-8" />
                                 <ClipRadius className="absolute bottom-0 left-full fill-[#011425] w-8 h-8" />
 
-                                <Link href={item.Url || "#"} className="w-12 h-12 bg-[#1b2c3b] cursor-pointer select-none rounded-full absolute bottom-1 left-1 flex items-center justify-center">
+                                <Link prefetch={false} href={item.Url || "#"} className="w-12 h-12 bg-[#1b2c3b] cursor-pointer select-none rounded-full absolute bottom-1 left-1 flex items-center justify-center">
                                     <ArrowTopLeft className="fill-white w-3.5 h-3.5" />
                                 </Link>
 

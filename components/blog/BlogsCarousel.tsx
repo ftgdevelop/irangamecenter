@@ -4,7 +4,11 @@ import ArrowTopLeft from "../icons/ArrowTopLeft";
 import { BlogItemType } from "@/types/blog";
 import { toPersianDigits } from "@/helpers";
 import parse from 'html-react-parser';
-import Carousel from "../shared/Carousel";
+import dynamic from "next/dynamic";
+
+const Carousel = dynamic(() => import("../shared/Carousel"), {
+  ssr: false,
+});
 
 type Props = {
     blogs: BlogItemType[];

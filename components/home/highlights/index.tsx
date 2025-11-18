@@ -150,9 +150,10 @@ useEffect(() => {
                               : '/images/default-game.png'
                           }
                           alt={highlight?.Item?.Title || ''}
-                          width={80}
-                          height={80}
+                          width={64}
+                          height={64}
                           className="block w-10 h-10"
+                          quality={50}
                         />
                         <span className='text-neutral-800 font-semibold'>
                         {highlight?.Item?.Title}

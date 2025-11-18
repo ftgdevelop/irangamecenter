@@ -168,19 +168,8 @@ const Home: NextPage<Props> = props => {
         imageAlt: item.ImageAlternative,
         imageTitle: item.ImageTitle
       }))} />
+      
 
-      {/* <Promotion
-        items={promotionData?.Items.map(item => ({
-          title: item.Title || "",
-          url: item.Url,
-          price: item.price,
-          oldPrice: item.oldPrice,
-          imageAlt: item.ImageAlternative,
-          imageTitle: item.ImageTitle,
-          imageUrl: item.Image?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}${item.Image.url}` : undefined,
-        }))}
-        title={promotionData?.Title || ""}
-      /> */}
 
       {!!(promotionData?.Items?.length) && <SimilarProductsCarousel 
         products={promotionData?.Items.map(item => ({
