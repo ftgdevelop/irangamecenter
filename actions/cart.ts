@@ -1,4 +1,4 @@
-import { Cart, ServerAddress, Headers } from "@/enum/url";
+import { Cart, ServerAddress } from "@/enum/url";
 import { useAppSelector } from "@/hooks/use-store";
 import { UpdateUserParams } from "@/types/authentication";
 import {
