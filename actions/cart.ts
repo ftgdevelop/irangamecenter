@@ -1,4 +1,4 @@
-import { Cart, ServerAddress } from "@/enum/url";
+import { Cart, ServerAddress, Headers } from "@/enum/url";
 import { useAppSelector } from "@/hooks/use-store";
 import { UpdateUserParams } from "@/types/authentication";
 import {
@@ -33,11 +33,13 @@ export const useCartApi = () => {
 
   const getHeaders = (): Record<string, string> => {
     const headers: Record<string, string> = {};
+    
+    headers['apikey'] = "e8fad1497a1244f29f15cde4a242baf0";
 
     if (currency) headers["Currency"] = currency;
     if (deviceId) headers["X-Device-Id"] = deviceId;
 
-    return headers;
+    return headers
   };
 
   const handleError = (error: unknown, label: string) => {
