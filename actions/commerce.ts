@@ -90,6 +90,26 @@ export const getAllForSiteMap = async (
     }
 }
 
+export const getSimilarsBySlug = async (slug: string, acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
+
+    try {
+        const response: any = await axios({
+            method: "get",
+            url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetSimilar}?Slug=${slug}`,
+            headers: {
+                "Accept-Language": acceptLanguage,
+                apikey: apikey,
+                currency: "IRR",
+                tenantid: 7
+            }
+        });
+        return (response)
+    } catch (error: any) {
+        return error
+    }
+}
+
+
 export type ProductSortKeywords = "Sale" | "Visitor" | "LowPrice" | "HighPrice";
 
 export type ProductSortOption = {

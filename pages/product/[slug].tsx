@@ -16,16 +16,18 @@ import ProductDetail from '@/components/products/ProductDetail';
 import AgeRatingDetail from '@/components/products/AgeRatingDetail';
 import ArrowTopLeft from '@/components/icons/ArrowTopLeft';
 import VariantSection from '@/components/products/VariantSection';
-import SimilarProductsCarousel from '@/components/products/SimilarProductsCarousel';
 import Head from 'next/head';
 import ProductGalleryCarousel from '@/components/products/ProductGalleryCarousel';
 import ProductTabs from '@/components/products/ProductTabs';
 import Star from '@/components/icons/Star';
+import SimilarProducts from '@/components/products/SimilarProducts';
 
 const DetailProduct: NextPage<any> = ({
   productData,
+  slug
 }: {
   productData: ProductDetailData;
+  slug?: string;
 }) => {
   const [detailActiveTab, setDetailActiveTab] = useState<string>('');
 
@@ -459,10 +461,7 @@ const DetailProduct: NextPage<any> = ({
         </section>
       )}
 
-      {!!productData?.similar?.length && (
-          <section id="similar">
-            <SimilarProductsCarousel products={productData.similar} />
-          </section>      )}
+      {!!slug && <SimilarProducts productSlug={slug} />}
 
       <Contacts />
     </>
@@ -475,6 +474,7 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       productData: response.data?.result || null,
+      slug: context?.query?.slug || null
     },
   };
 }
