@@ -1,18 +1,35 @@
-import Image from "next/image";
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 
+import Image from "next/image";
 import { ProductItemExtented } from "@/types/commerce";
 import ProductListItem from "./ProductListItem";
 import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+import { getSimilarsBySlug } from "@/actions/commerce";
 
 const Carousel = dynamic(() => import("../shared/Carousel"), {
-  ssr: false,
+    ssr: false,
 });
 
 type Props = {
-    products: ProductItemExtented[];
-    title?: string;
+    productSlug: string;
 };
-const SimilarProductsCarousel: React.FC<Props> = props => {
+const SimilarProducts: React.FC<Props> = props => {
+
+    const [similarProducts, setSimilarProducts] = useState<ProductItemExtented[]>([]);
+
+    useEffect(() => {
+        const fetchData = async (s: string) => {
+            const response: any = await getSimilarsBySlug(s);
+            if (response.data?.result.length) {
+                setSimilarProducts(response.data.result);
+            }
+        }
+        if (props.productSlug) {
+            fetchData(props.productSlug);
+        }
+    }, [props.productSlug]);
+
 
     function chunkArray<T>(arr: T[], size: number): T[][] {
         const result: T[][] = [];
@@ -22,18 +39,20 @@ const SimilarProductsCarousel: React.FC<Props> = props => {
         return result;
     }
 
-    const products: ProductItemExtented[][] = chunkArray(props.products, 3);
+    const products: ProductItemExtented[][] = chunkArray(similarProducts, 3);
 
     if (!products?.length) {
         return null
     }
+
+    if (!props.productSlug) return null;
 
     return (
         <section className="bg-[#192b39] py-6 pr-[7.5px] relative">
 
             <h3 className="px-[7.5px] text-[#ff7189] font-bold flex gap-2 items-center text-md mb-4">
                 <Image src="/images/icons/curl.svg" alt="offer" width={36} height={36} className="w-9 h-9" />
-                {props.title || "محصولات مشابه"}
+                محصولات مشابه
             </h3>
 
             {products.length > 1 ? (
@@ -63,4 +82,4 @@ const SimilarProductsCarousel: React.FC<Props> = props => {
     )
 }
 
-export default SimilarProductsCarousel;
+export default SimilarProducts;

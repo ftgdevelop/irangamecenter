@@ -76,6 +76,7 @@ export const Payment = {
     GetBySlug:"/api/services/app/Product/GetBySlug",
     GetBrandBySlug:"/api/services/app/Brand/GetBySlug",
     GetAllForSiteMap:"/api/services/app/Product/GetAllForSiteMap",
+    GetSimilar:"/api/services/app/Product/GetSimilar"
   }
   
 

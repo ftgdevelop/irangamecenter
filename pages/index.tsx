@@ -17,7 +17,7 @@ import { BlogItemType } from "@/types/blog";
 import BlogsCarousel from "@/components/blog/BlogsCarousel";
 import { getAllForSiteMap, getProducts } from "@/actions/commerce";
 import { GetProductsDataType } from "@/types/commerce";
-import SimilarProductsCarousel from "@/components/products/SimilarProductsCarousel";
+import ProductsCarousel from "@/components/products/ProductsCarousel";
 import { useEffect } from "react";
 import BannerLinks from "@/components/home/BannerLinks";
 
@@ -171,7 +171,7 @@ const Home: NextPage<Props> = props => {
       
 
 
-      {!!(promotionData?.Items?.length) && <SimilarProductsCarousel 
+      {!!(promotionData?.Items?.length) && <ProductsCarousel 
         products={promotionData?.Items.map(item => ({
           strapiProductProperties:{
             price: item.price,
