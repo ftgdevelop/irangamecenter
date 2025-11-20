@@ -1,21 +1,30 @@
 import CartPage from "@/components/cart/CartPage";
+import { GetStaticProps, GetStaticPaths } from "next";
 
-export default function CartTabPage() {
-  return <CartPage />;
+type CartTab = "cart" | "profile" | "payment" | "confirmation";
+
+interface CartPageProps {
+  tab: CartTab;
 }
 
-export const getStaticPaths = () => {
-  return {
-    paths: [
-      { params: { tab: "cart" } },
-      { params: { tab: "profile" } },
-      { params: { tab: "payment" } },
-      { params: { tab: "confirmation" } },
-    ],
-    fallback: false,
-  };
-};
+export default function CartTabPage(props: CartPageProps) {
+  return <CartPage tab={props.tab} />;
+}
 
-export const getStaticProps = async () => {
-  return { props: {} };
+export const getStaticPaths: GetStaticPaths = () => ({
+  paths: [
+    { params: { tab: "cart" } },
+    { params: { tab: "profile" } },
+    { params: { tab: "payment" } },
+    { params: { tab: "confirmation" } },
+  ],
+  fallback: false,
+});
+
+export const getStaticProps: GetStaticProps<CartPageProps> = ({ params }) => {
+  return {
+    props: {
+      tab: params?.tab as CartTab,
+    },
+  };
 };
