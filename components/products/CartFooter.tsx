@@ -140,28 +140,30 @@ const CartFooter = ({
   return (
     <>
       {showSuccessAlert && (
-        <div className="fixed bottom-[100px] left-0 right-0 flex justify-center items-center px-4 z-50">
-          <Alert closable autoClose>
-            <div className="flex flex-wrap gap-2 justify-between items-center text-sm">
-              <span className="text-gradient-logo-linear">
-                کالا به سبد اضافه شد!
-              </span>
-            <button
-              type="button"
-              className="w-fit h-full text-white flex items-end"
-              onClick={async (e) => {
-                e.preventDefault();
-                dispatch(setProgressLoading(true)); 
-                await router.push("/cart");
-                dispatch(setProgressLoading(false));
-              }}
-            >
-              <span>برو به سبد خرید</span>
-              <ChevronLeft className="inline-block mr-1" size={16} />
-            </button>
-            </div>
-          </Alert>
-        </div>
+        <Alert 
+          closable 
+          autoClose
+          wrapperClassName="fixed bottom-[100px] left-0 right-0 flex justify-center items-center px-4 z-50"
+        >
+          <div className="flex flex-wrap gap-2 justify-between items-center text-sm">
+            <span className="text-gradient-logo-linear">
+              کالا به سبد اضافه شد!
+            </span>
+          <button
+            type="button"
+            className="w-fit h-full text-white flex items-end"
+            onClick={async (e) => {
+              e.preventDefault();
+              dispatch(setProgressLoading(true)); 
+              await router.push("/cart");
+              dispatch(setProgressLoading(false));
+            }}
+          >
+            <span>برو به سبد خرید</span>
+            <ChevronLeft className="inline-block mr-1" size={16} />
+          </button>
+          </div>
+        </Alert>
       )}
 
       <SimplePortal selector="fixed_bottom_portal">
