@@ -1,33 +1,20 @@
 import { ProductDetailData, ProductVariant } from "@/types/commerce";
 import {
-  Dispatch,
-  SetStateAction,
   useEffect,
   useState,
   useMemo,
 } from "react";
 import { numberWithCommas } from "@/helpers";
-import { SelectedVariantLevel } from "./VariantSection";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 import CartFooter from "./CartFooter";
 
 type VariantItemProps = {
   variantGroup?: ProductVariant;
-  level: string;
-  onSelectVariant: (variant: ProductVariant, level: number) => void;
-  updateSelectedVariants: Dispatch<SetStateAction<SelectedVariantLevel[]>>;
-  selectedVariantLevels: SelectedVariantLevel[];
-  selectedVariantIds: number[];
   productId: ProductDetailData['id'];
 };
 
 const VariantItem: React.FC<VariantItemProps> = ({
   variantGroup,
-  level,
-  onSelectVariant,
-  updateSelectedVariants,
-  selectedVariantLevels,
-  selectedVariantIds,
   productId,
 }) => {
   const firstAvailableChild = useMemo(() => {
@@ -58,44 +45,13 @@ const VariantItem: React.FC<VariantItemProps> = ({
     return variantGroup.children.find((c) => c.id === currentVariantId);
   }, [variantGroup, currentVariantId]);
 
-  useEffect(() => {
-    if (!currentVariant) return;
 
-    const nextLevel =
-      String(
-        Number(
-          selectedVariantLevels[selectedVariantLevels.length - 1]?.level || 0
-        ) + 1
-      );
 
-    updateSelectedVariants((prev) => {
-      const index = prev.findIndex(
-        (entry) => entry.variant.name === currentVariant.name
-      );
-
-      const updated = [...prev];
-
-      if (index !== -1) {
-        updated[index] = { variant: currentVariant, level: nextLevel };
-      } else {
-        updated.push({ variant: currentVariant, level: nextLevel });
-      }
-
-      return updated;
-    });
-  }, [currentVariant]);
-
-  /** next step (recursive or footer) */
   const renderNestedOrFooter = () => {
     if (currentVariant?.children?.length) {
       return (
         <VariantItem
           variantGroup={currentVariant}
-          level={level}
-          onSelectVariant={onSelectVariant}
-          updateSelectedVariants={updateSelectedVariants}
-          selectedVariantLevels={selectedVariantLevels}
-          selectedVariantIds={selectedVariantIds}
           productId={productId}
         />
       );
@@ -105,7 +61,6 @@ const VariantItem: React.FC<VariantItemProps> = ({
       return (
         <CartFooter
           currentVariant={currentVariant}
-          selectedVariantLevels={selectedVariantLevels}
           productId={productId}
         />
       );

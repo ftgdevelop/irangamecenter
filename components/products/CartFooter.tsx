@@ -8,7 +8,6 @@ import {  ChevronLeft, Minus, Plus, Trash2 } from "lucide-react";
 
 import SimplePortal from "../shared/layout/SimplePortal";
 import { numberWithCommas } from "@/helpers";
-import { SelectedVariantLevel } from "./VariantSection";
 import { addDeviceId, addQuantity,  fetchCart,  removeQuantity } from "@/redux/cartSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import {  useCartApi } from "@/actions/cart";
@@ -21,11 +20,9 @@ import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 
 const CartFooter = ({
   currentVariant,
-  selectedVariantLevels,
   productId,
 }: {
   currentVariant?: ProductVariant;
-  selectedVariantLevels: SelectedVariantLevel[];
   productId: ProductDetailData['id'];
 }) => {
   const [cartData, setCartData] = useState<GetCartByProductIdType | null>(null);
@@ -71,9 +68,8 @@ const CartFooter = ({
 
   if (!currentVariant?.items?.[0]) return null;
 
-  const variantList = selectedVariantLevels.map((v) => v.variant);
-  const activeVariant = variantList.find((v) => v.items?.length);
-  const variantItem = activeVariant?.items?.[0];
+  const variantItem = currentVariant?.items?.[0];
+
 
   const currency =
     getCurrencyLabelFa(cartData?.items?.[0]?.variant.currencyType )||
@@ -124,11 +120,11 @@ const CartFooter = ({
   };
 
   const getCartStatus = () => {
-    if (!cartData || !activeVariant?.items?.[0]?.id)
+    if (!cartData || !currentVariant?.items?.[0]?.id)
       return { exists: false, index: null as number | null };
 
     const index = cartData.items.findIndex(
-      (item) => item.variant.id === activeVariant.items?.[0]?.id
+      (item) => item.variant.id === currentVariant.items?.[0]?.id
     );
 
     return { exists: index !== -1, index: index !== -1 ? index : null };
@@ -224,10 +220,11 @@ const CartFooter = ({
               {variantItem && variantItem.profitPercentage && (
                 <div className="flex flex-wrap gap-2 mb-1">
                   <span className="text-[#fe9f00] text-2xs font-semibold">
-                    {currentCartItem?.unitDiscountAmount ?? variantItem.profitPercentage}% تخفیف
+                    {!currentCartItem?.totalDiscountAmount && variantItem.profitPercentage ? `${variantItem.profitPercentage} %   تخفیف` : `
+                    ${currentCartItem?.totalDiscountAmount} ${currency} تخفیف `}
                   </span>
                   <span className="text-xs text-white/70 line-through">
-                    {numberWithCommas(currentCartItem?.strikePrice ?? variantItem.regularPrice ?? 0)} {currency}
+                    {numberWithCommas(currentCartItem?.totalStrikePrice ?? variantItem.regularPrice ?? 0)} {currency}
                   </span>
                 </div>
               )}
