@@ -20,12 +20,12 @@ import { setProgressLoading } from "@/redux/stylesSlice";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 
 const CartFooter = ({
-  selectedVariant,
-  selectedVariants,
+  currentVariant,
+  selectedVariantLevels,
   productId,
 }: {
-  selectedVariant?: ProductVariant;
-  selectedVariants: SelectedVariantLevel[];
+  currentVariant?: ProductVariant;
+  selectedVariantLevels: SelectedVariantLevel[];
   productId: ProductDetailData['id'];
 }) => {
   const [cartData, setCartData] = useState<GetCartByProductIdType | null>(null);
@@ -69,9 +69,9 @@ const CartFooter = ({
     loadCartByProductId();
   }, []);
 
-  if (!selectedVariant?.items?.[0]) return null;
+  if (!currentVariant?.items?.[0]) return null;
 
-  const variantList = selectedVariants.map((v) => v.variant);
+  const variantList = selectedVariantLevels.map((v) => v.variant);
   const activeVariant = variantList.find((v) => v.items?.length);
   const variantItem = activeVariant?.items?.[0];
 

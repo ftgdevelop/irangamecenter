@@ -104,8 +104,8 @@ const VariantItem: React.FC<VariantItemProps> = ({
     if (currentVariant?.items?.[0]?.status !== "OutOfStock") {
       return (
         <CartFooter
-          selectedVariant={currentVariant}
-          selectedVariants={selectedVariantLevels}
+          currentVariant={currentVariant}
+          selectedVariantLevels={selectedVariantLevels}
           productId={productId}
         />
       );
