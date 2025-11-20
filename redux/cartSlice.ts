@@ -10,17 +10,13 @@ export const fetchCart = createAsyncThunk(
     const state = getState() as RootState;
     const deviceId = state.cart.deviceId;
     const currency = state.cart.currency;
-
-    if (!deviceId) {
-      return rejectWithValue("Device ID missing");
-    }
-
     try {
       const res = await axios.get<GetCurrentProductResponseType>(
         `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.GetCurrentCart}`,
         {
           headers: {
             "X-Device-Id": deviceId,
+            'apikey':"e8fad1497a1244f29f15cde4a242baf0",
             ...(currency && { Currency: currency }),
           },
         }

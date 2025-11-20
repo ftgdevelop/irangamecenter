@@ -12,38 +12,39 @@ export type SelectedVariantLevel = {
 };
 
 const VariantSection: React.FC<Props> = ({ productData }) => {
-  const [selectedVariants, setSelectedVariants] =
+  const [selectedVariantLevels, setSelectedVariantLevels] =
     useState<SelectedVariantLevel[]>([]);
 
   useEffect(() => {
-    if (productData.variants?.length) {
-      const first = productData.variants[0];
-      setSelectedVariants([{ variant: first, level: "0" }]);
+    const rootVariant = productData.variants?.[0];
+    if (rootVariant) {
+      setSelectedVariantLevels([{ variant: rootVariant, level: "0" }]);
     }
   }, [productData]);
 
   const handleSelectVariant = useCallback(
     (variant: ProductVariant, level: number) => {
-      setSelectedVariants((prev) => {
-        const existingLevelIndex = prev.findIndex(
-          (v) => v.variant.name === variant.name
+      setSelectedVariantLevels((prevLevels) => {
+        const index = prevLevels.findIndex(
+          (entry) => entry.variant.name === variant.name
         );
 
-        if (existingLevelIndex !== -1) {
-          const updated = [...prev];
-          updated[existingLevelIndex] = { variant, level: level.toString() };
+        const updatedLevel = { variant, level: level.toString() };
+
+        if (index !== -1) {
+          const updated = [...prevLevels];
+          updated[index] = updatedLevel;
           return updated;
-        } else {
-          return [...prev, { variant, level: level.toString() }];
         }
+
+        return [...prevLevels, updatedLevel];
       });
     },
     []
   );
 
-  const selectedVariant = selectedVariants[0]?.variant;
-  const selectedVariantIds = selectedVariants.map(s => s.variant.id)
-  
+  const rootSelectedVariant = selectedVariantLevels[0]?.variant;
+  const selectedVariantIds = selectedVariantLevels.map((s) => s.variant.id);
 
   return (
     <>
@@ -53,21 +54,23 @@ const VariantSection: React.FC<Props> = ({ productData }) => {
 
       <div className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip pb-3 pl-3">
         <div className="flex pr-4">
-          {productData.variants?.map((variantItem) => {
-            const isSelected = selectedVariant?.slug === variantItem.slug;
+          {productData.variants?.map((rootVariant) => {
+            const isSelected =
+              rootSelectedVariant?.slug === rootVariant.slug;
+
             return (
-              <div key={variantItem.slug} className="pl-3 last:pl-4">
+              <div key={rootVariant.slug} className="pl-3 last:pl-4">
                 <button
                   type="button"
+                  disabled={!rootVariant.slug}
+                  onClick={() => handleSelectVariant(rootVariant, 0)}
                   className={`shrink-0 rounded-xl whitespace-nowrap px-4 h-16 border-0 outline-none font-semibold py-3 ${
                     isSelected
                       ? "bg-gradient-green text-neutral-800"
                       : "bg-[#192a39]"
                   }`}
-                  disabled={!variantItem.slug}
-                  onClick={() => handleSelectVariant(variantItem, 0)}
                 >
-                  {variantItem.value}
+                  {rootVariant.value}
                 </button>
               </div>
             );
@@ -75,15 +78,15 @@ const VariantSection: React.FC<Props> = ({ productData }) => {
         </div>
       </div>
 
-      {selectedVariant && (
+      {rootSelectedVariant && (
         <VariantItem
-          variant={selectedVariant}
+          variantGroup={rootSelectedVariant}
           level="1"
-          setSelectedVariants={setSelectedVariants}
+          updateSelectedVariants={setSelectedVariantLevels}
           onSelectVariant={handleSelectVariant}
-          selectedVariants={selectedVariants}
+          selectedVariantLevels={selectedVariantLevels}
           selectedVariantIds={selectedVariantIds}
-          productData={productData}
+          product={productData}
         />
       )}
     </>
