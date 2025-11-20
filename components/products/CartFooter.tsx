@@ -22,11 +22,11 @@ import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 const CartFooter = ({
   selectedVariant,
   selectedVariants,
-  product,
+  productId,
 }: {
   selectedVariant?: ProductVariant;
   selectedVariants: SelectedVariantLevel[];
-  product: ProductDetailData;
+  productId: ProductDetailData['id'];
 }) => {
   const [cartData, setCartData] = useState<GetCartByProductIdType | null>(null);
   const [isAdding, setIsAdding] = useState(false);
@@ -56,7 +56,7 @@ const CartFooter = ({
 
     setIsFetching(true);
 
-    getCartByProductId( product.id)
+    getCartByProductId(productId)
       .then((res) => setCartData(res?.result || null))
       .catch(console.error)
       .finally(() => {

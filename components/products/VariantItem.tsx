@@ -18,7 +18,7 @@ type VariantItemProps = {
   updateSelectedVariants: Dispatch<SetStateAction<SelectedVariantLevel[]>>;
   selectedVariantLevels: SelectedVariantLevel[];
   selectedVariantIds: number[];
-  product: ProductDetailData;
+  productId: ProductDetailData['id'];
 };
 
 const VariantItem: React.FC<VariantItemProps> = ({
@@ -28,7 +28,7 @@ const VariantItem: React.FC<VariantItemProps> = ({
   updateSelectedVariants,
   selectedVariantLevels,
   selectedVariantIds,
-  product,
+  productId,
 }) => {
   const firstAvailableChild = useMemo(() => {
     return variantGroup?.children?.find(
@@ -96,7 +96,7 @@ const VariantItem: React.FC<VariantItemProps> = ({
           updateSelectedVariants={updateSelectedVariants}
           selectedVariantLevels={selectedVariantLevels}
           selectedVariantIds={selectedVariantIds}
-          product={product}
+          productId={productId}
         />
       );
     }
@@ -106,7 +106,7 @@ const VariantItem: React.FC<VariantItemProps> = ({
         <CartFooter
           selectedVariant={currentVariant}
           selectedVariants={selectedVariantLevels}
-          product={product}
+          productId={productId}
         />
       );
     }

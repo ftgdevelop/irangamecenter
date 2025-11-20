@@ -86,7 +86,7 @@ const VariantSection: React.FC<Props> = ({ productData }) => {
           onSelectVariant={handleSelectVariant}
           selectedVariantLevels={selectedVariantLevels}
           selectedVariantIds={selectedVariantIds}
-          product={productData}
+          productId={productData.id}
         />
       )}
     </>
