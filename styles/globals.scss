@@ -284,3 +284,11 @@ body {
   flex: 0 0 100%;
   min-width: 0;
 }
+
+@keyframes shrinkKeyframe {
+  from { width: 100%; }
+  to   { width: 0; }
+}
+.shrinkNimation {
+  animation: shrinkKeyframe 2s linear forwards;
+}

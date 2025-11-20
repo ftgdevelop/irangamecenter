@@ -1,49 +1,23 @@
 import { ProductDetailData, ProductVariant } from "@/types/commerce";
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import VariantItem from "./VariantItem";
 
 type Props = {
   productData: ProductDetailData;
 };
 
-export type SelectedVariantLevel = {
-  variant: ProductVariant;
-  level: string;
-};
+export type SelectedVariantLevel = ProductVariant | undefined;
+
 
 const VariantSection: React.FC<Props> = ({ productData }) => {
-  const [selectedVariants, setSelectedVariants] =
-    useState<SelectedVariantLevel[]>([]);
+  const [selectedVariantLevels, setSelectedVariantLevels] =
+    useState < SelectedVariantLevel[]>([ productData.variants?.[0]]);
 
-  useEffect(() => {
-    if (productData.variants?.length) {
-      const first = productData.variants[0];
-      setSelectedVariants([{ variant: first, level: "0" }]);
-    }
-  }, [productData]);
+  const handleSelectVariant = (variant: ProductVariant) => {
+    setSelectedVariantLevels([variant]);
+  };
 
-  const handleSelectVariant = useCallback(
-    (variant: ProductVariant, level: number) => {
-      setSelectedVariants((prev) => {
-        const existingLevelIndex = prev.findIndex(
-          (v) => v.variant.name === variant.name
-        );
-
-        if (existingLevelIndex !== -1) {
-          const updated = [...prev];
-          updated[existingLevelIndex] = { variant, level: level.toString() };
-          return updated;
-        } else {
-          return [...prev, { variant, level: level.toString() }];
-        }
-      });
-    },
-    []
-  );
-
-  const selectedVariant = selectedVariants[0]?.variant;
-  const selectedVariantIds = selectedVariants.map(s => s.variant.id)
-  
+  const rootSelectedVariant = selectedVariantLevels[0];
 
   return (
     <>
@@ -53,21 +27,22 @@ const VariantSection: React.FC<Props> = ({ productData }) => {
 
       <div className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip pb-3 pl-3">
         <div className="flex pr-4">
-          {productData.variants?.map((variantItem) => {
-            const isSelected = selectedVariant?.slug === variantItem.slug;
+          {productData.variants?.map((rootVariant) => {
+            const isSelected = rootSelectedVariant?.slug === rootVariant.slug;
+
             return (
-              <div key={variantItem.slug} className="pl-3 last:pl-4">
+              <div key={rootVariant.slug} className="pl-3 last:pl-4">
                 <button
                   type="button"
+                  disabled={!rootVariant.slug}
+                  onClick={() => handleSelectVariant(rootVariant)}
                   className={`shrink-0 rounded-xl whitespace-nowrap px-4 h-16 border-0 outline-none font-semibold py-3 ${
                     isSelected
                       ? "bg-gradient-green text-neutral-800"
                       : "bg-[#192a39]"
                   }`}
-                  disabled={!variantItem.slug}
-                  onClick={() => handleSelectVariant(variantItem, 0)}
                 >
-                  {variantItem.value}
+                  {rootVariant.value}
                 </button>
               </div>
             );
@@ -75,15 +50,10 @@ const VariantSection: React.FC<Props> = ({ productData }) => {
         </div>
       </div>
 
-      {selectedVariant && (
+      {rootSelectedVariant && (
         <VariantItem
-          variant={selectedVariant}
-          level="1"
-          setSelectedVariants={setSelectedVariants}
-          onSelectVariant={handleSelectVariant}
-          selectedVariants={selectedVariants}
-          selectedVariantIds={selectedVariantIds}
-          productData={productData}
+          variantGroup={rootSelectedVariant}
+          productId={productData.id}
         />
       )}
     </>
