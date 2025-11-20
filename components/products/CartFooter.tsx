@@ -1,0 +1,250 @@
+
+import {   GetCartByProductIdType, ProductDetailData, ProductVariant } from "@/types/commerce";
+import {
+  useEffect,
+  useState,
+} from "react";
+import {  ChevronLeft, Minus, Plus, Trash2 } from "lucide-react";
+
+import SimplePortal from "../shared/layout/SimplePortal";
+import { numberWithCommas } from "@/helpers";
+import { SelectedVariantLevel } from "./VariantSection";
+import { addDeviceId, addQuantity,  fetchCart,  removeQuantity } from "@/redux/cartSlice";
+import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
+import {  useCartApi } from "@/actions/cart";
+import Loading from "../icons/Loading";
+import Alert from "../shared/Alert";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { setProgressLoading } from "@/redux/stylesSlice";
+import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
+
+const CartFooter = ({
+  selectedVariant,
+  selectedVariants,
+  product,
+}: {
+  selectedVariant?: ProductVariant;
+  selectedVariants: SelectedVariantLevel[];
+  product: ProductDetailData;
+}) => {
+  const [cartData, setCartData] = useState<GetCartByProductIdType | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const router = useRouter();
+  const { getCartByProductId, addItem, removeItem } = useCartApi();
+
+
+  const dispatch = useAppDispatch();
+  const tempQuantity = useAppSelector((state) => state.cart.quantity);
+  const currencyStore = useAppSelector((state) => state.cart.currency);
+
+
+  const refreshCart = () => {
+    dispatch(fetchCart());
+  };
+
+  const loadCartByProductId = (
+    callbackOrObj?: (() => void) | { finallyAction?: () => void }
+  ) => {
+    const callback =
+      typeof callbackOrObj === "function"
+        ? callbackOrObj
+        : callbackOrObj?.finallyAction;
+
+    setIsFetching(true);
+
+    getCartByProductId( product.id)
+      .then((res) => setCartData(res?.result || null))
+      .catch(console.error)
+      .finally(() => {
+        setIsFetching(false);
+        callback?.();
+      });
+  };
+
+  useEffect(() => {
+    loadCartByProductId();
+  }, []);
+
+  if (!selectedVariant?.items?.[0]) return null;
+
+  const variantList = selectedVariants.map((v) => v.variant);
+  const activeVariant = variantList.find((v) => v.items?.length);
+  const variantItem = activeVariant?.items?.[0];
+
+  const currency =
+    getCurrencyLabelFa(cartData?.items?.[0]?.variant.currencyType )||
+    getCurrencyLabelFa(variantItem?.currencyType) || getCurrencyLabelFa(currencyStore)
+
+  const handleAddToCart = async () => {
+    const variantId = variantItem?.id;
+    if (!variantId) return;
+
+    dispatch(addQuantity());
+    setIsAdding(true);
+
+    try {
+      const res = await addItem(
+        { variantId, quantity: tempQuantity });
+      dispatch(addDeviceId(res?.result?.deviceId || ""));
+      dispatch(removeQuantity(tempQuantity));
+
+      loadCartByProductId(() => {
+        setIsAdding(false);
+        setShowSuccessAlert(true);
+        refreshCart()
+        setTimeout(() => setShowSuccessAlert(false), 4000);
+      });
+
+    } catch (err) {
+      console.error(err);
+      setIsAdding(false);
+    }
+  };
+
+  const handleRemoveFromCart = async () => {
+    if (!cartData?.items?.length) return;
+
+    const lastCartItem = cartData.items.at(-1);
+    if (!lastCartItem) return;
+
+    setIsRemoving(true);
+    try {
+      await removeItem({ Id: lastCartItem.id });
+      dispatch(removeQuantity(1));
+      refreshCart()
+      loadCartByProductId();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsRemoving(false);
+    }
+  };
+
+  const getCartStatus = () => {
+    if (!cartData || !activeVariant?.items?.[0]?.id)
+      return { exists: false, index: null as number | null };
+
+    const index = cartData.items.findIndex(
+      (item) => item.variant.id === activeVariant.items?.[0]?.id
+    );
+
+    return { exists: index !== -1, index: index !== -1 ? index : null };
+  };
+
+  const { exists, index } = getCartStatus();
+  const currentCartItem = exists && index !== null ? cartData?.items[index] : null;
+
+  return (
+    <>
+      {showSuccessAlert && (
+        <div className="fixed bottom-[100px] left-0 right-0 flex justify-center items-center px-4 transition-all duration-300 z-50">
+          <Alert closable autoClose duration={4000}>
+            <div className="flex flex-wrap gap-2 justify-between items-center text-sm">
+              <span className="text-gradient-logo-linear">
+                کالا به سبد اضافه شد!
+              </span>
+            <button
+              type="button"
+              className="w-fit h-full text-white flex items-end"
+              onClick={async (e) => {
+                e.preventDefault();
+                dispatch(setProgressLoading(true)); 
+                setShowSuccessAlert(false);
+                await router.push("/cart");
+                dispatch(setProgressLoading(false));
+              }}
+            >
+              <span>برو به سبد خرید</span>
+              <ChevronLeft className="inline-block mr-1" size={16} />
+            </button>
+            </div>
+          </Alert>
+        </div>
+      )}
+
+      <SimplePortal selector="fixed_bottom_portal">
+        <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 bg-[#192a39] px-4 py-3 flex flex-wrap max-[390px]:justify-center justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
+          {!!cartData?.items.length &&
+          cartData.totalQuantity &&
+          currentCartItem?.quantity ? (
+          <div className="flex items-center gap-2 h-13 bg-[#EFEFF0]/10 rounded-full max-[390px]:w-full max-[390px]:justify-between">
+              <button
+              className="bg-gradient-to-t from-green-600 to-green-300 hover:bg-gradient-to-tr flex justify-center items-center p-2 h-13 w-13 rounded-full"
+                onClick={handleAddToCart}
+              >
+                <Plus size={24} />
+              </button>
+
+              <span className="flex justify-center items-center w-[67px]  font-medium">
+                {isAdding || isRemoving || isFetching ? (
+                  <Loading className="fill-current w-5 h-5 animate-spin" />
+                ) : (
+                  currentCartItem?.quantity || 0
+                )}
+              </span>
+
+              <button
+                className="bg-gradient-to-r from-[#00B59C]/10 to-[#9CFFAC]/10 flex justify-center items-center p-2 h-13 w-13 rounded-full hover:bg-gray-600"
+                onClick={handleRemoveFromCart}
+                >
+                  {
+                    currentCartItem?.quantity  > 1 ? <Minus size={24} className="text-white/70" /> : <Trash2 size={24} className="text-white/70" />
+                  }
+              </button>
+            </div>
+          ) : (
+            isRemoving || isAdding || isFetching ? (
+              <div className="h-10 flex justify-center items-center px-6 bg-gradient-to-t from-green-600 to-green-300 rounded-full">
+                <Loading className="fill-current w-5 h-5 animate-spin" />
+              </div>
+            ) : (
+            <button
+              type="button"
+              onClick={handleAddToCart}
+              className="bg-violet-500 hover:bg-violet-600 text-white rounded-full px-4 py-3 text-xs flex gap-2 items-center font-semibold transition-all duration-200"
+            >
+              <Image
+                src="/images/icons/bag.svg"
+                alt="shopping bag"
+                width={24}
+                height={24}
+                className="w-6 h-6"
+              />
+              افزودن به سبد خرید
+            </button>
+          ))}
+
+          {((variantItem && variantItem.salePrice && variantItem.regularPrice) ||
+            (currentCartItem && currentCartItem.unitPrice)) && (
+            <div className="text-left text-white max-[390px]:w-full">
+              {variantItem && variantItem.profitPercentage && (
+                <div className="flex flex-wrap gap-2 mb-1">
+                  <span className="text-[#fe9f00] text-2xs font-semibold">
+                    {currentCartItem?.unitDiscountAmount ?? variantItem.profitPercentage}% تخفیف
+                  </span>
+                  <span className="text-xs text-white/70 line-through">
+                    {numberWithCommas(currentCartItem?.strikePrice ?? variantItem.regularPrice ?? 0)} {currency}
+                  </span>
+                </div>
+              )}
+
+              <b className="text-base font-semibold block">
+                {currency}{" "}
+                {numberWithCommas(
+                  currentCartItem?.totalPrice ?? variantItem?.salePrice ?? 0
+                )}
+              </b>
+            </div>
+          )}
+        </footer>
+        <div className="h-20" />
+      </SimplePortal>
+    </>
+  );
+};
+
+export default CartFooter;
