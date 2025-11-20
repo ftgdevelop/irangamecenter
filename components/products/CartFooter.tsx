@@ -46,6 +46,8 @@ const CartFooter = ({
   const loadCartByProductId = (
     callbackOrObj?: (() => void) | { finallyAction?: () => void }
   ) => {
+    const token = localStorage.getItem('Token');
+
     const callback =
       typeof callbackOrObj === "function"
         ? callbackOrObj
@@ -53,7 +55,7 @@ const CartFooter = ({
 
     setIsFetching(true);
 
-    getCartByProductId(productId)
+    getCartByProductId(productId, token)
       .then((res) => setCartData(res?.result || null))
       .catch(console.error)
       .finally(() => {
