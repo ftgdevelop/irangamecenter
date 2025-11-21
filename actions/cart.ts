@@ -63,21 +63,26 @@ export const useCartApi = () => {
     }
   };
 
-  const getCartByProductId = async (
-    productId: number
-  ): Promise<GetCartByProductIdResponseType> => {
-    try {
-      const res = await axios.get<GetCartByProductIdResponseType>(
-        `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.GetCartByProductId}?ProductId=${productId}`,
-        { headers: getHeaders() }
-      );
-      return res.data;
-    } catch (error) {
-      handleError(error, "getCartByProductId");
-      throw error;
+const getCartByProductId = async (
+  productId: number,
+  token?: string | null
+): Promise<GetCartByProductIdResponseType> => {
+  try {
+    const headers = { ...getHeaders() };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
     }
-  };
 
+    const res = await axios.get<GetCartByProductIdResponseType>(
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.GetCartByProductId}?ProductId=${productId}`,
+      { headers }
+    );
+    return res.data;
+  } catch (error) {
+    handleError(error, "getCartByProductId");
+    throw error;
+  }
+};
   const addItem = async (
     params: { variantId: number; quantity: number }
   ): Promise<CartResponse> => {
