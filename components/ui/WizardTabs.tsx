@@ -54,7 +54,7 @@ const WizardTabs: React.FC<TabsProps> = ({ items, activeTab, loading }) => {
             <p className="mt-4 text-sm text-gray-400">در حال بارگذاری...</p>
           </div>
         ) : (
-          visibleItems.map(
+          items.map(
             (item) =>
               activeTab === item.value && (
                 <div key={item.value} className="animate-fade-in w-full">

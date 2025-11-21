@@ -100,6 +100,11 @@ const ProfileSection = () => {
             emailAddress: userInfo?.emailAddress || '',
             phoneNumber: userInfo?.phoneNumber || ''
         }
+        
+        if (userInfo?.lastName && userInfo?.firstName && userInfo?.phoneNumber) {            
+            router.push("/cart");
+            return null;
+        }
     }
 
 

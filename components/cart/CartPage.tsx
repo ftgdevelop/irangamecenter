@@ -5,12 +5,11 @@ import ProfileSection from "@/components/cart/ProfileSection";
 import SimplePortal from "@/components/shared/layout/SimplePortal";
 import { numberWithCommas } from "@/helpers";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
-import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
+import {  useAppSelector } from "@/hooks/use-store";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import WizardTabs from "@/components/ui/WizardTabs";
-import { setOrderNumber } from "@/redux/cartSlice";
 import PaymentSection from "./PaymentSection";
 import ConfirmationSection from "./ConfirmationSection";
 
@@ -28,7 +27,6 @@ const CartPage = ({ tab }: CartPageProps) => {
   const userInfo = useAppSelector((state) => state.authentication.user);
   const getUserLoading = useAppSelector((state) => state.authentication.getUserLoading);
   const currencyStore = useAppSelector((state) => state.cart.currency);
-  const dispatch = useAppDispatch();
 
   const { createOrder } = useCartApi();
 
@@ -51,9 +49,7 @@ const CartPage = ({ tab }: CartPageProps) => {
 
       try {
         setIsSubmitting(true);
-        dispatch(setOrderNumber(undefined))
         await createOrder(token, userInfo);
-        router.push("/cart/payment");
       } catch (error) {
         console.error("Error creating order:", error);
       } finally {

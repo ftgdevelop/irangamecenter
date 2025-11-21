@@ -1,6 +1,5 @@
 import { Cart, ServerAddress } from "@/enum/url";
-import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
-import { setOrderNumber } from "@/redux/cartSlice";
+import {  useAppSelector } from "@/hooks/use-store";
 import { UpdateUserParams } from "@/types/authentication";
 import {
   CreateOrderResponseType,
@@ -9,6 +8,7 @@ import {
   ProductDetailData,
 } from "@/types/commerce";
 import axios, { AxiosError } from "axios";
+import { useRouter } from "next/router";
 
 export interface CartResponse {
   result?: {
@@ -31,8 +31,7 @@ export interface ApiError {
 export const useCartApi = () => {
   const deviceId = useAppSelector((state) => state.cart.deviceId);
   const currency = useAppSelector((state) => state.cart.currency);
-  const dispatch = useAppDispatch();
-
+  const router = useRouter();
   const getHeaders = (): Record<string, string> => {
     const headers: Record<string, string> = {};
     
@@ -137,12 +136,9 @@ const getCartByProductId = async (
         { headers: { ...getHeaders(), Authorization: `Bearer ${token}` } }
       );
       if (res.data?.result?.orderNumber) {
-        dispatch(setOrderNumber(res.data?.result?.orderNumber))
-        localStorage.setItem('orderNumber',res.data?.result?.orderNumber)
-      } else {
-        localStorage.setItem('orderNumber','')
-      }
-      
+        router.push(`/cart/payment?orderNumber=${res.data?.result?.orderNumber}`);
+
+      }     
       return res.data;
     } catch (error) {
       handleError(error, "createOrder");
