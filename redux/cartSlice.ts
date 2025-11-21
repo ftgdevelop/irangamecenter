@@ -38,6 +38,7 @@ export interface CartState {
   error?: string;
   lastItemIsChangedId: number | null;
   currency?: string;
+  orderNumber?: string;
 }
 
 const initialState: CartState = {
@@ -47,7 +48,8 @@ const initialState: CartState = {
   loading: false,
   error: undefined,
   lastItemIsChangedId: null,
-  currency: "IRR"
+  currency: "IRR",
+  orderNumber: undefined
 };
 
 const cartSlice = createSlice({
@@ -77,7 +79,10 @@ const cartSlice = createSlice({
     },
     setCurrency(state, action: PayloadAction<string>) {
       state.currency = action.payload;
-    }
+    },
+    setOrderNumber(state, action: PayloadAction<string | undefined>) {
+      state.orderNumber = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -102,7 +107,8 @@ export const {
   addQuantity,
   removeQuantity,
   setLastItemChangedId,
-  setCurrency
+  setCurrency,
+  setOrderNumber
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

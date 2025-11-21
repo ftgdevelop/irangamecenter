@@ -7,7 +7,7 @@ interface CartPageProps {
   tab: CartTab;
 }
 
-export default function CartTabPage(props: CartPageProps) {
+export default function CartTabPage(props: CartPageProps) {  
   return <CartPage tab={props.tab} />;
 }
 

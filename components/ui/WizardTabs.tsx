@@ -9,13 +9,12 @@ interface TabItem {
 
 interface TabsProps {
   items: TabItem[];
-  active?: string;
+  activeTab?: string;
   loading?: boolean;
 }
 
-const WizardTabs: React.FC<TabsProps> = ({ items, active, loading }) => {
+const WizardTabs: React.FC<TabsProps> = ({ items, activeTab, loading }) => {
   const visibleItems = items.filter((item) => item.show);
-  const activeTab = active || visibleItems[0]?.value;
 
   return (
     <div className="w-full">
@@ -27,7 +26,7 @@ const WizardTabs: React.FC<TabsProps> = ({ items, active, loading }) => {
             return (
               <li
                 key={item.value}
-                className="min-w-28 flex items-center pointer-events-none"
+                className="min-w-28 flex items-center justify-center pointer-events-none"
               >
                 {loading ? (
                   <div className="inline-block p-4 rounded-t-lg bg-gray-700/40 animate-pulse w-24 h-10" />

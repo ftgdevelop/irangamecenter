@@ -1,5 +1,6 @@
 import { Cart, ServerAddress } from "@/enum/url";
-import { useAppSelector } from "@/hooks/use-store";
+import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
+import { setOrderNumber } from "@/redux/cartSlice";
 import { UpdateUserParams } from "@/types/authentication";
 import {
   CreateOrderResponseType,
@@ -30,6 +31,7 @@ export interface ApiError {
 export const useCartApi = () => {
   const deviceId = useAppSelector((state) => state.cart.deviceId);
   const currency = useAppSelector((state) => state.cart.currency);
+  const dispatch = useAppDispatch();
 
   const getHeaders = (): Record<string, string> => {
     const headers: Record<string, string> = {};
@@ -129,6 +131,7 @@ export const useCartApi = () => {
         params || {},
         { headers: { ...getHeaders(), Authorization: `Bearer ${token}` } }
       );
+      if(res.data?.result?.orderNumber) dispatch(setOrderNumber(res.data?.result?.orderNumber))
       return res.data;
     } catch (error) {
       handleError(error, "createOrder");

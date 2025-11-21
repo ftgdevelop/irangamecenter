@@ -5,30 +5,20 @@ import ProfileSection from "@/components/cart/ProfileSection";
 import SimplePortal from "@/components/shared/layout/SimplePortal";
 import { numberWithCommas } from "@/helpers";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
-import { useAppSelector } from "@/hooks/use-store";
+import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import WizardTabs from "@/components/ui/WizardTabs";
+import { setOrderNumber } from "@/redux/cartSlice";
+import PaymentSection from "./PaymentSection";
+import ConfirmationSection from "./ConfirmationSection";
 
 export type CartTab = "cart" | "profile" | "payment" | "confirmation";
 
 interface CartPageProps {
   tab: CartTab;
 }
-
-const PaymentSection = () => (
-  <div>
-    <h2 className="text-xl font-semibold mb-2">پرداخت</h2>
-  </div>
-);
-
-const ConfirmationSection = () => (
-  <div>
-    <h2 className="text-xl font-semibold mb-2">تایید سفارش</h2>
-    <p>می‌توانید تنظیمات سفارش خود را در اینجا بررسی کنید.</p>
-  </div>
-);
 
 const CartPage = ({ tab }: CartPageProps) => {
   const router = useRouter();
@@ -38,14 +28,13 @@ const CartPage = ({ tab }: CartPageProps) => {
   const userInfo = useAppSelector((state) => state.authentication.user);
   const getUserLoading = useAppSelector((state) => state.authentication.getUserLoading);
   const currencyStore = useAppSelector((state) => state.cart.currency);
+  const dispatch = useAppDispatch();
 
   const { createOrder } = useCartApi();
 
-  // Local component state for active tab
   const [activeTab, setActiveTab] = useState<CartTab>(tab);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);  
 
-  // Sync tab when route changes
   useEffect(() => {
     setActiveTab(tab);
   }, [tab]);
@@ -62,6 +51,7 @@ const CartPage = ({ tab }: CartPageProps) => {
 
       try {
         setIsSubmitting(true);
+        dispatch(setOrderNumber(undefined))
         await createOrder(token, userInfo);
         router.push("/cart/payment");
       } catch (error) {
@@ -114,14 +104,14 @@ const CartPage = ({ tab }: CartPageProps) => {
       </Head>
 
       <div className="text-gray-900 dark:text-gray-100">
-        <WizardTabs items={tabItems} active={activeTab} loading={getUserLoading} />
+        <WizardTabs items={tabItems} activeTab={activeTab} loading={getUserLoading} />
       </div>
 
       {activeTab === "cart" &&
       cartGeneralInfo?.items &&
       cartGeneralInfo.items.length > 0 ? (
         <SimplePortal selector="fixed_bottom_portal">
-          <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 bg-[#192a39] px-4 py-3 flex flex-wrap justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
+          <footer className="min-h-20 fixed bottom-0 z-10 left-0 md:right-1/2 md:translate-x-1/2 bg-[#192a39] px-4 py-3 flex flex-wrap justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
             <button
               type="button"
               className="bg-violet-500 hover:bg-violet-600 text-white rounded-full px-[30px] py-[17px] max-[390px]:px-3 max-[390px]:text-sm flex gap-2 items-center font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
