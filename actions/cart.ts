@@ -136,7 +136,13 @@ const getCartByProductId = async (
         params || {},
         { headers: { ...getHeaders(), Authorization: `Bearer ${token}` } }
       );
-      if(res.data?.result?.orderNumber) dispatch(setOrderNumber(res.data?.result?.orderNumber))
+      if (res.data?.result?.orderNumber) {
+        dispatch(setOrderNumber(res.data?.result?.orderNumber))
+        localStorage.setItem('orderNumber',res.data?.result?.orderNumber)
+      } else {
+        localStorage.setItem('orderNumber','')
+      }
+      
       return res.data;
     } catch (error) {
       handleError(error, "createOrder");
