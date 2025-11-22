@@ -61,7 +61,7 @@ const CartPage = ({ tab }: CartPageProps) => {
   };
 
   const handleLoginSuccess = () => {
-    router.push("/cart/cart");
+    router.push("/cart");
   };
 
   const tabItems = [
