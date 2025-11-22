@@ -1,5 +1,11 @@
-import CartLayout, { CartRoutes } from "@/components/cart/CartLayout";
+import PaymentSection from "@/components/cart/PaymentSection";
+import Steps from "@/components/payment/Steps";
 
 export default function PaymentPage() {
-  return <CartLayout tab={CartRoutes.PAYMENT} />;
+  return (
+    <>
+      <Steps activeStepKey="payment" />
+      <PaymentSection />
+    </>
+  );
 }

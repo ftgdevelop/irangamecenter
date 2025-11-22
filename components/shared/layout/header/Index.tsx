@@ -16,7 +16,7 @@ type Props = {
         backToPrev?: boolean;
         withShare?: boolean;
         withLogo?: boolean;
-        isCart?: boolean;
+        hasCartLink?: boolean;
     }
 }
 
@@ -68,7 +68,7 @@ const Header: React.FC<Props> = props => {
             )}
             <div className="flex gap-5 w-[104px] justify-end items-center">
 
-                { props.type2Params?.isCart && (
+                { props.type2Params?.hasCartLink && (
                     <Link href='/cart' className="relative w-fit cursor-pointer">
                         <CartIcon className="w-8 h-8 fill-current" />
                         {!!cartGeneralInfo?.totalQuantity && (

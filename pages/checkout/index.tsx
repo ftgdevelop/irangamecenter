@@ -1,5 +1,11 @@
-import CartLayout, { CartRoutes } from "@/components/cart/CartLayout";
+import CheckoutSection from "@/components/cart/CheckoutSection";
+import Steps from "@/components/payment/Steps";
 
 export default function CheckoutPage() {
-  return <CartLayout tab={CartRoutes.CHECKOUT} />;
+  return (
+    <>
+      <Steps activeStepKey="checkout" />
+      <CheckoutSection />
+    </>
+  );
 }

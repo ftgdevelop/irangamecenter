@@ -19,19 +19,28 @@ export default function ForgetPassword() {
 
             <header className="relative p-4 mb-1">
                 <Link
-                    href="/"
-                    className="absolute right-7 w-6 h-6 top-1/2 -mt-3"
+                href={"/"}
+                className='block absolute right-7 top-1/2 -mt-3 w-6 h-6'
+                >
+                <button
+                    type="button"
+                    className="w-6 h-6"
                 >
                     <ArrowRight />
+                </button>
                 </Link>
-
+                <Link
+                href={"/"}
+                className='block mx-auto w-12 h-12'
+                >
                 <Image
                     src="/logo.svg"
                     alt="irangamecenter"
-                    width={50}
-                    height={50}
-                    className="block mx-auto"
+                    width={48}
+                    height={48}
+                    className="block w-12 h-12"
                 />
+                </Link>
             </header>
 
             <h3 className="font-semibold text-lg lg:text-xl text-[#ff7189] text-center mb-10"> فراموشی  کلمه عبور</h3>

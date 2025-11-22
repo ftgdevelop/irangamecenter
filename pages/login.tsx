@@ -6,6 +6,7 @@ import LoginWithPassword from '@/components/authentication/LoginWithPassword'
 import { useAppSelector } from '@/hooks/use-store'
 import Otp from '@/components/authentication/profile/OTP'
 import { useSearchParams } from "next/navigation";
+import Link from 'next/link'
 
 export default function Login() {
 
@@ -23,10 +24,6 @@ export default function Login() {
 
   const router = useRouter()
 
-  const backToHome = () => {
-    router.push('/')
-  }
-
   const isAuthenticated = useAppSelector(
     (state) => state.authentication.isAuthenticated,
   )
@@ -40,21 +37,29 @@ export default function Login() {
   return (
     <>
       <header className="relative p-4 mb-1">
-        <button
-          type="button"
-          className="absolute right-7 w-6 h-6 top-1/2 -mt-3"
-          onClick={backToHome}
+        <Link
+          href={"/"}
+          className='block absolute right-7 top-1/2 -mt-3 w-6 h-6'
         >
-          <ArrowRight />
-        </button>
-
-        <Image
-          src="/logo.svg"
-          alt="irangamecenter"
-          width={50}
-          height={50}
-          className="block mx-auto"
-        />
+          <button
+            type="button"
+            className="w-6 h-6"
+          >
+            <ArrowRight />
+          </button>
+        </Link>
+        <Link
+          href={"/"}
+          className='block mx-auto w-12 h-12'
+        >
+          <Image
+            src="/logo.svg"
+            alt="irangamecenter"
+            width={48}
+            height={48}
+            className="block w-12 h-12"
+          />
+        </Link>
       </header>
 
       {loginType === 'otp' ? (

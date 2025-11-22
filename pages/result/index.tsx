@@ -1,5 +1,11 @@
-import CartLayout, { CartRoutes } from "@/components/cart/CartLayout";
+import ResultSection from "@/components/cart/ResultSection";
+import Steps from "@/components/payment/Steps";
 
 export default function ResultPage() {
-  return <CartLayout tab={CartRoutes.RESULT} />;
+  return (
+    <>
+      <Steps activeStepKey="result" />
+      <ResultSection />
+    </>
+  );
 }
