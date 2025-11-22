@@ -1,4 +1,3 @@
-import { CartRoutes } from "@/components/cart/CartLayout";
 import { Cart, ServerAddress } from "@/enum/url";
 import {  useAppSelector } from "@/hooks/use-store";
 import { UpdateUserParams } from "@/types/authentication";
@@ -137,7 +136,7 @@ const getCartByProductId = async (
         { headers: { ...getHeaders(), Authorization: `Bearer ${token}` } }
       );
       if (res.data?.result?.orderNumber) {
-        router.push(`/${CartRoutes.PAYMENT}?orderNumber=${res.data?.result?.orderNumber}`);
+        router.push(`/payment?orderNumber=${res.data?.result?.orderNumber}`);
 
       }     
       return res.data;

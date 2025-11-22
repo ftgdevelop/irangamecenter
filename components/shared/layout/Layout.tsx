@@ -87,7 +87,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         backToPrev?: boolean;
         withShare?: boolean;
         withLogo?: boolean;
-        isCart?: boolean;
+        hasCartLink?: boolean;
     } | undefined = undefined;
 
     if (
@@ -173,7 +173,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             withShare: true,
             withLogo: true,
             backUrl: "/products",
-            isCart: true
+            hasCartLink: true
         };
         showFooter = true;
         showHeader = true;
@@ -194,9 +194,28 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     if (router.pathname === '/cart') {
         headerType2Params = {
             title: "",
-            withShare: true,
             withLogo: true,
-            backUrl: "/",
+            backToPrev: true
+        };
+        showFooter = false;
+        showHeader = true;
+        showFixedNav = false;
+    }
+    if (router.pathname === '/checkout' || router.pathname === '/payment') {
+        headerType2Params = {
+            title: "",
+            withLogo: true,
+            backUrl: "/cart",
+        };
+        showFooter = false;
+        showHeader = true;
+        showFixedNav = false;
+    }
+    if (router.pathname === "/result") {
+        headerType2Params = {
+            title: "",
+            withLogo: true,
+            backUrl: "/profile/orders",
         };
         showFooter = false;
         showHeader = true;

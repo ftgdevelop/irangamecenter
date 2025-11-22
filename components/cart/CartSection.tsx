@@ -27,11 +27,13 @@ const CartSection = () => {
         </div>
       )
     
-    const items = cartGeneralInfo && cartGeneralInfo.items;
+    const items = cartGeneralInfo?.items;
 
-    const renderCards = items &&  items.map((item) => item && cartGeneralInfo && <CartCard key={item.id} item={item} loading={loading} />);
+    const renderCards = items?.map((item) => item && cartGeneralInfo && <CartCard key={item.id} item={item} loading={loading} />);
     
-    return items && items.length > 0 && cartGeneralInfo ? <>
+    // TODO
+    //اینجا باید چک کنیم کی لودینگ دریافت دیتای کارت تموم شده، اگه دیتا رو نگرفته باشه (حتی اگه ریکوئست خطا بده هم باید پیغام مربوط به اون خطا رو نشون بدیم) پیام خالی بودن سبد خرید رو نشون ندیم.
+    return items?.length ? <>
       <div className="flex items-center justify-between gap-2.5">
 
         <div className="flex items-center gap-2.5">
