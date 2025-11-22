@@ -12,10 +12,9 @@ import {  useState } from "react";
 import PhoneInput from "../shared/PhoneInput";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { CartRoutes } from "./CartLayout";
 
-const ProfileSection = () => {
-
-
+const CheckoutSection = () => {
     const dispatch = useAppDispatch();
 
     const isAuthenticated = useAppSelector(
@@ -58,7 +57,7 @@ const ProfileSection = () => {
                 message: "اطلاعات با موفقیت ارسال شد",
                 isVisible: true
             }));
-            router.push("/cart");
+            router.push(`/${CartRoutes.CART}`);
 
             const response: any = await getCurrentUserProfile(token);
 
@@ -102,7 +101,7 @@ const ProfileSection = () => {
         }
         
         if (userInfo?.lastName && userInfo?.firstName && userInfo?.phoneNumber) {            
-            router.push("/cart");
+            router.push(`/${CartRoutes.CART}`);
             return null;
         }
     }
@@ -272,4 +271,4 @@ const ProfileSection = () => {
     )
 }
 
-export default ProfileSection
+export default CheckoutSection
