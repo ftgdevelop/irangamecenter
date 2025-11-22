@@ -80,8 +80,8 @@ const CartPage = ({ tab }: CartPageProps) => {
         <LoginSection onLoginSuccess={handleLoginSuccess} />
       ),
       show:
-        !isAuthenticated ||
-        !!(userInfo && !userInfo?.firstName && !userInfo?.lastName),
+        !!(userInfo && !userInfo?.firstName && !userInfo?.lastName) ||
+        !isAuthenticated,
     },
     { value: "payment", label: "پرداخت", component: <PaymentSection />, show: true },
     {
