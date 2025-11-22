@@ -53,21 +53,28 @@ const CartLayout = ({ tab }: CartLayoutProps) => {
     getCurrencyLabelFa(currencyStore);
 
   const handleCart = async () => {
-    if (isAuthenticated) {
-      const token =
-        typeof window !== "undefined" ? localStorage.getItem("Token") : null;
-      if (!token) return;
+    if (!isAuthenticated) {
+      router.push("/checkout");
+      return;
+    }
 
-      try {
-        setIsSubmitting(true);
-        await createOrder(token, userInfo);
-      } catch (error) {
-        console.error("Error creating order:", error);
-      } finally {
-        setIsSubmitting(false);
-      }
-    } else {
-      router.push(`/checkout`);
+    if (!userInfo || !userInfo.firstName || !userInfo.lastName) {
+      router.push("/checkout");
+      return;
+    }
+
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("Token") : null;
+
+    if (!token) return;
+
+    try {
+      setIsSubmitting(true);
+      await createOrder(token, userInfo);
+    } catch (error) {
+      console.error("Error creating order:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -88,9 +95,7 @@ const CartLayout = ({ tab }: CartLayoutProps) => {
       component: isAuthenticated
         ? <CheckoutSection />
         : <LoginSection onLoginSuccess={handleLoginSuccess} />,
-      show:
-        !!(userInfo && !userInfo?.firstName && !userInfo?.lastName) ||
-        !isAuthenticated,
+      show: !isAuthenticated || !!(userInfo && !userInfo?.firstName && !userInfo?.lastName) ,
     },
     {
       value: CartRoutes.PAYMENT,
