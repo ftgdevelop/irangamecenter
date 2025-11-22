@@ -11,6 +11,7 @@ import { Form, Formik } from "formik"
 import {  useState } from "react";
 import PhoneInput from "../shared/PhoneInput";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 const ProfileSection = () => {
 
@@ -21,6 +22,7 @@ const ProfileSection = () => {
         (state) => state.authentication.isAuthenticated,
     );
     const userInfo = useAppSelector((state) => state.authentication.user);
+    const router = useRouter();
 
 
     const [submitLoading, setSubmitLoading] = useState<boolean>(false);
@@ -56,6 +58,7 @@ const ProfileSection = () => {
                 message: "اطلاعات با موفقیت ارسال شد",
                 isVisible: true
             }));
+            router.push("/cart");
 
             const response: any = await getCurrentUserProfile(token);
 
@@ -96,6 +99,11 @@ const ProfileSection = () => {
             lastname: userInfo?.lastName || '',
             emailAddress: userInfo?.emailAddress || '',
             phoneNumber: userInfo?.phoneNumber || ''
+        }
+        
+        if (userInfo?.lastName && userInfo?.firstName && userInfo?.phoneNumber) {            
+            router.push("/cart");
+            return null;
         }
     }
 

@@ -1,5 +1,5 @@
 import { Cart, ServerAddress } from "@/enum/url";
-import { useAppSelector } from "@/hooks/use-store";
+import {  useAppSelector } from "@/hooks/use-store";
 import { UpdateUserParams } from "@/types/authentication";
 import {
   CreateOrderResponseType,
@@ -8,6 +8,7 @@ import {
   ProductDetailData,
 } from "@/types/commerce";
 import axios, { AxiosError } from "axios";
+import { useRouter } from "next/router";
 
 export interface CartResponse {
   result?: {
@@ -30,7 +31,7 @@ export interface ApiError {
 export const useCartApi = () => {
   const deviceId = useAppSelector((state) => state.cart.deviceId);
   const currency = useAppSelector((state) => state.cart.currency);
-
+  const router = useRouter();
   const getHeaders = (): Record<string, string> => {
     const headers: Record<string, string> = {};
     
@@ -134,6 +135,10 @@ const getCartByProductId = async (
         params || {},
         { headers: { ...getHeaders(), Authorization: `Bearer ${token}` } }
       );
+      if (res.data?.result?.orderNumber) {
+        router.push(`/cart/payment?orderNumber=${res.data?.result?.orderNumber}`);
+
+      }     
       return res.data;
     } catch (error) {
       handleError(error, "createOrder");

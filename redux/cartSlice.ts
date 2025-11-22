@@ -47,7 +47,7 @@ const initialState: CartState = {
   loading: false,
   error: undefined,
   lastItemIsChangedId: null,
-  currency: "IRR"
+  currency: "IRR",
 };
 
 const cartSlice = createSlice({
@@ -102,7 +102,7 @@ export const {
   addQuantity,
   removeQuantity,
   setLastItemChangedId,
-  setCurrency
+  setCurrency,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
