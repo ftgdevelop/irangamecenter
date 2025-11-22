@@ -362,7 +362,7 @@ const DetailProduct: NextPage<any> = ({
         <AgeRatingDetail productData={productData} />
       </div>
 
-      <VariantSection productData={productData} />
+      {!!productData.variants?.length && <VariantSection productId={productData.id} productVariants={productData.variants} />}
 
       {/* <hr/><hr/><hr/><hr/><hr/><hr/><hr/>
 
