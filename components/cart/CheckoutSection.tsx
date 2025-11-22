@@ -12,7 +12,7 @@ import {  useState } from "react";
 import PhoneInput from "../shared/PhoneInput";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { CartRoutes } from "./CartPage";
+import { CartRoutes } from "./CartLayout";
 
 const CheckoutSection = () => {
     const dispatch = useAppDispatch();

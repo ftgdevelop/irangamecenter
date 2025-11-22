@@ -1,5 +1,5 @@
-import CartPage, { CartRoutes } from "@/components/cart/CartPage";
+import CartLayout, { CartRoutes } from "@/components/cart/CartLayout";
 
-export default function CartIndexPage() {  
-  return <CartPage tab={CartRoutes.CART} />;
+export default function CartPage() {
+  return <CartLayout tab={CartRoutes.CART} />;
 }

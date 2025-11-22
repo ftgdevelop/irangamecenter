@@ -4,14 +4,14 @@ import LoginSection from "@/components/cart/LoginSection";
 import SimplePortal from "@/components/shared/layout/SimplePortal";
 import { numberWithCommas } from "@/helpers";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
-import {  useAppSelector } from "@/hooks/use-store";
-import Head from "next/head";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useAppSelector } from "@/hooks/use-store";
 import WizardTabs from "@/components/ui/WizardTabs";
 import PaymentSection from "./PaymentSection";
 import ResultSection from "./ResultSection";
 import CheckoutSection from "./CheckoutSection";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 export enum CartRoutes {
   CART = "cart",
@@ -20,13 +20,17 @@ export enum CartRoutes {
   RESULT = "result",
 }
 
-export type CartTab = CartRoutes.CART | CartRoutes.CHECKOUT | CartRoutes.PAYMENT | CartRoutes.RESULT;
+export type CartTab =
+  | CartRoutes.CART
+  | CartRoutes.CHECKOUT
+  | CartRoutes.PAYMENT
+  | CartRoutes.RESULT;
 
-interface CartPageProps {
+interface CartLayoutProps {
   tab: CartTab;
 }
 
-const CartPage = ({ tab }: CartPageProps) => {
+const CartLayout = ({ tab }: CartLayoutProps) => {
   const router = useRouter();
 
   const { cartGeneralInfo } = useAppSelector((state) => state.cart);
@@ -50,7 +54,8 @@ const CartPage = ({ tab }: CartPageProps) => {
 
   const handleCart = async () => {
     if (isAuthenticated) {
-      const token = typeof window !== "undefined" ? localStorage.getItem("Token") : null;
+      const token =
+        typeof window !== "undefined" ? localStorage.getItem("Token") : null;
       if (!token) return;
 
       try {
@@ -62,29 +67,27 @@ const CartPage = ({ tab }: CartPageProps) => {
         setIsSubmitting(false);
       }
     } else {
-      router.push(`/${CartRoutes.CART}/${CartRoutes.CHECKOUT}`);
+      router.push(`/checkout`);
     }
   };
 
   const handleLoginSuccess = () => {
-    router.push(`/${CartRoutes.CART}`);
+    router.push(`/cart`);
   };
 
   const tabItems = [
     {
       value: CartRoutes.CART,
       label: "سبد خرید",
-      component: <CartSection />, 
+      component: <CartSection />,
       show: true,
     },
     {
       value: CartRoutes.CHECKOUT,
       label: "اطلاعات کاربر",
-      component: isAuthenticated ? (
-        <CheckoutSection />
-      ) : (
-        <LoginSection onLoginSuccess={handleLoginSuccess} />
-      ),
+      component: isAuthenticated
+        ? <CheckoutSection />
+        : <LoginSection onLoginSuccess={handleLoginSuccess} />,
       show:
         !!(userInfo && !userInfo?.firstName && !userInfo?.lastName) ||
         !isAuthenticated,
@@ -92,7 +95,7 @@ const CartPage = ({ tab }: CartPageProps) => {
     {
       value: CartRoutes.PAYMENT,
       label: "پرداخت",
-      component: <PaymentSection />, 
+      component: <PaymentSection />,
       show: true,
     },
     {
@@ -106,22 +109,20 @@ const CartPage = ({ tab }: CartPageProps) => {
   return (
     <>
       <Head>
-        <title key="title">سبد خرید | فروشگاه</title>
-        <meta key="description" name="description" content="سبد خرید فروشگاه" />
+        <title>سبد خرید | فروشگاه</title>
       </Head>
 
-      <div className="text-gray-900 dark:text-gray-100">
-        <WizardTabs items={tabItems} activeTab={activeTab} loading={getUserLoading} />
-      </div>
+      <WizardTabs items={tabItems} activeTab={activeTab} loading={getUserLoading} />
 
       {activeTab === CartRoutes.CART &&
       cartGeneralInfo?.items &&
       cartGeneralInfo.items.length > 0 ? (
         <SimplePortal selector="fixed_bottom_portal">
           <footer className="min-h-20 fixed bottom-0 z-10 left-0 md:right-1/2 md:translate-x-1/2 bg-[#192a39] px-4 py-3 flex flex-wrap justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
+
             <button
               type="button"
-              className="bg-violet-500 hover:bg-violet-600 text-white rounded-full px-[30px] py-[17px] max-[390px]:px-3 max-[390px]:text-sm flex gap-2 items-center font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-violet-500 hover:bg-violet-600 text-white rounded-full px-[30px] py-[17px] flex gap-2 items-center font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleCart}
               disabled={isSubmitting}
             >
@@ -131,7 +132,8 @@ const CartPage = ({ tab }: CartPageProps) => {
             <div className="flex flex-col gap-2">
               <span className="text-sm text-gray-300 ml-2">مبلغ قابل پرداخت</span>
               <span className="font-bold text-lg">
-                {numberWithCommas(cartGeneralInfo?.payableAmount) || 0} {currency}
+                {numberWithCommas(cartGeneralInfo?.payableAmount) || 0}{" "}
+                {currency}
               </span>
             </div>
           </footer>
@@ -142,4 +144,4 @@ const CartPage = ({ tab }: CartPageProps) => {
   );
 };
 
-export default CartPage;
+export default CartLayout;
