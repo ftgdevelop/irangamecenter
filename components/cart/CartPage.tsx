@@ -1,7 +1,6 @@
 import { useCartApi } from "@/actions/cart";
 import CartSection from "@/components/cart/CartSection";
 import LoginSection from "@/components/cart/LoginSection";
-import ProfileSection from "@/components/cart/ProfileSection";
 import SimplePortal from "@/components/shared/layout/SimplePortal";
 import { numberWithCommas } from "@/helpers";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
@@ -11,9 +10,17 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import WizardTabs from "@/components/ui/WizardTabs";
 import PaymentSection from "./PaymentSection";
-import ConfirmationSection from "./ConfirmationSection";
+import ResultSection from "./ResultSection";
+import CheckoutSection from "./CheckoutSection";
 
-export type CartTab = "cart" | "profile" | "payment" | "confirmation";
+export enum CartRoutes {
+  CART = "cart",
+  CHECKOUT = "checkout",
+  PAYMENT = "payment",
+  RESULT = "result",
+}
+
+export type CartTab = CartRoutes.CART | CartRoutes.CHECKOUT | CartRoutes.PAYMENT | CartRoutes.RESULT;
 
 interface CartPageProps {
   tab: CartTab;
@@ -31,7 +38,7 @@ const CartPage = ({ tab }: CartPageProps) => {
   const { createOrder } = useCartApi();
 
   const [activeTab, setActiveTab] = useState<CartTab>(tab);
-  const [isSubmitting, setIsSubmitting] = useState(false);  
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     setActiveTab(tab);
@@ -40,7 +47,6 @@ const CartPage = ({ tab }: CartPageProps) => {
   const currency =
     getCurrencyLabelFa(cartGeneralInfo?.items?.[0]?.variant.currencyType) ||
     getCurrencyLabelFa(currencyStore);
-
 
   const handleCart = async () => {
     if (isAuthenticated) {
@@ -56,26 +62,26 @@ const CartPage = ({ tab }: CartPageProps) => {
         setIsSubmitting(false);
       }
     } else {
-      router.push("/cart/profile");
+      router.push(`/${CartRoutes.CART}/${CartRoutes.CHECKOUT}`);
     }
   };
 
   const handleLoginSuccess = () => {
-    router.push("/cart");
+    router.push(`/${CartRoutes.CART}`);
   };
 
   const tabItems = [
     {
-      value: "cart",
+      value: CartRoutes.CART,
       label: "سبد خرید",
-      component: <CartSection />,
+      component: <CartSection />, 
       show: true,
     },
     {
-      value: "profile",
+      value: CartRoutes.CHECKOUT,
       label: "اطلاعات کاربر",
       component: isAuthenticated ? (
-        <ProfileSection />
+        <CheckoutSection />
       ) : (
         <LoginSection onLoginSuccess={handleLoginSuccess} />
       ),
@@ -83,11 +89,16 @@ const CartPage = ({ tab }: CartPageProps) => {
         !!(userInfo && !userInfo?.firstName && !userInfo?.lastName) ||
         !isAuthenticated,
     },
-    { value: "payment", label: "پرداخت", component: <PaymentSection />, show: true },
     {
-      value: "confirmation",
+      value: CartRoutes.PAYMENT,
+      label: "پرداخت",
+      component: <PaymentSection />, 
+      show: true,
+    },
+    {
+      value: CartRoutes.RESULT,
       label: "تایید سفارش",
-      component: <ConfirmationSection />,
+      component: <ResultSection />,
       show: true,
     },
   ];
@@ -103,7 +114,7 @@ const CartPage = ({ tab }: CartPageProps) => {
         <WizardTabs items={tabItems} activeTab={activeTab} loading={getUserLoading} />
       </div>
 
-      {activeTab === "cart" &&
+      {activeTab === CartRoutes.CART &&
       cartGeneralInfo?.items &&
       cartGeneralInfo.items.length > 0 ? (
         <SimplePortal selector="fixed_bottom_portal">

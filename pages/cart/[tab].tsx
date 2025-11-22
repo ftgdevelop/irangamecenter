@@ -1,7 +1,6 @@
-import CartPage from "@/components/cart/CartPage";
+import CartPage, { CartRoutes, CartTab } from "@/components/cart/CartPage";
 import { GetStaticProps, GetStaticPaths } from "next";
 
-type CartTab = "cart" | "profile" | "payment" | "confirmation";
 
 interface CartPageProps {
   tab: CartTab;
@@ -13,10 +12,10 @@ export default function CartTabPage(props: CartPageProps) {
 
 export const getStaticPaths: GetStaticPaths = () => ({
   paths: [
-    { params: { tab: "cart" } },
-    { params: { tab: "profile" } },
-    { params: { tab: "payment" } },
-    { params: { tab: "confirmation" } },
+    { params: { tab: CartRoutes.CART } },
+    { params: { tab: CartRoutes.CHECKOUT } },
+    { params: { tab: CartRoutes.PAYMENT } },
+    { params: { tab: CartRoutes.RESULT } },
   ],
   fallback: false,
 });
