@@ -71,15 +71,15 @@ export default function CartPage() {
 
             <button
               type="button"
-              className="bg-violet-500 hover:bg-violet-600 text-white rounded-full px-[30px] py-[17px] flex gap-2 items-center font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-violet-500 hover:bg-violet-600 text-white rounded-full px-4 py-3 text-xs flex gap-2 items-center font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleCart}
               disabled={isSubmitting}
             >
               {isSubmitting ? "در حال ثبت..." : "تایید و ثبت سفارش"}
             </button>
 
-            <div className="flex flex-col gap-2">
-              <span className="text-sm text-gray-300 ml-2">مبلغ قابل پرداخت</span>
+            <div className="flex flex-col gap-1.5">
+              <span className="text-sm text-gray-300">مبلغ قابل پرداخت</span>
               <span className="font-bold text-lg">
                 {numberWithCommas(cartGeneralInfo?.payableAmount) || 0}{" "}
                 {currency}

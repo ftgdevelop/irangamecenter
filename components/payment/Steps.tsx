@@ -33,7 +33,7 @@ const Steps: React.FC<Props> = props => {
             {items.map(item => (
                 <div
                     key={item.key}
-                    className={`p-4 border-b-2 ${item.key === props.activeStepKey ? "text-[#aa3aff] border-[#aa3aff]" : "text-gray-400 border-transparent"}`}
+                    className={`py-3 px-2 border-b-2 ${item.key === props.activeStepKey ? "text-[#aa3aff] border-[#aa3aff]" : "text-gray-400 border-transparent"}`}
                 >
                     {item.label}
                 </div>

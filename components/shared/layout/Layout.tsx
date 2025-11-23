@@ -81,6 +81,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     let showHeader = true;
     let showFooter = true;
     let showFixedNav = true;
+    let hasInternalFixedFooter = false;
     let headerType2Params: {
         title: string;
         backUrl?: string;
@@ -178,6 +179,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         showFooter = true;
         showHeader = true;
         showFixedNav = false;
+        hasInternalFixedFooter = true;
     }
 
     if (router.pathname === "/categories"){
@@ -200,6 +202,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         showFooter = false;
         showHeader = true;
         showFixedNav = false;
+        hasInternalFixedFooter = true;
     }
     if (router.pathname === '/checkout' || router.pathname === '/payment') {
         headerType2Params = {
@@ -210,6 +213,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         showFooter = false;
         showHeader = true;
         showFixedNav = false;
+        hasInternalFixedFooter = true;
     }
     if (router.pathname === "/result") {
         headerType2Params = {
@@ -279,6 +283,20 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         headerType2 = headerType2ParamsFromRedux;
     }
 
+    let mainHeightClass : string = "";
+    if(showFooter){
+         mainHeightClass = "";
+    }else if (showFixedNav || hasInternalFixedFooter){
+        if(showHeader){
+            mainHeightClass = "min-h-screen-nav-header";
+        }else{
+            mainHeightClass = "min-h-screen-nav";
+        }
+    }else if(showHeader){
+        mainHeightClass = "min-h-screen-header";
+    }else{
+          mainHeightClass = "min-h-screen";
+    }
     return (
         <>
             <Error />
@@ -290,7 +308,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
                     <div className="mt-[84px]" />
                 </>}
                 <main 
-                    className={showFooter ? "" : showFixedNav ? "min-h-screen-nav" : "min-h-screen"}
+                    className={mainHeightClass}
                     style={{
                         position: (!isBodyScrollable && lastScrollPosition) ?"relative": "static",
                         top: -lastScrollPosition+"px"
