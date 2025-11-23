@@ -13,6 +13,8 @@ import PhoneInput from "../shared/PhoneInput";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import LoginSection from "./LoginSection";
+import { useCartApi } from "@/actions/cart";
+import LoadingFull from "../shared/LoadingFull";
 
 const CheckoutSection = () => {
     const dispatch = useAppDispatch();
@@ -22,8 +24,11 @@ const CheckoutSection = () => {
     );
     const userInfo = useAppSelector((state) => state.authentication.user);
     const router = useRouter();
+    const { createOrder } = useCartApi();
+    
 
     const [submitLoading, setSubmitLoading] = useState<boolean>(false);
+    const [submitLoadingCreateOrder, setSubmitLoadingCreateOrder] = useState<boolean>(false);
 
 
     const submitHandler = async (parameters: {
@@ -98,15 +103,36 @@ const CheckoutSection = () => {
         }        
     }
 
+    const handleCreateOrder = async () => {
+
+        if (!userInfo || !userInfo.lastName) {
+        router.push("/checkout");
+        return;
+        }
+
+        const token = typeof window !== "undefined" ? localStorage.getItem("Token") : null;
+
+        if (!token) return;
+
+        try {
+        setSubmitLoadingCreateOrder(true);
+        await createOrder(token, userInfo);
+        } catch (error) {
+        console.error("Error creating order:", error);
+        } finally {
+        setSubmitLoadingCreateOrder(false);
+        }
+    };
 
     useEffect(()=>{
         if(userInfo?.lastName && userInfo.isPhoneNumberConfirmed){
-            // TODO
-            //اینجا orderNumber اصلاح بشه
-            router.push(`/payment?orderNumber=IGC-251122-247302`);
-
+            handleCreateOrder()
         }
-    },[userInfo?.lastName]);
+    }, [userInfo?.lastName]);
+    
+    if (submitLoadingCreateOrder) {
+        return <LoadingFull /> 
+    }
     
     if(!isAuthenticated){
         return( 

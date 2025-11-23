@@ -135,9 +135,11 @@ const getCartByProductId = async (
         params || {},
         { headers: { ...getHeaders(), Authorization: `Bearer ${token}` } }
       );
-      if (res.data?.result?.orderNumber) {
-        router.push(`/payment?orderNumber=${res.data?.result?.orderNumber}`);
+      const orderId = res.data?.result?.id
+      const orderNumber = res.data?.result?.orderNumber
 
+      if (orderNumber && orderId) {
+        router.push(`/payment?orderNumber=${orderNumber}&orderId=${orderId}`);
       }     
       return res.data;
     } catch (error) {
