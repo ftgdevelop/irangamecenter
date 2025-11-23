@@ -11,7 +11,7 @@ import { useState } from "react";
 
 export default function CartPage() {
 
-  const { cartGeneralInfo } = useAppSelector((state) => state.cart);
+  const { cartGeneralInfo, loading } = useAppSelector((state) => state.cart);
   const userInfo = useAppSelector((state) => state.authentication.user);
   const getUserLoading = useAppSelector((state) => state.authentication.getUserLoading);
   const currencyStore = useAppSelector((state) => state.cart.currency);
@@ -55,10 +55,7 @@ export default function CartPage() {
       <Steps activeStepKey="cart" />
 
       <div className="p-4">
-        {/* TODO */}
-        {/* اینجا هم باید لودینگ دریافت اطلاعات کارت رو هم در نظر بگیریم */}
-        {/*  getUserLoading || getCartLOading... ?  */}
-        {getUserLoading ? (
+        {getUserLoading || loading ? (
           <div className="flex flex-col items-center justify-center">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#aa3aff]" />
             <p className="mt-4 text-sm text-gray-400">در حال بارگذاری...</p>
