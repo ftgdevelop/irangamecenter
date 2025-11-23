@@ -77,7 +77,8 @@ const CartFooter = ({
     getCurrencyLabelFa(cartData?.items?.[0]?.variant.currencyType )||
     getCurrencyLabelFa(variantItem?.currencyType) || getCurrencyLabelFa(currencyStore)
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = async () => {    
+    setShowSuccessAlert(false);
     const variantId = variantItem?.id;
     if (!variantId) return;
 
