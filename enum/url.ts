@@ -55,10 +55,10 @@ export const Payment = {
   GetDepositBankGateway:"/api/services/app/UserDepositBankGateway/GetAll",
   MakeDepositToken:"/api/services/app/UserDepositBankGateway/MakeToken",
   GetTransactionDeposit:"/api/services/app/TransactionDeposit/GetAll",
-
+  GetBankGateways:"/api/services/app/ReserveBankGateway/GetAll",
+  
   // ValidateDiscountCode:"/api/services/app/Discount/Validate",
   // RegisterDiscountCode: "/api/services/app/Discount/Register",
-  // GetBankGateway:"/api/services/app/ReserveBankGateway/GetAll",
   // MakeToken:"/api/services/app/ReserveBankGateway/MakeToken",
   // ConfirmByDeposit:"/api/services/app/DepositReserve/ConfirmByDeposit"
 };
@@ -76,7 +76,8 @@ export const Payment = {
     GetBySlug:"/api/services/app/Product/GetBySlug",
     GetBrandBySlug:"/api/services/app/Brand/GetBySlug",
     GetAllForSiteMap:"/api/services/app/Product/GetAllForSiteMap",
-    GetSimilar:"/api/services/app/Product/GetSimilar"
+    GetSimilar:"/api/services/app/Product/GetSimilar",
+    GetOrderById:"/api/services/app/Order/Get"
   }
   
 

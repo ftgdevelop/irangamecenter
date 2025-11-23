@@ -1,6 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { Commerce, ServerAddress } from "@/enum/url";
+import { Commerce, Headers, ServerAddress } from "@/enum/url";
 import { GetAllProductsParams } from "@/types/commerce";
 import axios from "axios";
 
@@ -117,3 +117,23 @@ export type ProductSortOption = {
     keywords: ProductSortKeywords;
 }
 
+export const getOrderById = async (params: { id: number; token?: string; currency?:string; }, acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
+
+    try {
+        const response: any = await axios({
+            method: "get",
+            url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetOrderById}?Id=${params.id}`,
+            headers: {
+                ...Headers,
+                Currency: params.currency || "IRR",
+                Authorization: `Bearer ${params.token}`,
+                "Accept-Language": acceptLanguage || "en-US",
+                apikey: apikey,
+                tenantid: 7
+            }
+        });
+        return (response)
+    } catch (error: any) {
+        return error
+    }
+}
