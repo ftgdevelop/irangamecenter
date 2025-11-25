@@ -1,5 +1,7 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import { Cart, ServerAddress } from "@/enum/url";
-import {  useAppSelector } from "@/hooks/use-store";
+import { useAppSelector } from "@/hooks/use-store";
 import { UpdateUserParams } from "@/types/authentication";
 import {
   CreateOrderResponseType,
@@ -32,13 +34,17 @@ export const useCartApi = () => {
   const deviceId = useAppSelector((state) => state.cart.deviceId);
   const currency = useAppSelector((state) => state.cart.currency);
   const router = useRouter();
-  const getHeaders = (): Record<string, string> => {
-    const headers: Record<string, string> = {};
-    
-    headers['apikey'] = "e8fad1497a1244f29f15cde4a242baf0";
 
-    if (currency) headers["Currency"] = currency;
+  const getHeaders = (): Record<string, string> => {
+
+    const token = localStorage.getItem("Token");
+
+    const headers: Record<string, string> = {};
+    headers['tenantid'] = '1040';
+    headers['apikey'] = "e8fad1497a1244f29f15cde4a242baf0";
+    headers["Currency"] = currency || "IRR";
     if (deviceId) headers["X-Device-Id"] = deviceId;
+    if(token) headers["Authorization"] =  `Bearer ${token}`;
 
     return headers
   };
@@ -63,18 +69,12 @@ export const useCartApi = () => {
   };
 
 const getCartByProductId = async (
-  productId: number,
-  token?: string | null
+  productId: number
 ): Promise<GetCartByProductIdResponseType> => {
   try {
-    const headers = { ...getHeaders() };
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
-    }
-
     const res = await axios.get<GetCartByProductIdResponseType>(
       `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.GetCartByProductId}?ProductId=${productId}`,
-      { headers }
+      { headers: getHeaders() }
     );
     return res.data;
   } catch (error) {
@@ -82,14 +82,18 @@ const getCartByProductId = async (
     throw error;
   }
 };
+
   const addItem = async (
-    params: { variantId: number; quantity: number }
+    params: { variantId: number;}
   ): Promise<CartResponse> => {
     try {
       const res = await axios.post<CartResponse>(
         `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.AddItem}`,
-        params,
-        { headers: getHeaders() }
+        {
+          variantId: params.variantId,
+          quantity:1
+         },
+        { headers: getHeaders()}
       );
       return res.data;
     } catch (error) {
@@ -126,14 +130,13 @@ const getCartByProductId = async (
   };
 
   const createOrder = async (
-    token: string,
     params?: UpdateUserParams
   ): Promise<CreateOrderResponseType> => {
     try {
       const res = await axios.post<CreateOrderResponseType>(
         `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.CreateOrder}`,
         params || {},
-        { headers: { ...getHeaders(), Authorization: `Bearer ${token}` } }
+        { headers: getHeaders()}
       );
       const orderId = res.data?.result?.id
       const orderNumber = res.data?.result?.orderNumber
@@ -154,6 +157,6 @@ const getCartByProductId = async (
     addItem,
     removeItem,
     clearCart,
-    createOrder,
+    createOrder
   };
 };

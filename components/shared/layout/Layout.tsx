@@ -13,7 +13,8 @@ import FooterNavigation from "./footer/FooterNavigation";
 import { getUserBalance } from "@/actions/payment";
 import PageLoadingBar from "./PageLoadingBar";
 import { setProgressLoading } from "@/redux/stylesSlice";
-import { fetchCart } from "@/redux/cartSlice";
+import { addDeviceId, fetchCart } from "@/redux/cartSlice";
+import { GetCookieDeviceId } from "@/helpers/order";
 
 type Props = {
     className?: string;
@@ -26,15 +27,26 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     const dispatch = useAppDispatch();
 
     const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
+    const userLoading = useAppSelector(state => state.authentication.getUserLoading);
 
     const isBodyScrollable = useAppSelector(state => state?.styles?.bodyScrollable);
     const lastScrollPosition = useAppSelector(state => state?.styles?.lastScrollPosition);
     const deviceId = useAppSelector((state) => state.cart.deviceId);
+    
+    useEffect(()=>{
+        const id = GetCookieDeviceId();
+        if(id){
+            dispatch(addDeviceId(id));
+        }
+    },[]);
+    
 
     useEffect(() => {
-        dispatch(fetchCart());
+        if(!userLoading){            
+            dispatch(fetchCart());
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [deviceId]);
+    }, [deviceId, userLoading]);
 
     useEffect(() => {
         if (isBodyScrollable && lastScrollPosition) {
@@ -204,7 +216,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         showFixedNav = false;
         hasInternalFixedFooter = true;
     }
-    if (router.pathname === '/checkout' || router.pathname === '/payment') {
+    if (router.pathname === '/payment') {
         headerType2Params = {
             title: "",
             withLogo: true,
@@ -215,6 +227,19 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         showFixedNav = false;
         hasInternalFixedFooter = true;
     }
+    
+    if (router.pathname === '/checkout') {
+        headerType2Params = {
+            title: "",
+            withLogo: true,
+            backUrl: "/cart",
+        };
+        showFooter = false;
+        showHeader = true;
+        showFixedNav = false;
+        hasInternalFixedFooter = false;
+    }
+
     if (router.pathname === "/result") {
         headerType2Params = {
             title: "",

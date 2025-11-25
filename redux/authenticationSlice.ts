@@ -13,7 +13,7 @@ type Authentication = {
 
 const initialState: Authentication = {
     isAuthenticated: false,
-    getUserLoading: false,
+    getUserLoading: true,
     user: undefined,
     balance: undefined,
     balanceLoading: false,

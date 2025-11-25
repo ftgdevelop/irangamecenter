@@ -4,6 +4,7 @@ import { useAppSelector } from "@/hooks/use-store";
 import Image from "next/image";
 import Link from "next/link";
 import CartCard from "./CartCard";
+import Skeleton from "../shared/Skeleton";
 
 const CartSection = () => {
   const { cartGeneralInfo, loading, error } = useAppSelector((state) => state.cart);
@@ -15,42 +16,72 @@ const CartSection = () => {
 
   const items = cartGeneralInfo?.items;
 
-  const shouldShowEmpty =
-    !loading && (!cartGeneralInfo || !Array.isArray(items) || items.length === 0);
+  if (loading) {
+    return [1, 2].map((x) => (
+      <div className="mt-3" key={x}>
+        <Skeleton className="h-3 w-24 mb-5" dark />
+        <div className="flex gap-5 mb-5">
+          <Skeleton type="image" dark className="rounded-2xl w-28 h-28" />
+          <div className="pt-4">
+            <Skeleton className="h-3 w-32 mb-5" dark />
+            <Skeleton className="h-3 w-24 mb-3" dark />
+            <Skeleton className="h-3 w-24 mb-3" dark />
+          </div>
+        </div>
+        <div className="flex justify-between">
+          <Skeleton className="h-8 w-36" dark />
+          <Skeleton className="h-3 w-24 mb-3" dark />
+        </div>
+        <hr className="my-6 border-[#192b39]/50"/>
+      </div>
+    ));
+  }
 
-  const shouldShowError = !loading && error;
+  if(!loading && error){
+    return(
+      <div className="flex flex-col justify-center items-center ">
+        <p className="font-extrabold text-xl text-red-500 mt-5">خطا در دریافت اطلاعات سبد خرید</p>
+        <p className="text-sm text-gray-400 mt-2">{String(error)}</p>
+      </div>
+    )
+  }
 
-  const emptySection = (
-    <div className="flex flex-col justify-center items-center ">
-      <Image width={90} height={90} src="/images/icons/2color/empty-cart.svg" alt="empty" />
-      <p className="font-extrabold text-xl text-[#FF163E] mt-5">سبد خرید شما خالی است!</p>
-      <Link href={"/"} className="w-full">
-        <button className="bg-gradient-to-r from-[#FE4968] to-[#FF9B90] py-[22px] w-full rounded-[100px] mt-[60px] flex gap-3 items-center justify-center">
-          <Image width={24} height={24} src="/images/icons/shop-outline.svg" alt="empty" />
-          بازگشت به فروشگاه
-        </button>
-      </Link>
-    </div>
-  );
+  if (
+    !loading &&
+    (!cartGeneralInfo || !Array.isArray(items) || items.length === 0)
+  ) {
+    return (
+      <div className="flex flex-col justify-center items-center ">
+        <Image
+          width={90}
+          height={90}
+          src="/images/icons/2color/empty-cart.svg"
+          alt="empty"
+        />
+        <p className="font-extrabold text-xl text-[#FF163E] mt-5">
+          سبد خرید شما خالی است!
+        </p>
+        <Link href={"/"} className="w-full">
+          <button className="bg-gradient-to-r from-[#FE4968] to-[#FF9B90] py-[22px] w-full rounded-[100px] mt-[60px] flex gap-3 items-center justify-center">
+            <Image
+              width={24}
+              height={24}
+              src="/images/icons/shop-outline.svg"
+              alt="empty"
+            />
+            بازگشت به فروشگاه
+          </button>
+        </Link>
+      </div>
+    );
+  }
 
-  const errorSection = (
-    <div className="flex flex-col justify-center items-center ">
-      <p className="font-extrabold text-xl text-red-500 mt-5">خطا در دریافت اطلاعات سبد خرید</p>
-      <p className="text-sm text-gray-400 mt-2">{String(error)}</p>
-    </div>
-  );
-
-  if (shouldShowError) return errorSection;
-  if (shouldShowEmpty) return emptySection;
-
-  const renderCards =
-    items?.map((item) => item && cartGeneralInfo && <CartCard key={item.id} item={item} loading={loading} />);
 
   return (
     <>
       <div className="flex items-center justify-between gap-2.5">
-        <div className="flex items-center gap-2.5">
-          <span className="bg-gradient-to-b from-[#FFE59A] to-[#FFFFD5] bg-clip-text text-transparent leading-8 font-bold">
+        <div>
+          <span className="bg-gradient-to-b from-[#FFE59A] to-[#FFFFD5] bg-clip-text text-transparent leading-8 font-bold ml-2.5">
             سبد خرید شما
           </span>
           {items && items.length && (
@@ -64,7 +95,7 @@ const CartSection = () => {
         <Image src="/images/icons/2color/menu.svg" alt="menu" width="24" height="24" />
       </div>
 
-      {renderCards}
+      {items?.map((item) => item && cartGeneralInfo && <CartCard key={item.id} item={item} loading={loading} />)}
 
       <div
         className={`transition-opacity duration-700 ease-in-out ${

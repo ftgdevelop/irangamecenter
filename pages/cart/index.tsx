@@ -11,9 +11,8 @@ import { useState } from "react";
 
 export default function CartPage() {
 
-  const { cartGeneralInfo, loading } = useAppSelector((state) => state.cart);
+  const { cartGeneralInfo } = useAppSelector((state) => state.cart);
   const userInfo = useAppSelector((state) => state.authentication.user);
-  const getUserLoading = useAppSelector((state) => state.authentication.getUserLoading);
   const currencyStore = useAppSelector((state) => state.cart.currency);
 
   const router = useRouter();
@@ -23,6 +22,8 @@ export default function CartPage() {
   const { createOrder } = useCartApi();
 
   const handleCart = async () => {
+      
+    setIsSubmitting(true);
 
     if (!userInfo || !userInfo.lastName) {
       router.push("/checkout");
@@ -34,8 +35,7 @@ export default function CartPage() {
     if (!token) return;
 
     try {
-      setIsSubmitting(true);
-      await createOrder(token, userInfo);
+      await createOrder(userInfo);
     } catch (error) {
       console.error("Error creating order:", error);
     } finally {
@@ -55,14 +55,7 @@ export default function CartPage() {
       <Steps activeStepKey="cart" />
 
       <div className="p-4">
-        {getUserLoading || loading ? (
-          <div className="flex flex-col items-center justify-center">
-            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#aa3aff]" />
-            <p className="mt-4 text-sm text-gray-400">در حال بارگذاری...</p>
-          </div>
-        ) : (
-          <CartSection />
-        )}
+        <CartSection />
       </div>
 
       {!!cartGeneralInfo?.items?.length && (
@@ -80,7 +73,7 @@ export default function CartPage() {
 
             <div className="flex flex-col gap-1.5">
               <span className="text-sm text-gray-300">مبلغ قابل پرداخت</span>
-              <span className="font-bold text-lg">
+              <span className="font-bold text-lg text-white">
                 {numberWithCommas(cartGeneralInfo?.payableAmount) || 0}{" "}
                 {currency}
               </span>

@@ -3,12 +3,13 @@ import React, { useState } from "react";
 import { Minus, Plus } from "lucide-react";
 import {  GetCurrentProductType } from "@/types/commerce";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
-import { addDeviceId, addQuantity, fetchCart, removeQuantity, setLastItemChangedId } from "@/redux/cartSlice";
+import { addDeviceId, fetchCart, setLastItemChangedId } from "@/redux/cartSlice";
 import Link from "next/link";
 import Loading from "../icons/Loading";
 import { numberWithCommas } from "@/helpers";
 import { useCartApi } from "@/actions/cart";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
+import { addDeviceIdToCookie } from "@/helpers/order";
 
 
 
@@ -19,7 +20,6 @@ const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][num
 
   const dispatch = useAppDispatch();
   const lastProductId = useAppSelector((state) => state.cart.lastItemIsChangedId);
-  const tempQuantity = useAppSelector((state) => state.cart.quantity);
   const {  addItem, removeItem } = useCartApi();
   
   const variantItem = item?.variant;
@@ -36,14 +36,14 @@ const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][num
     const variantId = variantItem?.id;
     if (!variantId) return;
 
-    dispatch(addQuantity());
     setIsAdding(true);
 
     try {
-      const res = await addItem(
-        { variantId, quantity: tempQuantity } );
+      const res = await addItem({variantId});
+
+      addDeviceIdToCookie(res?.result?.deviceId);
       dispatch(addDeviceId(res?.result?.deviceId || ""));
-      dispatch(removeQuantity(tempQuantity));
+
       dispatch(setLastItemChangedId(productId));
       refreshCart()
 
@@ -60,7 +60,6 @@ const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][num
     setIsRemoving(true);
     try {
       await removeItem({ Id: productId});
-      dispatch(removeQuantity(1));
       dispatch(setLastItemChangedId(productId));
       refreshCart()
     } catch (err) {
