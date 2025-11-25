@@ -11,7 +11,6 @@ import { Form, Formik } from "formik"
 import {  useEffect, useState } from "react";
 import PhoneInput from "../shared/PhoneInput";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import LoginSection from "./LoginSection";
 import { useCartApi } from "@/actions/cart";
 import LoadingFull from "../shared/LoadingFull";
@@ -19,17 +18,12 @@ import LoadingFull from "../shared/LoadingFull";
 const CheckoutSection = () => {
     const dispatch = useAppDispatch();
 
-    const isAuthenticated = useAppSelector(
-        (state) => state.authentication.isAuthenticated,
-    );
+    const getUserLoading = useAppSelector((state) => state.authentication.getUserLoading);
+    const isAuthenticated = useAppSelector((state) => state.authentication.isAuthenticated);
     const userInfo = useAppSelector((state) => state.authentication.user);
-    const router = useRouter();
     const { createOrder } = useCartApi();
-    
 
     const [submitLoading, setSubmitLoading] = useState<boolean>(false);
-    const [submitLoadingCreateOrder, setSubmitLoadingCreateOrder] = useState<boolean>(false);
-
 
     const submitHandler = async (parameters: {
         firstname?: string;
@@ -105,22 +99,14 @@ const CheckoutSection = () => {
 
     const handleCreateOrder = async () => {
 
-        if (!userInfo || !userInfo.lastName) {
-        router.push("/checkout");
-        return;
-        }
-
         const token = typeof window !== "undefined" ? localStorage.getItem("Token") : null;
 
         if (!token) return;
 
         try {
-        setSubmitLoadingCreateOrder(true);
-        await createOrder(token, userInfo);
+        await createOrder(userInfo);
         } catch (error) {
         console.error("Error creating order:", error);
-        } finally {
-        setSubmitLoadingCreateOrder(false);
         }
     };
 
@@ -130,7 +116,7 @@ const CheckoutSection = () => {
         }
     }, [userInfo?.lastName]);
     
-    if (submitLoadingCreateOrder) {
+    if (userInfo?.lastName || getUserLoading) {
         return <LoadingFull /> 
     }
     

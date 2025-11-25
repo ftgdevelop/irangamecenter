@@ -1,14 +1,11 @@
 
-import {   GetCartByProductIdType, ProductDetailData, ProductVariant } from "@/types/commerce";
-import {
-  useEffect,
-  useState,
-} from "react";
+import {   GetCartByProductIdType, ProductVariant } from "@/types/commerce";
+import { useEffect, useState} from "react";
 import {  ChevronLeft, Minus, Plus, Trash2 } from "lucide-react";
 
 import SimplePortal from "../shared/layout/SimplePortal";
 import { numberWithCommas } from "@/helpers";
-import { addDeviceId, addQuantity,  fetchCart,  removeQuantity } from "@/redux/cartSlice";
+import { addDeviceId,fetchCart } from "@/redux/cartSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import {  useCartApi } from "@/actions/cart";
 import Loading from "../icons/Loading";
@@ -17,50 +14,42 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { setProgressLoading } from "@/redux/stylesSlice";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
+import { addDeviceIdToCookie } from "@/helpers/order";
 
-const CartFooter = ({
+const VariantFooter = ({
   currentVariant,
   productId,
 }: {
   currentVariant?: ProductVariant;
-  productId: ProductDetailData['id'];
+  productId: number;
 }) => {
+
   const [cartData, setCartData] = useState<GetCartByProductIdType | null>(null);
-  const [isAdding, setIsAdding] = useState(false);
-  const [isRemoving, setIsRemoving] = useState(false);
-  const [isFetching, setIsFetching] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  
   const router = useRouter();
+  
   const { getCartByProductId, addItem, removeItem } = useCartApi();
 
 
   const dispatch = useAppDispatch();
-  const tempQuantity = useAppSelector((state) => state.cart.quantity);
-  const currencyStore = useAppSelector((state) => state.cart.currency);
 
+  const currencyStore = useAppSelector((state) => state.cart.currency);
 
   const refreshCart = () => {
     dispatch(fetchCart());
   };
 
-  const loadCartByProductId = (
-    callbackOrObj?: (() => void) | { finallyAction?: () => void }
-  ) => {
-    const token = localStorage.getItem('Token');
+  const loadCartByProductId = () => {
 
-    const callback =
-      typeof callbackOrObj === "function"
-        ? callbackOrObj
-        : callbackOrObj?.finallyAction;
+    setLoading(true);
 
-    setIsFetching(true);
-
-    getCartByProductId(productId, token)
+    getCartByProductId(productId)
       .then((res) => setCartData(res?.result || null))
       .catch(console.error)
       .finally(() => {
-        setIsFetching(false);
-        callback?.();
+        setLoading(false);
       });
   };
 
@@ -72,34 +61,36 @@ const CartFooter = ({
 
   const variantItem = currentVariant?.items?.[0];
 
-
   const currency =
     getCurrencyLabelFa(cartData?.items?.[0]?.variant.currencyType )||
     getCurrencyLabelFa(variantItem?.currencyType) || getCurrencyLabelFa(currencyStore)
 
-  const handleAddToCart = async () => {    
+  const handleAddToCart = async () => {  
+
     setShowSuccessAlert(false);
     const variantId = variantItem?.id;
     if (!variantId) return;
 
-    dispatch(addQuantity());
-    setIsAdding(true);
+    setLoading(true);
 
     try {
-      const res = await addItem(
-        { variantId, quantity: tempQuantity });
-      dispatch(addDeviceId(res?.result?.deviceId || ""));
-      dispatch(removeQuantity(tempQuantity));
+      const res = await addItem({variantId});
 
-      loadCartByProductId(() => {
-        setIsAdding(false);
-        setShowSuccessAlert(true);
-        refreshCart();
-      });
+      addDeviceIdToCookie(res?.result?.deviceId);
+
+      dispatch(addDeviceId(res?.result?.deviceId || ""));
+
+      await Promise.all([
+        loadCartByProductId(),
+        refreshCart(),
+      ]);
+
+      setLoading(false);
+      setShowSuccessAlert(true);
 
     } catch (err) {
       console.error(err);
-      setIsAdding(false);
+      setLoading(false);
     }
   };
 
@@ -109,16 +100,18 @@ const CartFooter = ({
     const lastCartItem = cartData.items.at(-1);
     if (!lastCartItem) return;
 
-    setIsRemoving(true);
+    setLoading(true);
+    
     try {
       await removeItem({ Id: lastCartItem.id });
-      dispatch(removeQuantity(1));
-      refreshCart()
-      loadCartByProductId();
+      await Promise.all([
+        loadCartByProductId(),
+        refreshCart(),
+      ]);
     } catch (err) {
       console.error(err);
     } finally {
-      setIsRemoving(false);
+      setLoading(false);
     }
   };
 
@@ -167,6 +160,7 @@ const CartFooter = ({
 
       <SimplePortal selector="fixed_bottom_portal">
         <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 bg-[#192a39] px-4 py-3 flex flex-wrap max-[390px]:justify-center justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
+          
           {!!cartData?.items.length &&
           cartData.totalQuantity &&
           currentCartItem?.quantity ? (
@@ -178,8 +172,8 @@ const CartFooter = ({
                 <Plus size={24} />
               </button>
 
-              <span className="flex justify-center items-center w-[67px]  font-medium">
-                {isAdding || isRemoving || isFetching ? (
+              <span className="flex justify-center items-center w-[67px]  font-medium text-white">
+                {loading ? (
                   <Loading className="fill-current w-5 h-5 animate-spin" />
                 ) : (
                   currentCartItem?.quantity || 0
@@ -196,7 +190,7 @@ const CartFooter = ({
               </button>
             </div>
           ) : (
-            isRemoving || isAdding || isFetching ? (
+            loading ? (
               <div className="h-10 flex justify-center items-center px-6 bg-gradient-to-t from-green-600 to-green-300 rounded-full">
                 <Loading className="fill-current w-5 h-5 animate-spin" />
               </div>
@@ -217,13 +211,13 @@ const CartFooter = ({
             </button>
           ))}
 
-          {((variantItem && variantItem.salePrice && variantItem.regularPrice) ||
+          {((variantItem?.salePrice && variantItem?.regularPrice) ||
             (currentCartItem && currentCartItem.unitPrice)) && (
             <div className="text-left text-white max-[390px]:w-full">
-              {variantItem && variantItem.profitPercentage && (
+              {variantItem?.profitPercentage && (
                 <div className="flex flex-wrap gap-2 mb-1">
                   <span className="text-[#fe9f00] text-2xs font-semibold">
-                    {!currentCartItem?.totalDiscountAmount && variantItem.profitPercentage ? `${variantItem.profitPercentage} %   تخفیف` : `
+                    {!currentCartItem?.totalDiscountAmount ? `${variantItem.profitPercentage} %   تخفیف` : `
                     ${currentCartItem?.totalDiscountAmount} ${currency} تخفیف `}
                   </span>
                   <span className="text-xs text-white/70 line-through">
@@ -247,4 +241,4 @@ const CartFooter = ({
   );
 };
 
-export default CartFooter;
+export default VariantFooter;

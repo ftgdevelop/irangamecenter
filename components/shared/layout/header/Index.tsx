@@ -28,7 +28,7 @@ const Header: React.FC<Props> = props => {
     return (
         <header className="fixed top-0 h-[84px] left-1/2 -translate-x-1/2 bg-[#011425] z-10 w-full md:max-w-lg flex justify-between p-3">
             {(props.type2Params?.backUrl || props.type2Params?.backToPrev)  ? (
-                <div className="flex items-center py-3.5 gap-4 w-[104px]">
+                <div className={`flex items-center py-3.5 gap-4 ${(props.type2Params?.withLogo && !props.type2Params?.title) ?"w-[104px]":""} `}>
                     {props.type2Params.backToPrev ? (
                         <button
                             type="button"
@@ -66,7 +66,7 @@ const Header: React.FC<Props> = props => {
                     <Image src="/logo.svg" alt="irangamecenter" width={50} height={50} />
                 </Link>
             )}
-            <div className="flex gap-5 w-[104px] justify-end items-center">
+            <div className={`flex gap-5 justify-end items-center ${props.type2Params?.withLogo?"w-[104px]":""}`}>
 
                 { props.type2Params?.hasCartLink && (
                     <Link href='/cart' className="relative w-fit cursor-pointer">

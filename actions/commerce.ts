@@ -4,7 +4,6 @@ import { Commerce, Headers, ServerAddress } from "@/enum/url";
 import { GetAllProductsParams } from "@/types/commerce";
 import axios from "axios";
 
-const apikey = "ACE01BF4-AAEE-45D6-ABE7-F3FF519052DB"
 
 export const getProducts = async (params: GetAllProductsParams, acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
     try {
@@ -14,8 +13,8 @@ export const getProducts = async (params: GetAllProductsParams, acceptLanguage: 
             params,
             {
                 headers: {
+                    ...Headers,
                     "Accept-Language": acceptLanguage,
-                    apikey: apikey,
                     currency: "IRR"
                 },
             },
@@ -35,10 +34,9 @@ export const getProductBySlug = async (slug: string, acceptLanguage: "fa-IR" | "
             method: "get",
             url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetBySlug}?Slug=${slug}`,
             headers: {
+                ...Headers,
                 "Accept-Language": acceptLanguage,
-                apikey: apikey,
-                currency: "IRR",
-                tenantid: 7
+                currency: "IRR"
             }
         });
         return (response)
@@ -54,10 +52,9 @@ export const getBrandBySlug = async (slug: string, acceptLanguage: "fa-IR" | "en
             method: "get",
             url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetBrandBySlug}?Slug=${slug}`,
             headers: {
+                ...Headers,
                 "Accept-Language": acceptLanguage,
-                apikey: apikey,
-                currency: "IRR",
-                tenantid: 7
+                currency: "IRR"
             }
         });
         return (response)
@@ -80,8 +77,8 @@ export const getAllForSiteMap = async (
             method: "get",
             url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetAllForSiteMap}?MediaType=${params.type}&SkipCount=${params.SkipCount}&MaxResultCount=${params.MaxResultCount}`,
             headers: {
-                "Accept-Language": acceptLanguage,
-                apikey: apikey
+                ...Headers,
+                "Accept-Language": acceptLanguage
             }
         });
         return (response)
@@ -97,10 +94,9 @@ export const getSimilarsBySlug = async (slug: string, acceptLanguage: "fa-IR" | 
             method: "get",
             url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetSimilar}?Slug=${slug}`,
             headers: {
+                ...Headers,
                 "Accept-Language": acceptLanguage,
-                apikey: apikey,
-                currency: "IRR",
-                tenantid: 7
+                currency: "IRR"
             }
         });
         return (response)
@@ -127,9 +123,7 @@ export const getOrderById = async (params: { id: number; token?: string; currenc
                 ...Headers,
                 Currency: params.currency || "IRR",
                 Authorization: `Bearer ${params.token}`,
-                "Accept-Language": acceptLanguage || "en-US",
-                apikey: apikey,
-                tenantid: 7
+                "Accept-Language": acceptLanguage || "en-US"
             }
         });
         return (response)

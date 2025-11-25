@@ -6,7 +6,7 @@ import {
 } from "react";
 import { numberWithCommas } from "@/helpers";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
-import CartFooter from "./CartFooter";
+import VariantFooter from "./VariantFooter";
 
 type VariantItemProps = {
   variantGroup?: ProductVariant;
@@ -59,7 +59,7 @@ const VariantItem: React.FC<VariantItemProps> = ({
 
     if (currentVariant?.items?.[0]?.status !== "OutOfStock") {
       return (
-        <CartFooter
+        <VariantFooter
           currentVariant={currentVariant}
           productId={productId}
         />

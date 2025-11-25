@@ -44,7 +44,7 @@ const initialState: CartState = {
   deviceId: undefined,
   quantity: 1,
   cartGeneralInfo: undefined,
-  loading: false,
+  loading: true,
   error: undefined,
   lastItemIsChangedId: null,
   currency: "IRR",
@@ -59,18 +59,6 @@ const cartSlice = createSlice({
     },
     removeDeviceId(state) {
       state.deviceId = undefined;
-    },
-    addQuantity: {
-      reducer(state, action: PayloadAction<number>) {
-        state.quantity = (state.quantity || 0) + action.payload;
-      },
-      prepare(amount?: number) {
-        return { payload: amount ?? 1 }; 
-      },
-    },
-    removeQuantity(state, action: PayloadAction<number>) {
-      state.quantity = (state.quantity || 0) - action.payload;
-      if (state.quantity < 1) state.quantity = 1;
     },
     setLastItemChangedId(state, action: PayloadAction<number | null>) {
       state.lastItemIsChangedId = action.payload;
@@ -99,8 +87,6 @@ const cartSlice = createSlice({
 export const {
   addDeviceId,
   removeDeviceId,
-  addQuantity,
-  removeQuantity,
   setLastItemChangedId,
   setCurrency,
 } = cartSlice.actions;
