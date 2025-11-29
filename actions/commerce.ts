@@ -45,6 +45,42 @@ export const getProductBySlug = async (slug: string, acceptLanguage: "fa-IR" | "
     }
 }
 
+
+export const getProductVariants = async (slug: string, acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
+
+    try {
+        const response: any = await axios({
+            method: "get",
+            url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetProductVariants}?Slug=${slug}`,
+            headers: {
+                ...Headers,
+                "Accept-Language": acceptLanguage,
+                currency: "IRR"
+            }
+        });
+        return (response)
+    } catch (error: any) {
+        return error
+    }
+}
+
+export const getProductGallries = async (slug: string, acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
+
+    try {
+        const response: any = await axios({
+            method: "get",
+            url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetProductGallries}?Slug=${slug}`,
+            headers: {
+                ...Headers,
+                "Accept-Language": acceptLanguage,
+                currency: "IRR"
+            }
+        });
+        return (response)
+    } catch (error: any) {
+        return error
+    }
+}
 export const getBrandBySlug = async (slug: string, acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
 
     try {

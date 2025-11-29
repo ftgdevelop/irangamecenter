@@ -10,9 +10,10 @@ const Carousel = dynamic(() => import("../shared/Carousel"), {
 
 interface Props {
   galleries?: ProductGalleryItemType[];
+  galleryLoading?: boolean;
 }
 
-function ProductGalleryCarousel({ galleries = [] }: Props) {
+function ProductGalleryCarousel({ galleries = [] , galleryLoading }: Props) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isFullscreen, setIsFullScreen] = useState(false);
 
@@ -56,6 +57,11 @@ function ProductGalleryCarousel({ galleries = [] }: Props) {
     return () => document.removeEventListener("fullscreenchange", handler);
   }, []);
 
+  if(galleryLoading){
+    return(
+      "loading items..."
+    )
+  }
   if (!galleries.length) return null;
 
   return (

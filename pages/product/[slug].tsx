@@ -1,9 +1,9 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { NextPage } from 'next';
-import { ReactNode, useMemo, useState } from 'react';
-import { getProductBySlug } from '@/actions/commerce';
-import { ProductDetailData } from '@/types/commerce';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { getProductBySlug, getProductGallries, getProductVariants } from '@/actions/commerce';
+import { ProductDetailData, ProductGalleryItem, ProductVariant } from '@/types/commerce';
 import BreadCrumpt from '@/components/shared/BreadCrumpt';
 import FAQ from '@/components/shared/FAQ';
 import Contacts from '@/components/shared/Contacts';
@@ -36,13 +36,42 @@ const DetailProduct: NextPage<any> = ({
     link?: string;
   }[] = [];
 
+  const [galleryData, setGalleryData] = useState<ProductGalleryItem[] | undefined>();
+  const [galleryLoading, setGalleryLoading] = useState<boolean>(true);
+  const [variantsData, setVariantsData] = useState<ProductVariant[] | undefined>();
+
+  useEffect(()=>{
+
+    const fetchGalleryData = async (s:string) => {
+      setGalleryLoading(true);
+      const response: any = await getProductGallries(s);
+      if(response.data?.result){
+        setGalleryData(response.data.result)
+      }
+      setGalleryLoading(false);
+    }
+
+    const fetchVariants = async (s:string) => {
+      const response: any = await getProductVariants(s);
+      if(response.data?.result){
+        setVariantsData(response.data.result)
+      }
+    }
+
+    if(slug){
+      fetchGalleryData(slug);
+      fetchVariants(slug);
+    }
+
+  },[slug]);
+
   const sortedGalleryItems = useMemo(() => {
-    if (!productData?.galleries) return [];
-    return [...productData.galleries].sort((a, b) => {
+    if (!galleryData) return [];
+    return [...galleryData].sort((a, b) => {
       if (a.mediaType === 'Image' && b.mediaType === 'Video') return 1;
       return -1;
     });
-  }, [productData?.galleries]);
+  }, [galleryData?.[0]?.filePath]);
 
   const parsedShortDescription = useMemo(() => {
     if (!productData?.shortDescription) return null;
@@ -268,7 +297,7 @@ const DetailProduct: NextPage<any> = ({
       </div>
 
       {sortedGalleryItems && (
-        <ProductGalleryCarousel galleries={sortedGalleryItems} />
+        <ProductGalleryCarousel galleries={sortedGalleryItems} galleryLoading={galleryLoading} />
       )}
 
       {!!productData?.shortDescription && (
@@ -362,7 +391,7 @@ const DetailProduct: NextPage<any> = ({
         <AgeRatingDetail productData={productData} />
       </div>
 
-      {!!productData.variants?.length && <VariantSection productId={productData.id} productVariants={productData.variants} />}
+      {!!variantsData?.length && <VariantSection productId={productData.id} productVariants={variantsData} />}
 
       {/* <hr/><hr/><hr/><hr/><hr/><hr/><hr/>
 
@@ -373,7 +402,7 @@ const DetailProduct: NextPage<any> = ({
       <div className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip pb-3 pl-3">
 
         <div className="flex pr-4">
-          {productData.variants?.map(variantItem => (
+          {variantsData?.map(variantItem => (
             <div key={variantItem.id} className="pl-3 last:pl-4">
               <button
                 type="button"

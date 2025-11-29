@@ -238,9 +238,7 @@ export interface ProductDetailData {
         name?: string;
         slug?: string;
     }
-    variants?: ProductVariant[];
     similar?:ProductItem[];
-    galleries?:ProductGalleryItem[];
     page?:{
         title?: string;
         richSnippet?: string;
