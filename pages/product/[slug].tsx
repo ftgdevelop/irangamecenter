@@ -296,7 +296,7 @@ const DetailProduct: NextPage<any> = ({
         </div>
       </div>
 
-      {sortedGalleryItems && (
+      {!!galleryData?.length && sortedGalleryItems && (
         <ProductGalleryCarousel galleries={sortedGalleryItems} galleryLoading={galleryLoading} />
       )}
 
