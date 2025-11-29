@@ -18,7 +18,7 @@ import { setReduxBalance } from "@/redux/authenticationSlice";
 type Props = {
     amount: number;
 }
-const OnlinePayment: React.FC<Props> = props => {
+const OnlineCharge: React.FC<Props> = props => {
 
     const router = useRouter();
 
@@ -282,4 +282,4 @@ const OnlinePayment: React.FC<Props> = props => {
     )
 }
 
-export default OnlinePayment;
+export default OnlineCharge;

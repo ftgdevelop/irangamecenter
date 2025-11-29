@@ -2,7 +2,7 @@ import ArrowRight from "@/components/icons/ArrowRight"
 import Loading from "@/components/icons/Loading";
 import Minus from "@/components/icons/Minus";
 import Plus from "@/components/icons/Plus";
-import OnlinePayment from "@/components/payment/OnlinePayment ";
+import OnlineCharge from "@/components/payment/OnlineCharge";
 import { numberWithCommas, persianNumbersToEnglish, rialsToLettersToman } from "@/helpers";
 import { useAppSelector } from "@/hooks/use-store";
 import Image from "next/image";
@@ -103,7 +103,7 @@ const Charge = () => {
                     ))}
                 </div>
 
-                <OnlinePayment amount={+amount} />
+                <OnlineCharge amount={+amount} />
 
             </div>
         </>
