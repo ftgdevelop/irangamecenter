@@ -1,34 +1,7 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { GetCurrentProductResponseType, GetCurrentProductType } from "@/types/commerce";
-import { RootState } from ".";
-import axios from "axios";
-import { Cart, ServerAddress } from "@/enum/url";
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 
-export const fetchCart = createAsyncThunk(
-  "cart/fetchCart",
-  async (_, { getState, rejectWithValue }) => {
-    const state = getState() as RootState;
-    const deviceId = state.cart.deviceId;
-    const currency = state.cart.currency;
-    try {
-      const res = await axios.get<GetCurrentProductResponseType>(
-        `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.GetCurrentCart}`,
-        {
-          headers: {
-            "X-Device-Id": deviceId,
-            'apikey':"e8fad1497a1244f29f15cde4a242baf0",
-            ...(currency && { Currency: currency }),
-          },
-        }
-      );
-
-      return res.data.result;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      return rejectWithValue(err.message);
-    }
-  }
-);
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { GetCurrentProductType } from "@/types/commerce";
 
 export interface CartState {
   deviceId?: string;
@@ -57,38 +30,27 @@ const cartSlice = createSlice({
     addDeviceId(state, action: PayloadAction<string>) {
       state.deviceId = action.payload;
     },
-    removeDeviceId(state) {
-      state.deviceId = undefined;
-    },
     setLastItemChangedId(state, action: PayloadAction<number | null>) {
       state.lastItemIsChangedId = action.payload;
     },
     setCurrency(state, action: PayloadAction<string>) {
       state.currency = action.payload;
+    },
+    setGeneralCartInfo(state, action: PayloadAction<GetCurrentProductType>) {
+      state.cartGeneralInfo = action.payload;
+    },
+    setGeneralCartLoading(state, action: PayloadAction<boolean>) {
+      state.loading = action.payload;
     }
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchCart.pending, (state) => {
-        state.loading = true;
-        state.error = undefined;
-      })
-      .addCase(fetchCart.fulfilled, (state, action) => {
-        state.loading = false;
-        state.cartGeneralInfo = action.payload;
-      })
-      .addCase(fetchCart.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
-  },
+  }
 });
 
 export const {
   addDeviceId,
-  removeDeviceId,
   setLastItemChangedId,
   setCurrency,
+  setGeneralCartInfo,
+  setGeneralCartLoading
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

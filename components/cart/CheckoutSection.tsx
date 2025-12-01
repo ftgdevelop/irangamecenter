@@ -14,9 +14,12 @@ import Image from "next/image";
 import LoginSection from "./LoginSection";
 import { useCartApi } from "@/actions/cart";
 import LoadingFull from "../shared/LoadingFull";
+import { useRouter } from "next/router";
 
 const CheckoutSection = () => {
     const dispatch = useAppDispatch();
+    
+    const router = useRouter();
 
     const getUserLoading = useAppSelector((state) => state.authentication.getUserLoading);
     const isAuthenticated = useAppSelector((state) => state.authentication.isAuthenticated);
@@ -104,7 +107,18 @@ const CheckoutSection = () => {
         if (!token) return;
 
         try {
-        await createOrder(userInfo);
+            const res: any = await createOrder(userInfo);
+            
+            debugger;
+
+            const orderId = res.data?.result?.id;
+            const orderNumber = res.data?.result?.orderNumber;
+
+            if (orderNumber && orderId) {
+            router.push(`/payment?orderNumber=${orderNumber}&orderId=${orderId}`);
+            } 
+
+
         } catch (error) {
         console.error("Error creating order:", error);
         }

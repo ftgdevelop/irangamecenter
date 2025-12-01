@@ -1,3 +1,4 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import {   GetCartByProductIdType, ProductVariant } from "@/types/commerce";
 import { useEffect, useState} from "react";
@@ -5,7 +6,7 @@ import {  ChevronLeft, Minus, Plus, Trash2 } from "lucide-react";
 
 import SimplePortal from "../shared/layout/SimplePortal";
 import { numberWithCommas } from "@/helpers";
-import { addDeviceId,fetchCart } from "@/redux/cartSlice";
+import { addDeviceId, setGeneralCartInfo, setGeneralCartLoading } from "@/redux/cartSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import {  useCartApi } from "@/actions/cart";
 import Loading from "../icons/Loading";
@@ -30,24 +31,33 @@ const VariantFooter = ({
   
   const router = useRouter();
   
-  const { getCartByProductId, addItem, removeItem } = useCartApi();
+  const { getCartByProductId, addItem, removeItem, getCart } = useCartApi();
 
 
   const dispatch = useAppDispatch();
 
   const currencyStore = useAppSelector((state) => state.cart.currency);
 
-  const refreshCart = () => {
-    dispatch(fetchCart());
+  const getGeneralCartData = async () => {
+    dispatch(setGeneralCartLoading(true));
+    const response: any = await getCart();
+    if (response?.result) {
+      dispatch(setGeneralCartInfo(response.result));
+    }
+    dispatch(setGeneralCartLoading(false));
   };
 
   const deviceId = useAppSelector((state) => state.cart?.deviceId);
 
-  const loadCartByProductId = () => {
+  const loadCartByProductId = (params?:{deviceId?:string;userToken?:string}) => {
 
     setLoading(true);
 
-    getCartByProductId(productId)
+    getCartByProductId({
+      productId: productId,
+      deviceId: params?.deviceId,
+      userToken: params?.userToken
+    })
       .then((res) => setCartData(res?.result || null))
       .catch(console.error)
       .finally(() => {
@@ -83,8 +93,8 @@ const VariantFooter = ({
       dispatch(addDeviceId(res?.result?.deviceId || ""));
 
       await Promise.all([
-        loadCartByProductId(),
-        refreshCart(),
+        loadCartByProductId({deviceId: res?.result?.deviceId || ""}),
+        getGeneralCartData(),
       ]);
 
       setLoading(false);
@@ -108,7 +118,7 @@ const VariantFooter = ({
       await removeItem({ Id: lastCartItem.id });
       await Promise.all([
         loadCartByProductId(),
-        refreshCart(),
+        getGeneralCartData()
       ]);
     } catch (err) {
       console.error(err);

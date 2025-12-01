@@ -10,6 +10,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function PaymentPage() {
+
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get("orderNumber");
   const orderId = searchParams.get("orderId");
@@ -43,13 +44,13 @@ export default function PaymentPage() {
         currency: "IRR",
         token: token || "",
       });
-
-      console.log(response?.data?.result);
       setOrderData(response?.data?.result);
     };
+
     if (orderId) {
       fetchOrder(orderId);
     }
+
   }, [orderId]);
 
   return (
