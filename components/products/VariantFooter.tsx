@@ -41,6 +41,8 @@ const VariantFooter = ({
     dispatch(fetchCart());
   };
 
+  const deviceId = useAppSelector((state) => state.cart?.deviceId);
+
   const loadCartByProductId = () => {
 
     setLoading(true);
@@ -55,7 +57,7 @@ const VariantFooter = ({
 
   useEffect(() => {
     loadCartByProductId();
-  }, []);
+  }, [deviceId]);
 
   if (!currentVariant?.items?.[0]) return null;
 
