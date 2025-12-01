@@ -279,6 +279,12 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
             }
             getUserData();
+        }else{
+            dispatch(setReduxUser({
+                isAuthenticated: false,
+                user: {},
+                getUserLoading: false
+            }));
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
