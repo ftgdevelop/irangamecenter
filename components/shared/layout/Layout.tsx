@@ -13,8 +13,9 @@ import FooterNavigation from "./footer/FooterNavigation";
 import { getUserBalance } from "@/actions/payment";
 import PageLoadingBar from "./PageLoadingBar";
 import { setProgressLoading } from "@/redux/stylesSlice";
-import { addDeviceId, fetchCart } from "@/redux/cartSlice";
+import { addDeviceId, setGeneralCartInfo, setGeneralCartLoading } from "@/redux/cartSlice";
 import { GetCookieDeviceId } from "@/helpers/order";
+import { useCartApi } from "@/actions/cart";
 
 type Props = {
     className?: string;
@@ -32,6 +33,8 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     const isBodyScrollable = useAppSelector(state => state?.styles?.bodyScrollable);
     const lastScrollPosition = useAppSelector(state => state?.styles?.lastScrollPosition);
     const deviceId = useAppSelector((state) => state.cart.deviceId);
+
+    const {getCart} = useCartApi(); 
     
     useEffect(()=>{
         const id = GetCookieDeviceId();
@@ -42,8 +45,17 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     
 
     useEffect(() => {
+        const getGeneralCartData = async () => {
+            dispatch(setGeneralCartLoading(true));
+            const response: any = await getCart();
+            if(response?.result){
+                dispatch(setGeneralCartInfo(response.result));
+            }
+            dispatch(setGeneralCartLoading(false));
+        }
+
         if(!userLoading){            
-            dispatch(fetchCart());
+            getGeneralCartData();
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [deviceId, userLoading]);

@@ -1,9 +1,11 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import Image from "next/image";
 import React, { useState } from "react";
 import { Minus, Plus } from "lucide-react";
 import {  GetCurrentProductType } from "@/types/commerce";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
-import { addDeviceId, fetchCart, setLastItemChangedId } from "@/redux/cartSlice";
+import { addDeviceId, setGeneralCartInfo, setGeneralCartLoading, setLastItemChangedId } from "@/redux/cartSlice";
 import Link from "next/link";
 import Loading from "../icons/Loading";
 import { numberWithCommas } from "@/helpers";
@@ -20,16 +22,20 @@ const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][num
 
   const dispatch = useAppDispatch();
   const lastProductId = useAppSelector((state) => state.cart.lastItemIsChangedId);
-  const {  addItem, removeItem } = useCartApi();
+  const {  addItem, removeItem, getCart } = useCartApi();
   
   const variantItem = item?.variant;
   const currency = getCurrencyLabelFa(item?.variant.currencyType);
   const productId = item?.id;
 
-
-  const refreshCart = () => {      
-      dispatch(fetchCart());
-    };
+  const getGeneralCartData = async () => {
+    dispatch(setGeneralCartLoading(true));
+    const response: any = await getCart();
+    if (response?.result) {
+      dispatch(setGeneralCartInfo(response.result));
+    }
+    dispatch(setGeneralCartLoading(false));
+  };    
 
 
   const handleAddToCart = async () => {
@@ -45,7 +51,7 @@ const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][num
       dispatch(addDeviceId(res?.result?.deviceId || ""));
 
       dispatch(setLastItemChangedId(productId));
-      refreshCart()
+      getGeneralCartData();
 
     } catch (err) {
       setIsAdding(false);
@@ -61,7 +67,7 @@ const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][num
     try {
       await removeItem({ Id: productId});
       dispatch(setLastItemChangedId(productId));
-      refreshCart()
+      getGeneralCartData();
     } catch (err) {
       console.error(err);
       setIsRemoving(false);

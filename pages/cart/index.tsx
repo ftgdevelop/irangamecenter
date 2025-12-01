@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import { useCartApi } from "@/actions/cart";
 import CartSection from "@/components/cart/CartSection";
 import Steps from "@/components/payment/Steps";
@@ -35,7 +37,17 @@ export default function CartPage() {
     if (!token) return;
 
     try {
-      await createOrder(userInfo);
+      const res: any = await createOrder(userInfo);
+            
+      debugger;
+
+      const orderId = res.data?.result?.id;
+      const orderNumber = res.data?.result?.orderNumber;
+
+      if (orderNumber && orderId) {
+      router.push(`/payment?orderNumber=${orderNumber}&orderId=${orderId}`);
+      } 
+      
     } catch (error) {
       console.error("Error creating order:", error);
     } finally {

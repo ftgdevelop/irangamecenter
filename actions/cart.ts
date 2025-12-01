@@ -10,7 +10,6 @@ import {
   ProductDetailData,
 } from "@/types/commerce";
 import axios, { AxiosError } from "axios";
-import { useRouter } from "next/router";
 
 export interface CartResponse {
   result?: {
@@ -33,7 +32,6 @@ export interface ApiError {
 export const useCartApi = () => {
   const deviceId = useAppSelector((state) => state.cart.deviceId);
   const currency = useAppSelector((state) => state.cart.currency);
-  const router = useRouter();
 
   const getHeaders = (): Record<string, string> => {
 
@@ -69,12 +67,21 @@ export const useCartApi = () => {
   };
 
 const getCartByProductId = async (
-  productId: number
+  params:{
+    productId: number;
+    deviceId?: string;
+    userToken?: string;
+  }
 ): Promise<GetCartByProductIdResponseType> => {
   try {
+
+    const Header = getHeaders();
+    if (params.deviceId) Header["X-Device-Id"] = params.deviceId;
+    if(params.userToken) Header["Authorization"] =  `Bearer ${params.userToken}`;
+
     const res = await axios.get<GetCartByProductIdResponseType>(
-      `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.GetCartByProductId}?ProductId=${productId}`,
-      { headers: getHeaders() }
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.GetCartByProductId}?ProductId=${params.productId}`,
+      { headers: Header }
     );
     return res.data;
   } catch (error) {
@@ -129,25 +136,24 @@ const getCartByProductId = async (
     }
   };
 
-  const createOrder = async (
-    params?: UpdateUserParams
-  ): Promise<CreateOrderResponseType> => {
+  const createOrder = async ( params?: UpdateUserParams ) => {
     try {
       const res = await axios.post<CreateOrderResponseType>(
         `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.CreateOrder}`,
         params || {},
         { headers: getHeaders()}
       );
-      const orderId = res.data?.result?.id
-      const orderNumber = res.data?.result?.orderNumber
 
-      if (orderNumber && orderId) {
-        router.push(`/payment?orderNumber=${orderNumber}&orderId=${orderId}`);
-      }     
-      return res.data;
+      // const orderId = res.data?.result?.id;
+      // const orderNumber = res.data?.result?.orderNumber;
+
+      // if (orderNumber && orderId) {
+      //   router.push(`/payment?orderNumber=${orderNumber}&orderId=${orderId}`);
+      // }     
+      return res;
     } catch (error) {
       handleError(error, "createOrder");
-      throw error;
+      return error
     }
   };
 
