@@ -83,12 +83,13 @@ const Carousel: React.FC<Props> = ({
 
       {showDots && (
         <div
-          className={`flex justify-center gap-2 mt-3 ${
+          className={`flex justify-center gap-3 mt-3 ${
             dotsWrapperClassName || ""
           }`}
         >
           {snapPoints.map((_, i) => (
             <button
+              aria-label="slider pagination button"
               key={i}
               onClick={() => scrollTo(i)}
               className={`h-3 rounded-full transition-all ${

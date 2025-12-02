@@ -58,7 +58,7 @@ const Slider: React.FC<Props> = props => {
                         <ClipRadius className="absolute bottom-full left-0 fill-[#011425] w-8 h-8" />
                         <ClipRadius className="absolute bottom-0 left-full fill-[#011425] w-8 h-8" />
 
-                        <Link prefetch={false} href={item.Url || "#"} className="w-12 h-12 bg-[#1b2c3b] cursor-pointer select-none rounded-full absolute bottom-1 left-1 flex items-center justify-center">
+                        <Link title={item.Title} prefetch={false} href={item.Url || "#"} className="w-12 h-12 bg-[#1b2c3b] cursor-pointer select-none rounded-full absolute bottom-1 left-1 flex items-center justify-center">
                             <ArrowTopLeft className="fill-white w-3.5 h-3.5" />
                         </Link>
 
@@ -107,7 +107,7 @@ const Slider: React.FC<Props> = props => {
                                 <ClipRadius className="absolute bottom-full left-0 fill-[#011425] w-8 h-8" />
                                 <ClipRadius className="absolute bottom-0 left-full fill-[#011425] w-8 h-8" />
 
-                                <Link prefetch={false} href={item.Url || "#"} className="w-12 h-12 bg-[#1b2c3b] cursor-pointer select-none rounded-full absolute bottom-1 left-1 flex items-center justify-center">
+                                <Link title={item.Title} prefetch={false} href={item.Url || "#"} className="w-12 h-12 bg-[#1b2c3b] cursor-pointer select-none rounded-full absolute bottom-1 left-1 flex items-center justify-center">
                                     <ArrowTopLeft className="fill-white w-3.5 h-3.5" />
                                 </Link>
 

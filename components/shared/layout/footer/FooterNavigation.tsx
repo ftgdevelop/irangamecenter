@@ -15,10 +15,10 @@ const FooterNavigation = () => {
   const { asPath } = router;
 
   const items = [
-    { label: "فروشگاه", href: "/", imageUrl: "/images/icons/shop.svg", active: asPath === "/" },
-    { label: "دسته بندی ها", href: "/products", imageUrl: "/images/icons/squares.svg", active: asPath === "/products" },
-    { label: "سفارش های من", href: "/cart", imageUrl: "/images/icons/cart.svg", active: asPath === "/cart" },
-    { label: "پروفایل", href: isAuthenticated ? "/profile" : "/login", imageUrl: "/images/icons/profile.svg", active: asPath.includes("/profile"), loading: userInfoLoading }
+    { alt:"خانه", label: "فروشگاه", href: "/", imageUrl: "/images/icons/shop.svg", active: asPath === "/" },
+    { alt:"محصولات", label: "دسته بندی ها", href: "/products", imageUrl: "/images/icons/squares.svg", active: asPath === "/products" },
+    { alt:"سبد خرید", label: "سفارش های من", href: "/cart", imageUrl: "/images/icons/cart.svg", active: asPath === "/cart" },
+    { alt:"حساب کاربری", label: "پروفایل", href: isAuthenticated ? "/profile" : "/login", imageUrl: "/images/icons/profile.svg", active: asPath.includes("/profile"), loading: userInfoLoading }
   ];
 
   return (
@@ -33,7 +33,7 @@ const FooterNavigation = () => {
               className={`relative basis-1/4 rounded-xl py-3 text-2xs flex flex-col justify-center items-center ${item.active ? "bg-[#2e3e4b]" : ""} ${item.loading ? "pointer-events-none" : ""}`}
             >
               <div className="relative w-fit">
-                <Image src={item.imageUrl} alt={item.label} className="block mx-auto mb-2" width={26} height={26} />
+                <Image src={item.imageUrl} alt={item.alt} className="block mx-auto mb-2" width={26} height={26} />
 
                 {
                    item.label === "سفارش های من" &&cartGeneralInfo?.totalQuantity &&  cartGeneralInfo?.totalQuantity  > 0 ? (
