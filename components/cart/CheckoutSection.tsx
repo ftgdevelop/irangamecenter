@@ -15,6 +15,7 @@ import LoginSection from "./LoginSection";
 import { useCartApi } from "@/actions/cart";
 import LoadingFull from "../shared/LoadingFull";
 import { useRouter } from "next/router";
+import { setGeneralCartInfo, setGeneralCartLoading } from "@/redux/cartSlice";
 
 const CheckoutSection = () => {
     const dispatch = useAppDispatch();
@@ -24,7 +25,9 @@ const CheckoutSection = () => {
     const getUserLoading = useAppSelector((state) => state.authentication.getUserLoading);
     const isAuthenticated = useAppSelector((state) => state.authentication.isAuthenticated);
     const userInfo = useAppSelector((state) => state.authentication.user);
-    const { createOrder } = useCartApi();
+    const { createOrder, getCart } = useCartApi();
+
+    const [goToPaymentLoading, setGoToPaymentLoading] = useState(false);
 
     const [submitLoading, setSubmitLoading] = useState<boolean>(false);
 
@@ -100,6 +103,16 @@ const CheckoutSection = () => {
         }        
     }
 
+    const getGeneralCartData = async () => {
+    dispatch(setGeneralCartLoading(true));
+    const response: any = await getCart();
+    if (response?.result) {
+        dispatch(setGeneralCartInfo(response.result));
+    }
+    dispatch(setGeneralCartLoading(false));
+    };
+
+
     const handleCreateOrder = async () => {
 
         const token = typeof window !== "undefined" ? localStorage.getItem("Token") : null;
@@ -108,8 +121,8 @@ const CheckoutSection = () => {
 
         try {
             const res: any = await createOrder(userInfo);
-            
-            debugger;
+            setGoToPaymentLoading(true);
+            await getGeneralCartData();
 
             const orderId = res.data?.result?.id;
             const orderNumber = res.data?.result?.orderNumber;
@@ -117,7 +130,6 @@ const CheckoutSection = () => {
             if (orderNumber && orderId) {
             router.push(`/payment?orderNumber=${orderNumber}&orderId=${orderId}`);
             } 
-
 
         } catch (error) {
         console.error("Error creating order:", error);
@@ -130,7 +142,7 @@ const CheckoutSection = () => {
         }
     }, [userInfo?.lastName]);
     
-    if (userInfo?.lastName || getUserLoading) {
+    if (userInfo?.lastName || getUserLoading || goToPaymentLoading) {
         return <LoadingFull /> 
     }
     

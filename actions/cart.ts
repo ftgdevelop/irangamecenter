@@ -143,13 +143,7 @@ const getCartByProductId = async (
         params || {},
         { headers: getHeaders()}
       );
-
-      // const orderId = res.data?.result?.id;
-      // const orderNumber = res.data?.result?.orderNumber;
-
-      // if (orderNumber && orderId) {
-      //   router.push(`/payment?orderNumber=${orderNumber}&orderId=${orderId}`);
-      // }     
+   
       return res;
     } catch (error) {
       handleError(error, "createOrder");
