@@ -40,6 +40,7 @@ const MainMenu: React.FC = () => {
     return (
         <Fragment>
             <button
+                aria-label="main menu button"
                 type="button"
                 className="outline-none border-none"
                 onClick={() => { setOpen(true) }}

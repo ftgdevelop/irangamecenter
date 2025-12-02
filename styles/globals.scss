@@ -114,6 +114,9 @@ body {
     direction: rtl;
   }
   
+  .text-shadow {
+    text-shadow: 0 0 2px #000000c9;
+  }
   .animate-spin-reverse{
     animation: spinReverse 1s linear infinite;
   }	
