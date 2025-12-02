@@ -98,12 +98,8 @@ const Gateways: React.FC<Props> = (props) => {
   }
 
   return gateways?.map((item) => (
-    <div
-      key={item.keyword}
-      className="box-border margin-bottom bank-group-item"
-    >
+    <div key={item.keyword} >
       <div
-        key={item.keyword}
         className="flex flex-wrap gap-2 items-center justify-between mb-2"
       >
         <h5>

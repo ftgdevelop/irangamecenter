@@ -4,9 +4,11 @@ import { useCartApi } from "@/actions/cart";
 import CartSection from "@/components/cart/CartSection";
 import Steps from "@/components/payment/Steps";
 import SimplePortal from "@/components/shared/layout/SimplePortal";
+import LoadingFull from "@/components/shared/LoadingFull";
 import { numberWithCommas } from "@/helpers";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
-import { useAppSelector } from "@/hooks/use-store";
+import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
+import { setGeneralCartInfo, setGeneralCartLoading } from "@/redux/cartSlice";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -18,10 +20,20 @@ export default function CartPage() {
   const currencyStore = useAppSelector((state) => state.cart.currency);
 
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { createOrder } = useCartApi();
+  const { createOrder, getCart } = useCartApi();
+
+  const getGeneralCartData = async () => {
+    dispatch(setGeneralCartLoading(true));
+    const response: any = await getCart();
+    if (response?.result) {
+      dispatch(setGeneralCartInfo(response.result));
+    }
+    dispatch(setGeneralCartLoading(false));
+  };
 
   const handleCart = async () => {
       
@@ -38,20 +50,20 @@ export default function CartPage() {
 
     try {
       const res: any = await createOrder(userInfo);
-            
-      debugger;
-
+               
       const orderId = res.data?.result?.id;
       const orderNumber = res.data?.result?.orderNumber;
 
+      await getGeneralCartData();
+
       if (orderNumber && orderId) {
-      router.push(`/payment?orderNumber=${orderNumber}&orderId=${orderId}`);
+        router.push(`/payment?orderNumber=${orderNumber}&orderId=${orderId}`);
       } 
       
     } catch (error) {
       console.error("Error creating order:", error);
-    } finally {
       setIsSubmitting(false);
+    } finally {
     }
   };
 
@@ -61,13 +73,16 @@ export default function CartPage() {
 
   return (
     <>
+      {isSubmitting && (
+        <LoadingFull />
+      )}
       <Head>
         <title>سبد خرید | فروشگاه</title>
       </Head>
       <Steps activeStepKey="cart" />
 
       <div className="p-4">
-        <CartSection />
+        <CartSection loading={isSubmitting} />
       </div>
 
       {!!cartGeneralInfo?.items?.length && (

@@ -6,7 +6,10 @@ import Link from "next/link";
 import CartCard from "./CartCard";
 import Skeleton from "../shared/Skeleton";
 
-const CartSection = () => {
+type Props = {
+  loading?: boolean;
+}
+const CartSection:React.FC<Props> = props => {
   const { cartGeneralInfo, loading, error } = useAppSelector((state) => state.cart);
   const currencyStore = useAppSelector((state) => state.cart.currency);
 
@@ -16,7 +19,7 @@ const CartSection = () => {
 
   const items = cartGeneralInfo?.items;
 
-  if (loading) {
+  if (loading || props.loading) {
     return [1, 2].map((x) => (
       <div className="mt-3" key={x}>
         <Skeleton className="h-3 w-24 mb-5" dark />
