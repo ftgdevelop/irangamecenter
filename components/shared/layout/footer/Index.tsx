@@ -49,7 +49,7 @@ const Footer = () => {
                             key={item.title}
                             title={item.title}
                             href={item.url}
-                            className="bg-white/15 block p-2 rounded-full"
+                            className="block p-2 rounded-full bg-black/10 dark:bg-white/15"
                         >
                             <Image src={item.iconUrl} alt={item.title} className="w-8 h-8" width={32} height={32} />
                         </Link>

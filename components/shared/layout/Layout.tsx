@@ -344,7 +344,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         <>
             <Error />
             <Notification />
-            <div className={`bg-[#011425] text-white md:max-w-lg mx-auto ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`}>
+            <div className={`bg-[#fafafa] text-[#333333] dark:bg-[#011425] dark:text-white md:max-w-lg mx-auto ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`}>
                 <PageLoadingBar active={loading} />
                 {showHeader && <>
                     <Header type2Params={headerType2} />

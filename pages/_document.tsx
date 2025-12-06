@@ -7,7 +7,7 @@ export default function Document() {
         <meta name="viewport" content="viewport-fit=cover" />
         <meta name="viewport" content="width=device-width" />
       </Head>
-      <body className="antialiased font-iranyekan bg-black" >
+      <body className="antialiased font-iranyekan bg-white dark:bg-black" >
         <Main />
         <div>
           <div id="menu_portal" className="fixed top-0 left-0 right-0 z-[20]" />

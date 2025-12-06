@@ -29,11 +29,11 @@ const Accordion: React.FC<Props> = props => {
         }
     }, [open, props.updateContent]);
 
-    let expandIconClass = `w-2.5 h-2.5 before:absolute before:bg-white/50 before:w-px before:h-full before:left-1/2 before:top-0 before:transition-all ${open ? "before:opacity-0" : "before:opacity-100"}
-            after:absolute after:bg-white/50 after:w-full after:h-px after:top-1/2 after:left-0`;
+    let expandIconClass = `w-[11px] h-[11px] before:absolute before:bg-black/50 dark:before:bg-white/50 before:w-px before:h-full before:left-[5px] before:top-0 before:transition-all ${open ? "before:opacity-0" : "before:opacity-100"}
+            after:absolute after:bg-black/50 dark:after:bg-white/50 after:w-full after:h-px after:top-1/2 after:left-0`;
 
     if (withArrowIcon) {
-        expandIconClass = `w-[7px] h-[7px] border block border-white border-r-transparent border-t-transparent transition-all ${!open ? "-rotate-45" : props.rotateArrow180?"rotate-135":"rotate-45"}`
+        expandIconClass = `w-[7px] h-[7px] border block border-[#777777] dark:border-white border-r-transparent border-t-transparent dark:border-r-transparent dark:border-t-transparent  transition-all ${!open ? "-rotate-45" : props.rotateArrow180?"rotate-135":"rotate-45"}`
     }
 
     return (

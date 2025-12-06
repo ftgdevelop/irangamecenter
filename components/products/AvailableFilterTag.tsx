@@ -18,14 +18,14 @@ const AvailableFilterTag: React.FC<Props> = props => {
         setLoading(false);
     }, [router.asPath]);
 
-    const activeFilterColor = "bg-gradient-to-t from-[#fe4c69] to-[#ff9a90]"
+    const activeFilterColor = "text-white bg-gradient-to-t from-[#fe4c69] to-[#ff9a90]"
 
     const isActive = slugs?.find(x => x.includes("onlyAvailable"));
 
     return (
         <button
             type="button"
-            className={`inline-flex gap-2 items-center justify-between rounded-full px-5 py-2.5 text-2xs select-none ${isActive ? activeFilterColor : "bg-[#192a39]"}`}
+            className={`inline-flex gap-2 items-center justify-between rounded-full px-5 h-10 text-2xs select-none ${isActive ? activeFilterColor : "bg-[#e8ecf0] dark:bg-[#192a39]"}`}
             onClick={() => {
                 setLoading(true);
                 const otherSlugs = slugs?.filter(item => !(item.includes("onlyAvailable")));

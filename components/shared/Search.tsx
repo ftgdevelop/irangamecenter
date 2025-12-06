@@ -17,6 +17,7 @@ import Skeleton from "./Skeleton";
 import History from "../icons/History";
 import ArrowTopLeft from "../icons/ArrowTopLeft";
 import { BlogItemType } from "@/types/blog";
+import SearchIcon from "../icons/SearchIcon";
 
 const Search = () => {
 
@@ -187,9 +188,9 @@ const Search = () => {
                 onClick={() => { setOpen(true); }}
                 type="button"
                 name="text"
-                className="w-full h-14 border-none outline-none rounded-full bg-white/10 px-4 flex items-center gap-3 text-[#bbbbbb]"
+                className="w-full h-14 border-none outline-none rounded-full bg-black/10 dark:bg-white/10 px-4 flex items-center gap-3 text-[#333333] dark:text-[#bbbbbb]"
             >
-                <Image src="/images/icons/search.svg" alt="search" className="" width={30} height={30} />
+                <SearchIcon className="w-9 h-9 fill-[#666] dark:fill-[#fff]" />
                 جستجو
             </button>
 
@@ -201,7 +202,7 @@ const Search = () => {
 
                     <div className="relative w-full md:max-w-lg md:mx-auto h-screen">
 
-                        <div className={`flex flex-col gap-4 p-5 py-7 bg-[#192a39] text-white absolute transition-all left-0 right-0 min-h-screen ${slideIn ? "opacity-100" : "opacity-0"}`}>
+                        <div className={`flex flex-col gap-4 p-5 py-7 bg-[#fafafa] dark:bg-[#192a39] dark:text-white absolute transition-all left-0 right-0 min-h-screen ${slideIn ? "opacity-100" : "opacity-0"}`}>
 
                             <div className='relative' >
                                 <input
@@ -212,7 +213,7 @@ const Search = () => {
                                     placeholder="جستجو"
                                     onChange={e => { setText(e.target.value) }}
                                     value={text}
-                                    className="w-full h-14 border-none outline-none rounded-full text-sm bg-white/10 px-5 pr-14"
+                                    className="w-full h-14 border-none outline-none rounded-full text-sm bg-black/10 dark:bg-white/10 px-5 pr-14"
                                 />
                                 <button
                                     type="submit"
@@ -224,7 +225,7 @@ const Search = () => {
 
                                 {!!text.length && <button
                                     type="button"
-                                    className="absolute top-1/2 left-4 -translate-y-1/2 bg-white/30 rounded-full p-1"
+                                    className="absolute top-1/2 left-4 -translate-y-1/2 bg-black/30 dark:bg-white/30 rounded-full p-1"
                                     onClick={() => {
                                         setText("");
                                         searchInputRef.current?.focus();
@@ -235,10 +236,10 @@ const Search = () => {
 
                             </div>
 
-                            <div className="bg-white/10 rounded-3xl py-5 px-2 grow">
+                            <div className="bg-black/10 dark:bg-white/10 rounded-3xl py-5 px-2 grow">
                                 {!!text.length && (
-                                    <div className="flex gap-4 mx-4 items-center border-b border-white/30 pb-5 text-xs">
-                                        <Image src="/images/icons/search.svg" alt="search" className="" width={30} height={30} />
+                                    <div className="flex gap-4 mx-4 items-center border-b border-black/30 dark:border-white/30 pb-5 text-xs">
+                                        <SearchIcon className="w-9 h-9 fill-[#666] dark:fill-[#fff]" />
                                         <span> جستجوی “{text}” </span>
                                     </div>
                                 )}
@@ -249,7 +250,7 @@ const Search = () => {
                                             <label className="block font-semibold mt-5 mb-3"> جستجو در محصولات </label>
                                             {loading ? (
                                                 [1, 2, 3].map(item => (
-                                                    <div className="flex gap-3 items-center border-b border-white/30 py-3" key={item}>
+                                                    <div className="flex gap-3 items-center border-b border-black/30 dark:border-white/30 py-3" key={item}>
                                                         <Skeleton
                                                             key={item}
                                                             dark
@@ -260,7 +261,7 @@ const Search = () => {
                                                     </div>
                                                 ))
                                             ) : products?.length ? products.map(product => (
-                                                <Link key={product.id} href={`/product/${product.slug}`} target="_blank" className="flex items-center gap-4 border-b border-white/30 py-3" >
+                                                <Link key={product.id} href={`/product/${product.slug}`} target="_blank" className="flex items-center gap-4 border-b border-black/30 dark:border-white/30 py-3" >
                                                     <Image
                                                         src={product.filePath || "/images/default-game.png"}
                                                         alt={product.fileAltAttribute || product.name || ""}
@@ -279,7 +280,7 @@ const Search = () => {
 
                                             {blogLoading ? (
                                                 [1, 2].map(item => (
-                                                    <div className="flex gap-3 items-center border-b border-white/30 py-3" key={item}>
+                                                    <div className="flex gap-3 items-center border-b border-black/30 dark:border-white/30 py-3" key={item}>
                                                         <Skeleton
                                                             key={item}
                                                             dark
@@ -290,7 +291,7 @@ const Search = () => {
                                                     </div>
                                                 ))
                                             ) : blogs?.length ? blogs.map(blog => (
-                                                <Link key={blog.id} href={`/blog/${blog.slug}`} target="_blank" className="flex items-center gap-4 border-b border-white/30 py-3" >
+                                                <Link key={blog.id} href={`/blog/${blog.slug}`} target="_blank" className="flex items-center gap-4 border-b border-black/30 dark:border-white/30 py-3" >
                                                     <Image
                                                         src={blog.jetpack_featured_media_url || "/images/no-image.jpg"}
                                                         alt={blog.title?.rendered || ""}

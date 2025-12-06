@@ -38,7 +38,7 @@ const BlogsCarousel: React.FC<Props> = props => {
     }
 
     return (
-        <section className="bg-[#192b39] py-6">
+        <section className="bg-[#e8ecf0] dark:bg-[#192b39] py-6">
 
             <h3 className="px-4 text-[#ff7189] font-bold flex gap-2 items-center text-md mb-4">
                 <Image src="/images/icons/blog.svg" alt="offer" width={36} height={36} className="w-9 h-9" />
@@ -53,7 +53,7 @@ const BlogsCarousel: React.FC<Props> = props => {
                             key: item.title,
                             content: (
                                 <div className="px-4" key={item.title} dir="rtl">
-                                    <div className="bg-[#011425] rounded-large">
+                                    <div className="bg-[#fff] dark:bg-[#011425] rounded-large">
                                         <Image
                                             src={item.image || "default-game.png"}
                                             alt={item.imageAlt || item.title}

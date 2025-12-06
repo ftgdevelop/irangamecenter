@@ -134,12 +134,12 @@ const Products: NextPage<Props> = props => {
     const isFiltered = !!selectedFilterSlugs.length;
 
 
-    const activeFilterColor = "bg-gradient-to-t from-[#fe4c69] to-[#ff9a90]"
+    const activeFilterColor = "text-white bg-gradient-to-t from-[#fe4c69] to-[#ff9a90]"
     return (
         <>
             <BreadCrumpt
-                wrapperClassName="bg-[#192a39] px-4 py-3 mb-4"
-                textColorClass="text-neutral-300"
+                wrapperClassName="bg-[#e8ecf0] dark:bg-[#192a39] px-4 py-3 mb-4"
+                textColorClass="text-neutral-800 dark:text-neutral-300"
                 items={[{ label: "محصولات", link: "" }]}
             />
 
@@ -153,7 +153,7 @@ const Products: NextPage<Props> = props => {
 
                     <button
                         type="button"
-                        className={`inline-flex gap-2 items-center rounded-full px-5 py-2.5 text-2xs select-none ${isFiltered ? activeFilterColor : "bg-[#192a39]"}`}
+                        className={`inline-flex gap-2 items-center rounded-full px-5 h-10 text-2xs select-none ${isFiltered ? activeFilterColor : "bg-[#e8ecf0] dark:bg-[#192a39]"}`}
                         onClick={() => { dispatch(openFilter("all")) }}
                     >
                         <Filter className="w-4.5 h-4.5 fill-current" />
@@ -168,7 +168,7 @@ const Products: NextPage<Props> = props => {
                         <button
                             key={facet.key}
                             type="button"
-                            className={`inline-flex gap-2 items-center justify-between rounded-full px-5 py-2.5 text-2xs select-none ${props.slugs?.find(x => x.includes(facet.key)) ? activeFilterColor : "bg-[#192a39]"}`}
+                            className={`inline-flex gap-2 items-center justify-between rounded-full px-5 h-10 text-2xs select-none ${props.slugs?.find(x => x.includes(facet.key)) ? activeFilterColor : "bg-[#e8ecf0] dark:bg-[#192a39]"}`}
                             onClick={() => {
                                 dispatch(openFilter(facet.key))
                             }}
