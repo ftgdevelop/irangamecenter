@@ -134,6 +134,13 @@ body {
       height: 0;
     }
   }
+
+  .headerShadow{
+    box-shadow: 0 2px 5px #8b8b8b30;
+  }
+  .no-box-shadow {
+    box-shadow: none;
+  }
   
   .styled-scrollbar {
     &::-webkit-scrollbar {

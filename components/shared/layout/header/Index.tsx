@@ -8,6 +8,7 @@ import { useAppSelector } from "@/hooks/use-store";
 import Loading from "@/components/icons/Loading";
 import CartIcon from "@/components/icons/CartIcon";
 import { toPersianDigits } from "@/helpers";
+import { useEffect, useState } from "react";
 
 type Props = {
     type2Params?: {
@@ -25,8 +26,27 @@ const Header: React.FC<Props> = props => {
 
     const router = useRouter();
 
+    const [scrolled, setScrolled] = useState<boolean>(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 10) {
+                setScrolled(true);
+            } else {
+                setScrolled(false);
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll);
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+
+
     return (
-        <header className="fixed top-0 h-[84px] left-1/2 -translate-x-1/2 bg-[#fafafa] dark:bg-[#011425] z-10 w-full md:max-w-lg flex justify-between p-3">
+        <header className={`${scrolled?"headerShadow dark:no-box-shadow":""} fixed top-0 h-[84px] left-1/2 -translate-x-1/2 bg-[#fafafa] dark:bg-[#011425] z-10 w-full md:max-w-lg flex justify-between p-3`}>
             {(props.type2Params?.backUrl || props.type2Params?.backToPrev)  ? (
                 <div className={`flex items-center py-3.5 gap-4 ${(props.type2Params?.withLogo && !props.type2Params?.title) ?"w-[104px]":""} `}>
                     {props.type2Params.backToPrev ? (

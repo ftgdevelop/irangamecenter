@@ -62,8 +62,8 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
                     {label:"وبلاگ", link:"/blogs"},
                     {label: post.title.rendered || "", link:""}
                 ]}
-                wrapperClassName="bg-[#192a39] px-4 py-3 mb-4"
-                textColorClass="text-neutral-300"                
+                wrapperClassName="bg-[#e8ecf0] dark:bg-[#192a39] px-4 py-3 mb-4"
+                textColorClass="text-neutral-800 dark:text-neutral-300"
             />
             
 
@@ -80,7 +80,7 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
                 
                 <div className="flex gap-3 flex-wrap">
 
-                    {!!date && <div className="block border border-white/15 p-4 rounded-xl text-xs">
+                    {!!date && <div className="block border border-black/15 dark:border-white/15 p-4 rounded-xl text-xs">
                         انتشار
                         <b className="block font-semibold mt-2 text-sm">
                             {toPersianDigits(dateDiplayFormat({
@@ -93,7 +93,7 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
 
                     {!!categories.length && (
                         <Link
-                            className="block border border-white/15 p-4 rounded-xl text-xs"
+                            className="block border border-black/15 dark:border-white/15 p-4 rounded-xl text-xs"
                             href={`/category/${categories[0]?.slug}`}
                         >
                             دسته بندی
@@ -103,7 +103,7 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
                         </Link>
                     )}
 
-                    {!!acf?.time_read && <div className="block border border-white/15 p-4 rounded-xl text-xs">
+                    {!!acf?.time_read && <div className="block border border-black/15 dark:border-white/15 p-4 rounded-xl text-xs">
                         مدت مطالعه
                         <b className="block font-semibold mt-2 text-sm">
                             {acf.time_read}
@@ -129,13 +129,13 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
 
                 {!!tags?.length && (
                     <>
-                    <h4 className="text-lg font-semibold mb-4 mt-8 text-[#ffefb2]"> تگ های مرتبط </h4>
+                    <h4 className="text-lg font-semibold mb-4 mt-8 text-[#a93aff] dark:text-[#ffefb2]"> تگ های مرتبط </h4>
                     <div className="flex gap-2 flex-wrap">
                         {tags.map(tag => (
                             <Link
                                 key={tag.id}
                                 href={`/tag/${tag.slug}`}
-                                className="bg-[#161b3b] text-[#a93aff] font-semibold p-4 text-xs rounded-xl block"
+                                className="bg-[#a93aff] text-white dark:bg-[#161b3b] dark:text-[#a93aff] font-semibold p-4 text-xs rounded-xl block"
                             >
                                 #{tag.label}
                             </Link>

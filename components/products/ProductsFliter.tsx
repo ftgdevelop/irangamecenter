@@ -94,7 +94,7 @@ const ProductsFliter: React.FC<Props> = props => {
         >
             <div className="bg-black/50 backdrop-blur-sm fixed top-0 left-0 right-0 bottom-0" onClick={() => { setSlideIn(false) }} />
 
-            <div className={`bg-[#192a39] text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full md:max-w-lg transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2 ${slideIn ? "bottom-0" : "-bottom-[80vh]"}`}>
+            <div className={`bg-white dark:bg-[#192a39] dark:text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full md:max-w-lg transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2 ${slideIn ? "bottom-0" : "-bottom-[80vh]"}`}>
                 <div className="px-4 pt-8 pb-3">
 
                     <div className="mb-5 flex justify-between items-center">
@@ -201,12 +201,12 @@ const ProductsFliter: React.FC<Props> = props => {
 
                 </div>
 
-                <div className={`sticky bottom-0 px-4 pt-3 safePadding-b bg-[#192a39] ${((hasActiveFilter && openedFilter === "all") || openedFilterIsActive(openedFilter)) ? "grid grid-cols-2 gap-3" : ""}`}>
+                <div className={`sticky bottom-0 px-4 pt-3 safePadding-b bg-white dark:bg-[#192a39] ${((hasActiveFilter && openedFilter === "all") || openedFilterIsActive(openedFilter)) ? "grid grid-cols-2 gap-3" : ""}`}>
 
                     {!!(openedFilter === "all" && hasActiveFilter) && (
                         <button
                             type="button"
-                            className="bg-[#011425] text-white w-full rounded-full px-5 py-3 my-2 text-sm"
+                            className="bg-neutral-400 dark:bg-[#011425] text-white w-full rounded-full px-5 py-3 my-2 text-sm"
                             onClick={() => {
                                 recetAllFilters();
                                 setSlideIn(false);
@@ -219,7 +219,7 @@ const ProductsFliter: React.FC<Props> = props => {
                     {openedFilterIsActive(openedFilter) && (
                         <button
                             type="button"
-                            className="bg-[#011425] text-white w-full rounded-full px-5 py-3 my-2 text-sm"
+                            className="bg-neutral-400 dark:bg-[#011425] text-white w-full rounded-full px-5 py-3 my-2 text-sm"
                             onClick={() => {
                                 changeFilterHandel([], openedFilter);
                                 setSlideIn(false);
@@ -231,7 +231,7 @@ const ProductsFliter: React.FC<Props> = props => {
 
                     <button
                         type="button"
-                        className="bg-violet-500 w-full rounded-full px-5 py-3 my-2 text-sm"
+                        className="text-white bg-violet-500 w-full rounded-full px-5 py-3 my-2 text-sm"
                         onClick={() => { setSlideIn(false) }}
                     >
                         اعمال تغییرات
