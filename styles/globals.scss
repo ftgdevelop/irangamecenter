@@ -121,6 +121,12 @@ body {
     animation: spinReverse 1s linear infinite;
   }	
 
+  .round-linecap{
+    stroke-linecap: round;
+  }
+  .stroke-15 {
+    stroke-width: 1.5px;
+  }
   .writing-tb {
     writing-mode: tb;
   }
@@ -133,6 +139,13 @@ body {
       width: 0;
       height: 0;
     }
+  }
+
+  .headerShadow{
+    box-shadow: 0 2px 5px #8b8b8b30;
+  }
+  .no-box-shadow {
+    box-shadow: none;
   }
   
   .styled-scrollbar {

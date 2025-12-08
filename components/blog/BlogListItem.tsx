@@ -12,15 +12,15 @@ const BlogListItem: React.FC<Props> = props => {
     const { data } = props;
 
     return (
-        <Link href={`/blog/${data.slug}`} className={`grid grid-cols-4 gap-3 ${props.wrapperClassName || ""}`}>
+        <Link href={`/blog/${data.slug}`} className={`flex gap-3 ${props.wrapperClassName || ""}`}>
             <Image
                 src={data.jetpack_featured_media_url || "/images/no-image.jpg"}
                 alt={data.title?.rendered || ""}
                 width={488}
                 height={214}
-                className="rounded-large aspect-square object-cover"
+                className="h-18 w-18 rounded-2xl aspect-square object-cover"
             />
-            <div className="col-span-3 py-3">
+            <div className="grow py-3">
                 <strong className="block mb-1 text-sm">
                     {data.title?.rendered}
                 </strong>

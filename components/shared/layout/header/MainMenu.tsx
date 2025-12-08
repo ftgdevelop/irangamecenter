@@ -60,8 +60,8 @@ const MainMenu: React.FC = () => {
                     />
 
                     <div className="overflow-hidden absolute h-screen left-0 top-0 w-5/6">
-                        <div className={`bg-[#011425] text-white h-screen rounded-r-2xl overflow-x-hidden overflow-y-auto transition-all ${delayedOpen ? "translate-x-0" : "-translate-x-full"}`}>
-                            <div className="flex justify-between bg-[#192a39] p-3.5">
+                        <div className={`bg-[#fafafa] text-[#333333] dark:bg-[#011425] dark:text-white h-screen rounded-r-2xl overflow-x-hidden overflow-y-auto transition-all ${delayedOpen ? "translate-x-0" : "-translate-x-full"}`}>
+                            <div className="flex justify-between bg-[#e5e5e5] dark:bg-[#192a39] p-3.5">
                                 <div className="flex gap-4">
                                     <Image src="/logo.svg" alt="irangamecenter" width={50} height={50} />
                                     <div>
@@ -78,7 +78,7 @@ const MainMenu: React.FC = () => {
                                     className=""
                                     onClick={() => { setDelayedOpen(false) }}
                                 >
-                                    <CloseSimple className=" w-8 h-8 fill-neutral-300" />
+                                    <CloseSimple className=" w-8 h-8 fill-red-500 dark:fill-neutral-300" />
                                 </button>
                             </div>
 
@@ -89,7 +89,7 @@ const MainMenu: React.FC = () => {
                                         onClick={()=>{setDelayedOpen(false)}}
                                         key={item.label}
                                         href={item.url} 
-                                        className={`block py-5 border-white/15 text-sm ${index ? "border-t" : ""}`}
+                                        className={`block py-5 border-neutral-300 dark:border-white/15 text-sm ${index ? "border-t" : ""}`}
                                     >
                                         {item.label}
                                     </Link>

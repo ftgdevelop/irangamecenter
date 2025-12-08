@@ -44,7 +44,7 @@ const FormikField: React.ForwardRefRenderFunction<FieldHandle, Props> = (props, 
 
   const [isPassword, setIsPassword] = useState<boolean>(props.isPassword || false);
 
-  const inputClassNames: string[] = ['w-full px-5 bg-[#192a39] border outline-none rounded-full text-sm'];
+  const inputClassNames: string[] = ['w-full px-5 bg-[#dddddd] dark:bg-[#192a39] border outline-none rounded-full text-sm'];
 
   if (props.heightClassName) {
     inputClassNames.push(props.heightClassName)

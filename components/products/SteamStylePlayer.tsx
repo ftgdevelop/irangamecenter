@@ -1,7 +1,12 @@
 import Hls, { Events, Level } from 'hls.js';
-import { Check, Pause, Play, Settings, Volume2, VolumeX } from 'lucide-react';
 import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
+import VolumeMute from '../icons/VolumeMute';
+import Volume from '../icons/Volume';
+import Settings from '../icons/Settings';
+import Play from '../icons/Play';
+import Pause from '../icons/Pause';
+import CheckIcon from '../icons/CheckIcon';
 
 interface Props {
   src: string;
@@ -221,7 +226,7 @@ const SteamStylePlayer: React.FC<Props> = ({
                     currentLevel === -1 ? 'text-red-400' : 'text-gray-200'
                   }`}
                 >
-                  Auto {currentLevel === -1 && <Check className="size-3" />}
+                  Auto {currentLevel === -1 && <CheckIcon className="w-4 h-4 fill-current" />}
                 </button>
                 {levels.map((level, index) => (
                   <button
@@ -232,13 +237,13 @@ const SteamStylePlayer: React.FC<Props> = ({
                     }`}
                   >
                     {level.height ? `${level.height}p` : `Level ${index}`}
-                    {currentLevel === index && <Check className="size-3" />}
+                    {currentLevel === index && <CheckIcon className="w-4 h-4 fill-current" />}
                   </button>
                 ))}
               </div>
             )}
             <button onClick={() => setShowSettings(!showSettings)}>
-              <Settings className="size-4 sm:size-5" />
+              <Settings className="w-5 h-5 fill-white" />
             </button>
 
 
@@ -263,18 +268,18 @@ const SteamStylePlayer: React.FC<Props> = ({
               />
               <button onClick={toggleMute}>
                 {muted || volume === 0 ? (
-                  <VolumeX className="size-4 sm:size-5" />
-                ) : (
-                  <Volume2 className="size-4 sm:size-5" />
+                  <VolumeMute className='w-5 h-5 fill-current' />
+                ) : (                  
+                   <Volume className='w-5 h-5 fill-current' />
                 )}
               </button>
 
             </div>
             <button onClick={togglePlay}>
               {playing ? (
-                <Pause className="size-5 sm:size-6" />
+                <Pause className="w-7 h-8 fill-white" />
               ) : (
-                <Play className="size-5 sm:size-6" />
+                <Play className="w-7 h-8 fill-white" />
               )}
             </button>
 

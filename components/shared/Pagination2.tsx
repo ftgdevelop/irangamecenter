@@ -46,11 +46,11 @@ const Pagination2: React.FC<Props> = props => {
     }
 
     return (
-        <div className={`flex justify-between items-center bg-[#1a1e3b] rounded-full p-2 ${props.wrapperClassName || ""}`}>
+        <div className={`flex justify-between items-center bg-[#e8ecf0] dark:bg-[#1a1e3b] rounded-full p-2 ${props.wrapperClassName || ""}`}>
             <button
                 type="button"
                 onClick={previousPage}
-                className={`w-10 h-10 flex justify-center items-center rounded-full ${activePage > 1 ? "bg-[#011425] active:from-[#a93aff] active:bg-gradient-to-t active:to-[#fe80ff]" : "text-white/25"}`}
+                className={`w-10 h-10 flex justify-center items-center rounded-full ${activePage > 1 ? "bg-[#fafafa] dark:bg-[#011425] dark:active:from-[#a93aff] dark:active:bg-gradient-to-t dark:active:to-[#fe80ff] dark:active:text-white" : "text-white/25"}`}
             >
                 <CaretRight className="w-4 h-4 fill-current" />
 
@@ -59,7 +59,7 @@ const Pagination2: React.FC<Props> = props => {
             {(activePage > 1) && <button
                 type="button"
                 onClick={() => { setActivePage(1); props.onChange(1); }}
-                className="w-10 h-10 flex items-center justify-center"
+                className="w-10 h-10 flex items-center justify-center rounded-full active:from-[#a93aff] active:bg-gradient-to-t active:to-[#fe80ff] active:text-white"
             >
                 1
             </button>}
@@ -71,7 +71,7 @@ const Pagination2: React.FC<Props> = props => {
             {(activePage === totalPages && totalPages > 4) && <button
                 type="button"
                 onClick={() => { setActivePage(totalPages - 2); props.onChange(totalPages - 2) }}
-                className="w-10 h-10 flex items-center justify-center"
+                className="w-10 h-10 flex items-center justify-center rounded-full active:from-[#a93aff] active:bg-gradient-to-t active:to-[#fe80ff] active:text-white"
             >
                 {totalPages - 2}
             </button>}
@@ -79,19 +79,19 @@ const Pagination2: React.FC<Props> = props => {
             {(activePage > 2) && <button
                 type="button"
                 onClick={previousPage}
-                className="w-10 h-10 flex items-center justify-center"
+                className="w-10 h-10 flex items-center justify-center rounded-full active:from-[#a93aff] active:bg-gradient-to-t active:to-[#fe80ff] active:text-white"
             >
                 {activePage - 1}
             </button>}
 
-            <div className="bg-[#011425] rounded-full w-10 h-10 flex items-center justify-center text-sm font-semibold">
+            <div className="bg-[#a93aff] text-white dark:bg-[#011425] rounded-full w-10 h-10 flex items-center justify-center text-sm font-semibold">
                 {activePage}
             </div>
 
             {((activePage + 1) < totalPages) && <button
                 type="button"
                 onClick={nextPage}
-                className="w-10 h-10 flex items-center justify-center"
+                className="w-10 h-10 flex items-center justify-center rounded-full active:from-[#a93aff] active:bg-gradient-to-t active:to-[#fe80ff] active:text-white"
             >
                 {activePage + 1}
             </button>}
@@ -99,7 +99,7 @@ const Pagination2: React.FC<Props> = props => {
             {((activePage === 1) && (totalPages > 4)) && <button
                 type="button"
                 onClick={() => { setActivePage(3); props.onChange(3); }}
-                className="w-10 h-10 flex items-center justify-center"
+                className="w-10 h-10 flex items-center justify-center rounded-full active:from-[#a93aff] active:bg-gradient-to-t active:to-[#fe80ff] active:text-white"
             >
                 3
             </button>}
@@ -111,7 +111,7 @@ const Pagination2: React.FC<Props> = props => {
             {(activePage < totalPages) && <button
                 type="button"
                 onClick={() => { setActivePage(totalPages); props.onChange(totalPages) }}
-                className="w-10 h-10 flex items-center justify-center"
+                className="w-10 h-10 flex items-center justify-center rounded-full active:from-[#a93aff] active:bg-gradient-to-t active:to-[#fe80ff] active:text-white"
             >
                 {totalPages}
             </button>}
@@ -119,7 +119,7 @@ const Pagination2: React.FC<Props> = props => {
             <button
                 type="button"
                 onClick={nextPage}
-                className={`w-10 h-10 flex justify-center items-center rounded-full ${activePage < totalPages ? "bg-[#011425] active:from-[#a93aff] active:bg-gradient-to-t active:to-[#fe80ff]" : "text-white/25"}`}
+                className={`w-10 h-10 flex justify-center items-center rounded-full ${activePage < totalPages ? "bg-[#fafafa] dark:bg-[#011425] dark:active:from-[#a93aff] dark:active:bg-gradient-to-t dark:active:to-[#fe80ff] dark:active:text-white" : "text-white/25"}`}
             >
                 <CaretLeft className="w-4 h-4 fill-current" />
 

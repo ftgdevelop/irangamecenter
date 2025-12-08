@@ -84,7 +84,7 @@ const CartSection:React.FC<Props> = props => {
     <>
       <div className="flex items-center justify-between gap-2.5">
         <div>
-          <span className="bg-gradient-to-b from-[#FFE59A] to-[#FFFFD5] bg-clip-text text-transparent leading-8 font-bold ml-2.5">
+          <span className="text-[#fd7e14] dark:text-[#FFE59A] leading-8 font-bold ml-2.5">
             سبد خرید شما
           </span>
           {items && items.length && (

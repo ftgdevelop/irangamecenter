@@ -75,7 +75,7 @@ const ProductDetail: React.FC<Props> = props => {
                 <h4 className="text-sm my-4 font-semibold"> مشخصات بازی</h4>
 
                 {!!productData.genres?.[0]?.name && (
-                    <div className="flex justify-between py-4 border-b border-white/15 text-sm gap-5 last:border-0" >
+                    <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5 last:border-0" >
                         <div className="whitespace-nowrap"> سبک بازی </div>
                         <div className="text-left text-teal-500">
                             {productData.genres.map(item => item.name).join("، ")}
@@ -84,7 +84,7 @@ const ProductDetail: React.FC<Props> = props => {
                 )}
 
                 {!!productData.developer?.name && (
-                    <div className="flex justify-between py-4 border-b border-white/15 text-sm gap-5" >
+                    <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5" >
                         <div className="whitespace-nowrap"> شرکت توسعه دهنده </div>
                         <Link href={`/brand/${productData.developer.slug || "unknown"}`} className="text-left text-teal-500 last:border-0">
                             {productData.developer.name}
@@ -92,7 +92,7 @@ const ProductDetail: React.FC<Props> = props => {
                     </div>
                 )}
                 {!!productData.publisher?.name && (
-                    <div className="flex justify-between py-4 border-b border-white/15 text-sm gap-5" >
+                    <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5" >
                         <div className="whitespace-nowrap"> شرکت انتشار دهنده </div>
                         <Link href={`/brand/${productData.publisher.slug || "unknown"}`} className="text-left text-teal-500 last:border-0">
                             {productData.publisher.name}
@@ -101,7 +101,7 @@ const ProductDetail: React.FC<Props> = props => {
                 )}
 
                 {!!productData.gameplay?.length && (
-                    <div className="flex justify-between py-4 border-b border-white/15 text-sm gap-5 last:border-0" >
+                    <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5 last:border-0" >
                         <div className="whitespace-nowrap"> حالت بازی </div>
                         <div className="text-left text-teal-500">
                             {productData.gameplay.map(item => item.name).join("، ")}
@@ -109,7 +109,7 @@ const ProductDetail: React.FC<Props> = props => {
                     </div>
                 )}
                 {!!productData.playerPerspective?.length && (
-                    <div className="flex justify-between py-4 border-b border-white/15 text-sm gap-5 last:border-0" >
+                    <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5 last:border-0" >
                         <div className="whitespace-nowrap"> زاویه دید </div>
                         <div className="text-left text-teal-500">
                             {productData.playerPerspective.map(item => item.name).join("، ")}
@@ -119,7 +119,7 @@ const ProductDetail: React.FC<Props> = props => {
 
 
                 {!!productData.theme?.length && (
-                    <div className="flex justify-between py-4 border-b border-white/15 text-sm gap-5 last:border-0" >
+                    <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5 last:border-0" >
                         <div className="whitespace-nowrap"> تم بازی </div>
                         <div className="text-left text-teal-500">
                             {productData.theme.map(item => item.name).join("، ")}
@@ -128,7 +128,7 @@ const ProductDetail: React.FC<Props> = props => {
                 )}
 
                 {!!productData.releaseDate && (
-                    <div className="flex justify-between py-4 border-b border-white/15 text-sm gap-5 last:border-0" >
+                    <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5 last:border-0" >
                         <div className="whitespace-nowrap"> تاریخ انتشار </div>
                         <div className="text-left text-teal-500">
                             {dateDiplayFormat({
@@ -152,7 +152,7 @@ const ProductDetail: React.FC<Props> = props => {
                     <h4 className="text-sm my-4 font-semibold"> امتیاز در وبسایت های معتبر</h4>
 
                     {productData.rating.map((rating, index) => (
-                        <div className={`flex justify-between py-4 text-sm gap-5 ${index ? "border-t border-white/15" : ""}`} key={rating.type} >
+                        <div className={`flex justify-between py-4 text-sm gap-5 ${index ? "border-t border-neutral-300 dark:border-white/15" : ""}`} key={rating.type} >
                             <div className="whitespace-nowrap font-semibold" dir="ltr"> {rating.value}/{rating.total} </div>
                             <div className="text-left text-violet-400 font-semibold">
                                 {rating.type}
@@ -181,11 +181,11 @@ const ProductDetail: React.FC<Props> = props => {
             >
                 <div className="bg-black/50 backdrop-blur-sm fixed top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInDetails(false) }} />
 
-                <div className={`bg-[#192a39] text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full md:max-w-lg safePadding-b transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2 ${slideInDetails ? "bottom-0" : "-bottom-[80vh]"}`}>
+                <div className={`bg-white dark:bg-[#192a39] dark:text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full md:max-w-lg safePadding-b transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2 ${slideInDetails ? "bottom-0" : "-bottom-[80vh]"}`}>
                     <Tab
                         heading={productData.name}
                         isSticky
-                        navsBgClass="bg-[#192a39]"
+                        navsBgClass="bg-white dark:bg-[#192a39]"
                         items={tabItems}
                         style="3"
                         wrapperClassName="mx-3"

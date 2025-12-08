@@ -307,12 +307,12 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             const token = localStorage?.getItem('Token');
             if (!token) return;
 
-            dispatch(setReduxBalance({ balance: undefined, loading: true }));
+            dispatch(setReduxBalance({ balance: undefined, loading: true, currency:"" }));
             const response: any = await getUserBalance(token);
             if (response.data?.result?.amount !== null) {
-                dispatch(setReduxBalance({ balance: response?.data?.result?.amount, loading: false }))
+                dispatch(setReduxBalance({ balance: response?.data?.result?.amount, loading: false, currency: response?.data?.result?.currencyType }))
             } else {
-                dispatch(setReduxBalance({ balance: undefined, loading: false }));
+                dispatch(setReduxBalance({ balance: undefined, loading: false,  currency:"" }));
             }
         }
         if (isAuthenticated) {
@@ -344,7 +344,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         <>
             <Error />
             <Notification />
-            <div className={`bg-[#011425] text-white md:max-w-lg mx-auto ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`}>
+            <div className={`bg-[#fafafa] text-[#333333] dark:bg-[#011425] dark:text-white md:max-w-lg mx-auto ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`}>
                 <PageLoadingBar active={loading} />
                 {showHeader && <>
                     <Header type2Params={headerType2} />

@@ -2,7 +2,6 @@
 
 import {   GetCartByProductIdType, ProductVariant } from "@/types/commerce";
 import { useEffect, useState} from "react";
-import {  ChevronLeft, Minus, Plus, Trash2 } from "lucide-react";
 
 import SimplePortal from "../shared/layout/SimplePortal";
 import { numberWithCommas } from "@/helpers";
@@ -16,6 +15,10 @@ import { useRouter } from "next/router";
 import { setProgressLoading } from "@/redux/stylesSlice";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 import { addDeviceIdToCookie } from "@/helpers/order";
+import CaretLeft from "../icons/CaretLeft";
+import Plus from "../icons/Plus";
+import Minus from "../icons/Minus";
+import Trash from "../icons/Trash";
 
 const VariantFooter = ({
   currentVariant,
@@ -155,7 +158,7 @@ const VariantFooter = ({
             </span>
           <button
             type="button"
-            className="w-fit h-full text-white flex items-end"
+            className="w-fit h-full text-neutral-700 text-white flex items-end"
             onClick={async (e) => {
               e.preventDefault();
               dispatch(setProgressLoading(true)); 
@@ -164,27 +167,27 @@ const VariantFooter = ({
             }}
           >
             <span>برو به سبد خرید</span>
-            <ChevronLeft className="inline-block mr-1" size={16} />
+            <CaretLeft className="fill-current w-4 h-4 inline-block align-middle mr-1" />
           </button>
           </div>
         </Alert>
       )}
 
       <SimplePortal selector="fixed_bottom_portal">
-        <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 bg-[#192a39] px-4 py-3 flex flex-wrap max-[390px]:justify-center justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
+        <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 bg-white dark:bg-[#192a39] px-4 py-3 flex flex-wrap max-[390px]:justify-center justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
           
           {!!cartData?.items.length &&
           cartData.totalQuantity &&
           currentCartItem?.quantity ? (
-          <div className="flex items-center gap-2 h-13 bg-[#EFEFF0]/10 rounded-full max-[390px]:w-full max-[390px]:justify-between">
+          <div className="flex items-center gap-2 h-13 bg-[#eeeeee] dark:bg-[#EFEFF0]/10 rounded-full max-[390px]:w-full max-[390px]:justify-between">
               <button
               className="bg-gradient-to-t from-green-600 to-green-300 hover:bg-gradient-to-tr flex justify-center items-center p-2 h-13 w-13 rounded-full"
                 onClick={handleAddToCart}
               >
-                <Plus size={24} />
+                <Plus className="w-4 h-4 fill-current" />
               </button>
 
-              <span className="flex justify-center items-center w-[67px]  font-medium text-white">
+              <span className="flex justify-center items-center w-[67px]  font-medium text-black dark:text-white">
                 {loading ? (
                   <Loading className="fill-current w-5 h-5 animate-spin" />
                 ) : (
@@ -193,11 +196,11 @@ const VariantFooter = ({
               </span>
 
               <button
-                className="bg-gradient-to-r from-[#00B59C]/10 to-[#9CFFAC]/10 flex justify-center items-center p-2 h-13 w-13 rounded-full hover:bg-gray-600"
+                className="text-[#333333] dark:text-white/70 bg-gradient-to-t hover:bg-gradient-to-tr from-[#dddddd] to-[#aaaaaa] dark:from-[#00B59C]/10 dark:to-[#9CFFAC]/10 flex justify-center items-center p-2 h-13 w-13 rounded-full"
                 onClick={handleRemoveFromCart}
                 >
                   {
-                    currentCartItem?.quantity  > 1 ? <Minus size={24} className="text-white/70" /> : <Trash2 size={24} className="text-white/70" />
+                    currentCartItem?.quantity  > 1 ? <Minus className="w-4 h-4 fill-current" /> : <Trash className="w-6 h-6 fill-current" />
                   }
               </button>
             </div>
@@ -225,14 +228,14 @@ const VariantFooter = ({
 
           {((variantItem?.salePrice && variantItem?.regularPrice) ||
             (currentCartItem && currentCartItem.unitPrice)) && (
-            <div className="text-left text-white max-[390px]:w-full">
+            <div className="text-left text-neutral-700 dark:text-white max-[390px]:w-full">
               {variantItem?.profitPercentage && (
                 <div className="flex flex-wrap gap-2 mb-1">
                   <span className="text-[#fe9f00] text-2xs font-semibold">
                     {!currentCartItem?.totalDiscountAmount ? `${variantItem.profitPercentage} %   تخفیف` : `
                     ${currentCartItem?.totalDiscountAmount} ${currency} تخفیف `}
                   </span>
-                  <span className="text-xs text-white/70 line-through">
+                  <span className="text-xs text-neutral-500 dark:text-white/70 line-through">
                     {numberWithCommas(currentCartItem?.totalStrikePrice ?? variantItem.regularPrice ?? 0)} {currency}
                   </span>
                 </div>

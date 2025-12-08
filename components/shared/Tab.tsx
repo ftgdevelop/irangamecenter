@@ -34,7 +34,7 @@ const Tab: React.FC<Props> = props => {
     }, [props.activeTab]);
 
     const tabClassName = (active: boolean) => {
-        return `outline-none font-semibold whitespace-nowrap select-none text-sm px-2 sm:px-3 py-2 sm:py-3 border-b-2 transition-all block ${props.noGrowTabs ? "" : "grow"} ${active ? "border-[#aa3aff] text-[#aa3aff]" : "border-transparent text-white"}`;
+        return `outline-none font-semibold whitespace-nowrap select-none text-sm px-2 sm:px-3 py-2 sm:py-3 border-b-2 transition-all block ${props.noGrowTabs ? "" : "grow"} ${active ? "border-[#aa3aff] text-[#aa3aff]" : "border-transparent text-[#888888] dark:text-white"}`;
     }
 
     return (
@@ -55,7 +55,7 @@ const Tab: React.FC<Props> = props => {
                     </div>
                 )}
 
-                <div className={`border-b border-neutral-200/25 ${props.scrollTabs ? 'hidden-scrollbar overflow-x-auto overflow-y-clip' : ""}`}>
+                <div className={`border-b border-neutral-200 dark:border-neutral-200/25 ${props.scrollTabs ? 'hidden-scrollbar overflow-x-auto overflow-y-clip' : ""}`}>
                     <div className={`flex ${!props.scrollTabs ? "flex-wrap" : ""} ${props.tabLinksBold ? "font-bold" : ""}`}>
                         {items.map(item => <button
                             type="button"

@@ -147,7 +147,7 @@ const Products: NextPage<Props> = props => {
     const isFiltered = !!selectedFilterSlugs.length;
 
 
-    const activeFilterColor = "bg-gradient-to-t from-[#fe4c69] to-[#ff9a90]"
+    const activeFilterColor = "text-white bg-gradient-to-t from-[#fe4c69] to-[#ff9a90]"
     return (
         <>
             <BreadCrumpt
@@ -155,8 +155,8 @@ const Products: NextPage<Props> = props => {
                     { label: "محصولات", link: "/products" },
                     { label: brandData?.name || "نامشخص", link: "" }
                 ]}
-                wrapperClassName="bg-[#192a39] px-4 py-3"
-                textColorClass="text-neutral-300"
+                wrapperClassName="bg-[#e8ecf0] dark:bg-[#192a39] px-4 py-3 mb-4"
+                textColorClass="text-neutral-800 dark:text-neutral-300"
             />
 
             {brandData?.filePath && <Image
@@ -166,7 +166,7 @@ const Products: NextPage<Props> = props => {
                 height={200}
                 className="h-24 w-24 block mt-8 mx-auto"
             />}
-            {brandData?.name && <h2 className="px-5 text-lg font-semibold mb-10 mt-3 text-[#ffefb2] text-center"> {brandData?.name} </h2>}
+            {brandData?.name && <h2 className="px-5 text-lg font-semibold mb-10 mt-3 text-[#fd7e14] dark:text-[#ffefb2] text-center"> {brandData?.name} </h2>}
 
 
             <div className="max-lg:hidden-scrollbar lg:styled-scrollbar md:pb-3 md:-mb-3 overflow-x-auto overflow-y-clip pl-3">
@@ -179,7 +179,7 @@ const Products: NextPage<Props> = props => {
 
                     <button
                         type="button"
-                        className={`inline-flex gap-2 items-center rounded-full px-5 py-2.5 text-2xs select-none ${isFiltered ? activeFilterColor : "bg-[#192a39]"}`}
+                        className={`inline-flex gap-2 items-center rounded-full px-5 py-2.5 text-2xs select-none ${isFiltered ? activeFilterColor : "bg-[#e8ecf0] dark:bg-[#192a39]"}`}
                         onClick={() => { dispatch(openFilter("all")) }}
                     >
                         <Filter className="w-4.5 h-4.5 fill-current" />
@@ -194,7 +194,7 @@ const Products: NextPage<Props> = props => {
                         <button
                             key={facet.key}
                             type="button"
-                            className={`inline-flex gap-2 items-center justify-between rounded-full px-5 py-2.5 text-2xs select-none ${props.slugs?.find(x => x.includes(facet.key)) ? activeFilterColor : "bg-[#192a39]"}`}
+                            className={`inline-flex gap-2 items-center justify-between rounded-full px-5 py-2.5 text-2xs select-none ${props.slugs?.find(x => x.includes(facet.key)) ? activeFilterColor : "bg-[#e8ecf0] dark:bg-[#192a39]"}`}
                             onClick={() => {
                                 dispatch(openFilter(facet.key))
                             }}

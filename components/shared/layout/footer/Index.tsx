@@ -37,7 +37,7 @@ const Footer = () => {
             <Accordion
                 title="لینک های مهم"
                 content="لینک های مهم"
-                WrapperClassName={`border-b border-t border-white/15 py-3`}
+                WrapperClassName={`border-b border-t border-neutral-300 dark:border-white/15 py-3`}
                 withArrowIcon
             />
 
@@ -49,7 +49,7 @@ const Footer = () => {
                             key={item.title}
                             title={item.title}
                             href={item.url}
-                            className="bg-white/15 block p-2 rounded-full"
+                            className="block p-2 rounded-full bg-black/10 dark:bg-white/15"
                         >
                             <Image src={item.iconUrl} alt={item.title} className="w-8 h-8" width={32} height={32} />
                         </Link>
@@ -87,7 +87,7 @@ const Footer = () => {
                 </div>
             </div>
 
-            <div className="text-[11px] border-t border-white/15 py-5">
+            <div className="text-[11px] border-t border-neutral-300 dark:border-white/15 py-5">
 
                 © ۱۴۰۳ - تمام حقوق مربوط به وب سایت ایران گیم سنتر می باشد.
             </div>

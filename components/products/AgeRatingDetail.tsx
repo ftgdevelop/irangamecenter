@@ -181,7 +181,7 @@ const AgeRatingDetail: React.FC<Props> = props => {
 
                     {!!productData.pegi && (
                         <button
-                            className={`block border border-white/15 p-2.5 text-xs mt-5 ${productData.esrb ? "rounded-r-xl border-l-0" : "rounded-xl"}`}
+                            className={`block border border-neutral-300 dark:border-white/15 p-2.5 text-xs mt-5 ${productData.esrb ? "rounded-r-xl border-l-0" : "rounded-xl"}`}
                             type="button"
                             onClick={() => { setActiveItem("pegi") }}
                         >
@@ -207,7 +207,7 @@ const AgeRatingDetail: React.FC<Props> = props => {
 
                     {!!productData.esrb && (
                         <button
-                            className={`block border border-white/15 p-2.5 text-xs mt-5 ${productData.pegi ? "rounded-l-xl" : "rounded-xl"}`}
+                            className={`block border border-neutral-300 dark:border-white/15 p-2.5 text-xs mt-5 ${productData.pegi ? "rounded-l-xl" : "rounded-xl"}`}
                             type="button"
                             onClick={() => { setActiveItem("esrb") }}
                         >
@@ -240,7 +240,7 @@ const AgeRatingDetail: React.FC<Props> = props => {
             >
                 <div className="bg-black/50 backdrop-blur-sm fixed top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInDetails(false) }} />
 
-                <div className={`bg-[#192a39] text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full md:max-w-lg safePadding-b transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2 ${slideInDetails ? "bottom-0" : "-bottom-[80vh]"}`}>
+                <div className={`bg-white dark:bg-[#192a39] dark:text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full md:max-w-lg safePadding-b transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2 ${slideInDetails ? "bottom-0" : "-bottom-[80vh]"}`}>
                     <div className="min-h-96 flex flex-col justify-between" >
                         <div>
 

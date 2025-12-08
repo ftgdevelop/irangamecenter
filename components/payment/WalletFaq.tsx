@@ -16,7 +16,7 @@ const WalletFaq: React.FC<Props> = props => {
                     key={item.key}
                     title={item.title}
                     content={item.content}
-                    WrapperClassName={`border-b border-white/15 py-2 ${index ? "" : "border-t"}`}
+                    WrapperClassName={`border-b border-neutral-300 dark:border-white/15 py-2 ${index ? "" : "border-t"}`}
                 />
             ))}
         </div>

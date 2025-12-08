@@ -18,7 +18,7 @@ const FAQ: React.FC<Props> = props => {
                     key={item.id}
                     title={item.Question}
                     content={props.answerParse === "markDown" ? (<Markdown>{item.Answer}</Markdown>) : parse(item.Answer||"")}
-                    WrapperClassName={`border-b border-white/15 py-2 ${index ? "" : "border-t"}`}
+                    WrapperClassName={`border-b border-neutral-300 dark:border-white/15 py-2 ${index ? "" : "border-t"}`}
                 />
             ))}
         </div>

@@ -82,8 +82,8 @@ const Blogs: NextPage<Props> = props => {
     return (
         <>
             <BreadCrumpt
-                wrapperClassName="bg-[#192a39] px-4 py-3 mb-4"
-                textColorClass="text-neutral-300"
+                wrapperClassName="bg-[#e8ecf0] dark:bg-[#192a39] px-4 py-3 mb-4"
+                textColorClass="text-neutral-800 dark:text-neutral-300"
                 items={[{ label: "وبلاگ", link: "" }]}
             />
 
@@ -97,12 +97,12 @@ const Blogs: NextPage<Props> = props => {
                 ))}
 
                 {!!loading && [1, 2, 3, 4, 5].map(item => (
-                    <div className="grid grid grid-cols-4 gap-3 mb-4" key={item}>
+                    <div className="flex gap-3 mb-4" key={item}>
                         <Skeleton
                             type="image"
-                            className="aspect-square rounded-large"
+                            className="w-18 h-18 aspect-square rounded-2xl"
                         />
-                        <div className="col-span-3">
+                        <div className="grow">
                             <Skeleton className="h-4 w-full mt-5 mb-4" />
                             <Skeleton className="w-1/2" />
                         </div>
@@ -112,7 +112,7 @@ const Blogs: NextPage<Props> = props => {
                 <button
                     ref={loadMoreWrapper}
                     type="button"
-                    className="text-sm text-[#ca54ff] bg-[#161b39] w-full px-5 py-3 flex rounded-full justify-center gap-3"
+                    className="text-sm text-white dark:text-[#ca54ff] bg-[#ca54ff] dark:bg-[#161b39] w-full px-5 py-3 flex rounded-full justify-center gap-3"
                     onClick={addItems}
                 >
                     <Add />

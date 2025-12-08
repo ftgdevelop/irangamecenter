@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import React, { useState } from "react";
-import { Minus, Plus } from "lucide-react";
 import {  GetCurrentProductType } from "@/types/commerce";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import { addDeviceId, setGeneralCartInfo, setGeneralCartLoading, setLastItemChangedId } from "@/redux/cartSlice";
@@ -12,6 +11,9 @@ import { numberWithCommas } from "@/helpers";
 import { useCartApi } from "@/actions/cart";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 import { addDeviceIdToCookie } from "@/helpers/order";
+import Plus from "../icons/Plus";
+import Minus from "../icons/Minus";
+import Trash from "../icons/Trash";
 
 
 
@@ -78,7 +80,7 @@ const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][num
 
 
   return (
-    <div className="text-white flex flex-col gap-5 pt-4 justify-between items-center pb-4 border-b border-[#192b39]/50 w-full">
+    <div className="dark:text-white flex flex-col gap-5 pt-4 justify-between items-center pb-4 border-b border-[#192b39]/50 w-full">
       <div className="flex w-full items-center min-h-[120px] gap-5">
         <Link href={`/product/${item.variant.product.slug}`} className="relative w-[120px] h-[120px] bg-black/25  rounded-[20px]  overflow-hidden" >
                     <Image
@@ -95,51 +97,51 @@ const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][num
           <div className="flex flex-col gap-1">
             {item?.variant.attributes && item?.variant.attributes.length > 0 ? (
               item?.variant.attributes.map((variant,index) => (
-                <p key={index} className="text-xs text-gray-400">
+                <p key={index} className="text-xs text-gray-600 dark:text-gray-400">
                   {variant}
                 </p>
               ))
             ) : (
-              <p className="text-xs text-gray-400">بدون واریانت</p>
+              <p className="text-xs text-gray-600 dark:text-gray-400">بدون واریانت</p>
             )}
           </div>
         </div>
       </div>
 
       <div className="flex flex-wrap gap-5 w-full justify-between">
-          <div className="flex items-center h-[42px] bg-[#EFEFF0]/10 rounded-full">
+          <div className="flex items-center h-[42px] bg-[#eeeeee] dark:bg-[#EFEFF0]/10 rounded-full">
           <button
             onClick={handleAddToCart}
             className="bg-gradient-to-t from-green-600 to-green-300 hover:bg-gradient-to-tr flex justify-center items-center p-2 h-[42px] w-[42px] rounded-full"
             disabled={isAdding}
           >
-            <Plus size={18} />
+            <Plus className="w-4 h-4 fill-current"  />
           </button>
           <span className="flex justify-center items-center w-[67px]  font-medium">
             {isAdding || isRemoving || (loading && lastProductId === productId) ? (
-                  <Loading className="fill-current text-[#A93AFF] w-5 h-5 animate-spin" />
+                <Loading className="fill-current text-[#A93AFF] w-5 h-5 animate-spin" />
                 ) : (
               item?.quantity || 0
             )}
           </span>
           <button
             onClick={handleRemoveFromCart}
-            className="bg-gradient-to-r from-[#00B59C]/10 to-[#9CFFAC]/10 flex justify-center items-center p-2 h-[42px] w-[42px] rounded-full hover:bg-gray-600"
+            className="text-[#333333] dark:text-white/70 bg-gradient-to-t hover:bg-gradient-to-tr from-[#dddddd] to-[#aaaaaa] dark:from-[#00B59C]/10 dark:to-[#9CFFAC]/10 flex justify-center items-center p-2 h-[42px] w-[42px] rounded-full"
             disabled={isRemoving}
           >
           {
               item.quantity > 1
                 ?
-              <Minus size={18} className="text-white/70" />
+              <Minus className="w-4 h-4 fill-current" />
                 :
-              <Image alt='decrease-item' src='/images/icons/trash.svg' width={18} height={18} />
+              <Trash className="w-5 h-5 fill-current" />
           }
           </button>
         </div>
 
         <div className="flex flex-col gap-1">
           {item.totalDiscountAmount > 0 && (
-            <p className="text-xs text-gray-400 mb-1">
+            <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">
               مبلغ با {numberWithCommas(item.totalDiscountAmount)} {(currency)} تخفیف
             </p>
           )}
@@ -149,7 +151,6 @@ const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][num
             </p>
           )}
         </div>
-
 
       </div>
     </div>

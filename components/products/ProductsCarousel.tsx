@@ -29,7 +29,7 @@ const ProductsCarousel: React.FC<Props> = props => {
     }
 
     return (
-        <section className="bg-[#192b39] py-6 pr-[7.5px] relative">
+        <section className="bg-[#e8ecf0] dark:bg-[#192b39] py-6 pr-[7.5px] relative">
 
             <h3 className="px-[7.5px] text-[#ff7189] font-bold flex gap-2 items-center text-md mb-4">
                 <Image src="/images/icons/curl.svg" alt="offer" width={36} height={36} className="w-9 h-9" />

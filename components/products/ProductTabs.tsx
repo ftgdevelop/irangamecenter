@@ -58,11 +58,11 @@ const ProductTabs = ({ tabs }: ProductTabsProps) => {
   return (
     <div
       ref={tabRef}
-      className={`w-full backdrop-blur-md md:max-w-lg bg-[#0f1f2e]/80 z-[10] transition-all duration-300 ${
+      className={`w-full backdrop-blur-md md:max-w-lg bg-white dark:bg-[#0f1f2e]/80 z-[10] transition-all duration-300 ${
         isSticky ? "fixed top-[77px] shadow-md" : "hidden"
       }`}
     >
-      <div className="flex styled-scrollbar overflow-x-auto border-b border-white/10">
+      <div className="flex styled-scrollbar overflow-x-auto border-b border-neutral-300 dark:border-white/10">
         {tabs
           .filter((t) => t.isActive)
           .map((tab) => {
@@ -74,7 +74,7 @@ const ProductTabs = ({ tabs }: ProductTabsProps) => {
                 className={`relative flex-1 min-w-fit px-4 py-3 text-sm font-medium transition-all duration-200 ${
                   isActive
                     ? "text-transparent bg-clip-text bg-gradient-to-r from-[#A93AFF] to-[#FF81FF] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-gradient-to-r after:from-[#A93AFF] after:to-[#FF81FF]"
-                    : "text-white/70 hover:text-white"
+                    : "dark:text-black hover:text-black dark:text-white/70 dark:hover:text-white"
                 }`}
                 style={{
                   WebkitBackgroundClip: isActive ? "text" : undefined,

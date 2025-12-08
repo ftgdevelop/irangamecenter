@@ -15,7 +15,7 @@ const RatingItem: React.FC<Props> = props => {
 
     return(
         <>
-            {!!props.index && <div className="w-px shrink-0 bg-white/50 h-8 self-center" />}
+            {!!props.index && <div className="w-px shrink-0 bg-neutral-300 dark:bg-white/50 h-8 self-center" />}
             <div className="shrink-0 min-w-20 flex flex-col items-center gap-2 p-2">
                 <div className="font-bold text-xs whitespace-nowrap" dir="ltr">
                     {toPersianDigits(rating.value.toString())}/{toPersianDigits(rating.total.toString())}

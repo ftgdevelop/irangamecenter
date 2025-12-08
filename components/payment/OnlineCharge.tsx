@@ -40,12 +40,12 @@ const OnlineCharge: React.FC<Props> = props => {
            
             const localStorageToken = localStorage.getItem('Token');
             const fetchBalance = async (token: string) => {
-                dispatch(setReduxBalance({ balance: undefined, loading: true }));
+                dispatch(setReduxBalance({ balance: undefined, loading: true , currency:"" }));
                 const response: any = await getUserBalance(token);
                 if (response.data?.result?.amount !== null) {
-                    dispatch(setReduxBalance({ balance: response?.data?.result?.amount, loading: false }))
+                    dispatch(setReduxBalance({ balance: response?.data?.result?.amount, loading: false, currency: response?.data?.result?.currencyType }))
                 } else {
-                    dispatch(setReduxBalance({ balance: undefined, loading: false }));
+                    dispatch(setReduxBalance({ balance: undefined, loading: false, currency:"" }));
                 } 
             }
             if(localStorageToken){
@@ -246,7 +246,7 @@ const OnlineCharge: React.FC<Props> = props => {
                         <button
                             key={gateway.id}
                             type="button"
-                            className={`text-xs flex gap-2 justify-center items-center border rounded-full py-2 px-3 mb-4 ${selectedBankId === gateway.id ? "bg-white/15 border-white/50" : "bg-transparent border-white/15"}`}
+                            className={`text-xs flex gap-2 justify-center items-center border rounded-full py-2 px-3 mb-4 ${selectedBankId === gateway.id ? "bg-neutral-200 dark:bg-white/15 border-neutral-400 dark:border-white/50" : "bg-transparent border-black/15 dark:border-white/15"}`}
                             onClick={() => { setSelectedBankId(gateway.id) }}
                         >
                             {gateway.image.path ? (
@@ -271,7 +271,7 @@ const OnlineCharge: React.FC<Props> = props => {
             <button
                 disabled={goToBankLoading || !(selectedBankId && props.amount)}
                 type="button"
-                className={`h-12 text-sm px-8 rounded-full text-white flex justify-center gap-2 items-center w-full mb-5 ${!selectedBankId || !props.amount ? "bg-[#231c51]" : "bg-[#aa3aff]"} `}
+                className={`h-12 text-sm px-8 rounded-full text-white flex justify-center gap-2 items-center w-full mb-5 ${!selectedBankId || !props.amount ? "bg-[#bbbbbb] dark:bg-[#231c51]" : "bg-[#aa3aff]"} `}
                 onClick={submitHandler}
             >
                 شارژ حساب
