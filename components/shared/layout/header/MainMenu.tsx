@@ -89,7 +89,7 @@ const MainMenu: React.FC = () => {
                                         onClick={()=>{setDelayedOpen(false)}}
                                         key={item.label}
                                         href={item.url} 
-                                        className={`block py-5 border-black/15 dark:border-white/15 text-sm ${index ? "border-t" : ""}`}
+                                        className={`block py-5 border-neutral-300 dark:border-white/15 text-sm ${index ? "border-t" : ""}`}
                                     >
                                         {item.label}
                                     </Link>

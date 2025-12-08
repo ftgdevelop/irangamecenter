@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CloseIcon } from "@mantine/core";
+import CloseSimple from "../icons/CloseSimple";
 
 interface AlertProps {
   children: React.ReactNode;
@@ -40,7 +40,7 @@ const Alert: React.FC<AlertProps> = ({
               onClick={() => setVisible(false)}
               className="text-white hover:text-white/50 font-bold text-lg"
             >
-              <CloseIcon size="24"/>
+              <CloseSimple className="w-6 h-6 fill-current" />
             </button>
           )}
 

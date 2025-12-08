@@ -59,7 +59,7 @@ const SortProducts: React.FC<Props> = props => {
             >
                 <div className="bg-black/50 backdrop-blur-sm fixed top-0 left-0 right-0 bottom-0" onClick={() => { setSlideIn(false) }} />
 
-                <div className={`bg-[#192a39] text-white rounded-t-2xl fixed w-full md:max-w-lg safePadding-b overflow-y-auto max-h-[50vh] transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2  bottom-0 ${slideIn ? "translate-y-0" : "translate-y-[80vh]"}`}>
+                <div className={`bg-[#ffffff] dark:bg-[#192a39] dark:text-white rounded-t-2xl fixed w-full md:max-w-lg safePadding-b overflow-y-auto max-h-[50vh] transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2  bottom-0 ${slideIn ? "translate-y-0" : "translate-y-[80vh]"}`}>
                     <div className="px-4 pt-8">
 
                         <div className="mb-4 flex justify-between items-center">
@@ -89,7 +89,7 @@ const SortProducts: React.FC<Props> = props => {
                                 <button
                                     key={option.keywords}
                                     type="button"
-                                    className={`text-sm h-12 w-full flex items-center justify-between ${index ? "border-t border-white/25" : ""}`}
+                                    className={`text-sm h-12 w-full flex items-center justify-between ${index ? "border-t border-neutral-300 dark:border-white/25" : ""}`}
                                     onClick={() => {
                                         props.onChange(option.keywords);
                                         setSlideIn(false);

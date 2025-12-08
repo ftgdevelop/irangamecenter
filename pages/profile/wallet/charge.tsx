@@ -1,11 +1,12 @@
 import ArrowRight from "@/components/icons/ArrowRight"
+import WalletIcon from "@/components/icons/icons-2-opacity/WalletIcon";
 import Loading from "@/components/icons/Loading";
 import Minus from "@/components/icons/Minus";
 import Plus from "@/components/icons/Plus";
 import OnlineCharge from "@/components/payment/OnlineCharge";
 import { numberWithCommas, persianNumbersToEnglish, rialsToLettersToman } from "@/helpers";
+import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 import { useAppSelector } from "@/hooks/use-store";
-import Image from "next/image";
 import Link from "next/link"
 import { useState } from "react";
 
@@ -13,6 +14,7 @@ const Charge = () => {
 
     const userBalanceLoading = useAppSelector(state => state.authentication.balanceLoading);
     const userBalance = useAppSelector(state => state.authentication.balance);
+    const balanceCurrency = useAppSelector(state => state.authentication.balanceCurrency);
 
     const [amount, setAmount] = useState<string>("");
 
@@ -26,15 +28,11 @@ const Charge = () => {
             </header>
             <div className="px-3.5">
 
-                <div className="flex justify-between items-center px-3 py-5 bg-gradient-to-t from-[#01212e] to-[#102c33] rounded-xl mb-10">
+                <div className="flex justify-between items-center px-3 py-5 bg-gradient-to-t text-white from-[#4b636f] dark:from-[#01212e] to-[#607d8b] dark:to-[#102c33] rounded-xl mb-10">
                     <div className="flex gap-3 items-center text-xs" >
-                        <Image
-                            src="/images/icons/2color/wallet-2.svg"
-                            alt="wallet icon"
-                            className="w-7 h-7 grow-0 shrink-0"
-                            width={28}
-                            height={28}
-                        />
+                        
+                        <WalletIcon className="w-7 h-7 fill-none stroke-current grow-0 shrink-0"  />
+
                         موجودی کیف پول
 
                     </div>
@@ -43,7 +41,7 @@ const Charge = () => {
                         <Loading className="w-5 h-5 fill-current" />
                     ) : userBalance ? (
                         <div className="text-green-400 text-xs font-semibold">
-                            {numberWithCommas(userBalance)} تومان
+                            {numberWithCommas(userBalance)}  {balanceCurrency? getCurrencyLabelFa(balanceCurrency) : "ریال"}
                         </div>
                     ) : <div className="text-green-400 text-xs font-semibold"> 0 </div>}
 
@@ -52,7 +50,7 @@ const Charge = () => {
 
                 <h4 className="text-center text-sm mb-3"> مبلغ افزایش شارژ </h4>
 
-                <div className="bg-[#192a39] text-white h-14 relative rounded-full w-full flex justify-between items-center p-2 mb-4">
+                <div className="bg-[#e8e8e8] dark:bg-[#192a39] dark:text-white h-14 relative rounded-full w-full flex justify-between items-center p-2 mb-4">
                     <button
                         type="button"
                         className="shrink-0 h-10 w-10 rounded-full bg-gradient-to-t from-[#028d7e] to-[#99feac] text-white text-xs flex gap-2 justify-center items-center"
@@ -95,7 +93,7 @@ const Charge = () => {
                         <button
                             key={item}
                             type="button"
-                            className="border border-white/25 px-2.5 py-1 text-sm rounded-full outline-none bg-transparent focus:bg-white/15"
+                            className="border border-neutral-300 dark:border-white/25 px-2.5 py-1 text-sm rounded-full outline-none bg-transparent focus:bg-black/15 dark:focus:bg-white/15"
                             onClick={() => { setAmount(item.toString()) }}
                         >
                             {numberWithCommas(item)} <span className="text-xs"> ریال </span>

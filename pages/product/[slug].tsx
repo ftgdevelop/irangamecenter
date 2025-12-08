@@ -143,21 +143,21 @@ const DetailProduct: NextPage<any> = ({
         )}
       </Head>
       <ProductTabs
-      tabs={[
-        { id: 'specs', label: 'مشخصات', isActive: !!productData },
-        { id: 'description', label: 'توضیحات', isActive: !!productData?.shortDescription },
-        { id: 'ratings', label: 'امتیازها', isActive: !!productData?.rating?.length },
-        { id: 'awards', label: 'جوایز', isActive: !!productData?.awards?.length },
-        { id: 'faq', label: 'سوالات متداول', isActive: !!productData?.faqs?.length },
-        { id: 'similar', label: 'محصولات مشابه', isActive: !!productData?.similar?.length },
-      ]}
-    />
+          tabs={[
+            { id: 'specs', label: 'مشخصات', isActive: !!productData },
+            { id: 'description', label: 'توضیحات', isActive: !!productData?.shortDescription },
+            { id: 'ratings', label: 'امتیازها', isActive: !!productData?.rating?.length },
+            { id: 'awards', label: 'جوایز', isActive: !!productData?.awards?.length },
+            { id: 'faq', label: 'سوالات متداول', isActive: !!productData?.faqs?.length },
+            { id: 'similar', label: 'محصولات مشابه', isActive: !!productData?.similar?.length },
+          ]}
+        />
 
       {!!breadcrumbsItems.length && (
         <BreadCrumpt
           items={breadcrumbsItems}
-          wrapperClassName="bg-[#192a39] mt-[84px] px-4 py-3"
-          textColorClass="text-neutral-300"
+          wrapperClassName="bg-[#e8ecf0] dark:bg-[#192a39] px-4 py-3 mb-4"
+          textColorClass="text-neutral-800 dark:text-neutral-300"
         />
       )}
 
@@ -202,7 +202,7 @@ const DetailProduct: NextPage<any> = ({
               onClick={() => {
                 setDetailActiveTab('details');
               }}
-              className="shrink-0 text-right block border border-white/15 p-3 rounded-xl text-xs max-w-56"
+              className="shrink-0 text-right block border border-neutral-300 dark:border-white/15 p-3 rounded-xl text-xs max-w-56"
             >
               <div className="flex gap-2 items-center">
                 سبک بازی
@@ -220,7 +220,7 @@ const DetailProduct: NextPage<any> = ({
               onClick={() => {
                 setDetailActiveTab('details');
               }}
-              className="shrink-0 text-right block border border-white/15 p-3 rounded-xl text-xs max-w-56"
+              className="shrink-0 text-right block border border-neutral-300 dark:border-white/15 p-3 rounded-xl text-xs max-w-56"
             >
               <div className="flex gap-2 items-center">
                 حالت بازی
@@ -238,7 +238,7 @@ const DetailProduct: NextPage<any> = ({
               onClick={() => {
                 setDetailActiveTab('details');
               }}
-              className="shrink-0 text-right block border border-white/15 p-3 rounded-xl text-xs max-w-56"
+              className="shrink-0 text-right block border border-neutral-300 dark:border-white/15 p-3 rounded-xl text-xs max-w-56"
             >
               <div className="flex gap-2 items-center">
                 زاویه دید
@@ -258,7 +258,7 @@ const DetailProduct: NextPage<any> = ({
               onClick={() => {
                 setDetailActiveTab('details');
               }}
-              className="shrink-0 text-right block border border-white/15 p-3 rounded-xl text-xs max-w-56"
+              className="shrink-0 text-right block border border-neutral-300 dark:border-white/15 p-3 rounded-xl text-xs max-w-56"
             >
               <div className="flex gap-2 items-center">
                 تم بازی
@@ -276,7 +276,7 @@ const DetailProduct: NextPage<any> = ({
               onClick={() => {
                 setDetailActiveTab('details');
               }}
-              className="shrink-0 text-right block border border-white/15 p-3 rounded-xl text-xs max-w-56"
+              className="shrink-0 text-right block border border-neutral-300 dark:border-white/15 p-3 rounded-xl text-xs max-w-56"
             >
               <div className="flex gap-2 items-center">
                 تاریخ انتشار
@@ -323,7 +323,7 @@ const DetailProduct: NextPage<any> = ({
 
       <div className="px-4">
         <div
-          className={`mt-6 bg-[#192a39] p-2.5 rounded-xl ${
+          className={`mt-6 bg-[#dddddd] dark:bg-[#192a39] p-2.5 rounded-xl ${
             productData?.developer?.name && productData?.publisher?.name
               ? 'grid grid-cols-2 gap-2.5'
               : ''
@@ -332,7 +332,7 @@ const DetailProduct: NextPage<any> = ({
           {!!productData?.developer?.name && (
             <Link
               href={`/brand/${productData.developer.slug || 'unknown'}`}
-              className=" block p-3 bg-[#011425] rounded-xl text-xs"
+              className=" block p-3 bg-[#fafafa] dark:bg-[#011425] rounded-xl text-xs"
             >
               <div className="flex gap-2">
                 {productData.developer.filePath && (
@@ -361,7 +361,7 @@ const DetailProduct: NextPage<any> = ({
           {!!productData?.publisher?.name && (
             <Link
               href={`/brand/${productData.publisher.slug || 'unknown'}`}
-              className="block p-3 bg-[#011425] rounded-xl text-xs"
+              className="block p-3 bg-[#fafafa] dark:bg-[#011425] rounded-xl text-xs"
             >
               <div className="flex gap-2">
                 {productData.publisher.filePath && (
@@ -393,54 +393,9 @@ const DetailProduct: NextPage<any> = ({
 
       {!!variantsData?.length && <VariantSection productId={productData.id} productVariants={variantsData} />}
 
-      {/* <hr/><hr/><hr/><hr/><hr/><hr/><hr/>
-
-      <label className="text-sm pointer-events-none mb-3 block px-4 mt-7">
-        انتخاب کنسول مورد نظر
-      </label>
-
-      <div className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip pb-3 pl-3">
-
-        <div className="flex pr-4">
-          {variantsData?.map(variantItem => (
-            <div key={variantItem.id} className="pl-3 last:pl-4">
-              <button
-                type="button"
-                className={`shrink-0 rounded-xl whitespace-nowrap px-4 h-16 border-0 outline-none font-semibold py-3 ${variant === variantItem.slug ? "bg-gradient-green text-neutral-800" : "bg-[#192a39]"}`}
-                disabled={!variantItem.slug}
-                onClick={() => { setVariant(variantItem.slug || "") }}
-              >
-                {variantItem.value}
-              </button>
-            </div>
-          ))}
-        </div>
-      </div> */}
-
-      {/* <label className="text-sm pointer-events-none mb-3 block px-4 mt-7">
-        انتخاب ظرفیت بازی
-      </label>
-
-      <div className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip pb-3 pl-3">
-        <div className="flex pr-5">
-          {capacityOptions?.map((capacityItem, index) => (
-            <div key={index} className="pl-3 last:pl-5">
-              <button
-                type="button"
-                className={`shrink-0 rounded-xl whitespace-nowrap px-4 h-16 border-0 outline-none font-semibold py-3 ${capacity === capacityItem.value ? "bg-gradient-green text-neutral-800" : "bg-[#192a39]"}`}
-                disabled={!capacityItem.value}
-                onClick={() => { setCapacity(capacityItem.value || "") }}
-              >
-                {capacityItem.label}
-              </button>
-            </div>
-          ))}
-        </div>
-      </div> */}
-
       {!!productData?.rating?.length && (
         <section id="ratings" className='pt-8'>
-          <strong  className="px-4 text-lg font-semibold mb-0 text-[#ffefb2] block">
+          <strong  className="px-4 text-lg font-semibold mb-0 text-[#fd7e14] dark:text-[#ffefb2] block">
             امتیاز در وبسایت های معتبر
           </strong>
           <div className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip py-3 pl-3">
@@ -455,7 +410,7 @@ const DetailProduct: NextPage<any> = ({
       )}
       {!!productData?.awards?.length && (
         <section id="awards" className="px-4 pt-8">
-            <strong className="text-lg font-semibold mb-3  text-[#ffefb2] block">
+            <strong className="text-lg font-semibold mb-3  text-[#fd7e14] dark:text-[#ffefb2] block">
               جوایز و دستاوردها
             </strong>
             {productData.awards.map((award) => (
@@ -476,7 +431,7 @@ const DetailProduct: NextPage<any> = ({
       {!!productData?.faqs?.length && (
           <section id="faq">
 
-          <h5  className="px-4 text-lg font-semibold mb-4 mt-8 text-[#ffefb2]">
+          <h5  className="px-4 text-lg font-semibold mb-4 mt-8 text-[#fd7e14] dark:text-[#ffefb2]">
             سوالات متداول درباره {productData.name}
           </h5>
           <FAQ

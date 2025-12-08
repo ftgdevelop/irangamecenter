@@ -60,19 +60,20 @@ const OtpSendCode: React.FC<Props> = props => {
                                 </p>          
                             </div>
     
-                            <div className=" text-white w-full rounded-2xl  space-y-2">
-                             <button
-                                type="submit"
-                                className="flex gap-4 items-center mb-2.5 justify-center h-14 w-full bg-[#aa3aff] rounded-full text-sm"
-                            >
-                                تایید و دریافت کد
+                            <div className="text-neutral-700 dark:text-white w-full rounded-2xl  space-y-2">
+                                <button
+                                    type="submit"
+                                    className="flex gap-4 items-center mb-2.5 justify-center h-14 w-full text-white bg-[#aa3aff] rounded-full text-sm"
+                                >
+                                    تایید و دریافت کد
 
-                                {props.loading ? (
-                                    <Loading className="fill-current w-5 h-5 animate-spin" />
-                                ) : (
-                                    <ArrowTopLeft className="fill-current w-3.5 h-3.5" />
-                                )}
-                            </button>
+                                    {props.loading ? (
+                                        <Loading className="fill-current w-5 h-5 animate-spin" />
+                                    ) : (
+                                        <ArrowTopLeft className="fill-current w-3.5 h-3.5" />
+                                    )}
+                                </button>
+
                                 <p className=" text-[10px]">
                                     ورود شما به معناى پذيرش
                                     {' '}

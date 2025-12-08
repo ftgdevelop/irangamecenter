@@ -121,6 +121,12 @@ body {
     animation: spinReverse 1s linear infinite;
   }	
 
+  .round-linecap{
+    stroke-linecap: round;
+  }
+  .stroke-15 {
+    stroke-width: 1.5px;
+  }
   .writing-tb {
     writing-mode: tb;
   }

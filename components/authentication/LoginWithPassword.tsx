@@ -177,7 +177,7 @@ const LoginWithPassword: React.FC<Props> = props => {
 
                             <button
                                 type="submit"
-                                className="flex gap-4 items-center justify-center mb-5 h-14 w-full text-center bg-[#aa3aff] rounded-full text-sm"
+                                className="flex gap-4 items-center justify-center mb-5 h-14 w-full text-center text-white bg-[#aa3aff] rounded-full text-sm"
                             >
                                 ورود
 

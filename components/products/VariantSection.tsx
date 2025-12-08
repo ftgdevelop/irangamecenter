@@ -32,7 +32,7 @@ const VariantSection: React.FC<Props> = ({ productId, productVariants }) => {
                   className={`shrink-0 rounded-xl whitespace-nowrap px-4 h-16 border-0 outline-none font-semibold py-3 ${
                     isSelected
                       ? "bg-gradient-green text-neutral-800"
-                      : "bg-[#192a39]"
+                      : "bg-[#eeeeee] dark:bg-[#192a39]"
                   }`}
                 >
                   {rootVariant.value}

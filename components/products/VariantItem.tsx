@@ -98,10 +98,10 @@ const VariantItem: React.FC<VariantItemProps> = ({
                     }
                     className={`relative min-w-40 shrink-0 rounded-xl whitespace-nowrap px-4 min-h-16 outline-none font-semibold py-3 ${
                       disabled
-                        ? "bg-transparent border border-white/15 cursor-not-allowed"
+                        ? "bg-transparent border border-neutral-300 dark:border-white/15 cursor-not-allowed"
                         : isSelected
                         ? "bg-gradient-green text-neutral-800"
-                        : "bg-[#192a39]"
+                        : "bg-[#eeeeee] dark:bg-[#192a39]"
                     }`}
                   >
                     {disabled && (
@@ -123,7 +123,7 @@ const VariantItem: React.FC<VariantItemProps> = ({
                         className={`border-t pt-2 mt-2 ${
                           isSelected
                             ? "border-neutral-800"
-                            : "border-white/15"
+                            : "border-neutral-300 dark:border-white/15"
                         }`}
                       >
                         {!!item.regularPrice && (

@@ -80,7 +80,7 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
                 
                 <div className="flex gap-3 flex-wrap">
 
-                    {!!date && <div className="block border border-black/15 dark:border-white/15 p-4 rounded-xl text-xs">
+                    {!!date && <div className="block border border-neutral-300 dark:border-white/15 p-4 rounded-xl text-xs">
                         انتشار
                         <b className="block font-semibold mt-2 text-sm">
                             {toPersianDigits(dateDiplayFormat({
@@ -93,7 +93,7 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
 
                     {!!categories.length && (
                         <Link
-                            className="block border border-black/15 dark:border-white/15 p-4 rounded-xl text-xs"
+                            className="block border border-neutral-300 dark:border-white/15 p-4 rounded-xl text-xs"
                             href={`/category/${categories[0]?.slug}`}
                         >
                             دسته بندی
@@ -103,7 +103,7 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
                         </Link>
                     )}
 
-                    {!!acf?.time_read && <div className="block border border-black/15 dark:border-white/15 p-4 rounded-xl text-xs">
+                    {!!acf?.time_read && <div className="block border border-neutral-300 dark:border-white/15 p-4 rounded-xl text-xs">
                         مدت مطالعه
                         <b className="block font-semibold mt-2 text-sm">
                             {acf.time_read}

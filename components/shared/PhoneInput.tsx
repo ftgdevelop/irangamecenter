@@ -159,13 +159,13 @@ const PhoneInput: React.FC<Props> = props => {
     const expectedTotalLength = expectedLength ? expectedLength + country.dialCode.length : undefined;
 
 
-    const inputClassNames : string[] = [`bg-caret bg-gradient-to-t from-[#01343c] to-[#1f4340] ${props.heightClass||"h-11"} rounded-l-full px-5 outline-none`];
+    const inputClassNames : string[] = [`bg-gradient-to-t from-[#d1d1d1] to-[#ababab] dark:from-[#01343c] dark:to-[#1f4340] ${props.heightClass||"h-11"} rounded-l-full px-5 outline-none`];
 
     if(errorText && isTouched){
         inputClassNames.push(`border-red-500`);
     }
 
-    const inputClassNames2 : string[] = [`${props.heightClass||"h-11"} text-right placeholder:text-right placeholder:tracking-normal px-5 col-span-4 rounded-r-full outline-none bg-[#192a39] tracking-widest`];
+    const inputClassNames2 : string[] = [`${props.heightClass||"h-11"} text-right placeholder:text-right placeholder:tracking-normal px-5 col-span-4 rounded-r-full outline-none bg-[#dddddd] dark:bg-[#192a39] tracking-widest`];
 
     if(errorText && isTouched){
         inputClassNames2.push(`border-red-500`);
@@ -256,7 +256,7 @@ const PhoneInput: React.FC<Props> = props => {
                         name={props.name}
                     />
 
-                    {!!openCodes && <div className='absolute styled-scrollbar max-w-full top-full mt-1 left-0 min-w-full bg-[#192a39] shadow z-20 max-h-44 overflow-auto rounded-2xl'>
+                    {!!openCodes && <div className='absolute styled-scrollbar max-w-full top-full mt-1 left-0 min-w-full bg-[#dddddd] dark:bg-[#192a39] shadow z-20 max-h-44 overflow-auto rounded-2xl'>
                         {filterCodeItems.map(item => {
                             return (
                                 <div
