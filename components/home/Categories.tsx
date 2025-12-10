@@ -45,7 +45,7 @@ const Categories: React.FC<Props> = props => {
                             <div key={item[0].id} className="pl-2">
                                 {item.map((i, index) => (
                                     <Link key={i.id} href={i.Url || "#"} className={`block w-36 ${index?"mt-2":""}`} prefetch={false} >
-                                        <Image quality={60} src={ServerAddress.Type! + ServerAddress.Strapi + i.Image!.url!} alt={i.ImageAlternative || i.Title || ""} width={144} height={80} className="w-36 h-20 object-cover rounded-2xl" />
+                                        <Image src={ServerAddress.Type! + ServerAddress.Strapi + i.Image!.url!} alt={i.ImageAlternative || i.Title || ""} width={144} height={80} className="w-36 h-20 object-cover rounded-2xl" />
                                     </Link>
                                 ))}
                             </div>

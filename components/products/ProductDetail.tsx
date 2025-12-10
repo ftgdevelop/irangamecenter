@@ -86,7 +86,7 @@ const ProductDetail: React.FC<Props> = props => {
                 {!!productData.developer?.name && (
                     <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5" >
                         <div className="whitespace-nowrap"> شرکت توسعه دهنده </div>
-                        <Link href={`/brand/${productData.developer.slug || "unknown"}`} className="text-left text-teal-500 last:border-0">
+                        <Link prefetch={false} href={`/brand/${productData.developer.slug || "unknown"}`} className="text-left text-teal-500 last:border-0">
                             {productData.developer.name}
                         </Link>
                     </div>
@@ -94,7 +94,7 @@ const ProductDetail: React.FC<Props> = props => {
                 {!!productData.publisher?.name && (
                     <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5" >
                         <div className="whitespace-nowrap"> شرکت انتشار دهنده </div>
-                        <Link href={`/brand/${productData.publisher.slug || "unknown"}`} className="text-left text-teal-500 last:border-0">
+                        <Link prefetch={false} href={`/brand/${productData.publisher.slug || "unknown"}`} className="text-left text-teal-500 last:border-0">
                             {productData.publisher.name}
                         </Link>
                     </div>

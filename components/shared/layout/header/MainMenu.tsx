@@ -86,6 +86,7 @@ const MainMenu: React.FC = () => {
                             <nav className="px-3.5">
                                 {items.map((item, index) => (
                                     <Link 
+                                        prefetch={false}
                                         onClick={()=>{setDelayedOpen(false)}}
                                         key={item.label}
                                         href={item.url} 

@@ -101,6 +101,7 @@ const Call : React.FC<Props> = props => {
                         
                         {!!props.InnerData?.Value && (
                             <Link
+                                prefetch={false}
                                 className="block my-2 p-4 w-full text-center bg-[#a93aff] rounded-full"
                                 href={callLink}
                             >

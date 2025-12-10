@@ -204,6 +204,7 @@ const HightlightItemSlider: React.FC<Props> = (props) => {
                   {!!item.Subtitle && <p className="text-xs">{item.Subtitle}</p>}
                 </div>
                 <Link
+                  prefetch={false}
                   href={item.Url || '#'}
                   className="mx-4 text-sm block p-2 bg-gradient-to-t from-[#a839fe] to-[#fe81ff] rounded-full flex justify-between items-center"
                 >

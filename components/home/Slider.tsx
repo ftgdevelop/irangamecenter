@@ -33,8 +33,8 @@ const Slider: React.FC<Props> = props => {
                         src={ServerAddress.Type! + ServerAddress.Strapi + item.Image!.url!}
                         alt={item.ImageAlternative || item.Title || ""}
                         title={item.ImageTitle}
-                        width={500}
-                        height={300}
+                        width={430}
+                        height={230}
                         priority
                         fetchPriority="high"
                         className="rounded-large w-full min-h-52 object-cover"

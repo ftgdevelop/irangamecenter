@@ -261,7 +261,7 @@ const Search = () => {
                                                     </div>
                                                 ))
                                             ) : products?.length ? products.map(product => (
-                                                <Link key={product.id} href={`/product/${product.slug}`} target="_blank" className="flex items-center gap-4 border-b border-black/30 dark:border-white/30 py-3" >
+                                                <Link prefetch={false} key={product.id} href={`/product/${product.slug}`} target="_blank" className="flex items-center gap-4 border-b border-black/30 dark:border-white/30 py-3" >
                                                     <Image
                                                         src={product.filePath || "/images/default-game.png"}
                                                         alt={product.fileAltAttribute || product.name || ""}
@@ -291,7 +291,7 @@ const Search = () => {
                                                     </div>
                                                 ))
                                             ) : blogs?.length ? blogs.map(blog => (
-                                                <Link key={blog.id} href={`/blog/${blog.slug}`} target="_blank" className="flex items-center gap-4 border-b border-black/30 dark:border-white/30 py-3" >
+                                                <Link prefetch={false} key={blog.id} href={`/blog/${blog.slug}`} target="_blank" className="flex items-center gap-4 border-b border-black/30 dark:border-white/30 py-3" >
                                                     <Image
                                                         src={blog.jetpack_featured_media_url || "/images/no-image.jpg"}
                                                         alt={blog.title?.rendered || ""}

@@ -10,6 +10,7 @@ type Props = {
 const Ticketing : React.FC<Props> = props => {
     return(
         <Link
+            prefetch={false}
             className="font-semibold text-sm mb-3 text-white flex py-4 min-h-20 px-5 items-center bg-gradient-to-t from-[#01212e] to-[#102c33] rounded-xl gap-4"
             href={props.url||"#"}
         >

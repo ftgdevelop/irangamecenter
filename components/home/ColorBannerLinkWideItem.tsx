@@ -27,7 +27,7 @@ const ColorBannerLinkWideItem:React.FC<Props> = props => {
                 height={60}
                 className="w-1/2 h-10 object-contain"
             />
-            <Link href={props.url} className="h-17 w-1/3 min-w-32 px-3 bg-white text-neutral-700 absolute bottom-0 left-0 flex justify-between items-center rounded-bl-2xl rounded-tr-2xl">
+            <Link prefetch={false} href={props.url} className="h-17 w-1/3 min-w-32 px-3 bg-white text-neutral-700 absolute bottom-0 left-0 flex justify-between items-center rounded-bl-2xl rounded-tr-2xl">
 
                 <ClipRadius className="absolute bottom-full left-0 fill-white w-4 h-4" />
                 <ClipRadius className="absolute bottom-0 left-full fill-white w-4 h-4" />

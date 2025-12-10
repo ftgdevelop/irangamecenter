@@ -17,12 +17,12 @@ const BannerLinks: React.FC<Props> = props => {
     return (
         <div className="p-3">
             {props.items?.map(item => (
-                <Link href={item.url} className="relative block mb-4" key={item.title}>
+                <Link prefetch={false} href={item.url} className="relative block mb-4" key={item.title}>
                     <Image
                         src={item.imageUrl || "/images/default-game.png"}
                         alt={item.title || item.imageAlt || item.imageTitle || ""}
-                        width={600}
-                        height={300}
+                        width={430}
+                        height={130}
                         className="rounded-3xl w-full h-32 object-cover border border-white/25"
                     />
                 </Link>

@@ -82,7 +82,7 @@ const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][num
   return (
     <div className="dark:text-white flex flex-col gap-5 pt-4 justify-between items-center pb-4 border-b border-[#192b39]/50 w-full">
       <div className="flex w-full items-center min-h-[120px] gap-5">
-        <Link href={`/product/${item.variant.product.slug}`} className="relative w-[120px] h-[120px] bg-black/25  rounded-[20px]  overflow-hidden" >
+        <Link prefetch={false} href={`/product/${item.variant.product.slug}`} className="relative w-[120px] h-[120px] bg-black/25  rounded-[20px]  overflow-hidden" >
                     <Image
             src={item?.variant.product.filePath || "/placeholder.png"}
             alt={item?.variant.product.fileTitleAttribute || "محصول"}

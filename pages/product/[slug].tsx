@@ -116,11 +116,11 @@ const DetailProduct: NextPage<any> = ({
   let brandTag: ReactNode = null;
   if (productData.publisher?.name) {
     brandTag = (
-      <Link className='block text-xs text-[#68cedb] mt-1.5' href={`/brand/${productData.publisher.slug}`}> {productData.publisher.name} </Link>
+      <Link prefetch={false} className='block text-xs text-[#68cedb] mt-1.5' href={`/brand/${productData.publisher.slug}`}> {productData.publisher.name} </Link>
     )
   } else if (productData.developer?.name) {
     brandTag = (
-      <Link className='block text-xs text-[#68cedb] mt-1.5' href={`/brand/${productData.developer.slug}`}> {productData.developer.name} </Link>
+      <Link prefetch={false} className='block text-xs text-[#68cedb] mt-1.5' href={`/brand/${productData.developer.slug}`}> {productData.developer.name} </Link>
     )
   }
 
@@ -331,6 +331,7 @@ const DetailProduct: NextPage<any> = ({
         >
           {!!productData?.developer?.name && (
             <Link
+              prefetch={false}
               href={`/brand/${productData.developer.slug || 'unknown'}`}
               className=" block p-3 bg-[#fafafa] dark:bg-[#011425] rounded-xl text-xs"
             >
@@ -360,6 +361,7 @@ const DetailProduct: NextPage<any> = ({
 
           {!!productData?.publisher?.name && (
             <Link
+              prefetch={false}
               href={`/brand/${productData.publisher.slug || 'unknown'}`}
               className="block p-3 bg-[#fafafa] dark:bg-[#011425] rounded-xl text-xs"
             >

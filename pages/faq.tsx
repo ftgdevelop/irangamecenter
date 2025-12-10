@@ -44,6 +44,7 @@ const Faq: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
         const imagePath = item.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}${item.icon?.url}` : undefined;
         return(
         <Link
+          prefetch={false}
           href={`faq/${item.Keyword}`}
           key={item.Keyword}
           className="flex text-xs p-5 flex-col text-center min-h-28 items-center justify-center bg-gradient-to-t from-[#01212e] to-[#102c33] rounded-xl"
