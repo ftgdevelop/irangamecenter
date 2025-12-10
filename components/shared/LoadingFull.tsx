@@ -2,7 +2,14 @@ import { useEffect, useState } from "react";
 import ModalPortal from "./layout/ModalPortal";
 import Image from "next/image";
 
-const LoadingFull = () => {
+type Props ={
+    details?: {
+        title: string;
+        description: string;
+    }
+}
+
+const LoadingFull:React.FC<Props> = props => {
 
     const [open, setOpen] = useState<boolean>(false);
 
@@ -23,10 +30,10 @@ const LoadingFull = () => {
                     <Image src="/logo.svg" alt="irangamecenter" className="my-4 w-16 h-16" width={64} height={64} />
                     <div className="text-center">
                         <strong className="block text-lg font-bold">
-                            ایران گیم سنتر
+                            {props.details?.title || "ایران گیم سنتر"}
                         </strong>
                         <span className="text-sm">
-                            فروشگاه آنلاین اکانت بازی
+                            {props.details?.description || "فروشگاه آنلاین اکانت بازی"}
                         </span>
                     </div>
                     <div className="bg-[#ffffff] dark:bg-[#101b25] border-[#dddddd] dark:border-black border aspect-square pt-1 mb-6 p-.5 mt-4">
