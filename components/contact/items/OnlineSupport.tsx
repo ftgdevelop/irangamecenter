@@ -100,6 +100,7 @@ const OnlineSupport : React.FC<Props> = props => {
 
                             return(
                                 <Link
+                                    prefetch={false}
                                     key={item.id}
                                     href={item.url || "#"}
                                     className={`block py-3 px-4 min-h-14 w-full text-center bg-[#a93aff] rounded-full flex items-center ${icon?" justify-between":" justify-center"}`}

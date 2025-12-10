@@ -31,7 +31,7 @@ const ProductListItem: React.FC<Props> = props => {
 
     return (
         <div className="mb-[15px] bg-[#fafafa] dark:bg-[#011425] rounded-2xl">
-            <Link href={product.slug ? `/product/${product.slug}`:product.strapiProductProperties?.url || ""} className="flex" onClick={()=>{if(props.onClick){props.onClick()}}}>
+            <Link prefetch={false} href={product.slug ? `/product/${product.slug}`:product.strapiProductProperties?.url || ""} className="flex" onClick={()=>{if(props.onClick){props.onClick()}}}>
                 <Image
                     src={product.filePath || "/images/default-game.png"}
                     alt={product.fileAltAttribute || product.name || ""}

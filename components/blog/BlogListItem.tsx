@@ -12,7 +12,7 @@ const BlogListItem: React.FC<Props> = props => {
     const { data } = props;
 
     return (
-        <Link href={`/blog/${data.slug}`} className={`flex gap-3 ${props.wrapperClassName || ""}`}>
+        <Link prefetch={false} href={`/blog/${data.slug}`} className={`flex gap-3 ${props.wrapperClassName || ""}`}>
             <Image
                 src={data.jetpack_featured_media_url || "/images/no-image.jpg"}
                 alt={data.title?.rendered || ""}

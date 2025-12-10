@@ -31,7 +31,7 @@ const BreadCrumpt: React.FC<Props> = props => {
                 <Fragment key={item.label}>
                     {!!index && carret}
                     {item.link ? (
-                        <Link href={item.link} className={linksClassName}> {item.label} </Link>
+                        <Link prefetch={false} href={item.link} className={linksClassName}> {item.label} </Link>
                     ) : (
                         <span className={linksClassName}> {item.label} </span>
                     )}

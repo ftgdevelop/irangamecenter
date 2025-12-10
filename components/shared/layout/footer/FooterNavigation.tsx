@@ -28,6 +28,7 @@ const FooterNavigation = () => {
         <nav className="md:max-w-lg md:mx-auto min-h-20 flex rounded-t-xl bg-[#ffffff] dark:bg-[#192b39]">
           {items.map(item => (
             <Link
+              prefetch={false}
               key={item.label}
               href={item.href}
               className={`relative basis-1/4 rounded-t-xl py-3 text-2xs flex flex-col justify-center items-center ${item.active ? "bg-[#eeeeee] dark:bg-[#2e3e4b]" : ""} ${item.loading ? "pointer-events-none" : ""}`}

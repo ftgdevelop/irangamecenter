@@ -62,7 +62,7 @@ const BlogsCarousel: React.FC<Props> = props => {
                                             className="rounded-large w-full min-h-52 object-cover"
                                         />
 
-                                        <Link href={item.url} className="relative pl-10 p-5 block justify-between gap-3 items-center">
+                                        <Link prefetch={false} href={item.url} className="relative pl-10 p-5 block justify-between gap-3 items-center">
                                             <strong className="block mb-1 text-sm">
                                                 {item.title}
                                             </strong>
@@ -89,7 +89,7 @@ const BlogsCarousel: React.FC<Props> = props => {
                             className="rounded-large w-full min-h-52 object-cover"
                         />
 
-                        <Link href={items[0]?.url} className="relative pl-10 p-5 block justify-between gap-3 items-center">
+                        <Link prefetch={false} href={items[0]?.url} className="relative pl-10 p-5 block justify-between gap-3 items-center">
                             <strong className="block mb-1 text-sm">
                                 {items[0]?.title}
                             </strong>

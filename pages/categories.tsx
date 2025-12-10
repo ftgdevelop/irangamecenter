@@ -76,6 +76,7 @@ const Categories: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
                         <div className="sticky top-2 px-3 py-5">
                             <div className="text-left">
                                 <Link
+                                    prefetch={false}
                                     href={`/category/${activeItem?.Slug}`}
                                     className="border px-3 py-2 rounded-full inline-flex items-center gap-2 text-sm font-semibold whitespace-nowrap"
                                 >
@@ -87,6 +88,7 @@ const Categories: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
                             <div className="grid grid-cols-2 gap-3 py-5">
                                 {activeItem?.Children?.map(item => (
                                     <Link
+                                        prefetch={false}
                                         key={item.id}
                                         href={`/category/${item.Slug}`}
                                         className="text-xs block text-center bg-white rounded-xl p-4 text-black"

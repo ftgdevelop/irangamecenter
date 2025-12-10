@@ -18,8 +18,8 @@ const HightlightItemLink: React.FC<Props> = props => {
                 <Image
                     src={props.Image || "/images/default-game.png"}
                     alt={` مشاهده ${props.Title}`}
-                    width={80}
-                    height={80}
+                    width={64}
+                    height={64}
                     className="rounded-full bg-white block w-16 h-16"
                 />
             </div>

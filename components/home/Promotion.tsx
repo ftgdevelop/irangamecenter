@@ -52,6 +52,7 @@ const Promotion : React.FC<Props> = props => {
                                 className="pl-2"
                             >
                                 <Link
+                                    prefetch={false}
                                     href={item.url}
                                     className="inline-block shrink-0 bg-[#011425] rounded-2xl w-40"
                                 >
