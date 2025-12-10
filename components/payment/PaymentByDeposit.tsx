@@ -3,10 +3,17 @@ import CheckIcon from "../icons/CheckIcon";
 import InfoCircle from "../icons/InfoCircle";
 import { useAppSelector } from "@/hooks/use-store";
 import Skeleton from "../shared/Skeleton";
+import React from "react";
 
-const PaymentByDeposit = () => {
+type Props = {
+  isSelected: boolean;
+  onSelect: () => void;
+}
 
-    const isSelected = true;
+const PaymentByDeposit: React.FC<Props> = props => {
+
+    const {isSelected, onSelect} = props;
+
     const balance = useAppSelector(state => state.authentication.balance);
     const getUserLoading = useAppSelector(state => state.authentication.getUserLoading);
     const balanceLoading = useAppSelector(state => state.authentication.balanceLoading);
@@ -23,7 +30,7 @@ const PaymentByDeposit = () => {
 
       <p className="mb-2 text-sm">
         <InfoCircle className="inline-block w-5 h-5 fill-current ml-1" /> بازگشت
-        وجه طبق قوانین محصول و پس از کسر جریمه انجام می‌شود.{" "}
+        وجه طبق قوانین محصول و پس از کسر جریمه انجام می‌شود.
       </p>
 
       <button
@@ -31,16 +38,14 @@ const PaymentByDeposit = () => {
         className={`w-full p-[2px] rounded-[15px] mt-3 ${
           isSelected
             ? "bg-gradient-to-t from-[#01b59c] to-[#9afeab] text-white"
-            : "bg-[#192a39]"
+            : "bg-white border border-[#cccccc] dark:bg-[#192a39] dark:border-[#192a39]"
         }`}
-        // onClick={() => {
-        //   setSelectedGatewayId(gatewayItem.id);
-        // }}
+        onClick={onSelect}
       >
         <div
           className={`flex rounded-[13px] items-center justify-between p-5 ${
             isSelected
-              ? "bg-gradient-to-t from-[#012431] to-[#0f2b32] text-white"
+              ? "bg-gradient-to-t from-[#e6fcf5] to-[#ebfbee] text-[#04b69c] dark:from-[#012431] dark:to-[#0f2b32] dark:text-white"
               : ""
           }`}
         >
@@ -48,12 +53,12 @@ const PaymentByDeposit = () => {
             <div
               className={`w-7 h-7 rounded-full border inline-flex justify-center items-center ${
                 isSelected
-                  ? "bg-gradient-to-t from-[#01b59c] to-[#9afeab] border-[#01b59c]"
-                  : "border-white"
+                    ? "bg-gradient-to-t from-[#01b59c] to-[#9afeab] border-[#01b59c]"
+                    : "border-[#cccccc] dark:border-white"
               }`}
             >
               {isSelected && (
-                <CheckIcon className="w-5 h-5 fill-current" />
+                <CheckIcon className="w-5 h-5 fill-white" />
               )}
             </div>
             ایران گیم سنتر

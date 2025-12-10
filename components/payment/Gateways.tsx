@@ -84,7 +84,7 @@ const Gateways: React.FC<Props> = (props) => {
         {[1, 2].map((x) => (
           <div
             key={x}
-            className="flex rounded-[13px] items-center justify-between p-5 bg-[#192a39] mb-4"
+            className="flex rounded-[13px] items-center justify-between p-5 bg-white dark:bg-[#192a39] mb-4"
           >
             <div className="flex items-center gap-3">
               <Skeleton type="image" className="w-7 h-7 rounded-full" dark />
@@ -98,7 +98,7 @@ const Gateways: React.FC<Props> = (props) => {
   }
 
   return gateways?.map((item) => (
-    <div key={item.keyword} >
+    <div key={item.keyword} className="mb-4" >
       <div
         className="flex flex-wrap gap-2 items-center justify-between mb-2"
       >
@@ -126,7 +126,7 @@ const Gateways: React.FC<Props> = (props) => {
           className={`w-full p-[2px] rounded-[15px] mt-3 ${
             selectedGatewayId === gatewayItem.id
               ? "bg-gradient-to-t from-[#01b59c] to-[#9afeab] text-white"
-              : "bg-[#192a39]"
+              : "bg-white border border-[#cccccc] dark:bg-[#192a39] dark:border-[#192a39]"
           }`}
           onClick={() => {
             setSelectedGatewayId(gatewayItem.id);
@@ -135,7 +135,7 @@ const Gateways: React.FC<Props> = (props) => {
           <div
             className={`flex rounded-[13px] items-center justify-between p-5 ${
               selectedGatewayId === gatewayItem.id
-                ? "bg-gradient-to-t from-[#012431] to-[#0f2b32] text-white"
+                ? "bg-gradient-to-t from-[#e6fcf5] to-[#ebfbee] text-[#04b69c] dark:from-[#012431] dark:to-[#0f2b32] dark:text-white"
                 : ""
             }`}
           >
@@ -144,11 +144,11 @@ const Gateways: React.FC<Props> = (props) => {
                 className={`w-7 h-7 rounded-full border inline-flex justify-center items-center ${
                   selectedGatewayId === gatewayItem.id
                     ? "bg-gradient-to-t from-[#01b59c] to-[#9afeab] border-[#01b59c]"
-                    : "border-white"
+                    : "border-[#cccccc] dark:border-white"
                 }`}
               >
                 {selectedGatewayId === gatewayItem.id && (
-                  <CheckIcon className="w-5 h-5 fill-current" />
+                  <CheckIcon className="w-5 h-5 fill-white" />
                 )}
               </div>
               {gatewayItem.displayName || gatewayItem.name}

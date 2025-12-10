@@ -71,11 +71,11 @@ const OnlineSupport : React.FC<Props> = props => {
 
                 <div className="relative w-full md:max-w-lg md:mx-auto h-screen">
 
-                    <div className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideIn(false) }} />
+                    <div className="bg-[#cccccc]/50 dark:bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideIn(false) }} />
 
-                    <div className={`flex flex-col gap-6 items-center p-5 py-10 bg-[#192a39] text-white rounded-2xl absolute transition-all left-5 right-5 ${slideIn ? "bottom-5" : "-bottom-[80vh]"}`}>
+                    <div className={`flex flex-col gap-6 items-center p-5 py-10 bg-white dark:bg-[#192a39] text-[#666666] dark:text-white rounded-2xl absolute transition-all left-5 right-5 ${slideIn ? "bottom-5" : "-bottom-[80vh]"}`}>
 
-                        <div className="bg-[#011425] p-3 rounded-full" >
+                        <div className="bg-[#eeeeee] dark:bg-[#011425] p-3 rounded-full" >
                             <Image 
                                 src="/images/icons/onlineSupportIcon.svg"
                                 alt="پشتیبانی آنلاین"
@@ -103,7 +103,7 @@ const OnlineSupport : React.FC<Props> = props => {
                                     prefetch={false}
                                     key={item.id}
                                     href={item.url || "#"}
-                                    className={`block py-3 px-4 min-h-14 w-full text-center bg-[#a93aff] rounded-full flex items-center ${icon?" justify-between":" justify-center"}`}
+                                    className={`block py-3 px-4 min-h-14 w-full text-center text-white bg-[#a93aff] rounded-full flex items-center ${icon?" justify-between":" justify-center"}`}
                                     style={{backgroundColor:item.backgroundColorCode || "#bbb"}}
                                 >
                                     {item.Name||""}
@@ -115,7 +115,7 @@ const OnlineSupport : React.FC<Props> = props => {
                         <button
                             type="button"
                             onClick={()=>{setSlideIn(false)}}
-                            className="block p-4 w-full text-center rounded-full bg-[#011425]"
+                            className="block p-4 w-full text-center rounded-full bg-[#dddddd] dark:bg-[#011425]"
                         >
                             انصراف
                         </button>

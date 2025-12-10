@@ -1,12 +1,15 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { getOrderById } from "@/actions/commerce";
+import { approve, getOrderById } from "@/actions/commerce";
+//import { confirmByDeposit } from "@/actions/payment";
 import Gateways from "@/components/payment/Gateways";
 import PaymentByDeposit from "@/components/payment/PaymentByDeposit";
 import Steps from "@/components/payment/Steps";
 import SimplePortal from "@/components/shared/layout/SimplePortal";
+import LoadingFull from "@/components/shared/LoadingFull";
 import { numberWithCommas } from "@/helpers";
 import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function PaymentPage() {
@@ -36,14 +39,27 @@ export default function PaymentPage() {
   }
   const [orderData, setOrderData] = useState<OrderDetail>();
 
+  const [depositIsSelected, setDepositIsSelected] = useState(false);
+  const [paymentByDepositLoading, setPaymentByDepositLoading] = useState(false);
+
+  const router = useRouter();
+
   useEffect(() => {
+
     const fetchOrder = async (id: string) => {
+      
       const token = localStorage.getItem("Token");
+
+      if(!token){
+        router.push("/");
+      }
+
       const response: any = await getOrderById({
         id: +id,
         currency: "IRR",
         token: token || "",
       });
+
       setOrderData(response?.data?.result);
     };
 
@@ -53,12 +69,51 @@ export default function PaymentPage() {
 
   }, [orderId]);
 
+  useEffect(()=>{
+    
+    const token = localStorage.getItem("Token");
+
+    const confirmDeposit = async (params:{ reserveId : number; username: string } , token: string) => {
+      setPaymentByDepositLoading(true);
+      // const response : any = await confirmByDeposit(params , token);
+      // console.log(response.data);
+      
+      // debugger;
+
+      // if(response.data?.result?.isSuccess){
+      //   debugger;
+      // }else{
+      //   debugger;
+      // }
+
+      const approveResponse : any = await approve({orderId:params.reserveId, orderNumber: params.username, token:token});
+      debugger;
+      console.log(approveResponse);
+
+    }
+
+    if(depositIsSelected && token && orderId && orderNumber){
+      confirmDeposit({reserveId:+orderId, username:orderNumber}, token)
+    }
+
+  },[depositIsSelected, orderId, orderNumber]);
+
   return (
     <>
+
+      {paymentByDepositLoading && (
+        <LoadingFull 
+          details={{
+            title:"در حال پرداخت از کیف پول",
+            description:"لطفا صبر کنید ..."
+          }}
+        />
+      )}
+
       <Steps activeStepKey="payment" />
 
       <div className="p-4">
-        <h2 className="text-lg font-semibold my-4 text-[#ffefb2]">
+        <h2 className="text-lg font-semibold my-4 text-[#fd7e14] dark:text-[#ffefb2]">
           انتخاب روش پرداخت
         </h2>
 
@@ -66,7 +121,9 @@ export default function PaymentPage() {
           <Gateways orderId={+orderId} orderNumber={orderNumber} />
         )}
 
-        <PaymentByDeposit />
+        <PaymentByDeposit 
+          onSelect={()=>{setDepositIsSelected(true)}} isSelected={depositIsSelected} 
+        />
 
         <div className="text-sm flex gap-3 items-center justify-between mt-5">
           <label className="text-xs">

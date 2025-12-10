@@ -5,7 +5,7 @@ import axios from "axios";
 export const getUserBalance = async (token: string) => {
 
   try {
-    let response = await axios.get(
+    const response = await axios.get(
       `${ServerAddress.Type}${ServerAddress.Payment}${Payment.GetBalance}`,
       {
         headers: {
@@ -70,7 +70,7 @@ export const getTransactionDeposit = async (params:GetTransactionParams, token:s
           ...Headers,
           Currency: "IRR",
           Authorization: `Bearer ${token}`,
-          "Accept-Language": "en-US"
+          "Accept-Language": acceptLanguage
         }
       }
     )
@@ -98,3 +98,22 @@ export const getBanksGateways = async (params: {token:string; reserveId: number;
     return error
   }
 }
+
+
+// export const confirmByDeposit = async ( params:{ reserveId : number; username: string } , token: string) => {
+//   try {
+//     const response = await axios.post(
+//       `${ServerAddress.Type}${ServerAddress.Payment}${Payment.ConfirmByDeposit}`,
+//       params,
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       },
+//     )
+//     return response
+//   } catch (error) {
+//     return error
+//   }
+// }
+

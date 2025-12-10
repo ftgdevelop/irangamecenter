@@ -167,3 +167,29 @@ export const getOrderById = async (params: { id: number; token?: string; currenc
         return error
     }
 }
+
+
+export const approve = async ( params:{ 
+    orderId: number;
+    orderNumber:string;
+    token: string
+ }) => {
+  try {
+    const response = await axios.post(
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.Approve}?orderId=${params.orderId}&orderNumber=${params.orderNumber}`,
+      params,
+      {
+        headers: {
+        ...Headers,
+        Currency: "IRR",
+        "Accept-Language": "fa-IR",
+        Authorization: `Bearer ${params.token}`,          
+        },
+      },
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
