@@ -47,7 +47,7 @@ const Faq: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
           prefetch={false}
           href={`faq/${item.Keyword}`}
           key={item.Keyword}
-          className="flex text-xs p-5 flex-col text-center min-h-28 items-center justify-center bg-gradient-to-t from-[#01212e] to-[#102c33] rounded-xl"
+          className="flex text-xs p-5 flex-col text-center min-h-28 items-center justify-center bg-gradient-to-t from-[#e7f5ff] to-[#f8f0fc] dark:from-[#01212e] dark:to-[#102c33] rounded-xl text-[#be4bdb] dark:text-white"
         >
           <Image 
             src={imagePath||"/images/icons/arrow-up-left.png"}

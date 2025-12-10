@@ -44,7 +44,7 @@ const Call : React.FC<Props> = props => {
         <button
             onClick={()=>{setOpen(true)}}
             type="button"
-            className={`text-right min-h-20 w-full mb-3 py-4 px-5 rounded-xl ${isActive?"bg-gradient-to-t from-[#01212e] to-[#102c33]":"bg-[#1a1e2e]"}`}
+            className={`text-right text-white min-h-20 w-full mb-3 py-4 px-5 rounded-xl ${isActive?"bg-gradient-to-t from-[#01212e] to-[#102c33]":"bg-[#1a1e2e]"}`}
         >
             <div className="mb-4 flex justify-between gap-4 items-center font-semibold text-sm text-white">
                 <div className="flex gap-4 items-center">
@@ -81,11 +81,11 @@ const Call : React.FC<Props> = props => {
 
                 <div className="relative w-full md:max-w-lg md:mx-auto h-screen">
 
-                    <div className="bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideIn(false) }} />
+                    <div className="bg-[#cccccc]/50 dark:bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideIn(false) }} />
 
-                    <div className={`flex flex-col gap-5 items-center p-5 py-10 bg-[#192a39] text-white rounded-2xl absolute transition-all left-5 right-5 ${slideIn ? "bottom-5" : "-bottom-[80vh]"}`}>
+                    <div className={`flex flex-col gap-6 items-center p-5 py-10 bg-white dark:bg-[#192a39] text-[#666666] dark:text-white rounded-2xl absolute transition-all left-5 right-5 ${slideIn ? "bottom-5" : "-bottom-[80vh]"}`}>
 
-                        <div className="bg-[#011425] p-3 rounded-full" >
+                        <div className="bg-[#eeeeee] dark:bg-[#011425] p-3 rounded-full" >
                             <Image 
                                 src="/images/icons/callSupportIcon.svg"
                                 alt="تماس تلفنی"
@@ -102,7 +102,7 @@ const Call : React.FC<Props> = props => {
                         {!!props.InnerData?.Value && (
                             <Link
                                 prefetch={false}
-                                className="block my-2 p-4 w-full text-center bg-[#a93aff] rounded-full"
+                                className="block my-2 p-4 w-full text-center text-white bg-[#a93aff] rounded-full"
                                 href={callLink}
                             >
                                 {props.InnerData?.Name} 
@@ -112,7 +112,7 @@ const Call : React.FC<Props> = props => {
                         <button
                             type="button"
                             onClick={()=>{setSlideIn(false)}}
-                            className="block p-4 w-full text-center rounded-full bg-[#011425]"
+                            className="block p-4 w-full text-center rounded-full bg-[#dddddd] dark:bg-[#011425]"
                         >
                             انصراف
                         </button>

@@ -16,7 +16,7 @@ const AboutIcons: React.FC<Props> = props => {
             {props.items.map(item=> (
                 <div 
                     key={item.Title}
-                    className="flex py-5 px-3 flex-col text-center min-h-28 items-center justify-center bg-gradient-to-t from-[#01212e] to-[#102c33] rounded-xl gap-3"
+                    className="flex py-5 px-3 flex-col text-center min-h-28 items-center justify-center bg-gradient-to-t from-[#01212e] to-[#102c33] rounded-xl gap-3 text-white"
                 >
                     {!!item.Image?.url && (
                         <Image 

@@ -108,7 +108,7 @@ const Contact: NextPage = ({ contacts, faq }: { contacts?: ContactsData, faq?: F
                   key={item.id}
                   title={item.Question}
                   content={<Markdown>{item.Answer}</Markdown>}
-                  WrapperClassName={`border-b border-white/15 py-2 ${index ? "" : "border-t"}`}
+                  WrapperClassName={`border-b border-neutral-300 dark:border-white/15 py-2 ${index ? "" : "border-t"}`}
               />
             ))}
         </div>)}
