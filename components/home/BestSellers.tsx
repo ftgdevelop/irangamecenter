@@ -74,7 +74,7 @@ const BestSellers: React.FC<Props> = props => {
                 prefetch={false}
                 href={`/products/variants-${item.slug}`}
                 onClick={()=>{dispatch(setProgressLoading(true));}}
-                className="text-sm text-white dark:text-[#ca54ff] bg-[#ca54ff] dark:bg-[#161b39] w-full px-5 py-3 flex rounded-full justify-center gap-3"
+                className="text-sm text-white dark:text-[#ca54ff] bg-gradient-violet dark:bg-gradient-dark-violet w-full px-5 py-3 flex rounded-full justify-center gap-3"
             >
                 <Add />
                 محصولات بیشتر

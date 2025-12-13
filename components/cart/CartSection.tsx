@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import CartCard from "./CartCard";
 import Skeleton from "../shared/Skeleton";
+import Home from "../icons/Home";
 
 type Props = {
   loading?: boolean;
@@ -54,7 +55,7 @@ const CartSection:React.FC<Props> = props => {
     (!cartGeneralInfo || !Array.isArray(items) || items.length === 0)
   ) {
     return (
-      <div className="flex flex-col justify-center items-center ">
+      <div className="flex flex-col cart-min-h justify-center items-center ">
         <Image
           width={90}
           height={90}
@@ -64,14 +65,9 @@ const CartSection:React.FC<Props> = props => {
         <p className="font-extrabold text-xl text-[#FF163E] mt-5">
           سبد خرید شما خالی است!
         </p>
-        <Link href={"/"} className="w-full">
-          <button className="bg-gradient-to-r from-[#FE4968] to-[#FF9B90] py-[22px] w-full rounded-[100px] mt-[60px] flex gap-3 items-center justify-center">
-            <Image
-              width={24}
-              height={24}
-              src="/images/icons/shop-outline.svg"
-              alt="empty"
-            />
+        <Link href="/" className="w-full">
+          <button className="bg-gradient-orange text-white h-11 w-full rounded-full mt-5 flex gap-3 items-center justify-center">
+            <Home className="w-5 h-5 fill-current" />
             بازگشت به فروشگاه
           </button>
         </Link>

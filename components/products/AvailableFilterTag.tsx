@@ -18,7 +18,7 @@ const AvailableFilterTag: React.FC<Props> = props => {
         setLoading(false);
     }, [router.asPath]);
 
-    const activeFilterColor = "text-white bg-gradient-to-t from-[#fe4c69] to-[#ff9a90]"
+    const activeFilterColor = "text-white bg-gradient-orange"
 
     const isActive = slugs?.find(x => x.includes("onlyAvailable"));
 

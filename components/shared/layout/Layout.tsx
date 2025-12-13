@@ -239,6 +239,17 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         showFixedNav = false;
         hasInternalFixedFooter = true;
     }
+    if (router.pathname === '/confirm') {
+        headerType2Params = {
+            title: "",
+            withLogo: true,
+            backUrl: "/cart",
+        };
+        showFooter = false;
+        showHeader = true;
+        showFixedNav = false;
+        hasInternalFixedFooter = false;
+    }
     
     if (router.pathname === '/checkout') {
         headerType2Params = {
@@ -250,17 +261,6 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         showHeader = true;
         showFixedNav = false;
         hasInternalFixedFooter = false;
-    }
-
-    if (router.pathname === "/result") {
-        headerType2Params = {
-            title: "",
-            withLogo: true,
-            backUrl: "/profile/orders",
-        };
-        showFooter = false;
-        showHeader = true;
-        showFixedNav = false;
     }
 
     useEffect(() => {

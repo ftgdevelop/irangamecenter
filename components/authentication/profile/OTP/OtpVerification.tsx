@@ -189,7 +189,7 @@ const OtpVerification: React.FC<Props> = props => {
                     size="lg"
                     value={verificationCode}
                     length={6}
-                    className={`otp-pin ${status === "error"?"has-error": status === "success" ? "has-sucess" : ""}`}
+                    className={`otp-pin dark:dark-otp-pin ${status === "error"?"has-error": status === "success" ? "has-sucess" : ""}`}
                     onChange={code => {
                         setStatus(undefined);
                         if (code.length === 6) {
@@ -237,7 +237,7 @@ const OtpVerification: React.FC<Props> = props => {
                     }}
                     disabled={!codeIsEntered || registerLoading}
                     type="button"
-                    className={`flex gap-4 items-center justify-center mb-5 h-14 w-full text-center rounded-full text-sm  text-white ${codeIsEntered ? "bg-[#aa3aff]" : "bg-[#231c50]"}`}
+                    className={`flex gap-4 items-center justify-center mb-5 h-14 w-full text-center rounded-full text-sm  text-white ${codeIsEntered ? "bg-[#aa3aff]" : "bg-[#bbbbbb] dark:bg-[#231c50]"}`}
                 >
                     تایید
 

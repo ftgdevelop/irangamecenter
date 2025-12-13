@@ -177,7 +177,7 @@ export const approve = async ( params:{
   try {
     const response = await axios.post(
       `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.Approve}?orderId=${params.orderId}&orderNumber=${params.orderNumber}`,
-      params,
+      null,
       {
         headers: {
         ...Headers,
