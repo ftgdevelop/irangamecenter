@@ -199,7 +199,7 @@ const LoginWithPassword: React.FC<Props> = props => {
 
                             <Link
                                 href={"/profile/forget-password"}
-                                className="text-[#2ac99f] font-semibold text-sm"
+                                className="text-[#2ac99f] font-semibold text-sm mb-5"
                             >
                                 فراموشی رمز عبور
                             </Link>

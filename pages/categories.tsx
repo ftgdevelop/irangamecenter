@@ -54,21 +54,13 @@ const Categories: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
                                     key={cat.id}
                                     type="button"
                                     onClick={() => { setActiveItemId(cat.id) }}
-                                    className={`p-2 rounded-l-xl ${activeItemId === cat.id ? "bg-white text-neutral-800" : "bg-[#192b39] text-white"} text-center mb-3 text-2xs block w-full relative`}
+                                    className={`p-2 shadow dark:box-shadow-none rounded-l-xl ${activeItemId === cat.id ? "bg-white text-neutral-800" : "bg-[#eeeeee] dark:bg-[#192b39] text-[#333] dark:text-white"} text-center mb-3 text-2xs block w-full relative`}
                                 >
                                     <span className={`absolute block h-full w-1.5 right-0 top-0 ${activeItemId === cat.id ? "bg-gradient-to-t from-[#fe707b] to-[#ff9b91]" : "bg-transparent"}`} />
                                     <Image src={cat.Image?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${cat.Image.url}` : "/images/default-game.png"} alt={cat.Title} title={cat.Title} width={94} height={32} className="w-full h-8  block mb-2 object-contain px-2" />
                                     {cat.Title}
                                 </button>
                             ))}
-
-
-                            {/* {[1, 2].map(item => (
-                            <div key={item} className="block text-center bg-[#192a39] rounded-l-xl p-3 mb-3" >
-                                <div className="bg-[#475561] rounded-full w-7 h-7 mb-2 mx-auto" />
-                                <div className="bg-[#475561] rounded-full w-20 max-w-full mx-auto h-3" />
-                            </div>
-                        ))} */}
 
                         </div>
                     </div>
@@ -91,19 +83,13 @@ const Categories: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
                                         prefetch={false}
                                         key={item.id}
                                         href={`/category/${item.Slug}`}
-                                        className="text-xs block text-center bg-white rounded-xl p-4 text-black"
+                                        className="text-xs block text-center shadow dark:box-shadow-none bg-white rounded-xl p-4 text-black"
                                     >
                                         <Image src={item.Image?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${item.Image.url}` : "/images/default-game.png"} alt={item.Title} width={100} height={100} className="w-12 h-12 block mb-2 mx-auto" />
                                         {item.Title}
                                     </Link>
                                 ))}
 
-                                {/* {[1, 2, 3, 4].map(item => (
-                                <div key={item} className="block text-center bg-[#192a39] rounded-xl p-4" >
-                                    <div className="bg-[#475561] rounded-full w-10 h-10 mb-3 mx-auto" />
-                                    <div className="bg-[#475561] rounded-full w-20 max-w-full mx-auto h-3" />
-                                </div>
-                            ))} */}
 
                             </div>
                         </div>

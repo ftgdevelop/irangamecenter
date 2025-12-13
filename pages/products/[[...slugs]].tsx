@@ -134,7 +134,7 @@ const Products: NextPage<Props> = props => {
     const isFiltered = !!selectedFilterSlugs.length;
 
 
-    const activeFilterColor = "text-white bg-gradient-to-t from-[#fe4c69] to-[#ff9a90]"
+    const activeFilterColor = "text-white bg-gradient-orange"
     return (
         <>
             <BreadCrumpt

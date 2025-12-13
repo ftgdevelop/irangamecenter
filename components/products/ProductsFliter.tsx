@@ -231,7 +231,7 @@ const ProductsFliter: React.FC<Props> = props => {
 
                     <button
                         type="button"
-                        className="text-white bg-violet-500 w-full rounded-full px-5 py-3 my-2 text-sm"
+                        className="text-white bg-gradient-violet w-full rounded-full px-5 py-3 my-2 text-sm"
                         onClick={() => { setSlideIn(false) }}
                     >
                         اعمال تغییرات

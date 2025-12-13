@@ -1,77 +1,20 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { getBanksGateways } from "@/actions/payment";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import CheckIcon from "../icons/CheckIcon";
 import Skeleton from "../shared/Skeleton";
+import { GatewayGroupItem } from "@/types/payment";
 
 type Props = {
-  orderId: number;
-  orderNumber: string;
-};
-
-export type GatewayItem = {
-  id: number;
-  name?: string;
-  displayName?: string;
-  isEnabled: boolean;
-  image?: {
-    path?: string;
-    titleAttribute?: string;
-    altAttribute?: string;
-  };
-  form: {
-    elements: [];
-  };
+  getGatewaysLoading: boolean;
+  gateways?: GatewayGroupItem[];
+  selectedGatewayId?: number;
+  onSelectGateway: (id: number) => void;
 };
 
 const Gateways: React.FC<Props> = (props) => {
-  const { orderId, orderNumber } = props;
 
-  const [selectedGatewayId, setSelectedGatewayId] = useState<number>();
-
-  type GatewayGroupItem = {
-    keyword: string;
-    category: "Group" | string;
-    name?: string;
-    title?: string;
-    description?: string;
-    image?: {
-      path?: string;
-      titleAttribute?: string;
-      altAttribute?: string;
-    };
-    gateways: GatewayItem[];
-  };
-
-  const [gateways, setGateways] = useState<GatewayGroupItem[]>();
-  const [getGatewaysLoading, setGetGatewaysLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    const fetchBanks = async (orderId: number, orderNumber: string) => {
-      const token = localStorage.getItem("Token");
-      if (!token) return;
-      setGetGatewaysLoading(true);
-      const response: any = await getBanksGateways(
-        {
-          reserveId: orderId,
-          username: orderNumber,
-          token: token,
-        },
-        "fa-IR"
-      );
-
-      if (response.data?.result) {
-        setGateways(response.data.result);
-      }
-      setGetGatewaysLoading(false);
-    };
-
-    if (orderId && orderNumber) {
-      fetchBanks(+orderId, orderNumber as string);
-    }
-  }, [orderId, orderNumber]);
+  const { getGatewaysLoading, gateways , selectedGatewayId, onSelectGateway} = props;
 
   if (getGatewaysLoading) {
     return [1, 2].map((i) => (
@@ -81,18 +24,15 @@ const Gateways: React.FC<Props> = (props) => {
           <Skeleton className="w-24 h-4" dark />
         </div>
 
-        {[1, 2].map((x) => (
-          <div
-            key={x}
-            className="flex rounded-[13px] items-center justify-between p-5 bg-white dark:bg-[#192a39] mb-4"
-          >
-            <div className="flex items-center gap-3">
-              <Skeleton type="image" className="w-7 h-7 rounded-full" dark />
-              <Skeleton className="w-24 h-4" dark />
-            </div>
-            <Skeleton type="image" className="w-7 h-7" dark />
+        <div
+          className="flex rounded-[13px] items-center justify-between p-5 bg-white dark:bg-[#192a39] mb-4"
+        >
+          <div className="flex items-center gap-3">
+            <Skeleton type="image" className="w-7 h-7 rounded-full" dark />
+            <Skeleton className="w-24 h-4" dark />
           </div>
-        ))}
+          <Skeleton type="image" className="w-7 h-7" dark />
+        </div>
       </div>
     ));
   }
@@ -123,13 +63,13 @@ const Gateways: React.FC<Props> = (props) => {
         <button
           key={gatewayItem.id}
           type="button"
-          className={`w-full p-[2px] rounded-[15px] mt-3 ${
+          className={`font-semibold w-full p-[2px] rounded-[15px] mt-3 ${
             selectedGatewayId === gatewayItem.id
               ? "bg-gradient-to-t from-[#01b59c] to-[#9afeab] text-white"
               : "bg-white border border-[#cccccc] dark:bg-[#192a39] dark:border-[#192a39]"
           }`}
           onClick={() => {
-            setSelectedGatewayId(gatewayItem.id);
+            onSelectGateway(gatewayItem.id);
           }}
         >
           <div

@@ -159,18 +159,18 @@ const PhoneInput: React.FC<Props> = props => {
     const expectedTotalLength = expectedLength ? expectedLength + country.dialCode.length : undefined;
 
 
-    const inputClassNames : string[] = [`bg-gradient-to-t from-[#d1d1d1] to-[#ababab] dark:from-[#01343c] dark:to-[#1f4340] ${props.heightClass||"h-11"} rounded-l-full px-5 outline-none`];
+    const inputClassNames : string[] = [`bg-gradient-to-t from-[#37b24d] to-[#0ca678] dark:from-[#01343c] dark:to-[#1f4340] ${props.heightClass||"h-11"} rounded-l-full px-5 outline-none`];
 
     if(errorText && isTouched){
         inputClassNames.push(`border-red-500`);
     }
 
-    const inputClassNames2 : string[] = [`${props.heightClass||"h-11"} text-right placeholder:text-right placeholder:tracking-normal px-5 col-span-4 rounded-r-full outline-none bg-[#dddddd] dark:bg-[#192a39] tracking-widest`];
+    const inputClassNames2 : string[] = [`${props.heightClass||"h-11"} border text-right placeholder:text-right placeholder:tracking-normal px-5 col-span-4 rounded-r-full outline-none bg-[#ffffff] dark:bg-[#192a39] tracking-widest`];
 
     if(errorText && isTouched){
         inputClassNames2.push(`border-red-500`);
     }else{
-        inputClassNames2.push(`border-neutral-300 focus:border-blue-500`);
+        inputClassNames2.push(`border-neutral-300 dark:border-transparent`);
     }
 
     const validationMessage = validateMobileNumberId({
@@ -213,14 +213,7 @@ const PhoneInput: React.FC<Props> = props => {
 
                 <div className={`relative text-sm grid grid-cols-5`} dir='ltr' ref={codeRef}>
 
-                    {!typedCode && <div className='absolute left-5 top-1/2 -translate-y-1/2 flex gap-2 items-center pointer-events-none'>
-                        {/* <Image
-                            src={`/images/flags/${country?.countryCode || defaultCountry.countryCode}.svg`}
-                            alt={country?.countryCode || defaultCountry.countryCode}
-                            width={30}
-                            height={16}
-                            className='w-8 h-5 object-cover border'
-                        />  */}
+                    {!typedCode && <div className='absolute left-5 top-1/2 -translate-y-1/2 flex gap-2 items-center pointer-events-none text-white'>
                         +{country?.dialCode}
                     </div>}
 
@@ -256,7 +249,7 @@ const PhoneInput: React.FC<Props> = props => {
                         name={props.name}
                     />
 
-                    {!!openCodes && <div className='absolute styled-scrollbar max-w-full top-full mt-1 left-0 min-w-full bg-[#dddddd] dark:bg-[#192a39] shadow z-20 max-h-44 overflow-auto rounded-2xl'>
+                    {!!openCodes && <div className='absolute styled-scrollbar max-w-full top-full mt-1 left-0 min-w-full bg-white dark:bg-[#192a39] shadow z-20 max-h-44 overflow-auto rounded-2xl'>
                         {filterCodeItems.map(item => {
                             return (
                                 <div

@@ -53,7 +53,7 @@ export const useCartApi = () => {
     throw err;
   };
 
-  const getCart = async (): Promise<GetCurrentProductResponseType> => {
+  const getCart = async () => {
     try {
       const res = await axios.get<GetCurrentProductResponseType>(
         `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.GetCurrentCart}`,
@@ -62,7 +62,6 @@ export const useCartApi = () => {
       return res.data;
     } catch (error) {
       handleError(error, "getCart");
-      throw error;
     }
   };
 

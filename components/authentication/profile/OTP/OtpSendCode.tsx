@@ -18,10 +18,7 @@ const OtpSendCode: React.FC<Props> = props => {
 
     return (
         <>
-            {
-                props.title ? props.title : <h3 className="font-semibold text-lg lg:text-xl text-[#ff7189] text-center mb-10"> ورود یا ثبت نام</h3>
-
-            }
+            {props.title ? props.title : <h3 className="font-semibold text-lg lg:text-xl text-[#ff7189] text-center mb-10"> ورود یا ثبت نام</h3>}
 
             <Formik
                 validate={() => { return {} }}
@@ -76,12 +73,10 @@ const OtpSendCode: React.FC<Props> = props => {
 
                                 <p className=" text-[10px]">
                                     ورود شما به معناى پذيرش
-                                    {' '}
                                     <Link
                                     href="/terms"
                                     className=" text-[#A93AFF]  hover:text-[#A93AFF]/50 transition"
                                     >
-
                                      شرايط ايران كيم 
                                     </Link> و  <Link
                                     href="/privacy"
@@ -92,7 +87,7 @@ const OtpSendCode: React.FC<Props> = props => {
                                 </p>
            
                             </div>
-                            <div className="flex flex-col gap-[30px]">
+                            <div className="flex flex-col gap-[30px] pb-10">
                             <button
                                 type="button"
                                 className="text-[#2ac99f] font-semibold text-sm"

@@ -121,6 +121,14 @@ body {
     animation: spinReverse 1s linear infinite;
   }	
 
+  .dark-otp-pin input.mantine-PinInput-input{
+    background-color: #192b39;
+    border-color: #192b39;
+    color: #fff;
+    &:focus{
+      border-color: #fff;
+    }
+  }
   .round-linecap{
     stroke-linecap: round;
   }
@@ -186,6 +194,15 @@ body {
   .bg-gradient-green{
     @apply bg-gradient-to-t from-[#028d7e] to-[#99feac];
   }
+  .bg-gradient-orange{
+    @apply bg-gradient-to-t from-[#fe5f73] to-[#ff908b];
+  }
+  .bg-gradient-violet{
+    @apply bg-gradient-to-t from-[#aa3bff] to-[#fe80ff];
+  }
+  .bg-gradient-dark-violet{
+    @apply bg-gradient-to-t from-[#161b39] to-[#161b39];
+  }  
   
 }
 
@@ -204,9 +221,9 @@ body {
     min-height: 45px;
     font-weight: 600;
     border-radius: 100%;
-    background-color: #192b39;
-    border-color: #192b39;
-    color: #fff;
+    background-color: #fff;
+    border-color: #dddddd;
+    color: #333;
     @media screen and (min-width:400px) {
       height: 55px;
       width: 55px;
@@ -215,7 +232,7 @@ body {
       color: transparent;
     }
     &:focus{
-      border-color: #fff;
+      border-color: #aaaaaa;
     }
     &::selection{
       background: transparent;
@@ -313,4 +330,11 @@ body {
 }
 .shrinkNimation {
   animation: shrinkKeyframe 2s linear forwards;
+}
+
+.confirm-min-h {
+    min-height: calc(100vh - 200px);
+}
+.cart-min-h{
+  min-height: calc(100vh - 162px);
 }
