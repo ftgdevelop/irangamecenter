@@ -1,13 +1,16 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { getOrderById } from "@/actions/commerce";
-import { getBanksGateways } from "@/actions/payment";
+import { getBanksGateways, makeTokenByAmount } from "@/actions/payment";
 import Gateways from "@/components/payment/Gateways";
 import PaymentByDeposit from "@/components/payment/PaymentByDeposit";
 import Steps from "@/components/payment/Steps";
 import SimplePortal from "@/components/shared/layout/SimplePortal";
+import LoadingFull from "@/components/shared/LoadingFull";
+import { ServerAddress } from "@/enum/url";
 import { numberWithCommas } from "@/helpers";
-import { useAppSelector } from "@/hooks/use-store";
+import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
+import { setReduxError } from "@/redux/errorSlice";
 import { GatewayGroupItem } from "@/types/payment";
 import { Skeleton } from "@mantine/core";
 import { useSearchParams } from "next/navigation";
@@ -16,9 +19,12 @@ import { useEffect, useState } from "react";
 
 export default function PaymentPage() {
 
+  const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get("orderNumber");
   const orderId = searchParams.get("orderId");
+
+  const [goToBankLoading, setGoToBankLoading] = useState(false);
 
   interface OrderDetail {
     currencyType: "IRR" | string;
@@ -111,7 +117,7 @@ export default function PaymentPage() {
 
   }, [orderId, orderNumber]);
 
-  let requiredAmount = orderData?.payableAmount;
+  let requiredAmount: number = orderData?.payableAmount || 0;
 
   let withdrawFromWallet = 0;
 
@@ -127,17 +133,67 @@ export default function PaymentPage() {
     }
   }
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
+    setGoToBankLoading(true);
+
     if(withdrawFromWallet && !requiredAmount){
       router.push(`/confirm?deposite=true&orderNumber=${orderNumber}&orderId=${orderId}`);
     }else{
+      
+      const callbackUrl = window?.location?.origin + "/confirm";
+
+      const token = localStorage.getItem("Token");
+      
+      if(!selectedGatewayId || !orderId || !token) return;
+
       debugger;
+      const response: any = await makeTokenByAmount({
+        amount:requiredAmount < 30000 ? 30000 : requiredAmount,
+        callBackUrl:callbackUrl,
+        currencyType:"IRR",
+        gatewayId: +selectedGatewayId,
+        ipAddress:1,
+        reserveId: +orderId
+      }, token);
+
+
+      debugger;
+      console.log(response);
+      debugger;
+      
+      if (response?.status == 200) {
+        const url = `https://${ServerAddress.Payment}/Reserves/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`;         
+        window.location.replace(url);
+      } else {
+          
+        const errorMessage = response?.response?.data?.error?.message;
+        dispatch(setReduxError({
+            status: 'error',
+            message: errorMessage || "ارسال اطلاعات ناموفق",
+            isVisible: true
+        }));
+
+        setGoToBankLoading(false);
+      }
+
+
+      
+      //makeTokenByAmount
       //goToBank
     }
   }
 
   return (
     <>
+
+      {goToBankLoading && (
+        <LoadingFull
+          details={{
+            title:"در حال پرداخت از کیف پول",
+            description:"لطفا صبر کنید ..."
+          }}
+        />
+      )}
 
       <Steps activeStepKey="payment" />
 
@@ -215,6 +271,7 @@ export default function PaymentPage() {
             type="button"
             className="w-full p-3 font-semibold bg-[#a93aff] text-white rounded-full"
             onClick = {onSubmit}
+            disabled={!selectedGatewayId && !!requiredAmount}
           >
             {(withdrawFromWallet && !requiredAmount) ? 
             "پرداخت از کیف پول" :

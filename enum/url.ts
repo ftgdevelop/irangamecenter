@@ -56,8 +56,8 @@ export const Payment = {
   MakeDepositToken:"/api/services/app/UserDepositBankGateway/MakeToken",
   GetTransactionDeposit:"/api/services/app/TransactionDeposit/GetAll",
   GetBankGateways:"/api/services/app/ReserveBankGateway/GetAll",
+  MakeTokenByAmount:"/api/services/app/UserDepositBankGateway/MakeToken"
   //ConfirmByDeposit:"/api/services/app/DepositReserve/ConfirmByDeposit__"
-  
 
 
   
