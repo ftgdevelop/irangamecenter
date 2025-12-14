@@ -116,7 +116,7 @@ const VariantItem: React.FC<VariantItemProps> = ({
                       </span>
                     )}
 
-                    {child.value}
+                    {item?.description || child.value}
 
                     {item?.salePrice && (
                       <div
