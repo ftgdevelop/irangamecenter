@@ -1,24 +1,65 @@
 import Menu from "@/components/icons/Menu";
-import Image from "next/image";
 import Link from "next/link";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, ReactNode, useEffect, useState } from "react";
 import ModalPortal from "../ModalPortal";
 import CloseSimple from "@/components/icons/CloseSimple";
+import Home from "@/components/icons/Home";
+import CaretLeft from "@/components/icons/CaretLeft";
+import UserCircle from "@/components/icons/UserCircle";
+import { useAppSelector } from "@/hooks/use-store";
+import DarkModeSwitch from "./DarkModeSwitch";
 
 const MainMenu: React.FC = () => {
+
+    const userLoading = useAppSelector(state => state.authentication.getUserLoading);
+    const user = useAppSelector(state => state.authentication.user);
 
     const items: {
         label: string;
         url: string;
+        icon : ReactNode;
     }[] = [
-            { label: "دسته بندی ها", url: "#" },
-            { label: "پیگیری سفارش", url: "#" },
-            { label: "راهنمای ثبت سفارش", url: "#" },
-            { label: "قوانین و مقررات", url: "/terms" },
-            { label: "سوالات متداول", url: "/faq" },
-            { label: "درباره ما", url: "/about" },
-            { label: "تماس با ما", url: "/contact" }
-        ];
+        {
+            url:"/",
+            label:"فروشگاه",
+            icon: <Home className="w-5 h-5 fill-current" />
+        },
+        {
+            url:"/products",
+            label:"پیشنهادهای ویژه",
+            icon: <Home className="w-5 h-5 fill-current" />
+        },
+        {
+            url:"/categories",
+            label:"دسته بندی ها",
+            icon: <Home className="w-5 h-5 fill-current" />
+        },
+        {
+            url:"/orders",
+            label:"سفارش های من",
+            icon: <Home className="w-5 h-5 fill-current" />
+        },
+        {
+            url:"/terms",
+            label:"قوانین و راهنما",
+            icon: <Home className="w-5 h-5 fill-current" />
+        },
+        {
+            url:"/faq",
+            label:"سوالات متداول",
+            icon: <Home className="w-5 h-5 fill-current" />
+        },
+        {
+            url:"/about",
+            label:"درباره ما",
+            icon: <Home className="w-5 h-5 fill-current" />
+        },
+        {
+            url:"/contact",
+            label:"تماس با ما",
+            icon: <Home className="w-5 h-5 fill-current" />
+        }
+    ];
 
 
     const [open, setOpen] = useState<boolean>(false);
@@ -59,43 +100,71 @@ const MainMenu: React.FC = () => {
                         onClick={() => { setDelayedOpen(false) }}
                     />
 
-                    <div className="overflow-hidden absolute h-screen left-0 top-0 w-5/6">
-                        <div className={`bg-[#fafafa] text-[#333333] dark:bg-[#011425] dark:text-white h-screen rounded-r-2xl overflow-x-hidden overflow-y-auto transition-all ${delayedOpen ? "translate-x-0" : "-translate-x-full"}`}>
-                            <div className="flex justify-between bg-[#e5e5e5] dark:bg-[#192a39] p-3.5">
-                                <div className="flex gap-4">
-                                    <Image src="/logo.svg" alt="irangamecenter" width={50} height={50} />
-                                    <div>
-                                        <strong className="block text-xl font-bold">
-                                            ایران گیم سنتر
-                                        </strong>
-                                        <span className="text-xs">
-                                            فروشگاه آنلاین اکانت بازی
-                                        </span>
-                                    </div>
-                                </div>
+                    <div className="overflow-hidden absolute h-screen left-0 top-0 w-11/12">
+
+                        <div className={`flex h-screen rounded-r-2xl overflow-x-hidden overflow-y-auto transition-all ${delayedOpen ? "translate-x-0" : "-translate-x-full"}`}>
+
+                            <div className="w-10 shrink-0" onClick={() => { setDelayedOpen(false) }}>
                                 <button
                                     type="button"
-                                    className=""
-                                    onClick={() => { setDelayedOpen(false) }}
+                                    className="mt-5"
                                 >
-                                    <CloseSimple className=" w-8 h-8 fill-red-500 dark:fill-neutral-300" />
+                                    <CloseSimple className=" w-9 h-9 fill-red-500 dark:fill-neutral-300" />
                                 </button>
                             </div>
+                            <div className="grow flex flex-col justify-between bg-[#fafafa] text-[#333333] dark:bg-[#192b39] dark:text-white">
+                                <div>
+                                    {userLoading?(
+                                        <div>
 
+                                        </div>
+                                    ): user?(
+                                        <div>
+                                            <div className="relative flex items-center justify-between bg-[#e5e5e5] dark:bg-[#2b2f4c] p-5 rounded-b-2xl">
+                                                <div className="flex gap-3 items-center">
+                                                    <UserCircle className="w-8 h-8 fill-[#bd55ec]" />
+                                                    <span className="" dir="ltr"> {user.phoneNumber?.replace("+98","0")} </span>
+                                                </div>
+                                                <Link prefetch={false} href={"/profile"} className="flex gap-3 items-center">
+                                                    پروفایل
+                                                    <CaretLeft className="w-4 h-4 fill-current" />
+                                                </Link>
+                                            </div>                                            
+                                        </div>
+                                    ):(
+                                        <Link href={"/login"} prefetch={false} className="relative flex items-center justify-between bg-[#e5e5e5] dark:bg-[#2b2f4c] py-4 px-5 rounded-b-2xl">
+                                            <div className=" flex gap-3 items-center">
+                                                <UserCircle className="w-8 h-8 fill-current" />
+                                                ورود یا ثبت نام
+                                            </div>
+                                            <CaretLeft className="w-4 h-4 fill-current" />
+                                        </Link>
+                                    )}
 
-                            <nav className="px-3.5">
-                                {items.map((item, index) => (
-                                    <Link 
-                                        prefetch={false}
-                                        onClick={()=>{setDelayedOpen(false)}}
-                                        key={item.label}
-                                        href={item.url} 
-                                        className={`block py-5 border-neutral-300 dark:border-white/15 text-sm ${index ? "border-t" : ""}`}
-                                    >
-                                        {item.label}
-                                    </Link>
-                                ))}
-                            </nav>
+                                    <nav className="px-3">
+                                        {items.map((item, index) => (
+                                            <Link 
+                                                prefetch={false}
+                                                onClick={()=>{setDelayedOpen(false)}}
+                                                key={item.label}
+                                                href={item.url} 
+                                                className={`flex justify-between items-center px-2 py-4 border-neutral-300 dark:border-white/15 text-sm ${index ? "border-t" : ""}`}
+                                            >
+                                                <span className="flex gap-3 items-center">
+                                                    {item.icon}
+                                                    {item.label}
+                                                </span>
+                                                <CaretLeft className="w-4 h-4 fill-current" />
+                                            </Link>
+                                        ))}
+                                    </nav>
+                                </div>
+
+                                <div className="flex justify-between items-center p-4 mb-8 text-sm">
+                                        تنظیمات نمایش
+                                        <DarkModeSwitch />
+                                </div>
+                            </div>
 
                         </div>
                     </div>

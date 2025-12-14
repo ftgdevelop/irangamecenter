@@ -7,6 +7,7 @@ import {
 import { numberWithCommas } from "@/helpers";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 import VariantFooter from "./VariantFooter";
+import Image from "next/image";
 
 type VariantItemProps = {
   variantGroup?: ProductVariant;
@@ -114,6 +115,16 @@ const VariantItem: React.FC<VariantItemProps> = ({
                       <span className="absolute top-0 left-3 -mt-2 bg-purple-600 rounded-full text-white text-[11px] px-2">
                         پیش خرید
                       </span>
+                    )}
+
+                    {item?.filePath && (
+                      <Image 
+                        src={item.filePath}
+                        alt={item?.description || child.value || ""}
+                        width={128}
+                        height={128}
+                        className="w-full square mb-2 rounded-xl"
+                      />
                     )}
 
                     {item?.description || child.value}

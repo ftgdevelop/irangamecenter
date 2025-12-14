@@ -110,7 +110,9 @@ export default function Profile() {
   return (
     <>
       <div className="p-3.5 flex gap-5 items-center">
-        <Image src="/logo.svg" alt="irangamecenter" width="40" height="40" />
+        <Link href={"/"}> 
+          <Image src="/logo.svg" alt="irangamecenter" width="40" height="40" />
+        </Link>
         <strong className="block text-xl font-bold text-[#ff7189]"> پروفایل </strong>
       </div>
       <div className="px-3.5">

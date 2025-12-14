@@ -117,3 +117,30 @@ export const getBanksGateways = async (params: {token:string; reserveId: number;
 //   }
 // }
 
+
+export const makeTokenByAmount = async ( params:{
+  ipAddress: 1;
+  gatewayId: number;
+  amount: number;
+  callBackUrl: string;
+  currencyType: "IRR" | "USD";
+  reserveId: number;
+} , token: string) => {
+  try {
+    const response = await axios.post(
+      `${ServerAddress.Type}${ServerAddress.Payment}${Payment.MakeTokenByAmount}`,
+      params,
+      {
+        headers: {
+          ...Headers,
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+

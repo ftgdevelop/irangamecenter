@@ -160,8 +160,8 @@ const EdiPersonalInfo = () => {
                                     setFieldValue("gender", true);
                                 }}
                                 className={`h-11 gap-2 flex grow justify-center items-center rounded-full ${gender
-                                    ? 'bg-gradient-to-t from-[#03b69d] to-[#99feac] text-[#222222]'
-                                    : 'bg-[#192a39] text-white'
+                                    ? 'bg-gradient-green text-[#222222]'
+                                    : 'bg-neutral-300 dark:bg-[#192a39] dark:text-white'
                                     }`}
                             >
                                 <Male className="w-5 h-5 fill-current" />
@@ -175,8 +175,8 @@ const EdiPersonalInfo = () => {
                                     setFieldValue("gender", false);
                                 }}
                                 className={`h-11 gap-2 flex grow justify-center items-center rounded-full ${gender === false
-                                    ? 'bg-gradient-to-t from-[#03b69d] to-[#99feac] text-[#222222]'
-                                    : 'bg-[#192a39] text-white'
+                                    ? 'bg-gradient-green text-[#222222]'
+                                    : 'bg-neutral-300 dark:bg-[#192a39] dark:text-white'
                                     }`}
                             >
                                 <Female className="w-5 h-5 fill-current" />
