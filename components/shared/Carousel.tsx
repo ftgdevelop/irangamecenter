@@ -95,7 +95,7 @@ const Carousel: React.FC<Props> = ({
               className={`h-3 rounded-full transition-all ${
                 selectedIndex === i
                   ? "w-7 bg-[#fe1940]"
-                  : "w-3 bg-white hover:bg-gray-300"
+                  : "w-3 bg-gray-400 hover:bg-gray-600 dark:bg-white dark:hover:bg-gray-300"
               }`}
             />
           ))}

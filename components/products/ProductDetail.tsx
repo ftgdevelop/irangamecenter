@@ -77,7 +77,7 @@ const ProductDetail: React.FC<Props> = props => {
                 {!!productData.genres?.[0]?.name && (
                     <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5 last:border-0" >
                         <div className="whitespace-nowrap"> سبک بازی </div>
-                        <div className="text-left text-teal-500">
+                        <div className="text-left text-[#099268] dark:text-teal-500">
                             {productData.genres.map(item => item.name).join("، ")}
                         </div>
                     </div>
@@ -86,7 +86,7 @@ const ProductDetail: React.FC<Props> = props => {
                 {!!productData.developer?.name && (
                     <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5" >
                         <div className="whitespace-nowrap"> شرکت توسعه دهنده </div>
-                        <Link prefetch={false} href={`/brand/${productData.developer.slug || "unknown"}`} className="text-left text-teal-500 last:border-0">
+                        <Link prefetch={false} href={`/brand/${productData.developer.slug || "unknown"}`} className="text-left text-[#099268] dark:text-teal-500 last:border-0">
                             {productData.developer.name}
                         </Link>
                     </div>
@@ -94,7 +94,7 @@ const ProductDetail: React.FC<Props> = props => {
                 {!!productData.publisher?.name && (
                     <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5" >
                         <div className="whitespace-nowrap"> شرکت انتشار دهنده </div>
-                        <Link prefetch={false} href={`/brand/${productData.publisher.slug || "unknown"}`} className="text-left text-teal-500 last:border-0">
+                        <Link prefetch={false} href={`/brand/${productData.publisher.slug || "unknown"}`} className="text-left text-[#099268] dark:text-teal-500 last:border-0">
                             {productData.publisher.name}
                         </Link>
                     </div>
@@ -103,7 +103,7 @@ const ProductDetail: React.FC<Props> = props => {
                 {!!productData.gameplay?.length && (
                     <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5 last:border-0" >
                         <div className="whitespace-nowrap"> حالت بازی </div>
-                        <div className="text-left text-teal-500">
+                        <div className="text-left text-[#099268] dark:text-teal-500">
                             {productData.gameplay.map(item => item.name).join("، ")}
                         </div>
                     </div>
@@ -111,7 +111,7 @@ const ProductDetail: React.FC<Props> = props => {
                 {!!productData.playerPerspective?.length && (
                     <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5 last:border-0" >
                         <div className="whitespace-nowrap"> زاویه دید </div>
-                        <div className="text-left text-teal-500">
+                        <div className="text-left text-[#099268] dark:text-teal-500">
                             {productData.playerPerspective.map(item => item.name).join("، ")}
                         </div>
                     </div>
@@ -121,7 +121,7 @@ const ProductDetail: React.FC<Props> = props => {
                 {!!productData.theme?.length && (
                     <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5 last:border-0" >
                         <div className="whitespace-nowrap"> تم بازی </div>
-                        <div className="text-left text-teal-500">
+                        <div className="text-left text-[#099268] dark:text-teal-500">
                             {productData.theme.map(item => item.name).join("، ")}
                         </div>
                     </div>
@@ -130,7 +130,7 @@ const ProductDetail: React.FC<Props> = props => {
                 {!!productData.releaseDate && (
                     <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5 last:border-0" >
                         <div className="whitespace-nowrap"> تاریخ انتشار </div>
-                        <div className="text-left text-teal-500">
+                        <div className="text-left text-[#099268] dark:text-teal-500">
                             {dateDiplayFormat({
                                 date: productData.releaseDate,
                                 locale: "fa",

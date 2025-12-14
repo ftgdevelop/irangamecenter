@@ -116,11 +116,11 @@ const DetailProduct: NextPage<any> = ({
   let brandTag: ReactNode = null;
   if (productData.publisher?.name) {
     brandTag = (
-      <Link prefetch={false} className='block text-xs text-[#68cedb] mt-1.5' href={`/brand/${productData.publisher.slug}`}> {productData.publisher.name} </Link>
+      <Link prefetch={false} className='block text-xs text-[#228be6] dark:text-[#68cedb] mt-1.5' href={`/brand/${productData.publisher.slug}`}> {productData.publisher.name} </Link>
     )
   } else if (productData.developer?.name) {
     brandTag = (
-      <Link prefetch={false} className='block text-xs text-[#68cedb] mt-1.5' href={`/brand/${productData.developer.slug}`}> {productData.developer.name} </Link>
+      <Link prefetch={false} className='block text-xs text-[#228be6] dark:text-[#68cedb] mt-1.5' href={`/brand/${productData.developer.slug}`}> {productData.developer.name} </Link>
     )
   }
 

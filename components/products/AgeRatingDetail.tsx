@@ -82,7 +82,7 @@ const AgeRatingDetail: React.FC<Props> = props => {
                     {productData.pegi.items?.map(item => (
 
                         <div
-                            className="flex gap-3 my-4 border rounded-xl mb-5 border-white/15 p-3"
+                            className="flex gap-3 my-4 border rounded-xl mb-5 border-neutral-300 dark:border-white/15 p-3"
                             key={item.keyword}
                         >
                             {item.image && (
@@ -141,7 +141,7 @@ const AgeRatingDetail: React.FC<Props> = props => {
                     {productData.esrb.items?.map(item => (
 
                         <div
-                            className="flex gap-3 my-4 border rounded-xl mb-5 border-white/15 p-3"
+                            className="flex gap-3 my-4 border rounded-xl mb-5 border-neutral-300 dark:border-white/15 p-3"
                             key={item.keyword}
                         >
                             {item.image && (
