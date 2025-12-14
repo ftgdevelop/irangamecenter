@@ -120,6 +120,7 @@ export interface ProductVariant {
     value?: string;
     children?: ProductVariant[];
     items?: {
+        filePath?: string;
         status?:  "InStock" | "OutOfStock" | "OnBackOrder";
         attributes?: {
             value?: string;
