@@ -398,3 +398,14 @@ export function groupByPrefix(items: string[]): Record<string, string[]> {
 
     return result;
 }
+
+export const GetCookieMode = () => {
+  let cookieMode = undefined;
+  const cookies = decodeURIComponent(document?.cookie).split(";");
+  for (const item of cookies) {
+    if (item.includes("mode=")) {
+      cookieMode = item.split("=")[1];
+    }
+  }
+  return(cookieMode);
+};

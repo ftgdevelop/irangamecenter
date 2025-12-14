@@ -12,10 +12,11 @@ import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import FooterNavigation from "./footer/FooterNavigation";
 import { getUserBalance } from "@/actions/payment";
 import PageLoadingBar from "./PageLoadingBar";
-import { setProgressLoading } from "@/redux/stylesSlice";
+import { setMode, setProgressLoading } from "@/redux/stylesSlice";
 import { addDeviceId, setGeneralCartInfo, setGeneralCartLoading } from "@/redux/cartSlice";
 import { GetCookieDeviceId } from "@/helpers/order";
 import { useCartApi } from "@/actions/cart";
+import { GetCookieMode } from "@/helpers";
 
 type Props = {
     className?: string;
@@ -34,6 +35,8 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     const lastScrollPosition = useAppSelector(state => state?.styles?.lastScrollPosition);
     const deviceId = useAppSelector((state) => state.cart.deviceId);
 
+    const reduxMode = useAppSelector(state => state.styles.mode);
+
     const {getCart} = useCartApi(); 
     
     useEffect(()=>{
@@ -41,8 +44,33 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         if(id){
             dispatch(addDeviceId(id));
         }
+
+        const cookieMode = GetCookieMode();
+
+        const isSystemDark = window?.matchMedia('(prefers-color-scheme: dark)').matches;
+        if(cookieMode==="dark"){
+            dispatch(setMode("dark"));
+        }else if (cookieMode === "light"){
+            dispatch(setMode("light"));
+        }else if(isSystemDark){
+            dispatch(setMode("dark"));
+        }else{
+            dispatch(setMode("light"));
+        }
+
     },[]);
-    
+
+    useEffect(()=>{
+
+        const root = document.documentElement;
+
+        if(reduxMode === "dark"){
+            root.classList.add('dark');
+        }else {
+            root.classList.remove('dark');
+        }        
+
+    },[reduxMode]);
 
     useEffect(() => {
         const getGeneralCartData = async () => {
@@ -172,7 +200,14 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         showFixedNav = false;
     }
 
-
+    if (router.pathname.startsWith("/orders")) {
+        headerType2Params = {
+            backUrl: "/",
+            title: "سفارش های من"
+        };
+        showFooter = false;
+        showFixedNav = false;
+    }
 
     if (router.pathname.startsWith("/blog/")) {
         headerType2Params = {
