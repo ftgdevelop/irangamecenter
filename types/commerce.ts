@@ -129,6 +129,7 @@ export interface ProductVariant {
         profitPercentage?: number;
         currencyType?: string;
         id: number;
+        description?: string;
     }[];
 }
 
