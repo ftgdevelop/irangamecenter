@@ -104,13 +104,13 @@ const MainMenu: React.FC = () => {
                 <div className="md:max-w-lg md:mx-auto relative">
 
                     <div
-                        className={`bg-black/75 absolute top-0 left-0 w-full h-screen transition-all ${delayedOpen ? "opacity-100" : "opacity-0"}`}
+                        className={`bg-black/75 absolute top-0 left-0 w-full h-dvh transition-all ${delayedOpen ? "opacity-100" : "opacity-0"}`}
                         onClick={() => { setDelayedOpen(false) }}
                     />
 
-                    <div className="overflow-hidden absolute h-screen left-0 top-0 w-11/12">
+                    <div className="overflow-hidden absolute h-dvh left-0 top-0 w-11/12">
 
-                        <div className={`flex h-screen rounded-r-2xl overflow-x-hidden overflow-y-auto transition-all ${delayedOpen ? "translate-x-0" : "-translate-x-full"}`}>
+                        <div className={`flex h-dvh rounded-r-2xl overflow-x-hidden overflow-y-auto transition-all ${delayedOpen ? "translate-x-0" : "-translate-x-full"}`}>
 
                             <div className="w-10 shrink-0" onClick={() => { setDelayedOpen(false) }}>
                                 <button
@@ -120,7 +120,7 @@ const MainMenu: React.FC = () => {
                                     <CloseSimple className=" w-9 h-9 fill-red-500 dark:fill-neutral-300" />
                                 </button>
                             </div>
-                            <div className="safePadding-b grow h-screen flex flex-col bg-[#fafafa] text-[#333333] dark:bg-[#192b39] dark:text-white">
+                            <div className="safePadding-b grow h-dvh flex flex-col bg-[#fafafa] text-[#333333] dark:bg-[#192b39] dark:text-white">
                              
                                 {userLoading ?(
                                     <div className="relative flex items-center justify-between bg-[#e5e5e5] dark:bg-[#2b2f4c] p-5 rounded-b-2xl">
