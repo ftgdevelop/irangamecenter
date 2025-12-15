@@ -24,14 +24,14 @@ const FooterNavigation = () => {
   return (
     <>
       <div className="pb-20" />
-      <div className="text-white fixed bottom-0 left-0 right-0 z-10">
-        <nav className="md:max-w-lg md:mx-auto min-h-20 flex rounded-t-xl bg-[#111111] dark:bg-[#192b39]">
+      <div className="text-black dark:text-white fixed bottom-0 left-0 right-0 z-10">
+        <nav className="md:max-w-lg md:mx-auto min-h-20 flex rounded-t-xl bg-white dark:bg-[#192b39]">
           {items.map(item => (
             <Link
               prefetch={false}
               key={item.label}
               href={item.href}
-              className={`relative basis-1/4 rounded-t-xl py-3 text-2xs flex flex-col justify-center items-center ${item.active ? "bg-[white]/10 dark:bg-[#2e3e4b]" : ""} ${item.loading ? "pointer-events-none" : ""}`}
+              className={`relative basis-1/4 rounded-t-xl py-3 text-2xs flex flex-col justify-center items-center ${item.active ? "bg-[#f0eff2] dark:bg-[#2e3e4b]" : ""} ${item.loading ? "pointer-events-none" : ""}`}
             >
               <div className="relative w-fit">
                 <Image src={item.imageUrl} alt={item.alt} className="block mx-auto mb-2" width={26} height={26} />

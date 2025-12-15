@@ -104,13 +104,13 @@ const MainMenu: React.FC = () => {
                 <div className="md:max-w-lg md:mx-auto relative">
 
                     <div
-                        className={`bg-black/75 absolute top-0 left-0 w-full h-dvh transition-all ${delayedOpen ? "opacity-100" : "opacity-0"}`}
+                        className={`bg-black/75 absolute top-0 left-0 w-full h-screen transition-all ${delayedOpen ? "opacity-100" : "opacity-0"}`}
                         onClick={() => { setDelayedOpen(false) }}
                     />
 
-                    <div className="overflow-hidden absolute h-dvh left-0 top-0 w-11/12">
+                    <div className="overflow-hidden absolute h-screen left-0 top-0 w-11/12">
 
-                        <div className={`flex h-dvh rounded-r-2xl overflow-x-hidden overflow-y-auto transition-all ${delayedOpen ? "translate-x-0" : "-translate-x-full"}`}>
+                        <div className={`flex h-screen rounded-r-2xl overflow-x-hidden overflow-y-auto transition-all ${delayedOpen ? "translate-x-0" : "-translate-x-full"}`}>
 
                             <div className="w-10 shrink-0" onClick={() => { setDelayedOpen(false) }}>
                                 <button
@@ -120,62 +120,64 @@ const MainMenu: React.FC = () => {
                                     <CloseSimple className=" w-9 h-9 fill-red-500 dark:fill-neutral-300" />
                                 </button>
                             </div>
-                            <div className="safePadding-b grow h-dvh flex flex-col bg-[#fafafa] text-[#333333] dark:bg-[#192b39] dark:text-white">
-                             
-                                {userLoading ?(
-                                    <div className="relative flex items-center justify-between bg-[#e5e5e5] dark:bg-[#2b2f4c] p-5 rounded-b-2xl">
-                                        <div className="flex gap-3 items-center">
-                                            <UserCircle className="w-8 h-8 fill-current" />
-                                            <Skeleton className="w-16 h-4" />
-                                        </div>
-                                        <div className="flex gap-3 items-center text-sm">
-                                            <Skeleton className="w-16 h-4" />
-                                            <CaretLeft className="w-4 h-4 fill-current" />
-                                        </div>
-                                    </div>                                            
-                                ): user?(
-                                    <div className="relative flex items-center justify-between bg-[#e5e5e5] dark:bg-[#2b2f4c] p-5 rounded-b-2xl">
-                                        <div className="flex gap-3 items-center">
-                                            <UserCircle className="w-8 h-8 fill-[#bd55ec]" />
-                                            <span className="text-sm" dir="ltr"> {user.phoneNumber?.replace("+98","0")} </span>
-                                        </div>
-                                        <Link prefetch={false} href={"/profile"} className="flex gap-3 items-center text-sm">
-                                            پروفایل
-                                            <CaretLeft className="w-4 h-4 fill-current" />
-                                        </Link>
-                                    </div>                                            
-                                ):(
-                                    <Link href={"/login"} prefetch={false} className="relative flex items-center justify-between bg-[#e5e5e5] dark:bg-[#2b2f4c] py-4 px-5 rounded-b-2xl">
-                                        <div className=" flex gap-3 items-center text-sm">
-                                            <UserCircle className="w-8 h-8 fill-current" />
-                                            ورود یا ثبت نام
-                                        </div>
-                                        <CaretLeft className="w-4 h-4 fill-current" />
-                                    </Link>
-                                )}
-                              
-                                <nav className="px-3 grow">
-                                    {items.map((item, index) => (
-                                        <Link 
-                                            prefetch={false}
-                                            onClick={()=>{setDelayedOpen(false)}}
-                                            key={item.label}
-                                            href={item.url} 
-                                            className={`flex justify-between items-center px-2 py-4 border-neutral-300 dark:border-white/15 text-sm ${index ? "border-t" : ""}`}
-                                        >
-                                            <span className="flex gap-3 items-center">
-                                                {item.icon}
-                                                {item.label}
-                                            </span>
+                            <div className="grow h-screen bg-[#fafafa] text-[#333333] dark:bg-[#192b39] dark:text-white">
+                                <div className="h-svh flex flex-col safePadding-b">
+                                    {userLoading ?(
+                                        <div className="relative flex items-center justify-between bg-[#e5e5e5] dark:bg-[#2b2f4c] p-5 rounded-b-2xl">
+                                            <div className="flex gap-3 items-center">
+                                                <UserCircle className="w-8 h-8 fill-current" />
+                                                <Skeleton className="w-16 h-4" />
+                                            </div>
+                                            <div className="flex gap-3 items-center text-sm">
+                                                <Skeleton className="w-16 h-4" />
+                                                <CaretLeft className="w-4 h-4 fill-current" />
+                                            </div>
+                                        </div>                                            
+                                    ): user?(
+                                        <div className="relative flex items-center justify-between bg-[#e5e5e5] dark:bg-[#2b2f4c] p-5 rounded-b-2xl">
+                                            <div className="flex gap-3 items-center">
+                                                <UserCircle className="w-8 h-8 fill-[#bd55ec]" />
+                                                <span className="text-sm" dir="ltr"> {user.phoneNumber?.replace("+98","0")} </span>
+                                            </div>
+                                            <Link prefetch={false} href={"/profile"} className="flex gap-3 items-center text-sm">
+                                                پروفایل
+                                                <CaretLeft className="w-4 h-4 fill-current" />
+                                            </Link>
+                                        </div>                                            
+                                    ):(
+                                        <Link href={"/login"} prefetch={false} className="relative flex items-center justify-between bg-[#e5e5e5] dark:bg-[#2b2f4c] py-4 px-5 rounded-b-2xl">
+                                            <div className=" flex gap-3 items-center text-sm">
+                                                <UserCircle className="w-8 h-8 fill-current" />
+                                                ورود یا ثبت نام
+                                            </div>
                                             <CaretLeft className="w-4 h-4 fill-current" />
                                         </Link>
-                                    ))}
-                                </nav>
+                                    )}
+                                
+                                    <nav className="px-3 grow">
+                                        {items.map((item, index) => (
+                                            <Link 
+                                                prefetch={false}
+                                                onClick={()=>{setDelayedOpen(false)}}
+                                                key={item.label}
+                                                href={item.url} 
+                                                className={`flex justify-between items-center px-2 py-4 border-neutral-300 dark:border-white/15 text-sm ${index ? "border-t" : ""}`}
+                                            >
+                                                <span className="flex gap-3 items-center">
+                                                    {item.icon}
+                                                    {item.label}
+                                                </span>
+                                                <CaretLeft className="w-4 h-4 fill-current" />
+                                            </Link>
+                                        ))}
+                                    </nav>
 
-                                <div className="flex justify-between items-center p-4 text-sm">
-                                    تنظیمات نمایش
-                                    <DarkModeSwitch />
+                                    <div className="flex justify-between items-center p-4 text-sm">
+                                        تنظیمات نمایش
+                                        <DarkModeSwitch />
+                                    </div>
                                 </div>
+                             
                             </div>
 
                         </div>
