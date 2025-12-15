@@ -83,7 +83,8 @@ export const Payment = {
     GetOrderById:"/api/services/app/Order/Get",
     GetProductGallries:"/api/services/app/Product/GetGallries",
     GetProductVariants:"/api/services/app/Product/GetVariants",
-    Approve:"/api/services/app/Order/Approve"
+    Approve:"/api/services/app/Order/Approve",
+    GetAllVariants:"/api/services/app/Variant/GetAll"
   }
   
 

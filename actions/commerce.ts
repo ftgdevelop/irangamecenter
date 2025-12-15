@@ -193,3 +193,24 @@ export const approve = async ( params:{
   }
 }
 
+
+export const getAllVariants = async (params:{
+    SkipCount:number;
+    MaxResultCount: number;
+}) => {
+    try{
+        const res : any = await axios({
+            method: "get",
+            url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetAllVariants}?SkipCount=${params.SkipCount}&MaxResultCount=${params.MaxResultCount}`,
+            headers: {
+                ...Headers,
+                "Accept-Language": "fa-IR",
+                currency: "IRR"
+            }
+        })
+        return res
+
+    } catch (error){
+        return error
+    }
+}

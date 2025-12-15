@@ -146,7 +146,6 @@ export default function PaymentPage() {
       
       if(!selectedGatewayId || !orderId || !token) return;
 
-      debugger;
       const response: any = await makeTokenByAmount({
         amount:requiredAmount < 30000 ? 30000 : requiredAmount,
         callBackUrl:callbackUrl,
@@ -155,7 +154,6 @@ export default function PaymentPage() {
         ipAddress:1,
         reserveId: +orderId
       }, token);
-
 
       debugger;
       console.log(response);
