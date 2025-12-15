@@ -120,7 +120,7 @@ const MainMenu: React.FC = () => {
                                     <CloseSimple className=" w-9 h-9 fill-red-500 dark:fill-neutral-300" />
                                 </button>
                             </div>
-                            <div className="pb-10 grow h-screen flex flex-col bg-[#fafafa] text-[#333333] dark:bg-[#192b39] dark:text-white">
+                            <div className="safePadding-b grow h-screen flex flex-col bg-[#fafafa] text-[#333333] dark:bg-[#192b39] dark:text-white">
                              
                                 {userLoading ?(
                                     <div className="relative flex items-center justify-between bg-[#e5e5e5] dark:bg-[#2b2f4c] p-5 rounded-b-2xl">
@@ -173,8 +173,8 @@ const MainMenu: React.FC = () => {
                                 </nav>
 
                                 <div className="flex justify-between items-center p-4 text-sm">
-                                        تنظیمات نمایش
-                                        <DarkModeSwitch />
+                                    تنظیمات نمایش
+                                    <DarkModeSwitch />
                                 </div>
                             </div>
 
