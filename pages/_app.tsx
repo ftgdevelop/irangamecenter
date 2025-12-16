@@ -7,7 +7,6 @@ import { createTheme, MantineProvider } from "@mantine/core";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { Provider } from "react-redux";
-import Script from "next/script";
 
 export default function App({ Component, pageProps }: AppProps) {
 
