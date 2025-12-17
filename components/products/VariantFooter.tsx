@@ -174,7 +174,7 @@ const VariantFooter = ({
       )}
 
       <SimplePortal selector="fixed_bottom_portal">
-        <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 text-white bg-[#192a39] px-4 py-3 flex flex-wrap max-[390px]:justify-center justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
+        <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 bg-white dark:text-white dark:bg-[#192a39] px-4 py-3 flex flex-wrap max-[390px]:justify-center justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
           
           {!!cartData?.items.length &&
           cartData.totalQuantity &&
@@ -235,13 +235,13 @@ const VariantFooter = ({
                     {!currentCartItem?.totalDiscountAmount ? `${variantItem.profitPercentage} %   تخفیف` : `
                     ${currentCartItem?.totalDiscountAmount} ${currency} تخفیف `}
                   </span>
-                  <span className="text-xs text-white/70 line-through">
+                  <span className="text-xs text-[#5f5f5f] dark:text-white/70 line-through">
                     {numberWithCommas(currentCartItem?.totalStrikePrice ?? variantItem.regularPrice ?? 0)} {currency}
                   </span>
                 </div>
               )}
 
-              <b className="text-base font-semibold block">
+              <b className="text-[#011425] dark:text-white text-base font-semibold block">
                 {currency} {numberWithCommas(currentCartItem?.totalPrice ?? variantItem?.salePrice ?? 0 )}
               </b>
             </div>

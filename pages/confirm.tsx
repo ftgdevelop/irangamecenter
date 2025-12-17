@@ -19,7 +19,9 @@ export default function Confirm() {
   const orderId = searchParams.get("orderId");
   const isDeposite = searchParams.get("deposite");
 
-  const [errorMode, setError] = useState<boolean>(true);
+  const [mode, setMode] = useState<"error"|"success"|"pending">("pending");
+
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   interface OrderDetail {
     currencyType: "IRR" | string;
@@ -46,8 +48,6 @@ export default function Confirm() {
     //todo:
     console.log(orderData.status);
   }
-
-  const [paymentByDepositLoading, setPaymentByDepositLoading] = useState(false);
   
   const router = useRouter();
 
@@ -83,7 +83,7 @@ export default function Confirm() {
 
     const confirm = async (params:{ reserveId : number; username: string } , token: string) => {
       
-      setPaymentByDepositLoading(true);
+      setMode("pending");
       
       // const response : any = await confirmByDeposit(params , token);
       // console.log(response.data);
@@ -97,8 +97,15 @@ export default function Confirm() {
       // }
 
       const approveResponse : any = await approve({orderId:params.reserveId, orderNumber: params.username, token:token});
+
+      if(approveResponse.message){
+        debugger;
+        setErrorMessage(approveResponse.message);
+        setMode("error")
+      }
+
+      
       debugger;
-      setPaymentByDepositLoading(false);
       console.log(approveResponse);
 
     }
@@ -125,7 +132,6 @@ export default function Confirm() {
       <button
       type="button"
       className="h-11 w-full mb-5 text-white bg-gradient-violet rounded-full text-sm"
-      onClick={()=>{setError(x => !x)}}
       >
         ثبت اطلاعات اکانت
       </button>
@@ -133,7 +139,7 @@ export default function Confirm() {
     </div>
   );
 
-  if(errorMode){
+  if(mode === "error"){
    element = ( 
    <div className="bg-[#34142a] text-white p-5 confirm-min-h flex flex-col justify-center text-center items-center rounded-xl">
       <div className="bg-[#011425] p-2.5 rounded-full mb-3">
@@ -141,20 +147,29 @@ export default function Confirm() {
       </div>
 
       <h5 className="mb-5 font-bold text-xl text-[#ff163e]"> پرداخت شما ناموفق بود! </h5>
-      <p className="text-[11px] mb-1"> 
-        متأسفانه تراکنش شما با خطا مواجه شد یا از سوی بانک تأیید نشد.
-      </p>
-      <p className="text-[11px] mb-12"> 
-        لطفاً موجودی حساب و اتصال اینترنت خود را بررسی کرده و مجدداً تلاش کنید.
-      </p>
-      <button
-        type="button"
+      
+      {errorMessage ? (
+        <p className="text-[12px] mb-12"> 
+          {errorMessage}
+        </p>
+      ):(
+        <>
+          <p className="text-[11px] mb-1"> 
+            متأسفانه تراکنش شما با خطا مواجه شد یا از سوی بانک تأیید نشد.
+          </p>
+          <p className="text-[11px] mb-12"> 
+            لطفاً موجودی حساب و اتصال اینترنت خود را بررسی کرده و مجدداً تلاش کنید.
+          </p>
+        </>
+      )}
+      
+      <Link
+        href={`/payment?orderNumber=${orderNumber}&orderId=${orderId}`}
         className="flex gap-3 items-center justify-center h-11 w-full mb-5 text-white bg-gradient-violet rounded-full text-sm"
-        onClick={()=>{setError(x => !x)}}
       >
         <Refresh className="w-4 h-4 fill-current" />
         تلاش مجدد برای پرداخت
-      </button>
+      </Link>
       <Link
         href="/"
         className="flex gap-3 items-center justify-center h-11 w-full mb-5 text-white bg-gradient-orange rounded-full text-sm"
@@ -166,19 +181,24 @@ export default function Confirm() {
     </div>
   )}
 
+  if(mode === "pending"){
+   element = ( 
+   <div className="bg-[#231c50] text-white p-5 confirm-min-h flex flex-col justify-center text-center items-center rounded-xl">
+      <div className="bg-[#011425] rounded-full mb-3">
+        <Image src={'/images/loading.gif'} width={280} height={280} className="w-16 h-16" alt="error"/>
+      </div>
+
+      <h5 className="mb-5 font-bold text-xl bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent drop-shadow"> در حال پردازش سفارش شما </h5>
+
+      <p className="text-[11px] mb-12"> 
+        پس از تکمیل پردازش، به ‌صورت خودکار به صفحه جزئیات سفارش هدایت می‌شوید و اطلاعات بازی یا اکانت خریداری‌شده در بخش «سفارش‌های من» نمایش داده می‌شود.
+      </p>
+
+    </div>
+  )}
+
   return (
     <>
-
-      {paymentByDepositLoading && (
-        <div > loading </div>
-        // <LoadingFull 
-        //   details={{
-        //     title:"در حال پرداخت از کیف پول",
-        //     description:"لطفا صبر کنید ..."
-        //   }}
-        // />
-      )}
-
       <Steps activeStepKey="payment" />
 
       <div className="p-5">

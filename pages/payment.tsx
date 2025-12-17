@@ -135,7 +135,7 @@ export default function PaymentPage() {
 
   const onSubmit = async () => {
     setGoToBankLoading(true);
-
+    
     if(withdrawFromWallet && !requiredAmount){
       router.push(`/confirm?deposite=true&orderNumber=${orderNumber}&orderId=${orderId}`);
     }else{

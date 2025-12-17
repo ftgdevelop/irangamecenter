@@ -22,11 +22,8 @@ function creareSiteMap(){
     <sitemap>
       <loc>${process.env.SITE_NAME}/sitemaps/videos.xml</loc>
     </sitemap>
-    <sitemap>
-      <loc>${process.env.SITE_NAME}/sitemaps/variants.xml</loc>
-    </sitemap>
     `
-}
+  }
 
   return `<?xml version="1.0" encoding="UTF-8"?>
     <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
