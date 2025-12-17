@@ -168,7 +168,6 @@ export const getOrderById = async (params: { id: number; token?: string; currenc
     }
 }
 
-
 export const approve = async ( params:{ 
     orderId: number;
     orderNumber:string;
@@ -176,8 +175,11 @@ export const approve = async ( params:{
  }) => {
   try {
     const response = await axios.post(
-      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.Approve}?orderId=${params.orderId}&orderNumber=${params.orderNumber}`,
-      null,
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.Approve}`,
+      {
+        orderId: params.orderId,
+        orderNumber: params.orderNumber
+      },
       {
         headers: {
         ...Headers,
@@ -219,7 +221,7 @@ export const getAllOrders = async (
   params: {
     SkipCount: number;
     MaxResultCount: number;
-    status?: string[];
+    status?: string;
     search?: string;
   },
   token: string,
@@ -228,12 +230,12 @@ export const getAllOrders = async (
   try {
     const query = [`SkipCount=${params.SkipCount}&MaxResultCount=${params.MaxResultCount}`];
 
-    if (params.status?.length) {
-      const statusQueries = params.status.map((s) => `Statuses=${s}`).join("&");
+    if (params.status) {
+      const statusQueries = `Statuses=${params.status}`;
       query.push(statusQueries);
     }
     if (params.search) {
-      query.push(`SSSSSSSSSSEEEEEARCHTODO=${params.search}`);
+      query.push(`IdOrTitle=${params.search}`);
     }
 
     const res: any = await axios({
@@ -256,3 +258,24 @@ export const getAllOrders = async (
     return error;
   }
 };
+
+
+
+export const getOrdersStatistics = async (token: string) => {
+    try{
+        const res : any = await axios({
+            method: "get",
+            url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetOrdersStatistics}`,
+            headers: {
+                ...Headers,
+                "Accept-Language": "fa-IR",
+                currency: "IRR",
+                Authorization: `Bearer ${token}`
+            }
+        })
+        return res
+
+    } catch (error){
+        return error
+    }
+}

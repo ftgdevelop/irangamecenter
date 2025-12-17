@@ -85,7 +85,8 @@ export const Payment = {
     GetProductVariants:"/api/services/app/Product/GetVariants",
     Approve:"/api/services/app/Order/Approve",
     GetAllVariants:"/api/services/app/Variant/GetAll",
-    GetAllOrders:"/api/services/app/Order/GetAll"
+    GetAllOrders:"/api/services/app/Order/GetAll",
+    GetOrdersStatistics:"/api/services/app/Order/GetStatistics"
   }
   
 
