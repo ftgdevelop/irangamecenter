@@ -43,7 +43,7 @@ const MainMenu: React.FC = () => {
             icon: <Category className="w-5 h-5 fill-none stroke-current" />
         },
         {
-            url:"/orders",
+            url:"/profile/orders",
             label:"سفارش های من",
             icon: <CartOutline className="w-5 h-5 fill-none stroke-current" />
         },

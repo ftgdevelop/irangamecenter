@@ -214,3 +214,45 @@ export const getAllVariants = async (params:{
         return error
     }
 }
+
+export const getAllOrders = async (
+  params: {
+    SkipCount: number;
+    MaxResultCount: number;
+    status?: string[];
+    search?: string;
+  },
+  token: string,
+  signal?: AbortSignal // اضافه کردن signal
+) => {
+  try {
+    const query = [`SkipCount=${params.SkipCount}&MaxResultCount=${params.MaxResultCount}`];
+
+    if (params.status?.length) {
+      const statusQueries = params.status.map((s) => `Statuses=${s}`).join("&");
+      query.push(statusQueries);
+    }
+    if (params.search) {
+      query.push(`SSSSSSSSSSEEEEEARCHTODO=${params.search}`);
+    }
+
+    const res: any = await axios({
+      method: "get",
+      url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetAllOrders}?${query.join("&")}`,
+      headers: {
+        ...Headers,
+        "Accept-Language": "fa-IR",
+        currency: "IRR",
+        Authorization: `Bearer ${token}`,
+      },
+      signal, // ارسال signal به axios
+    });
+
+    return res;
+  } catch (error: any) {
+    if (axios.isCancel(error)) {
+      console.log("Request canceled:", error.message);
+    }
+    return error;
+  }
+};

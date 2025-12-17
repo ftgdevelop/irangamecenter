@@ -65,7 +65,7 @@ export default function Profile() {
     iconSvg: ReactNode;
   }[] = [
       {
-        href: "#",
+        href: "/profile/orders",
         label: "سفارش های من",
         title: "سفارش های من",
         iconSvg : <CartIcon  className="w-7 h-7 fill-none stroke-current grow-0 shrink-0"/>
