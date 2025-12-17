@@ -28,7 +28,7 @@ const Slider: React.FC<Props> = props => {
 
         return (
             <section className="py-3 px-3">
-                <div className="relative uyy">
+                <Link className="relative"  prefetch={false} href={item.Url || "#"}  >
                     <Image
                         src={ServerAddress.Type! + ServerAddress.Strapi + item.Image!.url!}
                         alt={item.ImageAlternative || item.Title || ""}
@@ -58,13 +58,13 @@ const Slider: React.FC<Props> = props => {
                         <ClipRadius className="absolute bottom-full left-0 fill-[#fafafa] dark:fill-[#011425] w-8 h-8" />
                         <ClipRadius className="absolute bottom-0 left-full fill-[#fafafa] dark:fill-[#011425] w-8 h-8" />
 
-                        <Link title={item.Title} prefetch={false} href={item.Url || "#"} className="w-12 h-12  bg-[#eaeaea] dark:bg-[#1b2c3b] cursor-pointer select-none rounded-full absolute bottom-1 left-1 flex items-center justify-center">
+                        <div className="w-12 h-12  bg-[#eaeaea] dark:bg-[#1b2c3b] cursor-pointer select-none rounded-full absolute bottom-1 left-1 flex items-center justify-center">
                             <ArrowTopLeft className="fill-black dark:fill-white w-3.5 h-3.5" />
-                        </Link>
+                        </div>
 
                     </div>
 
-                </div>
+                </Link>
             </section>
         )
     }
@@ -77,7 +77,7 @@ const Slider: React.FC<Props> = props => {
                 items={props.items.map((item, index) => ({
                     key: item.id,
                     content: (
-                        <div className="relative ggh">
+                        <Link className="relative"  prefetch={false} href={item.Url || "#"} >
                             <Image
                                 priority={!index}
                                 fetchPriority={index ? "low" :"high"}
@@ -107,13 +107,13 @@ const Slider: React.FC<Props> = props => {
                                 <ClipRadius className="absolute bottom-full left-0 fill-[#011425] w-8 h-8" />
                                 <ClipRadius className="absolute bottom-0 left-full fill-[#011425] w-8 h-8" />
 
-                                <Link title={item.Title} prefetch={false} href={item.Url || "#"} className="w-12 h-12 bg-[#1b2c3b] cursor-pointer select-none rounded-full absolute bottom-1 left-1 flex items-center justify-center">
+                                <div className="w-12 h-12 bg-[#1b2c3b] cursor-pointer select-none rounded-full absolute bottom-1 left-1 flex items-center justify-center">
                                     <ArrowTopLeft className="fill-white w-3.5 h-3.5" />
-                                </Link>
+                                </div>
 
                             </div>
 
-                        </div>
+                        </Link>
                     )
                 }
                 ))}

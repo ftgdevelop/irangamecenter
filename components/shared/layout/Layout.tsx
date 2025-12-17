@@ -200,13 +200,13 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         showFixedNav = false;
     }
 
-    if (router.pathname.startsWith("/orders")) {
+    if (router.pathname.includes("/orders")) {
         headerType2Params = {
             backUrl: "/",
             title: "سفارش های من"
         };
         showFooter = false;
-        showFixedNav = false;
+        showFixedNav = true;
     }
 
     if (router.pathname.startsWith("/blog/")) {

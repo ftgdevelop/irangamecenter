@@ -378,3 +378,77 @@ export interface CreateOrderResponseType {
     [key: string]: unknown;
   };
 }
+
+export interface OrderListItemItemsType {
+    "provider": null,
+    "netPrice": 0,
+    "product": {
+        genres:{
+            keyword: string;
+            name:string;
+            id: number
+            }[];
+        gameplay: {
+            keyword: string;
+            name: string;
+            id: number;
+        }[];
+        playerPerspective: {
+            keyword: string;
+            name: string;
+            id: number;
+        }[];
+        theme: {
+            keyword: string;
+            name: string;
+            id: number;
+        }[];
+        filePath?:string;
+        fileTitleAttribute?: string;
+        fileAltAttribute?:string;
+        slug: string;
+        name?: string;
+        id: number;
+    },
+
+
+    currencyType: "USD" | "IRR";
+    id: number;
+}
+
+export interface OrderListItemType {
+    phoneNumber: string;
+    email?: string;
+    firstName?: string;
+    lastName?: string;
+    gender:boolean;
+    orderNumber: string;
+    currencyType: "IRR" | "USD";
+    status: "Pending" | "TODO";
+    creationTime: string;
+    items: OrderListItemItemsType[];
+
+    "specialRequest": null,
+    "totalItemsPrice": 0,
+    "payableAmount": 0,
+    "totalQuantity": 0,
+    "profitAmount": 0,
+    "profitPercent": 0,
+    "paymentStatus": "None",
+    "terminalType": "e8fad149-7a12-44f2-9f15-cde4a242baf0",
+    "tenantId": 1040,
+    "userId": null,
+    "lastModifierUserId": null,
+    "timeLines": [
+        {
+            "orderId": 247403,
+            "description": null,
+            "status": "Pending",
+            "reasonCode": "None",
+            "creationTime": "2025-12-14T19:03:45.0712972",
+            "creatorUserId": 171734,
+            "id": 157
+        }
+    ],
+    "id": 247403
+}
