@@ -87,7 +87,7 @@ export default function CartPage() {
 
       {!!cartGeneralInfo?.items?.length && (
         <SimplePortal selector="fixed_bottom_portal">
-          <footer className="min-h-20 fixed bottom-0 z-10 left-0 md:right-1/2 md:translate-x-1/2 bg-[#192a39] px-4 py-3 flex flex-wrap justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
+          <footer className="min-h-20 fixed bottom-0 z-10 left-0 md:right-1/2 md:translate-x-1/2 bg-white dark:bg-[#192a39] px-4 py-3 flex flex-wrap justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
 
             <button
               type="button"
@@ -99,8 +99,8 @@ export default function CartPage() {
             </button>
 
             <div className="flex flex-col gap-1.5">
-              <span className="text-sm text-gray-300">مبلغ قابل پرداخت</span>
-              <span className="font-bold text-lg text-white">
+              <span className="text-sm text-[#011425] dark:text-gray-300">مبلغ قابل پرداخت</span>
+              <span className="font-bold text-lg text-[#011425] dark:text-white">
                 {numberWithCommas(cartGeneralInfo?.payableAmount) || 0}{" "}
                 {currency}
               </span>

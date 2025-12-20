@@ -174,20 +174,20 @@ const VariantFooter = ({
       )}
 
       <SimplePortal selector="fixed_bottom_portal">
-        <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 bg-white dark:text-white dark:bg-[#192a39] px-4 py-3 flex flex-wrap max-[390px]:justify-center justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
+        <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 bg-white dark:text-white dark:bg-[#192a39] px-4 py-3 flex justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
           
           {!!cartData?.items.length &&
           cartData.totalQuantity &&
           currentCartItem?.quantity ? (
-          <div className="flex items-center gap-2 h-13 bg-[#EFEFF0]/10 rounded-full max-[390px]:w-full max-[390px]:justify-between">
+          <div className="flex items-center gap-2 h-13 bg-[#EFEFF0]/10 rounded-full">
               <button
-              className="bg-gradient-to-t from-green-600 to-green-300 hover:bg-gradient-to-tr flex justify-center items-center p-2 h-13 w-13 rounded-full"
+              className="text-[#011425] dark:text-white bg-gradient-to-t from-green-600 to-green-300 hover:bg-gradient-to-tr flex justify-center items-center p-2 h-13 w-13 rounded-full"
                 onClick={handleAddToCart}
               >
                 <Plus className="w-4 h-4 fill-current" />
               </button>
 
-              <span className="flex justify-center items-center w-[67px]  font-medium">
+              <span className="text-[#011425] dark:text-white flex justify-center items-center w-8 grow-0  font-medium">
                 {loading ? (
                   <Loading className="fill-current w-5 h-5 animate-spin" />
                 ) : (
@@ -196,7 +196,7 @@ const VariantFooter = ({
               </span>
 
               <button
-                className="text-white/70 bg-gradient-to-t hover:bg-gradient-to-tr from-[#00B59C]/10 to-[#9CFFAC]/10 flex justify-center items-center p-2 h-13 w-13 rounded-full"
+                className="text-[#5F5F5F] dark:text-white/70 bg-gradient-to-t hover:bg-gradient-to-tr from-[#00B59C]/10 to-[#9CFFAC]/10 flex justify-center items-center p-2 h-13 w-13 rounded-full"
                 onClick={handleRemoveFromCart}
                 >
                   {
@@ -228,9 +228,9 @@ const VariantFooter = ({
 
           {((variantItem?.salePrice && variantItem?.regularPrice) ||
             (currentCartItem && currentCartItem.unitPrice)) && (
-            <div className="text-left text-white max-[390px]:w-full">
+            <div className="text-left text-white">
               {variantItem?.profitPercentage && (
-                <div className="flex flex-wrap gap-2 mb-1">
+                <div className="flex flex-wrap justify-end gap-2 mb-1">
                   <span className="text-[#fe9f00] text-2xs font-semibold">
                     {!currentCartItem?.totalDiscountAmount ? `${variantItem.profitPercentage} %   تخفیف` : `
                     ${currentCartItem?.totalDiscountAmount} ${currency} تخفیف `}
@@ -242,7 +242,7 @@ const VariantFooter = ({
               )}
 
               <b className="text-[#011425] dark:text-white text-base font-semibold block">
-                {currency} {numberWithCommas(currentCartItem?.totalPrice ?? variantItem?.salePrice ?? 0 )}
+                {numberWithCommas(currentCartItem?.totalPrice ?? variantItem?.salePrice ?? 0 )} {currency}
               </b>
             </div>
           )}

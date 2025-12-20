@@ -8,9 +8,9 @@ import Filter from "@/components/icons/Filter";
 import ModalPortal from "@/components/shared/layout/ModalPortal";
 import Pagination from "@/components/shared/Pagination";
 import Skeleton from "@/components/shared/Skeleton";
-import { dateDiplayFormat } from "@/helpers";
+import { Transaction } from "@/types/payment";
 import Link from "next/link"
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const Transactions = () => {
 
@@ -34,13 +34,7 @@ const Transactions = () => {
         }
     }, [slideInFilters]);
 
-
-    const [transactions, setTransactions] = useState<{
-        amount: number;
-        creationTime: string;
-        id: number;
-        type: string;
-    }[]>([]);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
 
     const [totalCount, setTotalCount] = useState<number>(0);
 
@@ -78,7 +72,7 @@ const Transactions = () => {
             <div className="px-3.5 pb-5">
                 <button
                     type="button"
-                    className="inline-flex gap-3 border border-white/25 rounded-full px-4 py-1.5 text-sm"
+                    className="inline-flex gap-3 mb-3 border border-neutral-300 dark:border-white/25 rounded-full px-4 py-1.5 text-sm"
                     onClick={() => { setOpenFilters(true) }}
                 >
                     <Filter className="w-5 h-5 fill-current" />
@@ -99,46 +93,7 @@ const Transactions = () => {
                     </>
                 )}
 
-                {transactions.map((item, index, array) => {
-
-                    const prevItem = array[index - 1];
-
-                    const prevItemMonth = prevItem?.creationTime ? dateDiplayFormat({
-                        date: prevItem.creationTime,
-                        locale: "fa",
-                        format: "yyyy MMM"
-                    }) : null;
-
-                    const itemMonth = dateDiplayFormat({
-                        date: item.creationTime,
-                        locale: "fa",
-                        format: "yyyy MMM"
-                    });
-
-
-                    const monthSeparator = prevItemMonth !== itemMonth ? itemMonth : null;
-
-                    return (
-
-                        <Fragment key={item.id} >
-
-                            <div className="flex items-center gap-2 my-2.5">
-                                <div className="text-2xs whitespace-nowrap min-w-[15%] min-h-[16.5px] shrink-0">
-                                    {monthSeparator}
-                                </div>
-                                <div className="w-full border-b border-white/25" />
-                            </div>
-
-                            <TransactionItem
-                                amount={item.amount}
-                                creationTime={item.creationTime}
-                                id={item.id}
-                                type={item.type}
-                            />
-
-                        </Fragment>
-                    )
-                })}
+                {transactions.map(item => <TransactionItem transaction={item} key={item.id} /> )}
                 
                 {!transactions.length && (
                     <div className="text-sm p-4">

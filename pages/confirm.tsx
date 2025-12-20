@@ -188,11 +188,12 @@ export default function Confirm() {
         <Image src={'/images/loading.gif'} width={280} height={280} className="w-16 h-16" alt="error"/>
       </div>
 
-      <h5 className="mb-5 font-bold text-xl bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent drop-shadow"> در حال پردازش سفارش شما </h5>
+      <h5 className="mb-5 font-bold text-xl bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent drop-shadow"> در حال صدور سفارش شما </h5>
 
-      <p className="text-[11px] mb-12"> 
-        پس از تکمیل پردازش، به ‌صورت خودکار به صفحه جزئیات سفارش هدایت می‌شوید و اطلاعات بازی یا اکانت خریداری‌شده در بخش «سفارش‌های من» نمایش داده می‌شود.
-      </p>
+      <p className="text-[11px] mb-1" > پرداخت شما با موفقیت انجام شده است. </p>
+      <p className="text-[11px] mb-1"> در حال ثبت و صدور سفارش توسط سیستم هستیم.
+       لطفاً چند ثانیه منتظر بمانید و از بستن یا رفرش کردن این صفحه خودداری کنید. </p>
+      <p className="text-[11px] mb-12"> پس از تکمیل فرآیند، نتیجه به‌صورت خودکار نمایش داده خواهد شد.</p>
 
     </div>
   )}
