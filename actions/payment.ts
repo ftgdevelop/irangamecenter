@@ -79,6 +79,24 @@ export const getTransactionDeposit = async (params:GetTransactionParams, token:s
     return error
   }
 }
+export const getAllTransactionsToExcel = async (token:string, acceptLanguage: string = 'fa-IR') => {
+  try {
+    const response = await axios.get(
+      `${ServerAddress.Type}${ServerAddress.Payment}${Payment.GetAllToExcel}`,
+      {
+        headers: {
+          ...Headers,
+          Currency: "IRR",
+          Authorization: `Bearer ${token}`,
+          "Accept-Language": acceptLanguage
+        }
+      }
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
 
 export const getBanksGateways = async (params: {token:string; reserveId: number; username: string;currency?: string;}, acceptLanguage: string = 'fa-IR') => {
   try {

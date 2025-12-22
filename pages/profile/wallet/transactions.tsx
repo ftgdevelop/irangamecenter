@@ -1,13 +1,16 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { getTransactionDeposit } from "@/actions/payment";
+import { getAllTransactionsToExcel, getTransactionDeposit } from "@/actions/payment";
 import TransactionItem from "@/components/authentication/profile/tansactions/TransactionItem";
 import TransactionsFilter from "@/components/authentication/profile/tansactions/TransactionsFilter";
 import ArrowRight from "@/components/icons/ArrowRight"
+import Download from "@/components/icons/Download";
 import Filter from "@/components/icons/Filter";
+import Loading from "@/components/icons/Loading";
 import ModalPortal from "@/components/shared/layout/ModalPortal";
 import Pagination from "@/components/shared/Pagination";
 import Skeleton from "@/components/shared/Skeleton";
+import { ServerAddress } from "@/enum/url";
 import { Transaction } from "@/types/payment";
 import Link from "next/link"
 import { useEffect, useState } from "react";
@@ -16,6 +19,7 @@ const Transactions = () => {
 
     const [page, setPage] = useState<number>(1);
     const [loading, setLoading] = useState<boolean>(false);
+    const [downloadExcelLoading, setDownloadExcelLoading] = useState<boolean>(false);
     const [openFilters, setOpenFilters] = useState<boolean>(false);
     const [slideInFilters, setSlideInFilters] = useState<boolean>(false);
     const [filterStartDate, setFilterStartDate] = useState<string>("");
@@ -61,13 +65,42 @@ const Transactions = () => {
 
     }, [page, filterEndDate, filterStartDate, filterType]);
 
+    const downloadExcel= async () => {
+        const token = localStorage?.getItem('Token');
+        if (token) {
+            setDownloadExcelLoading(true);
+            const response:any = await getAllTransactionsToExcel(token);
+            setDownloadExcelLoading(false);
+            if(response.data?.result?.fileToken){
+                const url = `${ServerAddress.Type}${ServerAddress.Payment}/File/DownloadTempFile?fileName=${response.data.result.fileName}&fileType=${response.data.result.fileType}&fileToken=${response.data.result.fileToken}`;
+                const a = document.createElement('a');
+                a.href = url;
+                a.click();
+            }
+        }
+    }
+
     return (
         <>
-            <header className="flex items-center gap-5 p-4 text-xs">
-                <Link href="/profile/wallet" className="w-6 h-6">
-                    <ArrowRight />
-                </Link>
-                تراکنش های من
+            <header className="flex items-center justify-between gap-5 p-4 py-5 text-sm">
+                <div className="flex items-center gap-5">
+                    <Link href="/profile/wallet" className="w-6 h-6">
+                        <ArrowRight />
+                    </Link>
+                    تراکنش های من
+                </div>
+                <button
+                    type="button"
+                    className="flex gap-1 items-center semibold outline-none text-xs"
+                    onClick={downloadExcel}
+                >
+                    {downloadExcelLoading ? (
+                        <Loading className="w-5 h-5 fill-current animate-spin" />
+                    ):(
+                        <Download className="w-5 h-5 fill-current" />
+                    )}
+                    خروجی اکسل
+                </button>
             </header>
             <div className="px-3.5 pb-5">
                 <button

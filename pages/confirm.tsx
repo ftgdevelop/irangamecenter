@@ -4,6 +4,7 @@ import { approve, getOrderById } from "@/actions/commerce";
 import Home from "@/components/icons/Home";
 import Refresh from "@/components/icons/Refresh";
 import Steps from "@/components/payment/Steps";
+import { OrderDetail } from "@/types/commerce";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -23,26 +24,6 @@ export default function Confirm() {
 
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  interface OrderDetail {
-    currencyType: "IRR" | string;
-    creationTime: string;
-    firstName?: string;
-    gender: boolean;
-    id: number;
-    items: any[];
-    lastName?: string;
-    orderNumber: string;
-    payableAmount: number;
-    paymentStatus: "None";
-    phoneNumber: "+989374755674";
-    profitAmount: number;
-    profitPercent: number;
-    specialRequest?: unknown;
-    status: "Pending" | string;
-    tenantId: number;
-    totalItemsPrice: number;
-    totalQuantity: number;
-  }
   const [orderData, setOrderData] = useState<OrderDetail>();
   if(orderData){
     //todo:
