@@ -203,7 +203,8 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     if (router.pathname.includes("/orders")) {
         headerType2Params = {
             backUrl: "/",
-            title: "سفارش های من"
+            title: "",
+            withLogo: true
         };
         showFooter = false;
         showFixedNav = true;

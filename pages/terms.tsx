@@ -18,17 +18,17 @@ type StrapiData = {
 
 const Terms: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
 
-  const dispath = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(()=>{
 
-    dispath(setHeaderType2Params({
+    dispatch(setHeaderType2Params({
       backUrl:"/",
       title:"قوانین و مقررات"
     }));
 
     return(()=>{
-      dispath(setHeaderType2Params({
+      dispatch(setHeaderType2Params({
         backUrl:"",
         title:""
       }));

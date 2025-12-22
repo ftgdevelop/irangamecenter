@@ -20,17 +20,17 @@ type StrapiData = {
 
 const Faq: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
 
-    const dispath = useAppDispatch();
+    const dispatch = useAppDispatch();
   
     useEffect(()=>{
   
-      dispath(setHeaderType2Params({
+      dispatch(setHeaderType2Params({
         backUrl:"/",
         title:"سوالات متداول"
       }));
   
       return(()=>{
-        dispath(setHeaderType2Params({
+        dispatch(setHeaderType2Params({
           backUrl:"",
           title:""
         }));

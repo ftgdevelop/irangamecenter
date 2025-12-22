@@ -41,7 +41,9 @@ export type Transaction = {
     information?: string;
     typeStr?: string;
     amount: number;
-    creationTime: string;
+    creationTime: string;  
+    creationDateStr?: string;
+    creationTimeStr?: string;
     id: number;
     type: string;
     currencyType: "IRR" | string;

@@ -11,7 +11,7 @@ type Props = {
 }
 const TransactionItem: React.FC<Props> = props => {
 
-    const {amount, creationTime, type, typeStr, information, currencyType} = props.transaction;
+    const {amount, type, typeStr, information, currencyType, creationDateStr, creationTimeStr} = props.transaction;
 
     const [openDetail, setOpenDetail] = useState<boolean>(false);
     const [slideInDetail, setSlideInDetail] = useState<boolean>(false);
@@ -35,7 +35,7 @@ const TransactionItem: React.FC<Props> = props => {
                     <div className="mb-2 font-semibold" >
                         {typeStr}
                     </div>
-                    <span dir="ltr" className="text-neutral-500"> {toPersianDigits(creationTime)} </span>
+                    <span dir="ltr" className="text-neutral-500"> {toPersianDigits(creationDateStr||"")} - {toPersianDigits(creationTimeStr||"")} </span>
                 </div>
                 <div className="flex gap-2 items-center">
                     <div className={`font-semibold text-xs px-2 rounded whitespace-nowrap ${amount > 0 ? "text-[#2b8a3e] bg-[#d3f9d8] dark:bg-[#0c859921]" : "text-[#c92a2a] bg-red-100 dark:bg-[#ff2f2f1f]"}`}>                
@@ -66,24 +66,24 @@ const TransactionItem: React.FC<Props> = props => {
                         </button>
                     </div>
 
-                    <div className="text-sm flex flex-wrap justify-between items-center py-3 border-b border-neutral-300 dark:border-white/25">
+                    <div className="text-sm flex gap-5 flex-wrap justify-between items-center py-3 border-b border-neutral-300 dark:border-white/25">
                         <label className="text-sm font-semibold"> نوع تراکنش </label>
                         <div className="text-xs"> {typeStr || type} </div>
                     </div>
 
-                    <div className="text-sm flex flex-wrap justify-between items-center py-3 border-b border-neutral-300 dark:border-white/25">
+                    <div className="text-sm flex gap-5 flex-wrap justify-between items-center py-3 border-b border-neutral-300 dark:border-white/25">
                         <label className="text-sm font-semibold"> تاریخ و ساعت تراکنش </label>
-                        <div className="text-xs"> {creationTime} </div>
+                        <div className="text-xs" dir="ltr"> {toPersianDigits(creationDateStr||"")} - {toPersianDigits(creationTimeStr||"")} </div>
                     </div>
 
-                    <div className="text-sm flex flex-wrap justify-between items-center py-3 border-b border-neutral-300 dark:border-white/25">
+                    <div className="text-sm flex gap-5 flex-wrap justify-between items-center py-3 border-b border-neutral-300 dark:border-white/25">
                         <label className="text-sm font-semibold"> مبلغ تراکنش </label>
                         <span className={`px-2 text-xs rounded ${amount > 0 ? "text-[#2b8a3e] bg-[#d3f9d8] dark:bg-[#0c859921]" : "text-[#c92a2a] bg-red-100 dark:bg-[#ff2f2f1f]"}`}> 
                            <b dir="ltr" className="text-sm ml-2"> {amount > 0 ? "+" : "-"} {numberWithCommas(Math.abs(amount))} </b> {getCurrencyLabelFa(currencyType)} 
                         </span>
                     </div>
 
-                    {information && <div className="text-sm flex flex-wrap justify-between items-center py-3 mb-3">
+                    {information && <div className="text-sm flex gap-5 flex-wrap justify-between items-center py-3 mb-3">
                         <label className="text-sm font-semibold"> توضیحات </label>
                         <div className="text-xs"> {information} </div>
                     </div>}
