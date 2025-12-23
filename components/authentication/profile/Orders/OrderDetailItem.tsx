@@ -38,7 +38,10 @@ const OrderDetailItem : React.FC<Props> = props => {
 
             <div className="mb-5">
                 <div className="flex justify-between items-center mb-2">
-                    <div className="text-sm flex items-center gap-1"> <HourGlass className="w-4.5 h-4.5 fill-none stroke-current" /> در حال بررسی اکانت </div>
+                    <div className="text-sm flex items-center gap-1"> 
+                        <HourGlass className="w-4.5 h-4.5 fill-none stroke-current" /> 
+                        {data.currentTimeline?.description || "نامشخص"}
+                    </div>
                     <button
                         type="button"
                         className="outline-none flex gap-2 items-center text-xs"
@@ -49,7 +52,7 @@ const OrderDetailItem : React.FC<Props> = props => {
                 </div>
 
                 <div className="h-3 w-full rounded-full bg-[#eaeaea] dark:bg-gradient-dark-green relative">
-                    <span className="bg-gradient-green block absolute h-full rounded-full right-0 top-0 w-1/3" />
+                    <span className="bg-gradient-green block absolute h-full rounded-full right-0 top-0" style={{width:(data.currentTimeline?.progressPercent || 0) + "%"}} />
                 </div>
 
             </div>

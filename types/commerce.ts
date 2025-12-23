@@ -456,6 +456,18 @@ export interface OrderListItemType {
 
 export interface OrderDetailItemType{
   //"provider": null,
+  currentTimeline?:{
+    step: number;
+    status: "Pending" | string;
+    progressPercent: number;
+    description: string;
+    creationTime: string;
+    isFinal:boolean;
+    "reasonCode": "None",
+    "creatorUserId": 171734,
+    "nextStep": null,
+    "id": 11
+};
   netPrice: number;
   product: {
     "genres": [
