@@ -202,6 +202,12 @@ body {
   }
   .bg-gradient-dark-violet{
     @apply bg-gradient-to-t from-[#161b39] to-[#161b39];
+  }
+  .bg-gradient-dark-green{
+    @apply bg-gradient-to-t from-[#012431] to-[#0f2b32];
+  } 
+  .bg-gradient-light-green{
+    @apply bg-gradient-to-t from-[#e6fcf5] to-[#d3f9d8];
   }  
   
 }

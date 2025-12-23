@@ -154,7 +154,7 @@ export interface ProductDetailData {
     fileTitleAttribute?: string;
     breadcrumbs?: {
         name?: string;
-        slug?: string;
+        url?: string;
     }[];
     name?: string;
     faqs?: {
@@ -454,7 +454,7 @@ export interface OrderListItemType {
 }
 
 
-export interface OrderDetailItem{
+export interface OrderDetailItemType{
   //"provider": null,
   netPrice: number;
   product: {
@@ -605,7 +605,8 @@ export interface OrderDetailItem{
     "developer": null,
     "id": 1242
   },
-  "variant": {
+  variant?: {
+    attributes?: string[];
     "product": null,
     "isActive": true,
     "name": null,
@@ -617,7 +618,6 @@ export interface OrderDetailItem{
     "filePath": "https://cdn.irangamecenter.com/images/products/1242/variants/cp۸۰.png",
     "fileTitleAttribute": null,
     "fileAltAttribute": null,
-    "attributes": [],
     "currencyType": "USD",
     "id": 2918
   },
@@ -650,5 +650,5 @@ export interface OrderDetail {
     creationTime: string;
     tenantId: number;
     id: number;
-    items: OrderDetailItem[];
+    items: OrderDetailItemType[];
 }

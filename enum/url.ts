@@ -59,9 +59,10 @@ export const Payment = {
   MakeTokenByAmount:"/api/services/app/UserDepositBankGateway/MakeToken",
   GetAllToExcel:"/api/services/app/TransactionDeposit/GetAllToExcel"
   //ConfirmByDeposit:"/api/services/app/DepositReserve/ConfirmByDeposit__"
-
-
   
+  
+  
+  ,GetTransactionDeposit2222222222222:"/api/services/app/Transaction/GetAll",
   // ValidateDiscountCode:"/api/services/app/Discount/Validate",
   // RegisterDiscountCode: "/api/services/app/Discount/Register",
   // MakeToken:"/api/services/app/ReserveBankGateway/MakeToken",
