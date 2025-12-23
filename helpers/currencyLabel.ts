@@ -9,7 +9,7 @@ export enum CurrencyEnum {
 
 const currencyToFarsiMap: Record<CurrencyEnum, string> = {
   [CurrencyEnum.IRR]: "ریال",
-  [CurrencyEnum.USD]: "دلار آمریکا",
+  [CurrencyEnum.USD]: "دلار",
   [CurrencyEnum.EUR]: "یورو",
   [CurrencyEnum.TRY]: "لیر ترکیه",
   [CurrencyEnum.AED]: "درهم امارات",

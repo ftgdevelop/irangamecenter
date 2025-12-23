@@ -1,6 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { getOrderById } from "@/actions/commerce";
+import OrderDetailItem from "@/components/authentication/profile/Orders/OrderDetailItem";
 import OrderTransactions from "@/components/authentication/profile/Orders/OrderTransactions";
 import Skeleton from "@/components/shared/Skeleton";
 import { numberWithCommas } from "@/helpers";
@@ -88,7 +89,7 @@ const OrderDeatil: NextPage = () => {
 
   return (
     <>
-      <div className="bg-[#192a39] px-5 py-3 text-xs text-center">
+      <div className="bg-[#e8ecf0] dark:bg-[#192a39] px-5 py-3 text-xs text-center">
         <Image src="/images/icons/sand-clock.svg" alt="sand clock" width={24} height={24} className="w-6 h-6 inline-block ml-2" />
         لطفاً اطلاعات اکانت بازی خود را برای ادامه فرایند وارد کنید.
       </div>
@@ -106,11 +107,13 @@ const OrderDeatil: NextPage = () => {
 
         {orderId && <OrderTransactions orderId={+orderId} />}
 
+        {orderDetail?.items?.map(item => (
+          <OrderDetailItem
+            key={item.id}
+            itemData={item}
+          />
+        ))}
 
-
-        <div className="">
-
-        </div>
       </div>
     </>
   );

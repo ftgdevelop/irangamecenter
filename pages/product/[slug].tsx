@@ -83,15 +83,9 @@ const DetailProduct: NextPage<any> = ({
     breadcrumbsItems.push(
       ...productData.breadcrumbs.map((item) => ({
         label: item.name || '',
-        link: `/products/VariantSlug=${item.slug}`,
+        link: item.url
       }))
     );
-  }
-  if (productData?.name) {
-    breadcrumbsItems.push({
-      label: productData.name,
-      link: '',
-    });
   }
 
   const metas: { property: string; content: string }[] = [];
