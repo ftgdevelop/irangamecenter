@@ -1,4 +1,5 @@
 import { Html, Head, Main, NextScript } from "next/document";
+import Script from "next/script";
 
 export default function Document() {
   return (
@@ -13,7 +14,38 @@ export default function Document() {
               'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
             })(window,document,'script','dataLayer','GTM-N6VRBVVG');`,
           }}
-        />        
+        />  
+
+        <Script
+          id="home-schema"
+          type="application/ld+json"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "@id": "https://irangamecenter.com/#organization",
+                  "name": "Iran Game Center",
+                  "url": "https://irangamecenter.com",
+                  "logo": "https://irangamecenter.com/logo.svg"
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": "https://irangamecenter.com/#website",
+                  "url": "https://irangamecenter.com",
+                  "name": "Iran Game Center",
+                  "publisher": {
+                    "@id": "https://irangamecenter.com/#organization"
+                  }
+                }
+              ]
+            })
+          }}
+        />
+
+
       </Head>
       <body className="antialiased font-iranyekan bg-white dark:bg-black" >
          
