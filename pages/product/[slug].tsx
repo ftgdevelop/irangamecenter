@@ -138,8 +138,8 @@ const DetailProduct: NextPage<any> = ({
                 "offers": {
                   "@type": "Offer",
                   "url": `https://irangamecenter.com/product/${productData.slug}`,
-                  "priceCurrency": "IRR",
-                  "price": 12000000,
+                  "priceCurrency": productData.minVariant?.items?.[0]?.currencyType || "IRR",
+                  "price": productData.minVariant?.items?.[0]?.salePrice,
                   "availability": "https://schema.org/InStock",
                   "itemCondition": "https://schema.org/NewCondition"
                 }
