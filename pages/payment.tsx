@@ -9,6 +9,7 @@ import SimplePortal from "@/components/shared/layout/SimplePortal";
 import LoadingFull from "@/components/shared/LoadingFull";
 import { ServerAddress } from "@/enum/url";
 import { numberWithCommas } from "@/helpers";
+import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import { setReduxError } from "@/redux/errorSlice";
 import { GatewayGroupItem } from "@/types/payment";
@@ -271,10 +272,8 @@ export default function PaymentPage() {
             onClick = {onSubmit}
             disabled={!selectedGatewayId && !!requiredAmount}
           >
-            {(withdrawFromWallet && !requiredAmount) ? 
-            "پرداخت از کیف پول" :
-            `پرداخت ${numberWithCommas(requiredAmount || 0)} ریال`
-            }            
+            {/* {`پرداخت ${numberWithCommas(requiredAmount || 0)} ${getCurrencyLabelFa(orderData?.currencyType)}`}   */}
+            {`پرداخت ${numberWithCommas(orderData?.payableAmount||0)} ${getCurrencyLabelFa(orderData?.currencyType)}`}
           </button>
         </footer>
         <div className="h-20" />
