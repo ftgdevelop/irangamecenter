@@ -212,7 +212,7 @@ export default function PaymentPage() {
 
         {(orderData && !getUserLoading && !balanceLoading) ? (
           <PaymentByDeposit 
-            onSelect={()=>{setDepositIsSelected(true)}} 
+            onSelect={()=>{setDepositIsSelected(prevState => !prevState)}} 
             isSelected={depositIsSelected} 
           /> 
         ):(
