@@ -121,6 +121,32 @@ const DetailProduct: NextPage<any> = ({
   return (
     <>
       <Head>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Product",
+                "name": productData.name,
+                "image": [productData.filePath],
+                "description": productData.page?.title,
+                "sku": `ACC-${productData.slug}`,
+                "brand": {
+                  "@type": "Brand",
+                  "name": productData.publisher || "PlayStation"
+                },
+                "offers": {
+                  "@type": "Offer",
+                  "url": `https://irangamecenter.com/product/${productData.slug}`,
+                  "priceCurrency": "IRR",
+                  "price": 12000000,
+                  "availability": "https://schema.org/InStock",
+                  "itemCondition": "https://schema.org/NewCondition"
+                }
+              })
+            }}
+          />
+
         {productData?.page?.title && <title> {productData.page.title} </title>}
 
         {metas?.map((meta, index) => (

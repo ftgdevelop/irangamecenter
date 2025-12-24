@@ -1,5 +1,4 @@
 import { Html, Head, Main, NextScript } from "next/document";
-import Script from "next/script";
 
 export default function Document() {
   return (
@@ -16,10 +15,8 @@ export default function Document() {
           }}
         />  
 
-        <Script
-          id="home-schema"
+        <script
           type="application/ld+json"
-          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
@@ -29,7 +26,12 @@ export default function Document() {
                   "@id": "https://irangamecenter.com/#organization",
                   "name": "Iran Game Center",
                   "url": "https://irangamecenter.com",
-                  "logo": "https://irangamecenter.com/logo.svg"
+                  "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://irangamecenter.com/logo.svg",
+                    "width": 512,
+                    "height": 512
+                  }
                 },
                 {
                   "@type": "WebSite",
@@ -44,7 +46,6 @@ export default function Document() {
             })
           }}
         />
-
 
       </Head>
       <body className="antialiased font-iranyekan bg-white dark:bg-black" >
