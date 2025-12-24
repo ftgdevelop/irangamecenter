@@ -250,6 +250,12 @@ export interface ProductDetailData {
     }
     id: number;
     slug: string;
+    minVariant?:{
+      items?:{
+        currencyType?: string;
+        salePrice?: number;
+      }[];
+    }
 }
 
 export type GetAllProductsParams = {
