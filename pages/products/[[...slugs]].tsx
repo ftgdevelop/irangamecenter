@@ -19,7 +19,6 @@ import ProductsFliter from "@/components/products/ProductsFliter";
 import { groupByPrefix } from "@/helpers";
 import AvailableFilterTag from "@/components/products/AvailableFilterTag";
 import BackOrderFilterTag from "@/components/products/BackOrderFilterTag";
-import Script from "next/script";
 
 type Props = {
     productsData?: GetProductsDataType;
@@ -138,27 +137,25 @@ const Products: NextPage<Props> = props => {
     const activeFilterColor = "text-white bg-gradient-orange"
     return (
         <>
-            <Script
-                id="product-list-schema"
+            <script
                 type="application/ld+json"
-                strategy="afterInteractive"
                 dangerouslySetInnerHTML={{
-                __html: JSON.stringify({
+                    __html: JSON.stringify({
                     "@context": "https://schema.org",
                     "@type": "CollectionPage",
                     "name": "خرید اکانت بازی",
                     "url": "https://irangamecenter.com/products",
                     "mainEntity": {
-                    "@type": "ItemList",
-                    "itemListOrder": "https://schema.org/ItemListOrderAscending",
-                    "numberOfItems": products.length,
-                    "itemListElement": products.map((product, index) => ({
+                        "@type": "ItemList",
+                        "itemListOrder": "https://schema.org/ItemListOrderAscending",
+                        "numberOfItems": products.length,
+                        "itemListElement": products.map((product, index) => ({
                         "@type": "ListItem",
                         "position": index + 1,
                         "url": `https://irangamecenter.com/product/${product.slug}`
-                    }))
+                        }))
                     }
-                })
+                    })
                 }}
             />
 

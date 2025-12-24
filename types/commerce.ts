@@ -249,6 +249,7 @@ export interface ProductDetailData {
         }
     }
     id: number;
+    slug: string;
 }
 
 export type GetAllProductsParams = {
