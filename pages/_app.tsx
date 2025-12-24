@@ -32,8 +32,6 @@ export default function App({ Component, pageProps }: AppProps) {
       <Provider store={store}>
         <Head>
           <title> Iran Game Center </title>
-          <meta name="robots" content="noindex,nofollow" />
-
           <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
           <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
           <link rel="shortcut icon" href="/favicon.ico" />
