@@ -4,9 +4,11 @@ import { numberWithCommas, toPersianDigits } from "@/helpers";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 import { OrderDetailItemType } from "@/types/commerce";
 import Image from "next/image";
+import Link from "next/link";
 
 type Props = {
     itemData : OrderDetailItemType;
+    orderId: number;
 }
 
 const OrderDetailItem : React.FC<Props> = props => {
@@ -24,7 +26,7 @@ const OrderDetailItem : React.FC<Props> = props => {
     return(
         <div className="mb-7">
             <div className="flex gap-3 mb-5">
-                <Image src={data.product?.filePath || "/images/default-game.png"} alt={data.product.name} className="aspect-square shrink-0 grow-0 w-1/4 max-w-24 rounded-2xl" width={96} height={96} />
+                <Image src={data.variant?.filePath || data.product?.filePath || "/images/default-game.png"} alt={data.product.name} className="aspect-square shrink-0 grow-0 w-1/4 max-w-24 rounded-2xl" width={96} height={96} />
                 <div className="grow text-xs">
                     <h5 className="text-sm font-semibold mb-2"> {data.product.name} </h5>
                     {!!subtitleItems.length && <div className="mb-2"> {subtitleItems.join(", ")} </div>}
@@ -57,12 +59,12 @@ const OrderDetailItem : React.FC<Props> = props => {
 
             </div>
 
-            <button
-                type="button"
-                className="bg-gradient-violet text-white rounded-full px-3 w-full text-sm py-3"
+            <Link
+                href={`/profile/orders/${props.orderId}/${data.id}`}
+                className="block text-center bg-gradient-violet text-white rounded-full px-3 w-full text-sm py-3"
             >
                 ثبت اطلاعات اکانت
-            </button>
+            </Link>
         </div>
     )
 }

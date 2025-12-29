@@ -107,10 +107,11 @@ const OrderDeatil: NextPage = () => {
 
         {orderId && <OrderTransactions orderId={+orderId} />}
 
-        {orderDetail?.items?.map(item => (
+        {!!orderId && orderDetail?.items?.map(item => (
           <OrderDetailItem
             key={item.id}
             itemData={item}
+            orderId={+orderId}
           />
         ))}
 

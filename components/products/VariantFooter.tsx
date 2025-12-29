@@ -39,8 +39,6 @@ const VariantFooter = ({
 
   const dispatch = useAppDispatch();
 
-  const currencyStore = useAppSelector((state) => state.cart.currency);
-
   const getGeneralCartData = async () => {
     dispatch(setGeneralCartLoading(true));
     const response: any = await getCart();
@@ -58,7 +56,7 @@ const VariantFooter = ({
 
     getCartByProductId({
       productId: productId,
-      deviceId: params?.deviceId,
+      deviceId: params?.userToken ? undefined : params?.deviceId,
       userToken: params?.userToken
     })
       .then((res) => setCartData(res?.result || null))
@@ -76,9 +74,7 @@ const VariantFooter = ({
 
   const variantItem = currentVariant?.items?.[0];
 
-  const currency =
-    getCurrencyLabelFa(cartData?.items?.[0]?.variant.currencyType )||
-    getCurrencyLabelFa(variantItem?.currencyType) || getCurrencyLabelFa(currencyStore)
+  const currency = getCurrencyLabelFa(variantItem?.currencyType || "IRR")
 
   const handleAddToCart = async () => {  
 
@@ -130,20 +126,8 @@ const VariantFooter = ({
     }
   };
 
-  const getCartStatus = () => {
-    if (!cartData || !currentVariant?.items?.[0]?.id)
-      return { exists: false, index: null as number | null };
-
-    const index = cartData.items.findIndex(
-      (item) => item.variant.id === currentVariant.items?.[0]?.id
-    );
-
-    return { exists: index !== -1, index: index !== -1 ? index : null };
-  };
-
-  const { exists, index } = getCartStatus();
-  const currentCartItem = exists && index !== null ? cartData?.items[index] : null;
-
+  const currentVariantAddedQuantity = cartData?.items.find(x => x.variantId === variantItem.id)?.quantity || 0;
+  
   return (
     <>
       {showSuccessAlert && (
@@ -159,8 +143,7 @@ const VariantFooter = ({
           <button
             type="button"
             className="w-fit h-full text-neutral-700 text-white flex items-end"
-            onClick={async (e) => {
-              e.preventDefault();
+            onClick={async () => {
               dispatch(setProgressLoading(true)); 
               await router.push("/cart");
               dispatch(setProgressLoading(false));
@@ -176,9 +159,7 @@ const VariantFooter = ({
       <SimplePortal selector="fixed_bottom_portal">
         <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 bg-white dark:text-white dark:bg-[#192a39] px-4 py-3 flex justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
           
-          {!!cartData?.items.length &&
-          cartData.totalQuantity &&
-          currentCartItem?.quantity ? (
+          {currentVariantAddedQuantity ? (
           <div className="flex items-center gap-2 h-13 bg-[#EFEFF0]/10 rounded-full">
               <button
               className="text-[#011425] dark:text-white bg-gradient-to-t from-green-600 to-green-300 hover:bg-gradient-to-tr flex justify-center items-center p-2 h-13 w-13 rounded-full"
@@ -191,7 +172,7 @@ const VariantFooter = ({
                 {loading ? (
                   <Loading className="fill-current w-5 h-5 animate-spin" />
                 ) : (
-                  currentCartItem?.quantity || 0
+                  currentVariantAddedQuantity
                 )}
               </span>
 
@@ -200,7 +181,7 @@ const VariantFooter = ({
                 onClick={handleRemoveFromCart}
                 >
                   {
-                    currentCartItem?.quantity  > 1 ? <Minus className="w-4 h-4 fill-current" /> : <Trash className="w-6 h-6 fill-current" />
+                    currentVariantAddedQuantity  > 1 ? <Minus className="w-4 h-4 fill-current" /> : <Trash className="w-6 h-6 fill-current" />
                   }
               </button>
             </div>
@@ -226,23 +207,21 @@ const VariantFooter = ({
             </button>
           ))}
 
-          {((variantItem?.salePrice && variantItem?.regularPrice) ||
-            (currentCartItem && currentCartItem.unitPrice)) && (
+          {!!variantItem?.salePrice && (
             <div className="text-left text-white">
-              {variantItem?.profitPercentage && (
+              {(variantItem?.profitPercentage || variantItem.profitPrice) && (
                 <div className="flex flex-wrap justify-end gap-2 mb-1">
                   <span className="text-[#fe9f00] text-2xs font-semibold">
-                    {!currentCartItem?.totalDiscountAmount ? `${variantItem.profitPercentage} %   تخفیف` : `
-                    ${currentCartItem?.totalDiscountAmount} ${currency} تخفیف `}
+                    {variantItem.profitPercentage ? `${variantItem.profitPercentage} %   تخفیف` : `${(variantItem.profitPrice! * (currentVariantAddedQuantity || 1))} ${currency} تخفیف `}
                   </span>
-                  <span className="text-xs text-[#5f5f5f] dark:text-white/70 line-through">
-                    {numberWithCommas(currentCartItem?.totalStrikePrice ?? variantItem.regularPrice ?? 0)} {currency}
-                  </span>
+                  {!!variantItem.regularPrice && <span className="text-xs text-[#5f5f5f] dark:text-white/70 line-through">
+                    {numberWithCommas(variantItem.regularPrice * (currentVariantAddedQuantity || 1))} {currency}
+                  </span>}
                 </div>
               )}
 
               <b className="text-[#011425] dark:text-white text-base font-semibold block">
-                {numberWithCommas(currentCartItem?.totalPrice ?? variantItem?.salePrice ?? 0 )} {currency}
+                {numberWithCommas(variantItem.salePrice * (currentVariantAddedQuantity || 1))} {currency}
               </b>
             </div>
           )}

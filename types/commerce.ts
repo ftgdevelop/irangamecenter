@@ -128,6 +128,7 @@ export interface ProductVariant {
         regularPrice?: number;
         salePrice?: number;
         profitPercentage?: number;
+        profitPrice?: number;
         currencyType?: string;
         id: number;
         description?: string;
@@ -298,16 +299,16 @@ export interface GetCartByProductIdType {
     deviceId?: string,
     id: string;
     items: {
-        id: number;
-        quantity: number;
-        strikePrice: number;
-        unitDiscountAmount: number;
-        totalDiscountAmount: number;
-        totalStrikePrice: number;
-        unitPrice: number;
-        totalPrice: number;
         variantId: number;
-        variant: VariantType;
+        quantity: number;
+        id: number;
+        // strikePrice: number;
+        // unitDiscountAmount: number;
+        // totalDiscountAmount: number;
+        // totalStrikePrice: number;
+        // unitPrice: number;
+        // totalPrice: number;
+        // variant: VariantType;
     }[];
     payableAmount: number,
     profitAmount : number,
@@ -417,7 +418,9 @@ export interface OrderListItemItemsType {
         name?: string;
         id: number;
     },
-
+    variant?:{
+      filePath?: string;
+    };
 
     currencyType: "USD" | "IRR";
     id: number;
@@ -670,4 +673,50 @@ export interface OrderDetail {
     tenantId: number;
     id: number;
     items: OrderDetailItemType[];
+}
+
+export interface OrderFormFields {
+    key: "platform";
+    type:
+      "Select"
+      | "Text"
+      | "Password"
+      | "Checkbox"
+      | "InputGroup"
+      | "Email"
+      | "Textarea";
+    isRequired: boolean;
+    inputGroupCount?: number;
+    extraJson: null;
+    order: number;
+    sourceDependencies: [];
+    targetDependencies: [];
+    translations: {
+      language: "fa" | "en";
+      label: string;
+      placeholder?: string;
+      info: "";
+      id: number;
+    }[];
+    options?: {
+      value: string;
+      order: 1;
+      translations: {
+        language: "fa" | "en";
+        displayName?: string;
+      }[];
+      id: 3;
+    }[];
+
+    id: 69;
+  }
+export interface OrderFormData {
+  providerKey: "Konami";
+  extraJson: null;
+  icon: "https://cdn.irangamecenter.com/images/provider/konami.svg";
+  displayName: null;
+  description: null;
+  productIds: [];
+  fields: OrderFormFields[];
+  id: 23;
 }

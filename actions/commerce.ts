@@ -279,3 +279,49 @@ export const getOrdersStatistics = async (token: string) => {
         return error
     }
 }
+export const getOrderDetailItem = async (params: {id: number; token: string;}) => {
+    try{
+        const res : any = await axios({
+            method: "get",
+            url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetOrderDetailItem}?Id=${params.id}`,
+            headers: {
+                ...Headers,
+                "Accept-Language": "fa-IR",
+                currency: "IRR",
+                Authorization: `Bearer ${params.token}`
+            }
+        })
+        return res
+
+    } catch (error){
+        return error
+    }
+}
+
+
+export const submitOrderForm = async ( params:{ 
+    orderItemId: number;
+    loginProviderId: number;
+    fields:{
+        fieldKey: string;
+        value: string | boolean;
+    }[];
+ }, token: string) => {
+  try {
+    const response = await axios.post(
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.SubmitOrderForm}`,
+      params,
+      {
+        headers: {
+        ...Headers,
+        Currency: "IRR",
+        "Accept-Language": "fa-IR",
+        Authorization: `Bearer ${token}`,          
+        },
+      },
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}

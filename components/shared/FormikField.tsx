@@ -4,8 +4,11 @@ import { ChangeEvent, forwardRef, ReactNode, useImperativeHandle, useRef, useSta
 import VisibilityOff from '../icons/Visibility-Off'
 import Visibility from '../icons/Visibility'
 import Image from 'next/image'
+import InfoCircle from '../icons/InfoCircle'
 
 type Props = {
+  showRequiredStar?: boolean;
+  info?: string;
   placeholder?: string;
   errorText?: string
   isTouched?: boolean
@@ -93,7 +96,7 @@ const FormikField: React.ForwardRefRenderFunction<FieldHandle, Props> = (props, 
                 htmlFor={props.id || undefined}
                 className="select-none pointer-events-none inline-block text-sm"
               >
-                {props.label}
+                {props.label} {props.showRequiredStar && <span className='text-red-900'> * </span>}
               </label>
             )}
 
@@ -118,6 +121,13 @@ const FormikField: React.ForwardRefRenderFunction<FieldHandle, Props> = (props, 
           {props.labelLeft}
 
         </div>
+
+        {props.info && (
+          <p className='text-xs mb-3 px-5'>
+            <InfoCircle className='w-4 h-4 fill-current inline-block align-middle ml-1' />
+            {props.info}
+          </p>
+        )}
 
         {props.labelDescription || null}
         <div className="relative mt-2">
@@ -149,7 +159,7 @@ const FormikField: React.ForwardRefRenderFunction<FieldHandle, Props> = (props, 
       </div>
 
       {props.errorText && props.isTouched && (
-        <div className="text-[#ff163e] text-center text-xs px-5">{props.errorText}</div>
+        <div className="text-[#ff163e] text-xs px-5">{props.errorText}</div>
       )}
     </div>
   )

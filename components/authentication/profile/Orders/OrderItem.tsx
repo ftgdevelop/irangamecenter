@@ -51,7 +51,7 @@ const OrderItem : React.FC<Props> = props => {
                 {order?.items.filter(x => x.product.filePath).map(item => (
                     <Image
                         key={item.product.filePath} 
-                        src={item.product.filePath!}
+                        src={item.variant?.filePath || item.product.filePath!}
                         alt={item.product.fileAltAttribute || ""}
                         className="w-16 h-16 object-contain rounded-lg"
                         width={64}
