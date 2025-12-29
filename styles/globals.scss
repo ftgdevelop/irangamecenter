@@ -212,6 +212,9 @@ body {
   .bg-gradient-light-green{
     @apply bg-gradient-to-t from-[#e6fcf5] to-[#d3f9d8];
   }  
+  .bg-gradient-yellow{
+    @apply bg-gradient-to-t from-[#ffe69c] to-[#fffed3];
+  }  
   
 }
 

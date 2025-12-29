@@ -94,7 +94,7 @@ const CartSection:React.FC<Props> = props => {
         <Image src="/images/icons/2color/menu.svg" alt="menu" width="24" height="24" />
       </div>
 
-      {items?.map((item) => item && cartGeneralInfo && <CartCard key={item.id} item={item} loading={loading} />)}
+      {items?.map((item) => <CartCard key={item.id} item={item} loading={loading} />)}
 
       <div
         className={`transition-opacity duration-700 ease-in-out ${
