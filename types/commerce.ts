@@ -465,6 +465,7 @@ export interface OrderListItemType {
 
 
 export interface OrderDetailItemType{
+  allowNewLoginSubmission?: boolean;
   //"provider": null,
   currentTimeline?:{
     step: number;
