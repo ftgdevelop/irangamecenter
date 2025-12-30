@@ -162,7 +162,7 @@ export default function PaymentPage() {
       
       if (response?.status == 200) {
         const url = `https://${ServerAddress.Payment}/Reserves/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`;         
-        window.location.replace(url);
+        router.push(url);
       } else {
           
         const errorMessage = response?.response?.data?.error?.message;
