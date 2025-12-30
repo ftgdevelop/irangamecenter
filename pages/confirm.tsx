@@ -99,7 +99,7 @@ export default function Confirm() {
         </p>
         {!!orderData?.id && <Link
           href={`/profile/orders/${orderData?.id}`}
-          className="h-11 w-full mb-5 text-white bg-gradient-violet rounded-full text-sm"
+          className="flex items-center justify-center h-11 w-full mb-5 text-white bg-gradient-violet rounded-full text-sm"
         >
           {orderData?.items.some(x => x.allowNewLoginSubmission) ? "ثبت اطلاعات اکانت" : "جزییات سفارش"}
         </Link>}
