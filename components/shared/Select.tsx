@@ -82,7 +82,7 @@ const Select: React.FC<Props> = props => {
                         <div
                             key={item.value}
                             onClick={() => { setValue(item.value) }}
-                            className={`px-3 py-2.5 transition-all cursor-pointer select-none text-sm ${item.value === value ? "bg-[#293e4f]" : ""} ${index?"border-t border-white/5":""}`}
+                            className={`px-3 py-2.5 transition-all cursor-pointer select-none text-sm ${item.value === value ? "bg-[#eeeeee] dark:bg-[#293e4f]" : ""} ${index?"border-t border-white/5":""}`}
                         >
                             {item.label}
                         </div>
