@@ -92,6 +92,11 @@ const OrderItemDeatil: NextPage = () => {
     [activeFormKey]
   );
 
+  const activeId = useMemo(
+    () => data?.find((item) => item.providerKey === activeFormKey)?.id,
+    [activeFormKey]
+  );
+
   return (
     <>
       <div className="px-5">
@@ -136,21 +141,18 @@ const OrderItemDeatil: NextPage = () => {
             />
             <div className="flex flex-col justify-between grow py-2">
               <p className="font-semibold mb-2">
-                {" "}
-                {orderItemData?.product.name}{" "}
+                {orderItemData?.product.name}
               </p>
               <div className="flex justify-between flex-wrap gap-3 items-end">
                 <div>
                   {orderItemData?.variant?.description && (
                     <p className="text-xs mt-2">
-                      {" "}
-                      {orderItemData.variant.description}{" "}
+                      {orderItemData.variant.description}
                     </p>
                   )}
                   {!!orderItemData?.variant?.attributes?.length && (
                     <p className="text-xs mt-2">
-                      {" "}
-                      {orderItemData?.variant?.attributes?.join("، ")}{" "}
+                      {orderItemData?.variant?.attributes?.join("، ")}
                     </p>
                   )}
                 </div>
@@ -211,12 +213,12 @@ const OrderItemDeatil: NextPage = () => {
               ))}
             </div>
 
-            {activeField && orderId && orderItemId && (
+            {activeField && activeId && orderItemId && (
               <FormItem
                 key={activeFormKey}
                 fields={activeField}
-                loginProviderId={+orderItemId}
-                orderItemId={+orderId}
+                orderItemId={+orderItemId}
+                loginProviderId={+activeId}
               />
             )}
           </>

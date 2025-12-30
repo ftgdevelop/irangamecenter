@@ -59,12 +59,12 @@ const OrderDetailItem : React.FC<Props> = props => {
 
             </div>
 
-            <Link
+            {!!props.itemData.allowNewLoginSubmission && <Link
                 href={`/profile/orders/${props.orderId}/${data.id}`}
                 className="block text-center bg-gradient-violet text-white rounded-full px-3 w-full text-sm py-3"
             >
                 ثبت اطلاعات اکانت
-            </Link>
+            </Link>}
         </div>
     )
 }
