@@ -1,6 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-function creareSiteMap(){
+function createSiteMap(){
 
   let contents = "";
 
@@ -8,19 +8,16 @@ function creareSiteMap(){
     contents += `
     <sitemap>
       <loc>${process.env.SITE_NAME}/sitemaps/blogs.xml</loc>
-    </sitemap> 
-    <sitemap>
-      <loc>${process.env.SITE_NAME}/sitemaps/categories.xml</loc>
-    </sitemap>
-    <sitemap>
-      <loc>${process.env.SITE_NAME}/sitemaps/tags.xml</loc>
-    </sitemap>      
+    </sitemap>    
   `}
 
   if (process.env.PROJECT_SERVER_ECOMMERCE){
     contents += `
     <sitemap>
       <loc>${process.env.SITE_NAME}/sitemaps/videos.xml</loc>
+    </sitemap>
+    <sitemap>
+      <loc>${process.env.SITE_NAME}/sitemaps/products.xml</loc>
     </sitemap>
     `
   }
@@ -35,7 +32,7 @@ function SiteMap() {}
 
 export const getServerSideProps = async ({ res }:{res:any}) => {
 
-  const sitemap = creareSiteMap();
+  const sitemap = createSiteMap();
 
   res.setHeader('Content-Type', 'text/xml');
   res.write(sitemap);

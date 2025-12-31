@@ -2,7 +2,7 @@
 
 import { getBlogs } from "@/actions/blog";
 
-function creareSiteMap(postsData:any){
+function createSiteMap(postsData:any){
   let latestPost = 0;
   let postsXML = "";
   
@@ -54,9 +54,9 @@ export const getServerSideProps = async ({ res, query }:{res:any, query:any}) =>
       page:+pageQuery
     });
 
-    sitemap = creareSiteMap(postsResponse?.data );
+    sitemap = createSiteMap(postsResponse?.data );
   }else{
-    sitemap = creareSiteMap(undefined);
+    sitemap = createSiteMap(undefined);
   }
 
   res.setHeader('Content-Type', 'text/xml');

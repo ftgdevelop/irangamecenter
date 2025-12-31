@@ -19,7 +19,7 @@ type VideosData = {
   }[];
 }[];
 
-function creareSiteMap(items:VideosData){
+function createSiteMap(items:VideosData){
 
   let contents = "";
 
@@ -103,9 +103,9 @@ export const getServerSideProps = async ({ res, query }:{res:any, query:any}) =>
       SkipCount: (+pageQuery-1) * 100
     });
 
-    sitemap = creareSiteMap(videosResponse?.data?.result?.items || []);
+    sitemap = createSiteMap(videosResponse?.data?.result?.items || []);
   }else{
-    sitemap = creareSiteMap([]);
+    sitemap = createSiteMap([]);
   }
 
   res.setHeader('Content-Type', 'application/xml');
