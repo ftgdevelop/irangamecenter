@@ -5,6 +5,15 @@ import { ProductItem } from "@/types/commerce";
 
 function createSiteMap(items: ProductItem[]) {
 
+  function escapeXml(value: string = "") {
+    return value
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&apos;");
+  }
+
   let contents = "";
 
   for (const product of items) {
@@ -23,7 +32,7 @@ function createSiteMap(items: ProductItem[]) {
         ? `
     <image:image>
       <image:loc>${product.filePath}</image:loc>
-      <image:title>${product.name || product.slug}</image:title>
+      <image:title>${escapeXml(product.name) || escapeXml(product.slug)}</image:title>
     </image:image>`
         : ""
     }
