@@ -21,6 +21,15 @@ type VideosData = {
 
 function createSiteMap(items:VideosData){
 
+    function escapeXml(value: string = "") {
+      return value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;");
+    }
+
   let contents = "";
 
   if(items.length){
@@ -59,10 +68,10 @@ function createSiteMap(items:VideosData){
             <video:video>
               <video:thumbnail_loc>${video.thumbnail}</video:thumbnail_loc>
               <video:content_loc>${video.filePath}</video:content_loc>
-              <video:title><![CDATA[${video.fileTitleAttribute}]]></video:title>
-              <video:description><![CDATA[${video.fileAltAttribute}]]></video:description>
+              <video:title><![CDATA[${escapeXml(video.fileTitleAttribute)}]]></video:title>
+              <video:description><![CDATA[${escapeXml(video.fileAltAttribute)}]]></video:description>
               <video:duration>${video.duration}</video:duration>
-              <video:category><![CDATA[${video.category}]]></video:category>
+              <video:category><![CDATA[${escapeXml(video.category)}]]></video:category>
               ${timePart}
               ${tagsPart}
               <video:family_friendly>yes</video:family_friendly>
