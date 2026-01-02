@@ -99,34 +99,33 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }, [isBodyScrollable, lastScrollPosition]);
 
     const loading = useAppSelector(state => state.styles.progressLoading);
-    const addLoading = (href: string) => {
-        if (href !== router.asPath) {
-            dispatch(setProgressLoading(true));
-        }
-    }
-
-    const removeLoading = () => { dispatch(setProgressLoading(false)) }
-
+    
     useEffect(() => {
+        const handleStart = (url: string) => {
+            const pureCurrent = router.asPath.split('?')[0].split('#')[0];
+            const pureNext = url.split('?')[0].split('#')[0];
 
-        removeLoading();
-
-        document.querySelectorAll('a').forEach(item => {
-            
-            const target = item.getAttribute('target');
-
-            if (!target || target.toLowerCase() !== '_blank'){
-                item.addEventListener('click', () => { addLoading(item.getAttribute("href") || "") })
+            if (pureCurrent !== pureNext) {
+                dispatch(setProgressLoading(true));
             }
-        });
+        };
 
-        return (() => {
-            document.querySelectorAll('a').forEach(item => {
-                item.removeEventListener('click', () => { addLoading("") })
-            });
-        })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [router.asPath]);
+        const handleComplete = () => {
+            setTimeout(() => {            
+                dispatch(setProgressLoading(false));
+            }, 300);
+        };
+
+        router.events.on('routeChangeStart', handleStart);
+        router.events.on('routeChangeComplete', handleComplete);
+        router.events.on('routeChangeError', handleComplete);
+
+        return () => {
+            router.events.off('routeChangeStart', handleStart);
+            router.events.off('routeChangeComplete', handleComplete);
+            router.events.off('routeChangeError', handleComplete);
+        };
+        }, [router.asPath]);
 
     const headerType2ParamsFromRedux = useAppSelector(state => state.pages.headerType2Params);
 

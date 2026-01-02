@@ -17,6 +17,9 @@ function createSiteMap(){
       <loc>${process.env.SITE_NAME}/sitemaps/videos.xml</loc>
     </sitemap>
     <sitemap>
+      <loc>${process.env.SITE_NAME}/sitemaps/images.xml</loc>
+    </sitemap>
+    <sitemap>
       <loc>${process.env.SITE_NAME}/sitemaps/products.xml</loc>
     </sitemap>
     `

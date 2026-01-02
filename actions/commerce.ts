@@ -64,6 +64,25 @@ export const getProductVariants = async (slug: string, acceptLanguage: "fa-IR" |
     }
 }
 
+export const getVariantById = async (id: number, acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
+
+    try {
+        const response: any = await axios({
+            method: "get",
+            url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetVariantById}?Id=${id}`,
+            headers: {
+                ...Headers,
+                "Accept-Language": acceptLanguage,
+                currency: "IRR"
+            }
+        });
+        return (response)
+    } catch (error: any) {
+        return error
+    }
+}
+
+
 export const getProductGallries = async (slug: string, acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
 
     try {
