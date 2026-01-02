@@ -90,7 +90,8 @@ export const Payment = {
     GetAllOrders:"/api/services/app/Order/GetAll",
     GetOrdersStatistics:"/api/services/app/Order/GetStatistics",
     GetOrderDetailItem:"/api/services/app/LoginProvider/GetByOrderItemId",
-    SubmitOrderForm:"/api/services/app/OrderItemProviderField/Submit"
+    SubmitOrderForm:"/api/services/app/OrderItemProviderField/Submit",
+    GetVariantById:"/api/services/app/Variant/Get"
   }
   
 

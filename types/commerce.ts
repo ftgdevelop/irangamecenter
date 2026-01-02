@@ -134,6 +134,33 @@ export interface ProductVariant {
         description?: string;
     }[];
 }
+export interface SingleVariant {
+  id:number;
+  description?: string;
+  currencyType?: "IRR"|"USD";
+  regularPrice?: number;
+  salePrice?: number;
+  name?: string;
+  status?:  "InStock" | "OutOfStock" | "OnBackOrder";
+  filePath?: string;
+  // "productId": 1242,
+  // "netPrice": 22.41,
+  // "inventory": "Unlimited",
+  // "stockQuantity": 0,
+  // "isActive": true,
+  // "isVirtual": true,
+  // "isDownloadable": false,
+  // "fileUniqKey": "8306b3b1-65cd-f011-bf7a-000c29176f1e",
+  // "fileAltAttribute": null,
+  // "fileTitleAttribute": null,
+  // "product": {
+  //   "name": "Call of Duty: Mobile",
+  //   "slug": "call-of-duty-mobile",
+  //   "permalink": "product/call-of-duty-mobile/",
+  //   "link": "https://www.irangamecenter.com/product/call-of-duty-mobile/",
+  //   "canonicalUrl": "https://www.irangamecenter.com/product/call-of-duty-mobile/"
+  // }
+}
 
 export interface ProductGalleryItem {
     id:number;
