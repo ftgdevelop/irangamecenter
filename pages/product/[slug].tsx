@@ -3,7 +3,7 @@
 import { NextPage } from 'next';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { getProductBySlug, getProductGallries, getProductVariants, getVariantById } from '@/actions/commerce';
-import { ProductDetailData, ProductGalleryItem, ProductVariant, SingleVariant } from '@/types/commerce';
+import { PlatformSlugTypes, ProductDetailData, ProductGalleryItem, ProductVariant, SingleVariant } from '@/types/commerce';
 import BreadCrumpt from '@/components/shared/BreadCrumpt';
 import FAQ from '@/components/shared/FAQ';
 import Contacts from '@/components/shared/Contacts';
@@ -39,7 +39,8 @@ const DetailProduct: NextPage<any> = ({
   const {query} = router;
 
   const queryVariant = query.variant;
-
+  const queryPlatform = query.platform as PlatformSlugTypes || undefined;
+  
   const breadcrumbsItems: {
     label: string;
     link?: string;
@@ -465,7 +466,13 @@ const DetailProduct: NextPage<any> = ({
         <AgeRatingDetail productData={productData} />
       </div>
 
-      {!!variantsData?.length && <VariantSection productId={productData.id} productVariants={variantsData} />}
+      {!!variantsData?.length && (
+        <VariantSection 
+          productId={productData.id} 
+          productVariants={variantsData} 
+          platform={queryPlatform || undefined}
+        />
+      )}
 
       {!!variantData?.salePrice && (
         <VariantFooter 
