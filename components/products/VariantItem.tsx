@@ -97,7 +97,7 @@ const VariantItem: React.FC<VariantItemProps> = ({
                     onClick={() =>
                       !disabled && setCurrentVariantId(child.id)
                     }
-                    className={`flex flex-col justify-between relative w-40 shrink-0 rounded-xl px-4 min-h-16 outline-none font-semibold py-3 ${
+                    className={`flex flex-col justify-center relative w-40 shrink-0 rounded-xl px-4 min-h-16 outline-none font-semibold py-3 ${
                       disabled
                         ? "bg-transparent border border-neutral-300 dark:border-white/15 cursor-not-allowed"
                         : isSelected

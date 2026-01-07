@@ -1,3 +1,4 @@
+export type PlatformSlugTypes = "playstation-5" | "playstation-4" | "steam" | "xbox-one" | "xbox-series-xs" | "nintendo-switch-2";
 
 export interface ProductItem {
     id: number;
@@ -292,7 +293,8 @@ export type GetAllProductsParams = {
   search?: string;
   orderBy?: unknown;
   sortBy?: unknown;
-  onlyAvailable?: boolean;  
+  onlyAvailable?: boolean;
+  variants?: PlatformSlugTypes[];  
 } & {
   [key: string]: string[] | number | string | unknown;
 }

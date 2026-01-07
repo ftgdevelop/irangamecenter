@@ -55,7 +55,7 @@ const Tab: React.FC<Props> = props => {
                     </div>
                 )}
 
-                <div className={`border-b border-neutral-200 dark:border-neutral-200/25 ${props.scrollTabs ? 'hidden-scrollbar overflow-x-auto overflow-y-clip' : ""}`}>
+                <div className={`border-b border-neutral-200 dark:border-neutral-200/25 ${props.scrollTabs ? 'lg:border-none max-lg:hidden-scrollbar overflow-x-auto overflow-y-clip' : ""}`}>
                     <div className={`flex ${!props.scrollTabs ? "flex-wrap" : ""} ${props.tabLinksBold ? "font-bold" : ""}`}>
                         {items.map(item => <button
                             type="button"

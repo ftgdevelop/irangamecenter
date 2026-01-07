@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Tab from "../shared/Tab";
 import Add from "../icons/Add";
-import { ProductItem } from "@/types/commerce";
+import { PlatformSlugTypes, ProductItem } from "@/types/commerce";
 import React from "react";
 import ProductListItem from "../products/ProductListItem";
 import Link from "next/link";
@@ -15,6 +15,7 @@ type Props = {
     steamProducts?: ProductItem[];
     xboxOneProducts?: ProductItem[];
     xboxSeriesXsProducts?: ProductItem[];
+    nintendoSwitch2Products?: ProductItem[];
 };
 
 const BestSellers: React.FC<Props> = props => {
@@ -23,7 +24,7 @@ const BestSellers: React.FC<Props> = props => {
 
     const items: {
         products: ProductItem[];
-        slug: string;
+        slug: PlatformSlugTypes;
         label: string;
     }[] = [];
 
@@ -62,17 +63,24 @@ const BestSellers: React.FC<Props> = props => {
             products: props.xboxSeriesXsProducts
         })
     }
+    if (props.nintendoSwitch2Products) {
+        items.push({
+            slug: "nintendo-switch-2",
+            label: "Nintendo Switch 2",
+            products: props.nintendoSwitch2Products
+        })
+    }
 
     const tabItems: TabItem[] = items.map(item => ({
         label: item.label,
         key: item.label,
         children: (<div className="py-5">
 
-            {item.products.map(i => <ProductListItem onClick={()=>{dispatch(setProgressLoading(true))}} product={i} key={i.id} />)}
+            {item.products.map(i => <ProductListItem platform={item.slug} onClick={()=>{dispatch(setProgressLoading(true))}} product={i} key={i.id} />)}
 
             <Link
                 prefetch={false}
-                href={`/products/variants-${item.slug}`}
+                href={`/products/Platform-${item.slug}`}
                 onClick={()=>{dispatch(setProgressLoading(true));}}
                 className="text-sm text-white dark:text-[#ca54ff] bg-gradient-violet dark:bg-gradient-dark-violet w-full px-5 py-3 flex rounded-full justify-center gap-3"
             >
