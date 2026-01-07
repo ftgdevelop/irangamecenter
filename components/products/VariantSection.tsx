@@ -1,20 +1,32 @@
-import { ProductVariant } from "@/types/commerce";
-import { useState } from "react";
+import { PlatformSlugTypes, ProductVariant } from "@/types/commerce";
+import { useEffect, useState } from "react";
 import VariantItem from "./VariantItem";
 
 type Props = {
   productId: number;
   productVariants: ProductVariant[];
+  platform?: PlatformSlugTypes;
 };
 
-
-const VariantSection: React.FC<Props> = ({ productId, productVariants }) => {
+const VariantSection: React.FC<Props> = ({ productId, productVariants, platform }) => {
   
   const [selectedVariant, setSelectedVariant] = useState < ProductVariant>(productVariants[0]);
 
+  const isPlatform = productVariants[0]?.name?.toLowerCase() === "platform";
+
+  useEffect(()=>{
+    if(isPlatform && platform){
+      const activePlatform = productVariants.find(x => x.slug === platform);
+      if(activePlatform){
+        setSelectedVariant(activePlatform);
+      }
+    }
+  },[isPlatform, platform])
+
   return (
     <>
-      {(productVariants?.length > 1 ) && <>
+      {(isPlatform && platform) ? null :
+      (productVariants?.length > 1 ) && <>
         <label className="text-sm pointer-events-none mb-3 block px-4 mt-7">
           انتخاب {productVariants[0]?.name}
         </label>
