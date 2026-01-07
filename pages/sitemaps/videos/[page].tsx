@@ -1,7 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { getAllForSiteMap } from "@/actions/commerce";
-import { dateDiplayFormat } from "@/helpers";
+import { dateDiplayFormat, escapeXml } from "@/helpers";
 
 type VideosData = {
   slug?: string;
@@ -20,15 +20,6 @@ type VideosData = {
 }[];
 
 function createSiteMap(items:VideosData){
-
-    function escapeXml(value: string = "") {
-      return value
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&apos;");
-    }
 
   let contents = "";
 

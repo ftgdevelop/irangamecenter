@@ -1,18 +1,10 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { getProducts } from "@/actions/commerce";
+import { escapeXml } from "@/helpers";
 import { ProductItem } from "@/types/commerce";
 
 function createSiteMap(items: ProductItem[]) {
-
-  function escapeXml(value: string = "") {
-    return value
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&apos;");
-  }
 
   let contents = "";
 
