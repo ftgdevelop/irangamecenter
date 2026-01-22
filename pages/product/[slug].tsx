@@ -26,13 +26,15 @@ import Skeleton from '@/components/shared/Skeleton';
 import VariantFooter from '@/components/products/VariantFooter';
 
 const DetailProduct: NextPage<any> = ({
-  productData,
+  serversideProductData,
   slug
 }: {
-  productData: ProductDetailData;
+  serversideProductData: ProductDetailData;
   slug?: string;
 }) => {
   const [detailActiveTab, setDetailActiveTab] = useState<string>('');
+
+  const [productData, setProductData] = useState<ProductDetailData>(serversideProductData);
 
   const router = useRouter();
 
@@ -52,6 +54,21 @@ const DetailProduct: NextPage<any> = ({
 
   const [variantData, setVariantData] = useState<SingleVariant| undefined>(undefined);
   const [variantLoading, setVariantLoading] = useState<boolean>(true);
+
+  useEffect(()=>{
+    const fetchProductDatainClientForDebugging = async (s:string) => {
+      await getProductBySlug(s);  
+      const response: any = await getProductBySlug(s);  
+      if(response?.data?.result && !productData ){
+        setProductData(response.data.result);
+      }
+    }
+    
+    if(slug){
+      fetchProductDatainClientForDebugging(slug);
+    }
+
+  },[slug]);
 
   useEffect(()=>{
 
@@ -419,7 +436,7 @@ const DetailProduct: NextPage<any> = ({
                     }
                     width={48}
                     height={48}
-                    className="w-12 h-12 text-4xs"
+                    className="w-12 h-12 text-4xs bg-[#dddddd] dark:bg-[#192a39] p-1 rounded-lg"
                   />
                 )}
                 <div>
@@ -449,7 +466,7 @@ const DetailProduct: NextPage<any> = ({
                     }
                     width={48}
                     height={48}
-                    className="w-12 h-12 text-4xs"
+                    className="w-12 h-12 text-4xs bg-[#dddddd] dark:bg-[#192a39] p-1 rounded-lg"
                   />
                 )}
                 <div>
@@ -549,7 +566,7 @@ export async function getServerSideProps(context: any) {
 
   return {
     props: {
-      productData: response.data?.result || null,
+      serversideProductData: response.data?.result || null,
       slug: context?.query?.slug || null
     },
   };

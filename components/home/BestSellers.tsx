@@ -76,7 +76,7 @@ const BestSellers: React.FC<Props> = props => {
         key: item.label,
         children: (<div className="py-5">
 
-            {item.products.map(i => <ProductListItem platform={item.slug} onClick={()=>{dispatch(setProgressLoading(true))}} product={i} key={i.id} />)}
+            {item.products.map(i => <ProductListItem onClick={()=>{dispatch(setProgressLoading(true))}} product={i} key={i.id} />)}
 
             <Link
                 prefetch={false}

@@ -1,12 +1,11 @@
 import { numberWithCommas, toPersianDigits } from "@/helpers";
-import { PlatformSlugTypes, ProductItemExtented } from "@/types/commerce";
+import { ProductItemExtented } from "@/types/commerce";
 import Image from "next/image";
 import Link from "next/link";
 
 type Props = {
     product: ProductItemExtented;
     onClick?: ()=> void;
-    platform?: PlatformSlugTypes;
 }
 
 const ProductListItem: React.FC<Props> = props => {
@@ -33,9 +32,6 @@ const ProductListItem: React.FC<Props> = props => {
     let productUrl = product.strapiProductProperties?.url || "";
     if(product.slug){
         productUrl = `/product/${product.slug}`
-    }
-    if(props.platform){
-        productUrl += `?platform=${props.platform}`
     }
     return (
         <div className="mb-[15px] bg-[#fafafa] dark:bg-[#011425] rounded-2xl">

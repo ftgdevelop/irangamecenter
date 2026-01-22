@@ -6,7 +6,7 @@ import BreadCrumpt from "@/components/shared/BreadCrumpt";
 import { useEffect, useRef, useState } from "react";
 import Skeleton from "@/components/shared/Skeleton";
 import { getProducts, ProductSortKeywords } from "@/actions/commerce";
-import { GetAllProductsParams, GetProductsDataType, GetProductsResponseType, PlatformSlugTypes, ProductItem } from "@/types/commerce";
+import { GetAllProductsParams, GetProductsDataType, GetProductsResponseType, ProductItem } from "@/types/commerce";
 import ProductListItem from "@/components/products/ProductListItem";
 import SortProducts from "@/components/products/SortProducts";
 import { useRouter } from "next/router";
@@ -36,16 +36,16 @@ const Products: NextPage<Props> = props => {
     const [fetchMode, setFetchMode] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
 
-
-    //TODO: remove this useEffect:
     useEffect(() => {
         const fetchDatas = async () => {
             const parameters = { ...props.parameters };
-            await getProducts(parameters);
+            const res:any = await getProducts(parameters);
+            if(!products.length && res?.data?.result){
+                setProducts(res.data.result);
+            }
         }
         fetchDatas();
-    }, [router.asPath]);
-
+    }, []);
 
     useEffect(() => {
         setProducts(props.productsData?.pagedResult?.items || []);
@@ -130,14 +130,7 @@ const Products: NextPage<Props> = props => {
         }
     }
 
-
     const isFiltered = !!selectedFilterSlugs.length;
-
-    const filteredPlatformSlugs = selectedFilterSlugs?.filter(item => item.includes("Platform-"));
-    let selectedPlatform : PlatformSlugTypes | undefined = undefined;
-    if(filteredPlatformSlugs.length === 1){
-        selectedPlatform = filteredPlatformSlugs[0].split("Platform-")[1] as PlatformSlugTypes;
-    }
 
     const activeFilterColor = "text-white bg-gradient-orange"
     return (
@@ -214,7 +207,7 @@ const Products: NextPage<Props> = props => {
 
             <div className="px-4 mb-12">
 
-                {products?.map(item => <ProductListItem platform={selectedPlatform} product={item} key={item.id} />)}
+                {products?.map(item => <ProductListItem product={item} key={item.id} />)}
 
                 {!!loading && [1, 2, 3, 4, 5].map(item => (
                     <div className="flex gap-3 mb-4" key={item}>
