@@ -15,6 +15,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "strapi.irangamecenter.com", pathname: "**" },
       { protocol: "https", hostname: "pn.irangamecenter.com", pathname: "**" },
       { protocol: "https", hostname: "cdn.irangamecenter.com", pathname: "**" },
+      { protocol: "http", hostname: "cdn.irangamecenter.com", pathname: "**" },
       { protocol: "https", hostname: "igc1.storage.c2.liara.space", pathname: "**" },
     ],
     formats: ["image/avif", "image/webp"],

@@ -160,8 +160,13 @@ export default function PaymentPage() {
       debugger;
       
       if (response?.status == 200) {
+<<<<<<< Updated upstream
         const url = `https://${ServerAddress.Payment}/Reserves/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`;         
         window.location.replace(url);
+=======
+        const url = `https://${ServerAddress.Payment}/fa-IR/Reserves/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`;         
+        router.push(url);
+>>>>>>> Stashed changes
       } else {
           
         const errorMessage = response?.response?.data?.error?.message;

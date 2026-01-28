@@ -14,7 +14,8 @@ import Checkbox from "../shared/Checkbox";
 
 type Props = {
     filters: Facet[];
-    branName?: string;
+    brandName?: string;
+    categoryName?: string;
 }
 
 const ProductsFliter: React.FC<Props> = props => {
@@ -61,7 +62,7 @@ const ProductsFliter: React.FC<Props> = props => {
 
     const changeFilterHandel = (values: string[], type: string) => {
         const otherSlugs = slugs?.filter(item => !(item.includes(`${type}-`)));
-        const segments = [props.branName ? `/brand/${props.branName}` :"/products", ...otherSlugs, ...(values.map(x => `${type}-${x}`))];
+        const segments = [props.brandName ? `/brand/${props.brandName}`: props.categoryName? `/category/${props.categoryName}` :"/products", ...otherSlugs, ...(values.map(x => `${type}-${x}`))];
         const newUrl = segments.join("/");
         router.push({
             pathname: newUrl,
@@ -70,7 +71,7 @@ const ProductsFliter: React.FC<Props> = props => {
 
     const recetAllFilters = () => {
         const otherSlugs = slugs?.filter(x => (x.includes("sort-") || x.includes("page-"))) || [];
-        const segments = [props.branName ? `/brand/${props.branName}` :"/products", ...otherSlugs];
+        const segments = [props.brandName ? `/brand/${props.brandName}` : props.categoryName? `/category/${props.categoryName}`:"/products", ...otherSlugs];
         const newUrl = segments.join("/");
         router.push({
             pathname: newUrl,
@@ -121,7 +122,7 @@ const ProductsFliter: React.FC<Props> = props => {
                         label="فقط محصولات موجود"
                         onChange={(checked: boolean) => {
                             const otherSlugs = slugs?.filter(item => !(item.includes("onlyAvailable")));
-                            const segments = [props.branName ? `/brand/${props.branName}` :"/products", ...otherSlugs];
+                            const segments = [props.brandName ? `/brand/${props.brandName}`: props.categoryName? `/category/${props.categoryName}` :"/products", ...otherSlugs];
                             if(checked){
                                 segments.push("onlyAvailable")
                             }
@@ -142,7 +143,7 @@ const ProductsFliter: React.FC<Props> = props => {
                             label="فقط پیش فروش"
                             onChange={(checked: boolean) => {
                                 const otherSlugs = slugs?.filter(item => !(item.includes("onBackOrder")));
-                                const segments = [props.branName ? `/brand/${props.branName}` :"/products", ...otherSlugs];
+                                const segments = [props.brandName ? `/brand/${props.brandName}` : props.categoryName? `/category/${props.categoryName}` :"/products", ...otherSlugs];
                                 if(checked){
                                     segments.push("onBackOrder")
                                 }

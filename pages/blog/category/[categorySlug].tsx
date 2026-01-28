@@ -17,8 +17,8 @@ const Category: NextPage<any> = ({ page, posts, totalPages, categoryName }: { pa
     return (
         <>
             <BreadCrumpt
-                wrapperClassName="bg-[#192a39] px-4 py-3 mb-4"
-                textColorClass="text-neutral-300"
+                wrapperClassName="bg-[#e8ecf0] dark:bg-[#192a39] px-4 py-3 mb-4"
+                textColorClass="text-neutral-800 dark:text-neutral-300"
                 items={[
                     // { label: "وبلاگ", link: "/blogs" },
                     {label:categoryName ||"دسته بندی نامشخص", link:""}

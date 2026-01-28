@@ -232,7 +232,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             title: "",
             withShare: true,
             withLogo: true,
-            backUrl: "/products",
+            backToPrev: true,
             hasCartLink: true
         };
         showFooter = true;
