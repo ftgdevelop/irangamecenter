@@ -36,16 +36,16 @@ const Products: NextPage<Props> = props => {
     const [fetchMode, setFetchMode] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
 
-
-    //TODO: remove this useEffect:
     useEffect(() => {
         const fetchDatas = async () => {
             const parameters = { ...props.parameters };
-            await getProducts(parameters);
+            const res:any = await getProducts(parameters);
+            if(!products.length && res?.data?.result){
+                setProducts(res.data.result);
+            }
         }
         fetchDatas();
-    }, [router.asPath]);
-
+    }, []);
 
     useEffect(() => {
         setProducts(props.productsData?.pagedResult?.items || []);
@@ -130,13 +130,33 @@ const Products: NextPage<Props> = props => {
         }
     }
 
-
     const isFiltered = !!selectedFilterSlugs.length;
-
 
     const activeFilterColor = "text-white bg-gradient-orange"
     return (
         <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "CollectionPage",
+                    "name": "خرید اکانت بازی",
+                    "url": "https://irangamecenter.com/products",
+                    "mainEntity": {
+                        "@type": "ItemList",
+                        "itemListOrder": "https://schema.org/ItemListOrderAscending",
+                        "numberOfItems": products.length,
+                        "itemListElement": products.map((product, index) => ({
+                        "@type": "ListItem",
+                        "position": index + 1,
+                        "url": `https://irangamecenter.com/product/${product.slug}`
+                        }))
+                    }
+                    })
+                }}
+            />
+
             <BreadCrumpt
                 wrapperClassName="bg-[#e8ecf0] dark:bg-[#192a39] px-4 py-3 mb-4"
                 textColorClass="text-neutral-800 dark:text-neutral-300"

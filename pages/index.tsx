@@ -15,10 +15,9 @@ import Contacts from "@/components/shared/Contacts";
 import { getBlogs } from "@/actions/blog";
 import { BlogItemType } from "@/types/blog";
 import BlogsCarousel from "@/components/blog/BlogsCarousel";
-import { getAllForSiteMap, getProducts } from "@/actions/commerce";
+import {getProducts } from "@/actions/commerce";
 import { GetProductsDataType } from "@/types/commerce";
 import ProductsCarousel from "@/components/products/ProductsCarousel";
-import { useEffect } from "react";
 import BannerLinks from "@/components/home/BannerLinks";
 
 type HomeAboutDataType = {
@@ -92,12 +91,13 @@ type Props = {
   steamData?: GetProductsDataType;
   xboxOneData?: GetProductsDataType;
   xboxSeriesXsData?: GetProductsDataType;
+  nintendoSwitch2Data?: GetProductsDataType;
+  backOrderProductsData?: GetProductsDataType;
 }
-
 
 const Home: NextPage<Props> = props => {
 
-  const {homeAboutData, homeHighlights, homeSections,recentBlogs, playstation4Data, playstation5Data, steamData, xboxOneData, xboxSeriesXsData} = props;
+  const {homeAboutData, homeHighlights, homeSections,recentBlogs, playstation4Data, playstation5Data, steamData, xboxOneData, xboxSeriesXsData, nintendoSwitch2Data} = props;
 
   const categoris = homeSections?.find(section => section.Keyword === "category");
 
@@ -107,7 +107,7 @@ const Home: NextPage<Props> = props => {
 
   const banner3Items = homeSections?.find(section => section.Keyword === "banner3")?.Items?.filter(item => item.Image?.url) as BannerItemType[] || [];
 
-  const promotionData = homeSections?.find(section => section.Keyword === "special-offer");
+  //const promotionData = homeSections?.find(section => section.Keyword === "special-offer");
 
   const aboutDescription = homeAboutData?.find(item => item.Keyword === "about_intro")?.Body;
 
@@ -116,31 +116,14 @@ const Home: NextPage<Props> = props => {
   const SupportNumber = homeAboutData?.find(item => item.Keyword === "telNumber")?.Description;
   const SupportNumberUrl = homeAboutData?.find(item => item.Keyword === "telNumber")?.Url;
   const SupportNumberSubtitle = homeAboutData?.find(item => item.Keyword === "telNumber")?.Subtitle;
-  const emailAddress = homeAboutData?.find(item => item.Keyword === "email")?.Description;
+  const emailAddress = homeAboutData?.find(item => item.Keyword === "email")?.Description; 
 
-
-
-
-
-
-// This useEffect should be removed:
-  useEffect(()=>{
-    const fetchD = async () => {    
-      await getAllForSiteMap({
-        type:"Video",
-        MaxResultCount:100,
-        SkipCount: 0
-      });
-    }
-    fetchD()
-  },[]);
-
-
-
-
-
-
-  
+  if(props.backOrderProductsData){
+    console.log(props.backOrderProductsData?.pagedResult?.items);
+    debugger;
+  }else{
+    debugger;
+  }
 
   return (
     <>
@@ -171,20 +154,9 @@ const Home: NextPage<Props> = props => {
       
 
 
-      {!!(promotionData?.Items?.length) && <ProductsCarousel 
-        products={promotionData?.Items.map(item => ({
-          strapiProductProperties:{
-            price: item.price,
-            oldPrice: item.oldPrice,
-            url: item.Url,
-          },
-          id:item.id,
-          name: item.Title || "",
-          imageAlt: item.ImageAlternative,
-          imageTitle: item.ImageTitle,
-          filePath: item.Image?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}${item.Image.url}` : undefined,
-        }))}
-        title={promotionData?.Title || ""}
+      {!!(props.backOrderProductsData?.pagedResult?.items?.length) && <ProductsCarousel 
+        products={props.backOrderProductsData?.pagedResult?.items}
+        title="پیش خرید"
       />}
       <br/>
 
@@ -205,6 +177,7 @@ const Home: NextPage<Props> = props => {
         steamProducts={steamData?.pagedResult?.items}
         xboxOneProducts={xboxOneData?.pagedResult?.items}
         xboxSeriesXsProducts={xboxSeriesXsData?.pagedResult?.items}
+        nintendoSwitch2Products= {nintendoSwitch2Data?.pagedResult?.items}
       />
 
       {!!recentBlogs?.length && <BlogsCarousel blogs={recentBlogs} />}
@@ -228,7 +201,7 @@ const Home: NextPage<Props> = props => {
 
 export const getStaticProps = async (context: any) => {
 
-  const [strapiSectionResponse, strapiHighlightsResponse, strapiAboutSectionResponse, blogResponse, playstation5DataResponse,playstation4DataResponse,steamDataResponse,xboxOneDataResponse, xboxSeriesXsDataResponse] = await Promise.all<any>([
+  const [strapiSectionResponse, strapiHighlightsResponse, strapiAboutSectionResponse, blogResponse, playstation5DataResponse,playstation4DataResponse,steamDataResponse,xboxOneDataResponse, xboxSeriesXsDataResponse,nintendoSwitch2DataResponse, backOrderProductsResponse ] = await Promise.all<any>([
     getStrapiPages('filters[Page][$eq]=Home&locale=fa&populate[Sections][on][shared.repeter][populate][Items][populate]=*'),
     getStrapiHighlight('locale=fa&populate[Item][populate]=*'),
     getStrapiPages('filters[Page][$eq]=aboutUs&locale=fa&populate[Sections][populate]=*'),
@@ -237,7 +210,9 @@ export const getStaticProps = async (context: any) => {
     getProducts({skipCount:0, maxResultCount:10, variants:["playstation-4"]}),
     getProducts({skipCount:0, maxResultCount:10, variants:["steam"]}),
     getProducts({skipCount:0, maxResultCount:10, variants:["xbox-one"]}),
-    getProducts({skipCount:0, maxResultCount:10, variants:["xbox-series-x/s"]})
+    getProducts({skipCount:0, maxResultCount:10, variants:["xbox-series-xs"]}),
+    getProducts({skipCount:0, maxResultCount:10, variants:["nintendo-switch-2"]}),
+    getProducts({maxResultCount:9,skipCount:0,status : "OnBackOrder"})
   ]);
 
   return ({
@@ -253,7 +228,9 @@ export const getStaticProps = async (context: any) => {
       playstation4Data: playstation4DataResponse?.data?.result || null ,
       steamData: steamDataResponse?.data?.result || null ,
       xboxOneData: xboxOneDataResponse?.data?.result || null ,
-      xboxSeriesXsData: xboxSeriesXsDataResponse?.data?.result || null 
+      xboxSeriesXsData: xboxSeriesXsDataResponse?.data?.result || null,
+      nintendoSwitch2Data: nintendoSwitch2DataResponse?.data?.result || null,
+      backOrderProductsData: backOrderProductsResponse?.data?.result || null
     },
     revalidate: 3600
   })

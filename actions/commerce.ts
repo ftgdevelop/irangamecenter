@@ -64,6 +64,25 @@ export const getProductVariants = async (slug: string, acceptLanguage: "fa-IR" |
     }
 }
 
+export const getVariantById = async (id: number, acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
+
+    try {
+        const response: any = await axios({
+            method: "get",
+            url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetVariantById}?Id=${id}`,
+            headers: {
+                ...Headers,
+                "Accept-Language": acceptLanguage,
+                currency: "IRR"
+            }
+        });
+        return (response)
+    } catch (error: any) {
+        return error
+    }
+}
+
+
 export const getProductGallries = async (slug: string, acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
 
     try {
@@ -168,7 +187,6 @@ export const getOrderById = async (params: { id: number; token?: string; currenc
     }
 }
 
-
 export const approve = async ( params:{ 
     orderId: number;
     orderNumber:string;
@@ -176,8 +194,11 @@ export const approve = async ( params:{
  }) => {
   try {
     const response = await axios.post(
-      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.Approve}?orderId=${params.orderId}&orderNumber=${params.orderNumber}`,
-      null,
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.Approve}`,
+      {
+        orderId: params.orderId,
+        orderNumber: params.orderNumber
+      },
       {
         headers: {
         ...Headers,
@@ -219,7 +240,7 @@ export const getAllOrders = async (
   params: {
     SkipCount: number;
     MaxResultCount: number;
-    status?: string[];
+    status?: string;
     search?: string;
   },
   token: string,
@@ -228,12 +249,12 @@ export const getAllOrders = async (
   try {
     const query = [`SkipCount=${params.SkipCount}&MaxResultCount=${params.MaxResultCount}`];
 
-    if (params.status?.length) {
-      const statusQueries = params.status.map((s) => `Statuses=${s}`).join("&");
+    if (params.status) {
+      const statusQueries = `Statuses=${params.status}`;
       query.push(statusQueries);
     }
     if (params.search) {
-      query.push(`SSSSSSSSSSEEEEEARCHTODO=${params.search}`);
+      query.push(`IdOrTitle=${params.search}`);
     }
 
     const res: any = await axios({
@@ -255,9 +276,6 @@ export const getAllOrders = async (
     }
     return error;
   }
-<<<<<<< Updated upstream
-};
-=======
 };
 
 
@@ -326,7 +344,6 @@ export const submitOrderForm = async ( params:{
     return error
   }
 }
-
 export const getCategoryBySlug = async (params: {slug: string; token: string;}) => {
     try{
         const res : any = await axios({
@@ -345,4 +362,3 @@ export const getCategoryBySlug = async (params: {slug: string; token: string;}) 
         return error
     }
 }
->>>>>>> Stashed changes

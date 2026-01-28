@@ -9,6 +9,7 @@ import SimplePortal from "@/components/shared/layout/SimplePortal";
 import LoadingFull from "@/components/shared/LoadingFull";
 import { ServerAddress } from "@/enum/url";
 import { numberWithCommas } from "@/helpers";
+import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import { setReduxError } from "@/redux/errorSlice";
 import { GatewayGroupItem } from "@/types/payment";
@@ -135,7 +136,7 @@ export default function PaymentPage() {
 
   const onSubmit = async () => {
     setGoToBankLoading(true);
-
+    
     if(withdrawFromWallet && !requiredAmount){
       router.push(`/confirm?deposite=true&orderNumber=${orderNumber}&orderId=${orderId}`);
     }else{
@@ -160,13 +161,8 @@ export default function PaymentPage() {
       debugger;
       
       if (response?.status == 200) {
-<<<<<<< Updated upstream
-        const url = `https://${ServerAddress.Payment}/Reserves/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`;         
-        window.location.replace(url);
-=======
         const url = `https://${ServerAddress.Payment}/fa-IR/Reserves/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`;         
         router.push(url);
->>>>>>> Stashed changes
       } else {
           
         const errorMessage = response?.response?.data?.error?.message;
@@ -216,7 +212,7 @@ export default function PaymentPage() {
 
         {(orderData && !getUserLoading && !balanceLoading) ? (
           <PaymentByDeposit 
-            onSelect={()=>{setDepositIsSelected(true)}} 
+            onSelect={()=>{setDepositIsSelected(prevState => !prevState)}} 
             isSelected={depositIsSelected} 
           /> 
         ):(
@@ -276,10 +272,8 @@ export default function PaymentPage() {
             onClick = {onSubmit}
             disabled={!selectedGatewayId && !!requiredAmount}
           >
-            {(withdrawFromWallet && !requiredAmount) ? 
-            "پرداخت از کیف پول" :
-            `پرداخت ${numberWithCommas(requiredAmount || 0)} ریال`
-            }            
+            {/* {`پرداخت ${numberWithCommas(requiredAmount || 0)} ${getCurrencyLabelFa(orderData?.currencyType)}`}   */}
+            {`پرداخت ${numberWithCommas(orderData?.payableAmount||0)} ${getCurrencyLabelFa(orderData?.currencyType)}`}
           </button>
         </footer>
         <div className="h-20" />

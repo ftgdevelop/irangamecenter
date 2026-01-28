@@ -22,7 +22,6 @@ const BackOrderFilterTag: React.FC<Props> = props => {
     const activeFilterColor = "text-white bg-gradient-orange"
 
     const isActive = slugs?.find(x => x.includes("onBackOrder"));
-    
     return (
         <button
             type="button"

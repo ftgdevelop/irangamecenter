@@ -52,7 +52,7 @@ const Header: React.FC<Props> = props => {
                     {props.type2Params.backToPrev ? (
                         <button
                             type="button"
-                            className="w-8 h-8"
+                            className="w-8 h-8 outline-none"
                             onClick={e=>{
                                 e.preventDefault();
                                 router.back()

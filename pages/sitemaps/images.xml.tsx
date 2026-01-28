@@ -1,6 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { getBlogs } from "@/actions/blog";
+import { getAllForSiteMap } from "@/actions/commerce";
 
 function createSiteMap(total: number) {
 
@@ -11,7 +11,7 @@ function createSiteMap(total: number) {
     for (let i = 0; i < total; i++) {
       contents += `
           <sitemap>
-            <loc>${process.env.SITE_NAME}/sitemaps/blogs/blogSitemap-${i + 1}.xml</loc>
+            <loc>${process.env.SITE_NAME}/sitemaps/images/imageSitemap-${i + 1}.xml</loc>
           </sitemap>    
       `;
     }
@@ -31,12 +31,13 @@ export const getServerSideProps = async ({ res }: { res: any }) => {
 
   let sitemap: any;
 
-  if (process.env.PROJECT_SERVER_BLOG) {
-    const postsResponse: any = await getBlogs({
-      per_page:1,
-      page:1
+  if (process.env.PROJECT_SERVER_ECOMMERCE) {
+    const response: any = await getAllForSiteMap({
+      type:"Image",
+      SkipCount:0,
+      MaxResultCount:5
     });
-    sitemap = createSiteMap(Math.ceil(+postsResponse?.headers?.['x-wp-totalpages']/100 || 0));
+    sitemap = createSiteMap(Math.ceil(+response?.data?.result?.totalCount/100 || 0));
   } else {
     sitemap = createSiteMap(0);
   }

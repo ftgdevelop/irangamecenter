@@ -23,7 +23,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   env: {
-    SITE_NAME: "https://www.irangamecenter.com",
+    SITE_NAME: "https://irangamecenter.com",
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_IDENTITY: "identity.irangamecenter.com",
     PROJECT_SERVER_BLOG: "pn.irangamecenter.com",

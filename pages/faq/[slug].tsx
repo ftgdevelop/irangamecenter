@@ -24,21 +24,21 @@ type FAQ = {
 
 const FaqDetail: NextPage = ({ faq }: {faq?: FAQ }) => {
 
-    const dispath = useAppDispatch();
+    const dispatch = useAppDispatch();
   
     const title = faq?.Title;
 
     useEffect(()=>{
   
       if(title){
-        dispath(setHeaderType2Params({
+        dispatch(setHeaderType2Params({
           backUrl:"/faq",
           title:title
         }));
       }
   
       return(()=>{
-        dispath(setHeaderType2Params({
+        dispatch(setHeaderType2Params({
           backUrl:"",
           title:""
         }));

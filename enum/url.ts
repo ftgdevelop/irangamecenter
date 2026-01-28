@@ -56,11 +56,13 @@ export const Payment = {
   MakeDepositToken:"/api/services/app/UserDepositBankGateway/MakeToken",
   GetTransactionDeposit:"/api/services/app/TransactionDeposit/GetAll",
   GetBankGateways:"/api/services/app/ReserveBankGateway/GetAll",
-  MakeTokenByAmount:"/api/services/app/UserDepositBankGateway/MakeToken"
+  MakeTokenByAmount:"/api/services/app/UserDepositBankGateway/MakeToken",
+  GetAllToExcel:"/api/services/app/TransactionDeposit/GetAllToExcel"
   //ConfirmByDeposit:"/api/services/app/DepositReserve/ConfirmByDeposit__"
-
-
   
+  
+  
+  ,GetTransactionDeposit2222222222222:"/api/services/app/Transaction/GetAll",
   // ValidateDiscountCode:"/api/services/app/Discount/Validate",
   // RegisterDiscountCode: "/api/services/app/Discount/Register",
   // MakeToken:"/api/services/app/ReserveBankGateway/MakeToken",
@@ -85,16 +87,12 @@ export const Payment = {
     GetProductVariants:"/api/services/app/Product/GetVariants",
     Approve:"/api/services/app/Order/Approve",
     GetAllVariants:"/api/services/app/Variant/GetAll",
-<<<<<<< Updated upstream
-    GetAllOrders:"/api/services/app/Order/GetAll"
-=======
     GetAllOrders:"/api/services/app/Order/GetAll",
     GetOrdersStatistics:"/api/services/app/Order/GetStatistics",
     GetOrderDetailItem:"/api/services/app/LoginProvider/GetByOrderItemId",
     SubmitOrderForm:"/api/services/app/OrderItemProviderField/Submit",
     GetVariantById:"/api/services/app/Variant/Get",
     GetCategoryBySlug:"/api/services/app/Category/GetBySlug"
->>>>>>> Stashed changes
   }
   
 

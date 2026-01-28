@@ -37,3 +37,14 @@ export type GatewayGroupItem = {
   gateways: GatewayItem[];
 };
 
+export type Transaction = {
+    information?: string;
+    typeStr?: string;
+    amount: number;
+    creationTime: string;  
+    creationDateStr?: string;
+    creationTimeStr?: string;
+    id: number;
+    type: string;
+    currencyType: "IRR" | string;
+}

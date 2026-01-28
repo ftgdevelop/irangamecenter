@@ -29,9 +29,13 @@ const ProductListItem: React.FC<Props> = props => {
         discountPercentage = Math.floor(discount);
     }
 
+    let productUrl = product.strapiProductProperties?.url || "";
+    if(product.slug){
+        productUrl = `/product/${product.slug}`
+    }
     return (
         <div className="mb-[15px] bg-[#fafafa] dark:bg-[#011425] rounded-2xl">
-            <Link prefetch={false} href={product.slug ? `/product/${product.slug}`:product.strapiProductProperties?.url || ""} className="flex" onClick={()=>{if(props.onClick){props.onClick()}}}>
+            <Link prefetch={false} href={productUrl} className="flex" onClick={()=>{if(props.onClick){props.onClick()}}}>
                 <Image
                     src={product.filePath || "/images/default-game.png"}
                     alt={product.fileAltAttribute || product.name || ""}

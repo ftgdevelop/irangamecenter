@@ -78,33 +78,39 @@ const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][num
     }
   };
 
+  const attributesAndDescription : string[] = [];
+
+  if(item.variant.attributes?.length){
+    attributesAndDescription.push(...item.variant.attributes);
+  }
+
+  if(item.variant.description){
+    attributesAndDescription.push(item.variant.description)
+  }
 
   return (
     <div className="dark:text-white flex flex-col gap-5 pt-4 justify-between items-center pb-4 border-b border-[#192b39]/50 w-full">
-      <div className="flex w-full items-center min-h-[120px] gap-5">
-        <Link prefetch={false} href={`/product/${item.variant.product.slug}`} className="relative w-[120px] h-[120px] bg-black/25  rounded-[20px]  overflow-hidden" >
-                    <Image
-            src={item?.variant.product.filePath || "/placeholder.png"}
-            alt={item?.variant.product.fileTitleAttribute || "محصول"}
-            fill
-            className="object-cover rounded-[20px]"
+      <div className="flex w-full items-start gap-5">
+        <Link prefetch={false} href={`/product/${item.variant.product.slug}`} className="relative max-w-[100px] w-1/4 block bg-black/25 " >
+          <Image
+            src={item.variant.filePath || item.variant.product.filePath || "/placeholder.png"}
+            alt={item.variant.product.fileTitleAttribute || "محصول"}
+            width={100}
+            height={100}
+            className="object-cover rounded-2xl w-full aspect-square"
           />
         </Link>
-        <div className="flex flex-col justify-between min-h-[120px]">
-          <h2 className="font-semibold text-sm md:text-base mt-4">
-            {item?.variant.product.name || "محصول"}
+        <div className="text-xs text-gray-600 dark:text-gray-400">
+          <h2 className="font-semibold text-sm md:text-base mt-2 mb-3">
+            {item.variant.product.name || "محصول"}
           </h2>
-          <div className="flex flex-col gap-1">
-            {item?.variant.attributes && item?.variant.attributes.length > 0 ? (
-              item?.variant.attributes.map((variant,index) => (
-                <p key={index} className="text-xs text-gray-600 dark:text-gray-400">
-                  {variant}
-                </p>
-              ))
-            ) : (
-              <p className="text-xs text-gray-600 dark:text-gray-400">بدون واریانت</p>
-            )}
-          </div>
+          {!!item.variant.attributes?.length && (<p className="mb-2">
+            {item.variant.attributes?.join("، ")}
+          </p>)}
+          {item.variant.description && (<p>
+            {item.variant.description}
+          </p>)}
+
         </div>
       </div>
 

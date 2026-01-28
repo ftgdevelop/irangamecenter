@@ -2,7 +2,7 @@
 
 import { getAllForSiteMap } from "@/actions/commerce";
 
-function creareSiteMap(total: number) {
+function createSiteMap(total: number) {
 
   let contents = "";
 
@@ -37,9 +37,9 @@ export const getServerSideProps = async ({ res }: { res: any }) => {
       SkipCount:0,
       MaxResultCount:5
     });
-    sitemap = creareSiteMap(Math.ceil(+videosResponse?.data?.result?.totalCount/100 || 0));
+    sitemap = createSiteMap(Math.ceil(+videosResponse?.data?.result?.totalCount/100 || 0));
   } else {
-    sitemap = creareSiteMap(0);
+    sitemap = createSiteMap(0);
   }
 
   res.setHeader('Content-Type', 'text/xml');

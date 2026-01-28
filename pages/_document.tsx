@@ -13,7 +13,40 @@ export default function Document() {
               'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
             })(window,document,'script','dataLayer','GTM-N6VRBVVG');`,
           }}
-        />        
+        />  
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "@id": "https://irangamecenter.com/#organization",
+                  "name": "Iran Game Center",
+                  "url": "https://irangamecenter.com",
+                  "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://irangamecenter.com/logo.svg",
+                    "width": 512,
+                    "height": 512
+                  }
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": "https://irangamecenter.com/#website",
+                  "url": "https://irangamecenter.com",
+                  "name": "Iran Game Center",
+                  "publisher": {
+                    "@id": "https://irangamecenter.com/#organization"
+                  }
+                }
+              ]
+            })
+          }}
+        />
+
       </Head>
       <body className="antialiased font-iranyekan bg-white dark:bg-black" >
          

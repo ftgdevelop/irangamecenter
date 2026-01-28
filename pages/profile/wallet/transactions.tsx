@@ -1,21 +1,25 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { getTransactionDeposit } from "@/actions/payment";
+import { getAllTransactionsToExcel, getTransactionDeposit } from "@/actions/payment";
 import TransactionItem from "@/components/authentication/profile/tansactions/TransactionItem";
 import TransactionsFilter from "@/components/authentication/profile/tansactions/TransactionsFilter";
 import ArrowRight from "@/components/icons/ArrowRight"
+import Download from "@/components/icons/Download";
 import Filter from "@/components/icons/Filter";
+import Loading from "@/components/icons/Loading";
 import ModalPortal from "@/components/shared/layout/ModalPortal";
 import Pagination from "@/components/shared/Pagination";
 import Skeleton from "@/components/shared/Skeleton";
-import { dateDiplayFormat } from "@/helpers";
+import { ServerAddress } from "@/enum/url";
+import { Transaction } from "@/types/payment";
 import Link from "next/link"
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const Transactions = () => {
 
     const [page, setPage] = useState<number>(1);
     const [loading, setLoading] = useState<boolean>(false);
+    const [downloadExcelLoading, setDownloadExcelLoading] = useState<boolean>(false);
     const [openFilters, setOpenFilters] = useState<boolean>(false);
     const [slideInFilters, setSlideInFilters] = useState<boolean>(false);
     const [filterStartDate, setFilterStartDate] = useState<string>("");
@@ -34,13 +38,7 @@ const Transactions = () => {
         }
     }, [slideInFilters]);
 
-
-    const [transactions, setTransactions] = useState<{
-        amount: number;
-        creationTime: string;
-        id: number;
-        type: string;
-    }[]>([]);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
 
     const [totalCount, setTotalCount] = useState<number>(0);
 
@@ -67,18 +65,47 @@ const Transactions = () => {
 
     }, [page, filterEndDate, filterStartDate, filterType]);
 
+    const downloadExcel= async () => {
+        const token = localStorage?.getItem('Token');
+        if (token) {
+            setDownloadExcelLoading(true);
+            const response:any = await getAllTransactionsToExcel(token);
+            setDownloadExcelLoading(false);
+            if(response.data?.result?.fileToken){
+                const url = `${ServerAddress.Type}${ServerAddress.Payment}/File/DownloadTempFile?fileName=${response.data.result.fileName}&fileType=${response.data.result.fileType}&fileToken=${response.data.result.fileToken}`;
+                const a = document.createElement('a');
+                a.href = url;
+                a.click();
+            }
+        }
+    }
+
     return (
         <>
-            <header className="flex items-center gap-5 p-4 text-xs">
-                <Link href="/profile/wallet" className="w-6 h-6">
-                    <ArrowRight />
-                </Link>
-                تراکنش های من
+            <header className="flex items-center justify-between gap-5 p-4 py-5 text-sm">
+                <div className="flex items-center gap-5">
+                    <Link href="/profile/wallet" className="w-6 h-6">
+                        <ArrowRight />
+                    </Link>
+                    تراکنش های من
+                </div>
+                <button
+                    type="button"
+                    className="flex gap-1 items-center semibold outline-none text-xs"
+                    onClick={downloadExcel}
+                >
+                    {downloadExcelLoading ? (
+                        <Loading className="w-5 h-5 fill-current animate-spin" />
+                    ):(
+                        <Download className="w-5 h-5 fill-current" />
+                    )}
+                    خروجی اکسل
+                </button>
             </header>
             <div className="px-3.5 pb-5">
                 <button
                     type="button"
-                    className="inline-flex gap-3 border border-white/25 rounded-full px-4 py-1.5 text-sm"
+                    className="inline-flex gap-3 mb-3 border border-neutral-300 dark:border-white/25 rounded-full px-4 py-1.5 text-sm"
                     onClick={() => { setOpenFilters(true) }}
                 >
                     <Filter className="w-5 h-5 fill-current" />
@@ -99,46 +126,7 @@ const Transactions = () => {
                     </>
                 )}
 
-                {transactions.map((item, index, array) => {
-
-                    const prevItem = array[index - 1];
-
-                    const prevItemMonth = prevItem?.creationTime ? dateDiplayFormat({
-                        date: prevItem.creationTime,
-                        locale: "fa",
-                        format: "yyyy MMM"
-                    }) : null;
-
-                    const itemMonth = dateDiplayFormat({
-                        date: item.creationTime,
-                        locale: "fa",
-                        format: "yyyy MMM"
-                    });
-
-
-                    const monthSeparator = prevItemMonth !== itemMonth ? itemMonth : null;
-
-                    return (
-
-                        <Fragment key={item.id} >
-
-                            <div className="flex items-center gap-2 my-2.5">
-                                <div className="text-2xs whitespace-nowrap min-w-[15%] min-h-[16.5px] shrink-0">
-                                    {monthSeparator}
-                                </div>
-                                <div className="w-full border-b border-white/25" />
-                            </div>
-
-                            <TransactionItem
-                                amount={item.amount}
-                                creationTime={item.creationTime}
-                                id={item.id}
-                                type={item.type}
-                            />
-
-                        </Fragment>
-                    )
-                })}
+                {transactions.map(item => <TransactionItem transaction={item} key={item.id} /> )}
                 
                 {!transactions.length && (
                     <div className="text-sm p-4">

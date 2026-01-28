@@ -18,10 +18,8 @@ const OrderItem : React.FC<Props> = props => {
             <div className="flex justify-between items-center mb-3">
 
                 <StatusTag status={order?.status} />
-                
-                <span className="flex items-center px-4 h-7 rounded-full bg-gradient-green text-[#011425] font-semibold"> در حال انجام </span>
 
-                <Link href={`/profile/orders/${order?.id}`} className="flex items-center justify-center bg-[#231c51] h-7 w-7 rounded-full">
+                <Link href={`/profile/orders/${order?.id}`} className="flex items-center justify-center bg-[#f59f00] dark:bg-[#231c51] h-7 w-7 rounded-full">
                     <ArrowTopLeft className="fill-white w-3 h-3" />
                 </Link>
             </div>
@@ -53,7 +51,7 @@ const OrderItem : React.FC<Props> = props => {
                 {order?.items.filter(x => x.product.filePath).map(item => (
                     <Image
                         key={item.product.filePath} 
-                        src={item.product.filePath!}
+                        src={item.variant?.filePath || item.product.filePath!}
                         alt={item.product.fileAltAttribute || ""}
                         className="w-16 h-16 object-contain rounded-lg"
                         width={64}

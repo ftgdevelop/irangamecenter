@@ -66,7 +66,7 @@ const CartSection:React.FC<Props> = props => {
           سبد خرید شما خالی است!
         </p>
         <Link href="/" className="w-full">
-          <button className="bg-gradient-orange text-white h-11 w-full rounded-full mt-5 flex gap-3 items-center justify-center">
+          <button className="bg-gradient-orange text-xs text-white h-11 w-full rounded-full mt-5 flex gap-3 items-center justify-center">
             <Home className="w-5 h-5 fill-current" />
             بازگشت به فروشگاه
           </button>
@@ -94,7 +94,7 @@ const CartSection:React.FC<Props> = props => {
         <Image src="/images/icons/2color/menu.svg" alt="menu" width="24" height="24" />
       </div>
 
-      {items?.map((item) => item && cartGeneralInfo && <CartCard key={item.id} item={item} loading={loading} />)}
+      {items?.map((item) => <CartCard key={item.id} item={item} loading={loading} />)}
 
       <div
         className={`transition-opacity duration-700 ease-in-out ${

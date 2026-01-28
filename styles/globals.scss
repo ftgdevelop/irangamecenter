@@ -194,6 +194,9 @@ body {
   .bg-gradient-green{
     @apply bg-gradient-to-t from-[#028d7e] to-[#99feac];
   }
+  .bg-gradient-green2{
+    @apply bg-gradient-to-t from-[#028d7e] to-[#6edb83];
+  }
   .bg-gradient-orange{
     @apply bg-gradient-to-t from-[#fe5f73] to-[#ff908b];
   }
@@ -202,6 +205,15 @@ body {
   }
   .bg-gradient-dark-violet{
     @apply bg-gradient-to-t from-[#161b39] to-[#161b39];
+  }
+  .bg-gradient-dark-green{
+    @apply bg-gradient-to-t from-[#012431] to-[#0f2b32];
+  } 
+  .bg-gradient-light-green{
+    @apply bg-gradient-to-t from-[#e6fcf5] to-[#d3f9d8];
+  }  
+  .bg-gradient-yellow{
+    @apply bg-gradient-to-t from-[#ffe69c] to-[#fffed3];
   }  
   
 }

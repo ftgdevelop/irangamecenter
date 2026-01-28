@@ -2,8 +2,8 @@
 
 import { NextPage } from 'next';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
-import { getProductBySlug, getProductGallries, getProductVariants } from '@/actions/commerce';
-import { ProductDetailData, ProductGalleryItem, ProductVariant } from '@/types/commerce';
+import { getProductBySlug, getProductGallries, getProductVariants, getVariantById } from '@/actions/commerce';
+import { PlatformSlugTypes, ProductDetailData, ProductGalleryItem, ProductVariant, SingleVariant } from '@/types/commerce';
 import BreadCrumpt from '@/components/shared/BreadCrumpt';
 import FAQ from '@/components/shared/FAQ';
 import Contacts from '@/components/shared/Contacts';
@@ -21,16 +21,28 @@ import ProductGalleryCarousel from '@/components/products/ProductGalleryCarousel
 import ProductTabs from '@/components/products/ProductTabs';
 import Star from '@/components/icons/Star';
 import SimilarProducts from '@/components/products/SimilarProducts';
+import { useRouter } from 'next/router';
+import Skeleton from '@/components/shared/Skeleton';
+import VariantFooter from '@/components/products/VariantFooter';
 
 const DetailProduct: NextPage<any> = ({
-  productData,
+  serversideProductData,
   slug
 }: {
-  productData: ProductDetailData;
+  serversideProductData: ProductDetailData;
   slug?: string;
 }) => {
   const [detailActiveTab, setDetailActiveTab] = useState<string>('');
 
+  const [productData, setProductData] = useState<ProductDetailData>(serversideProductData);
+
+  const router = useRouter();
+
+  const {query} = router;
+
+  const queryVariant = query.variant;
+  const queryPlatform = query.platform as PlatformSlugTypes || undefined;
+  
   const breadcrumbsItems: {
     label: string;
     link?: string;
@@ -39,6 +51,24 @@ const DetailProduct: NextPage<any> = ({
   const [galleryData, setGalleryData] = useState<ProductGalleryItem[] | undefined>();
   const [galleryLoading, setGalleryLoading] = useState<boolean>(true);
   const [variantsData, setVariantsData] = useState<ProductVariant[] | undefined>();
+
+  const [variantData, setVariantData] = useState<SingleVariant| undefined>(undefined);
+  const [variantLoading, setVariantLoading] = useState<boolean>(true);
+
+  useEffect(()=>{
+    const fetchProductDatainClientForDebugging = async (s:string) => {
+      await getProductBySlug(s);  
+      const response: any = await getProductBySlug(s);  
+      if(response?.data?.result && !productData ){
+        setProductData(response.data.result);
+      }
+    }
+    
+    if(slug){
+      fetchProductDatainClientForDebugging(slug);
+    }
+
+  },[slug]);
 
   useEffect(()=>{
 
@@ -58,12 +88,26 @@ const DetailProduct: NextPage<any> = ({
       }
     }
 
-    if(slug){
-      fetchGalleryData(slug);
-      fetchVariants(slug);
+    const fetchVariant = async (id: number) => {
+        setVariantLoading(true);
+        const response: any = await getVariantById(id);
+        if(response.data?.result){
+          setVariantData(response.data.result)
+        }
+        setVariantLoading(false);
     }
 
-  },[slug]);
+    if(slug){
+      fetchGalleryData(slug);
+      if(queryVariant){
+        fetchVariant(+queryVariant)
+      }else{
+        fetchVariants(slug);
+      }
+
+    }
+
+  },[slug, queryVariant]);
 
   const sortedGalleryItems = useMemo(() => {
     if (!galleryData) return [];
@@ -83,15 +127,9 @@ const DetailProduct: NextPage<any> = ({
     breadcrumbsItems.push(
       ...productData.breadcrumbs.map((item) => ({
         label: item.name || '',
-        link: `/products/VariantSlug=${item.slug}`,
+        link: item.url
       }))
     );
-  }
-  if (productData?.name) {
-    breadcrumbsItems.push({
-      label: productData.name,
-      link: '',
-    });
   }
 
   const metas: { property: string; content: string }[] = [];
@@ -124,9 +162,67 @@ const DetailProduct: NextPage<any> = ({
     )
   }
 
+  let mainImage: ReactNode = null;
+  if(productData?.filePath){
+    mainImage = <Image
+      src={productData.filePath}
+      alt={productData.fileAltAttribute || productData.name || ''}
+      width={400}
+      height={200}
+      className="h-auto w-24 block rounded-xl"
+      title={productData.fileTitleAttribute || productData.name}
+    />
+  }
+
+  if(queryVariant){
+    if(variantLoading){
+      mainImage = <Skeleton 
+        dark
+        type='image'
+        className='w-24 h-24 block rounded-xl'
+      />
+    }else{
+      mainImage = <Image
+        src={variantData?.filePath || productData.filePath || "/images/default-game.png"}
+        alt={productData.fileAltAttribute || productData.name || ''}
+        width={400}
+        height={200}
+        className="h-auto w-24 block rounded-xl"
+        title={productData.fileTitleAttribute || productData.name}
+      />
+    }
+  }
+
+
   return (
     <>
       <Head>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Product",
+                "name": productData.name,
+                "image": [productData.filePath],
+                "description": productData.page?.title,
+                "sku": `ACC-${productData.slug}`,
+                "brand": {
+                  "@type": "Brand",
+                  "name": productData.publisher || "PlayStation"
+                },
+                "offers": {
+                  "@type": "Offer",
+                  "url": `https://irangamecenter.com/product/${productData.slug}`,
+                  "priceCurrency": productData.minVariant?.items?.[0]?.currencyType || "IRR",
+                  "price": productData.minVariant?.items?.[0]?.salePrice,
+                  "availability": "https://schema.org/InStock",
+                  "itemCondition": "https://schema.org/NewCondition"
+                }
+              })
+            }}
+          />
+
         {productData?.page?.title && <title> {productData.page.title} </title>}
 
         {metas?.map((meta, index) => (
@@ -162,20 +258,14 @@ const DetailProduct: NextPage<any> = ({
       )}
 
       <div className="flex gap-4 p-4">
-        {productData?.filePath && (
-          <Image
-            src={productData.filePath}
-            alt={productData.fileAltAttribute || productData.name || ''}
-            width={400}
-            height={200}
-            className="h-auto w-24 block rounded-xl"
-            title={productData.fileTitleAttribute || productData.name}
-          />
-        )}
+      {mainImage}
         <div>
           <h2 className="text-lg font-semibold block pt-3">
             {productData?.name}
           </h2>
+          {!!variantData?.description && <h3 className="font-semibold block mb-2">
+            {variantData.description}
+          </h3>}
           {firstRatingTag}
           {brandTag}
         </div>
@@ -346,7 +436,7 @@ const DetailProduct: NextPage<any> = ({
                     }
                     width={48}
                     height={48}
-                    className="w-12 h-12 text-4xs"
+                    className="w-12 h-12 text-4xs bg-[#dddddd] dark:bg-[#192a39] p-1 rounded-lg"
                   />
                 )}
                 <div>
@@ -376,7 +466,7 @@ const DetailProduct: NextPage<any> = ({
                     }
                     width={48}
                     height={48}
-                    className="w-12 h-12 text-4xs"
+                    className="w-12 h-12 text-4xs bg-[#dddddd] dark:bg-[#192a39] p-1 rounded-lg"
                   />
                 )}
                 <div>
@@ -393,7 +483,24 @@ const DetailProduct: NextPage<any> = ({
         <AgeRatingDetail productData={productData} />
       </div>
 
-      {!!variantsData?.length && <VariantSection productId={productData.id} productVariants={variantsData} />}
+      {!!variantsData?.length && (
+        <VariantSection 
+          productId={productData.id} 
+          productVariants={variantsData} 
+          platform={queryPlatform || undefined}
+        />
+      )}
+
+      {!!variantData?.salePrice && (
+        <VariantFooter 
+          productId={productData.id}
+          currentVariant={{
+            id:variantData.id,
+            name: productData.name,
+            items:[variantData]
+          }}
+        />
+      )}
 
       {!!productData?.rating?.length && (
         <section id="ratings" className='pt-8'>
@@ -459,7 +566,7 @@ export async function getServerSideProps(context: any) {
 
   return {
     props: {
-      productData: response.data?.result || null,
+      serversideProductData: response.data?.result || null,
       slug: context?.query?.slug || null
     },
   };

@@ -79,6 +79,24 @@ export const getTransactionDeposit = async (params:GetTransactionParams, token:s
     return error
   }
 }
+export const getAllTransactionsToExcel = async (token:string, acceptLanguage: string = 'fa-IR') => {
+  try {
+    const response = await axios.get(
+      `${ServerAddress.Type}${ServerAddress.Payment}${Payment.GetAllToExcel}`,
+      {
+        headers: {
+          ...Headers,
+          Currency: "IRR",
+          Authorization: `Bearer ${token}`,
+          "Accept-Language": acceptLanguage
+        }
+      }
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
 
 export const getBanksGateways = async (params: {token:string; reserveId: number; username: string;currency?: string;}, acceptLanguage: string = 'fa-IR') => {
   try {
@@ -143,4 +161,24 @@ export const makeTokenByAmount = async ( params:{
   }
 }
 
+//todo delete this getTransactionDeposit2222222222222222222222
+export const getTransactionDeposit2222222222222222222222 = async (params:GetTransactionParams, token:string, acceptLanguage: string = 'fa-IR') => {
+  try {
+    const response = await axios.get(
+      `${ServerAddress.Type}${ServerAddress.Payment}${Payment.GetTransactionDeposit2222222222222}`,
+      {
+        params:params,
+        headers: {
+          ...Headers,
+          Currency: "IRR",
+          Authorization: `Bearer ${token}`,
+          "Accept-Language": acceptLanguage
+        }
+      }
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
 

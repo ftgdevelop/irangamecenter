@@ -45,17 +45,17 @@ type ContactsData = {
 
 const Contact: NextPage = ({ contacts, faq }: { contacts?: ContactsData, faq?: FaqData }) => {
 
-  const dispath = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(()=>{
 
-    dispath(setHeaderType2Params({
+    dispatch(setHeaderType2Params({
       backUrl:"/",
       title:"تماس با ما"
     }));
 
     return(()=>{
-      dispath(setHeaderType2Params({
+      dispatch(setHeaderType2Params({
         backUrl:"",
         title:""
       }));
