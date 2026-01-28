@@ -5,7 +5,7 @@ import Contacts from "@/components/shared/Contacts";
 import BreadCrumpt from "@/components/shared/BreadCrumpt";
 import { useEffect, useRef, useState } from "react";
 import Skeleton from "@/components/shared/Skeleton";
-import { getBrandBySlug, getProducts, ProductSortKeywords } from "@/actions/commerce";
+import { getCategoryBySlug, getProducts, ProductSortKeywords } from "@/actions/commerce";
 import { GetAllProductsParams, GetProductsDataType, GetProductsResponseType, ProductItem } from "@/types/commerce";
 import ProductListItem from "@/components/products/ProductListItem";
 import SortProducts from "@/components/products/SortProducts";
@@ -22,7 +22,7 @@ import BackOrderFilterTag from "@/components/products/BackOrderFilterTag";
 import Image from "next/image";
 
 type Props = {
-    brandName?: string;
+    categoryName?: string;
     brandData?: {
         fileAltAttribute?: string;
         filePath?: string;
@@ -53,8 +53,12 @@ const Products: NextPage<Props> = props => {
     //TODO: remove this useEffect:
     useEffect(() => {
         const fetchDatas = async () => {
+            
+            const token = localStorage.getItem("Token");
+
             const parameters = { ...props.parameters };
             await getProducts(parameters);
+            await  getCategoryBySlug({slug: props.categoryName || "" , token : token || ""})
         }
         fetchDatas();
     }, [router.asPath]);
@@ -81,7 +85,7 @@ const Products: NextPage<Props> = props => {
 
     const changeSortHandel = (val: ProductSortKeywords) => {
         const otherSlugs = props.slugs?.filter(item => !(item.includes("sort-"))) || [];
-        const segments = ["/brand", props.brandName , ...otherSlugs, `sort-${val}`];        
+        const segments = ["/category", props.categoryName , ...otherSlugs, `sort-${val}`];        
         const newUrl = segments.join("/");
         router.push({
             pathname: newUrl,
@@ -186,9 +190,9 @@ const Products: NextPage<Props> = props => {
                         فیلتر
                     </button>
 
-                    <AvailableFilterTag brandName={props.brandName} />
+                    <AvailableFilterTag categoryName={props.categoryName} />
 
-                    <BackOrderFilterTag brandName={props.brandName} />
+                    <BackOrderFilterTag categoryName={props.categoryName} />
 
                     {props.productsData?.facets?.map(facet => (
                         <button
@@ -248,7 +252,7 @@ const Products: NextPage<Props> = props => {
 
             <Contacts />
 
-            {!!(props.productsData?.facets?.length) && <ProductsFliter brandName={props.brandName} filters={props.productsData?.facets} />}
+            {!!(props.productsData?.facets?.length) && <ProductsFliter categoryName={props.categoryName} filters={props.productsData?.facets} />}
 
         </>
     )
@@ -319,13 +323,13 @@ export async function getServerSideProps(context: any) {
         parameters.statuses = ["OnBackOrder"];
     }
 
-    if(context?.query?.brandName){        
-        parameters.brands = [
-            context.query.brandName
+    if(context?.query?.categoryName){        
+        parameters.categories = [
+            context.query.categoryName
         ]
     }
-      const [brandResponse, productsResponse] = await Promise.all<any>([
-        getBrandBySlug(context?.query?.brandName),
+      const [categoryResponse, productsResponse] = await Promise.all<any>([
+        getCategoryBySlug(context?.query?.categoryName),
         getProducts(parameters)
       ]);
 
@@ -333,8 +337,8 @@ export async function getServerSideProps(context: any) {
     return (
         {
             props: {
-                brandName: context?.query?.brandName || null,
-                brandData: brandResponse?.data?.result || null,
+                categoryName: context?.query?.categoryName || null,
+                brandData: categoryResponse?.data?.result || null,
                 productsData: productsResponse?.data?.result || null,
                 slugs: slugs || null,
                 page: selectedPage || null,

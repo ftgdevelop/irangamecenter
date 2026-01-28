@@ -161,7 +161,7 @@ export default function PaymentPage() {
       debugger;
       
       if (response?.status == 200) {
-        const url = `https://${ServerAddress.Payment}/Reserves/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`;         
+        const url = `https://${ServerAddress.Payment}/fa-IR/Reserves/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`;         
         router.push(url);
       } else {
           

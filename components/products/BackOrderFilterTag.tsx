@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import Loading from "../icons/Loading";
 
 type Props = {
-    branName?: string;
+    brandName?: string;
+    categoryName?: string;
 }
 const BackOrderFilterTag: React.FC<Props> = props => {
 
@@ -28,7 +29,7 @@ const BackOrderFilterTag: React.FC<Props> = props => {
             onClick={() => {
                 setLoading(true);
                 const otherSlugs = slugs?.filter(item => !(item.includes("onBackOrder")));
-                const segments = [props.branName ? `/brand/${props.branName}` :"/products", ...(otherSlugs || [])];
+                const segments = [props.brandName ? `/brand/${props.brandName}` : props.categoryName? `/category/${props.categoryName}` : "/products", ...(otherSlugs || [])];
 
                 if (!(slugs?.find(x => x.includes("onBackOrder")))) {
                     segments.push("onBackOrder")

@@ -94,7 +94,7 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
                     {!!categories.length && (
                         <Link
                             className="block border border-neutral-300 dark:border-white/15 p-4 rounded-xl text-xs"
-                            href={`/category/${categories[0]?.slug}`}
+                            href={`/blog/category/${categories[0]?.slug}`}
                         >
                             دسته بندی
                             <b className="block font-semibold mt-2 text-sm">

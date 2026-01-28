@@ -344,3 +344,21 @@ export const submitOrderForm = async ( params:{
     return error
   }
 }
+export const getCategoryBySlug = async (params: {slug: string; token: string;}) => {
+    try{
+        const res : any = await axios({
+            method: "get",
+            url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetCategoryBySlug}?Slug=${params.slug}`,
+            headers: {
+                ...Headers,
+                "Accept-Language": "fa-IR",
+                currency: "IRR",
+                Authorization: `Bearer ${params.token}`
+            }
+        })
+        return res
+
+    } catch (error){
+        return error
+    }
+}

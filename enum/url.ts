@@ -91,7 +91,8 @@ export const Payment = {
     GetOrdersStatistics:"/api/services/app/Order/GetStatistics",
     GetOrderDetailItem:"/api/services/app/LoginProvider/GetByOrderItemId",
     SubmitOrderForm:"/api/services/app/OrderItemProviderField/Submit",
-    GetVariantById:"/api/services/app/Variant/Get"
+    GetVariantById:"/api/services/app/Variant/Get",
+    GetCategoryBySlug:"/api/services/app/Category/GetBySlug"
   }
   
 
