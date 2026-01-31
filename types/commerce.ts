@@ -492,22 +492,25 @@ export interface OrderListItemType {
     "id": 247403
 }
 
-
+export interface OrderDetailItemTimelineItem {
+  progressPercent: number;
+  nextStep?: string;
+  nextStepStr?: string;
+  description: string;
+  step: "Created" | string;
+  stepStr?: string;
+  status: "Pending" | string;
+  creationTime: string;
+  isFinal:boolean;
+  "reasonCode": "None",
+  "creatorUserId": 171734,
+  "id": 11
+}
 export interface OrderDetailItemType{
   allowNewLoginSubmission?: boolean;
   //"provider": null,
-  currentTimeline?:{
-    step: number;
-    status: "Pending" | string;
-    progressPercent: number;
-    description: string;
-    creationTime: string;
-    isFinal:boolean;
-    "reasonCode": "None",
-    "creatorUserId": 171734,
-    "nextStep": null,
-    "id": 11
-};
+  currentTimeline?:OrderDetailItemTimelineItem;
+  timeLines?:OrderDetailItemTimelineItem[];
   netPrice: number;
   product: {
     "genres": [
@@ -684,6 +687,8 @@ export interface OrderDetailItemType{
 }
 
 export interface OrderDetail {
+    creationDateStr?: string;
+    creationTimeStr?: string;
     phoneNumber: string;
     email?: string;
     firstName?: string;
