@@ -11,6 +11,7 @@ import Ticketing from "@/components/contact/items/Ticketing";
 import { ServerAddress } from "@/enum/url";
 import OnlineSupport from "@/components/contact/items/OnlineSupport";
 import Call from "@/components/contact/items/Call";
+import Image from "next/image";
 
 type FaqData = {
   Title?: string;
@@ -23,7 +24,7 @@ type FaqData = {
 
 type ContactsData = {
   id:number;
-  Keyword?: "ticket"|"online"|"call";
+  Keyword?: "ticket"|"online"|"call"|"address";
   Subtitle?: string;
   Title?: string;
   Url?: string;
@@ -68,6 +69,9 @@ const Contact: NextPage = ({ contacts, faq }: { contacts?: ContactsData, faq?: F
   const onlineSupportData = contacts?.find(c => c.Keyword === "online");
 
   const callData = contacts?.find(c => c.Keyword === "call");
+  
+  const addressData = contacts?.find(c => c.Keyword === "address");
+  debugger;
 
   return (
     <>      
@@ -95,6 +99,26 @@ const Contact: NextPage = ({ contacts, faq }: { contacts?: ContactsData, faq?: F
             description={callData?.Subtitle} 
             InnerData={callData?.Items?.[0]}     
           />
+
+
+        <div
+            className="mb-3 text-white py-4 min-h-20 px-5 bg-gradient-to-t from-[#01212e] to-[#102c33] rounded-xl"
+        >
+          <div className="text-sm font-semibold flex gap-4 items-center mb-3">
+            <Image 
+                src={addressData?.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${addressData.icon.url}` : ""}
+                alt={addressData?.Title ||""}
+                width={36}
+                height={36}
+                className="w-9 h-9"
+            />            
+            {addressData?.Title}
+          </div>
+
+          <p className="text-xs w-full"> {addressData?.Subtitle} </p>
+
+        </div>
+
 
 
       </div>
