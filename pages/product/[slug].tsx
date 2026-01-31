@@ -36,6 +36,10 @@ const DetailProduct: NextPage<any> = ({
 
   const [productData, setProductData] = useState<ProductDetailData>(serversideProductData);
 
+  useEffect(()=>{
+    setProductData(serversideProductData);
+  },[serversideProductData.id]);
+
   const router = useRouter();
 
   const {query} = router;
@@ -51,6 +55,7 @@ const DetailProduct: NextPage<any> = ({
   const [galleryData, setGalleryData] = useState<ProductGalleryItem[] | undefined>();
   const [galleryLoading, setGalleryLoading] = useState<boolean>(true);
   const [variantsData, setVariantsData] = useState<ProductVariant[] | undefined>();
+  const [variantsLoading, setVariantsLoading] = useState<boolean>(true);
 
   const [variantData, setVariantData] = useState<SingleVariant| undefined>(undefined);
   const [variantLoading, setVariantLoading] = useState<boolean>(true);
@@ -82,10 +87,12 @@ const DetailProduct: NextPage<any> = ({
     }
 
     const fetchVariants = async (s:string) => {
+        setVariantsLoading(true);
       const response: any = await getProductVariants(s);
       if(response.data?.result){
         setVariantsData(response.data.result)
       }
+      setVariantsLoading(false);
     }
 
     const fetchVariant = async (id: number) => {
@@ -483,7 +490,7 @@ const DetailProduct: NextPage<any> = ({
         <AgeRatingDetail productData={productData} />
       </div>
 
-      {!!variantsData?.length && (
+      {!!variantsData?.length && !variantsLoading && (
         <VariantSection 
           productId={productData.id} 
           productVariants={variantsData} 

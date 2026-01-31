@@ -8,14 +8,22 @@ import { OrderDetail } from "@/types/commerce";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
 
 export default function Confirm() {
 
+  const router = useRouter();
+
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get("orderNumber");
   const orderId = searchParams.get("orderId");
+  
+  const urlUsername = searchParams.get("username");
+  const urlReserveId = searchParams.get("reserveId");
+
   const isDeposite = searchParams.get("deposite");
+  const urlStatus = searchParams.get("status");
 
   const [mode, setMode] = useState<"error"|"success"|"pending">("pending");
 
@@ -44,8 +52,11 @@ export default function Confirm() {
     if (orderId) {
       fetchOrder(orderId);
     }
+    if(urlStatus === "0" && urlUsername && urlReserveId){
+      router.push(`/payment?orderNumber=${urlUsername}&orderId=${urlReserveId}`);
+    }
 
-  }, [orderId, orderNumber]);
+  }, [orderId, orderNumber, urlStatus]);
 
   useEffect(()=>{
     

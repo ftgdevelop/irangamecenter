@@ -1,6 +1,10 @@
 import Image from "next/image";
-import Accordion from "../../Accordion";
 import Link from "next/link";
+import InfoCircleOutline from "@/components/icons/InfoCircleOutline";
+import Faq from "@/components/icons/Faq";
+import GameOutline from "@/components/icons/GameOutline";
+import Phone from "@/components/icons/Phone";
+import CaretLeft from "@/components/icons/CaretLeft";
 
 const Footer = () => {
 
@@ -31,15 +35,55 @@ const Footer = () => {
             }
         ];
 
+        const contactLinks = [        
+            {
+                url:"/about",
+                label:"درباره ما",
+                icon: <GameOutline className="w-5 h-5 fill-current" />
+            },
+            {
+                url:"/contact",
+                label:"تماس با ما",
+                icon: <Phone className="w-5 h-5 fill-none stroke-current" />
+            },
+            {
+                url:"/terms",
+                label:"قوانین و راهنما",
+                icon: <InfoCircleOutline className="w-5 h-5 fill-none stroke-current" />
+            },
+            {
+                url:"/faq",
+                label:"سوالات متداول",
+                icon: <Faq className="w-5 h-5 fill-none stroke-current" />
+            }
+        ]
+
     return (
         <footer className="p-3 px-5">
 
-            <Accordion
+            {/* <Accordion
                 title="لینک های مهم"
                 content="لینک های مهم"
                 WrapperClassName={`border-b border-t border-neutral-300 dark:border-white/15 py-3`}
                 withArrowIcon
-            />
+            /> */}
+
+            {contactLinks.map((item, index) => (
+                <Link 
+                    prefetch={false}
+                    key={item.label}
+                    href={item.url} 
+                    className={`flex justify-between items-center px-2 py-4 border-neutral-300 dark:border-white/15 text-sm ${index ? "border-t" : ""}`}
+                >
+                    <span className="flex gap-3 items-center">
+                        {item.icon}
+                        {item.label}
+                    </span>
+                    <CaretLeft className="w-4 h-4 fill-current" />
+                </Link>
+            ))}
+
+            
 
             <div className="py-5">
                 <strong className="block text-center font-semibold mb-4"> شبکه های اجتماعی </strong>
@@ -83,6 +127,21 @@ const Footer = () => {
                         height={96}
                         className="h-24 w-auto"
                     />
+
+                    <a 
+                        referrerPolicy="origin" 
+                        target="_blank" 
+                        href="https://qr.mojavez.ir/track/19893812"
+                    >
+                        <Image
+                            referrerPolicy="origin"
+                            src="/images/kasbokar.png"
+                            alt="نماد کسب و کار های مجازی"
+                            width={80}
+                            height={96}
+                            className="h-24 w-auto"
+                        />
+                    </a>
 
                 </div>
             </div>

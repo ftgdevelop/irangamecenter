@@ -4,7 +4,7 @@ import { getOrderById } from "@/actions/commerce";
 import OrderDetailItem from "@/components/authentication/profile/Orders/OrderDetailItem";
 import OrderTransactions from "@/components/authentication/profile/Orders/OrderTransactions";
 import Skeleton from "@/components/shared/Skeleton";
-import { numberWithCommas } from "@/helpers";
+import { numberWithCommas, toPersianDigits } from "@/helpers";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 import { useAppDispatch } from "@/hooks/use-store";
 import { setHeaderType2Params } from "@/redux/pages";
@@ -64,6 +64,23 @@ const OrderDeatil: NextPage = () => {
 
   }, [orderId]);
 
+  
+
+  let creationTimeString : ReactNode = toPersianDigits(orderDetail?.creationTime || "-");
+
+  if(orderDetail?.creationDateStr){
+    creationTimeString = toPersianDigits(orderDetail.creationDateStr);
+
+    if(orderDetail.creationTimeStr){
+      creationTimeString += ` - ${toPersianDigits(orderDetail.creationTimeStr)}`;
+    }
+  }
+
+  if(fetchingOrder){
+    creationTimeString = <Skeleton className="h-3 w-12" dark />
+  }
+
+
   const pairItems:{label: string; value: ReactNode}[] = [
     {
       label:"شماره سفارش",
@@ -71,7 +88,7 @@ const OrderDeatil: NextPage = () => {
     },
     {
       label:"تاریخ ثبت سفارش",
-      value: fetchingOrder ? ( <Skeleton className="h-3 w-12" dark /> ) : orderDetail?.creationTime || "-"
+      value: <span dir="ltr"> {creationTimeString} </span>
     },
     {
       label:"مبلغ",
