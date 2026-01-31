@@ -61,6 +61,13 @@ const Footer = () => {
     return (
         <footer className="p-3 px-5">
 
+            {/* <Accordion
+                title="لینک های مهم"
+                content="لینک های مهم"
+                WrapperClassName={`border-b border-t border-neutral-300 dark:border-white/15 py-3`}
+                withArrowIcon
+            /> */}
+
             {contactLinks.map((item, index) => (
                 <Link 
                     prefetch={false}
@@ -120,6 +127,21 @@ const Footer = () => {
                         height={96}
                         className="h-24 w-auto"
                     />
+
+                    <a 
+                        referrerPolicy="origin" 
+                        target="_blank" 
+                        href="https://qr.mojavez.ir/track/19893812"
+                    >
+                        <Image
+                            referrerPolicy="origin"
+                            src="/images/kasbokar.png"
+                            alt="نماد کسب و کار های مجازی"
+                            width={80}
+                            height={96}
+                            className="h-24 w-auto"
+                        />
+                    </a>
 
                 </div>
             </div>
