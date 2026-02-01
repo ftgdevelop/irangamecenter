@@ -29,16 +29,16 @@ const DetailProduct: NextPage<any> = ({
   serversideProductData,
   slug
 }: {
-  serversideProductData: ProductDetailData;
+  serversideProductData?: ProductDetailData;
   slug?: string;
 }) => {
   const [detailActiveTab, setDetailActiveTab] = useState<string>('');
 
-  const [productData, setProductData] = useState<ProductDetailData>(serversideProductData);
+  const [productData, setProductData] = useState<ProductDetailData | undefined>(serversideProductData);
 
   useEffect(()=>{
     setProductData(serversideProductData);
-  },[serversideProductData.id]);
+  },[serversideProductData?.id]);
 
   const router = useRouter();
 
@@ -62,8 +62,12 @@ const DetailProduct: NextPage<any> = ({
 
   useEffect(()=>{
     const fetchProductDatainClientForDebugging = async (s:string) => {
-      await getProductBySlug(s);  
-      const response: any = await getProductBySlug(s);  
+      const response: any = await getProductBySlug({
+        acceptLanguage:"fa-IR",
+        slug: s,
+        platform: queryPlatform,
+        variantId: queryVariant ? +queryVariant : undefined
+      });  
       if(response?.data?.result && !productData ){
         setProductData(response.data.result);
       }
@@ -129,6 +133,12 @@ const DetailProduct: NextPage<any> = ({
     return parse(productData.shortDescription);
   }, [productData?.shortDescription]);
 
+
+  if (!productData) return (
+    <div className='p-5'>
+      محصول مورد نظر وجود ندارد
+    </div>
+  );
 
   if (productData?.breadcrumbs?.length) {
     breadcrumbsItems.push(
@@ -569,12 +579,19 @@ const DetailProduct: NextPage<any> = ({
 };
 
 export async function getServerSideProps(context: any) {
-  const response: any = await getProductBySlug(context?.query?.slug);
+  const response: any = await getProductBySlug({
+    acceptLanguage:"fa-IR",
+    slug: context?.query?.slug,
+    platform: context?.query?.platform,
+    variantId:context?.query?.variant
+  });
 
   return {
     props: {
       serversideProductData: response.data?.result || null,
-      slug: context?.query?.slug || null
+      slug: context?.query?.slug || null,
+      platform : context?.query?.platform || null,
+      variantId : context?.query?.variant || null,
     },
   };
 }

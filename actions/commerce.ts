@@ -27,15 +27,25 @@ export const getProducts = async (params: GetAllProductsParams, acceptLanguage: 
 }
 
 
-export const getProductBySlug = async (slug: string, acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
+export const getProductBySlug = async (params : {slug: string; platform?: string; variantId?: number; acceptLanguage: "fa-IR" | "en-US" | "ar-AE"}) => {
+
+    let queryParams = `Slug=${params.slug}`;
+
+    if(params.platform){
+        queryParams += `&Platform=${params.platform}`;
+    }
+
+    if(params.variantId){
+        queryParams += `&VariantId=${params.variantId}`;
+    }
 
     try {
         const response: any = await axios({
             method: "get",
-            url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetBySlug}?Slug=${slug}`,
+            url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetBySlug}?${queryParams}`,
             headers: {
                 ...Headers,
-                "Accept-Language": acceptLanguage,
+                "Accept-Language": params.acceptLanguage,
                 currency: "IRR"
             }
         });
@@ -142,15 +152,25 @@ export const getAllForSiteMap = async (
     }
 }
 
-export const getSimilarsBySlug = async (slug: string, acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
+export const getSimilarsBySlug = async (params : {slug: string; platform?: string; variantId?: number; acceptLanguage: "fa-IR" | "en-US" | "ar-AE"}) => {
+
+    let queryParams = `Slug=${params.slug}`;
+
+    if(params.platform){
+        queryParams += `&Platform=${params.platform}`;
+    }
+
+    if(params.variantId){
+        queryParams += `&VariantId=${params.variantId}`;
+    }
 
     try {
         const response: any = await axios({
             method: "get",
-            url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetSimilar}?Slug=${slug}`,
+            url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetSimilar}?${queryParams}`,
             headers: {
                 ...Headers,
-                "Accept-Language": acceptLanguage,
+                "Accept-Language": params.acceptLanguage,
                 currency: "IRR"
             }
         });
