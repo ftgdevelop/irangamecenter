@@ -119,7 +119,7 @@ const Home: NextPage<Props> = props => {
   const emailAddress = homeAboutData?.find(item => item.Keyword === "email")?.Description; 
 
   if(props.backOrderProductsData){
-    console.log(props.backOrderProductsData?.pagedResult?.items);
+    //console.log(props.backOrderProductsData?.pagedResult?.items);
     debugger;
   }else{
     debugger;

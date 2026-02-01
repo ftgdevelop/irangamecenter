@@ -28,7 +28,7 @@ const Slider: React.FC<Props> = props => {
 
         return (
             <section className="py-3 px-3">
-                <Link className="relative"  prefetch={false} href={item.Url || "#"}  >
+                <Link className="relative block"  prefetch={false} href={item.Url || "#"}  >
                     <Image
                         src={ServerAddress.Type! + ServerAddress.Strapi + item.Image!.url!}
                         alt={item.ImageAlternative || item.Title || ""}
@@ -77,7 +77,7 @@ const Slider: React.FC<Props> = props => {
                 items={props.items.map((item, index) => ({
                     key: item.id,
                     content: (
-                        <Link className="relative"  prefetch={false} href={item.Url || "#"} >
+                        <Link className="relative block"  prefetch={false} href={item.Url || "#"} >
                             <Image
                                 priority={!index}
                                 fetchPriority={index ? "low" :"high"}
