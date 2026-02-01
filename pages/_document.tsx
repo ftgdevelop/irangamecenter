@@ -4,6 +4,9 @@ export default function Document() {
   return (
     <Html lang="fa" dir="rtl">
       <Head>
+
+        <meta name="samandehi" content="954474333"/>
+        
         {/* Google Tag Manager */}
         <script
           dangerouslySetInnerHTML={{
