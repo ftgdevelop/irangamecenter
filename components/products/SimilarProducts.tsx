@@ -1,11 +1,12 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import Image from "next/image";
-import { ProductItemExtented } from "@/types/commerce";
+import { PlatformSlugTypes, ProductItemExtented } from "@/types/commerce";
 import ProductListItem from "./ProductListItem";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { getSimilarsBySlug } from "@/actions/commerce";
+import { useRouter } from "next/router";
 
 const Carousel = dynamic(() => import("../shared/Carousel"), {
     ssr: false,
@@ -17,14 +18,28 @@ type Props = {
 const SimilarProducts: React.FC<Props> = props => {
 
     const [similarProducts, setSimilarProducts] = useState<ProductItemExtented[]>([]);
+  
+    const router = useRouter();
+
+    const {query} = router;
+
+    const queryVariant = query.variant;
+    const queryPlatform = query.platform as PlatformSlugTypes || undefined;
 
     useEffect(() => {
+    
         const fetchData = async (s: string) => {
-            const response: any = await getSimilarsBySlug(s);
+            const response: any = await getSimilarsBySlug({
+                acceptLanguage:"fa-IR",
+                slug: s,
+                platform: queryPlatform ,
+                variantId: queryVariant? +queryVariant : undefined
+            });
             if (response.data?.result.length) {
                 setSimilarProducts(response.data.result);
             }
         }
+
         if (props.productSlug) {
             fetchData(props.productSlug);
         }
