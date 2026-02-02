@@ -755,3 +755,14 @@ export interface OrderFormData {
   fields: OrderFormFields[];
   id: 23;
 }
+
+export interface CreateOrderParams {
+  phoneNumber?:string;
+  email?:string;
+  firstName?:string;
+  lastName?:string;
+  gender:boolean;
+  specialRequest?:string;
+  metaSearchName?:string;
+  metaSearchKey?:string;
+}

@@ -38,6 +38,18 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     const reduxMode = useAppSelector(state => state.styles.mode);
 
     const {getCart} = useCartApi(); 
+
+    const queryBasaUserToken = router.query?.ut;
+  
+    useEffect(() => {
+        if(queryBasaUserToken){
+            const expDate = new Date();
+            expDate.setTime(expDate.getTime() + (20 * 60 * 1000)); //save in cookie only 20 minutes.
+            if (document) {
+                document.cookie = `basaUserToken=${queryBasaUserToken}; expires=${expDate.toUTCString()};path=/`;
+            }        
+        }
+    }, [queryBasaUserToken]);
     
     useEffect(()=>{
         const id = GetCookieDeviceId();

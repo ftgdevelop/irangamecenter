@@ -9,6 +9,7 @@ import { numberWithCommas } from "@/helpers";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import { setGeneralCartInfo, setGeneralCartLoading } from "@/redux/cartSlice";
+import { CreateOrderParams } from "@/types/commerce";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -49,7 +50,29 @@ export default function CartPage() {
     if (!token) return;
 
     try {
-      const res: any = await createOrder(userInfo);
+
+      let basaCookie ="";
+      const cookies = decodeURIComponent(document?.cookie).split(';');
+      for (const item of cookies) {
+          if (item.includes("basaUserToken=")) {
+              basaCookie = item.split("=")[1];
+          }
+      }
+
+      const params : CreateOrderParams = {
+          gender: userInfo?.gender || false,
+          email: userInfo?.emailAddress,
+          firstName: userInfo?.firstName,
+          lastName: userInfo?.lastName,
+          phoneNumber: userInfo?.phoneNumber
+      };
+
+      if ( basaCookie){
+          params.metaSearchName = "basa";
+          params.metaSearchKey = basaCookie;
+      }
+
+      const res: any = await createOrder(params);
                
       const orderId = res.data?.result?.id;
       const orderNumber = res.data?.result?.orderNumber;
