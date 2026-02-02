@@ -13,7 +13,8 @@ export const ServerAddress = {
   Payment: process.env.PROJECT_SERVER_PAYMENT,
   Strapi: process.env.PROJECT_SERVER_STRAPI,
   Blog: process.env.PROJECT_SERVER_BLOG,
-  Commerce:process.env.PROJECT_SERVER_ECOMMERCE
+  Commerce:process.env.PROJECT_SERVER_ECOMMERCE,
+  Discount:process.env.PROJECT_SERVER_DISCOUNT
 };
 
 export const Strapi = {
@@ -93,6 +94,11 @@ export const Payment = {
     SubmitOrderForm:"/api/services/app/OrderItemProviderField/Submit",
     GetVariantById:"/api/services/app/Variant/Get",
     GetCategoryBySlug:"/api/services/app/Category/GetBySlug"
+  }
+
+  export const Discount = {
+    register:"/api/services/app/Discount/Register",
+    remove: "/api/services/app/Discount/Remove"
   }
   
 

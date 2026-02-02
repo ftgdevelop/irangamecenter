@@ -1,9 +1,10 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { getOrderById } from "@/actions/commerce";
-import { getBanksGateways, makeTokenByAmount } from "@/actions/payment";
+import { getBanksGateways, makeTokenByAmount, registerDiscount, removeDiscount } from "@/actions/payment";
 import Gateways from "@/components/payment/Gateways";
 import PaymentByDeposit from "@/components/payment/PaymentByDeposit";
+import PromoCode from "@/components/payment/PromoCode";
 import Steps from "@/components/payment/Steps";
 import SimplePortal from "@/components/shared/layout/SimplePortal";
 import LoadingFull from "@/components/shared/LoadingFull";
@@ -62,6 +63,10 @@ export default function PaymentPage() {
   const getUserLoading = useAppSelector(state => state.authentication.getUserLoading);
   const balanceCurrency = useAppSelector(state => state.authentication.balanceCurrency);
 
+  const [discountData, setDiscountData] = useState<any>();
+  const [discountLoading, setDiscountLoading] = useState<boolean>(false);
+  const [removeDiscountLoading, setRemoveDiscountLoading] = useState<boolean>(false);
+
   useEffect(()=>{
     if(gateways?.length){
       setSelectedGatewayId(gateways[0]?.gateways?.[0]?.id);
@@ -90,7 +95,6 @@ export default function PaymentPage() {
     if (orderId) {
       fetchOrder(orderId);
     }
-
 
     const fetchBanks = async (orderId: number, orderNumber: string) => {
       const token = localStorage.getItem("Token");
@@ -182,6 +186,53 @@ export default function PaymentPage() {
     }
   }
 
+  const submitDiscountCode = async (code : string) => {
+    
+    const userToken = localStorage.getItem("Token");        
+    
+    if(!code?.length || !userToken || !orderId || !orderNumber ) return;
+
+    setDiscountData(undefined);
+    setDiscountLoading(true);
+
+    const response: any = await registerDiscount({
+        promoCode:code,
+        reserveId:orderId,
+        username:orderNumber
+    },userToken);
+
+
+    if (response?.data?.result) {
+      setDiscountData(response.data.result);
+    } else if (response?.data?.error) {
+      setDiscountData(response.data?.error);
+    }
+    setDiscountLoading(false);
+
+  }
+
+  const removeDiscountHandle = async () => {
+    
+    const userToken = localStorage.getItem("Token");        
+    
+    if(!userToken || !orderId || !orderNumber ) return;
+    
+    setRemoveDiscountLoading(true);
+
+    const response: any = await removeDiscount({
+        reserveId:orderId,
+        username:orderNumber,
+        token: userToken
+    });
+
+    if (response?.data?.success) {
+      setDiscountData(undefined);
+    }
+
+    setRemoveDiscountLoading(false);
+
+  }
+  
   return (
     <>
 
@@ -220,6 +271,15 @@ export default function PaymentPage() {
             <Skeleton className="w-24 h-4 mb-6" />
           </div>
         )}
+        
+        <PromoCode 
+          onRemoveAddedCode={removeDiscountHandle}
+          onSubmit={submitDiscountCode}
+          loading={discountLoading}
+          data={discountData}
+          onChangeText={()=>{setDiscountData(undefined);}}
+          removeDiscountLoading={removeDiscountLoading}
+        />
 
         <div className="text-sm flex gap-3 items-center justify-between mt-5">
           <label className="text-xs">
@@ -242,16 +302,23 @@ export default function PaymentPage() {
         <div className="text-sm flex gap-3 items-center justify-between mt-5">
           <label className="text-xs"> مبلغ قابل پرداخت </label>
           <span className="font-semibold">
-            {numberWithCommas(requiredAmount || 0)} ریال
+            {numberWithCommas(requiredAmount - (discountData?.discountPrice || 0) || 0) } ریال
           </span>
         </div>
+
+        {!!discountData?.discountPrice && <div className="text-sm flex gap-3 items-center justify-between mt-5">
+          <label className="text-xs"> کد تخفیف </label>
+          <span className="font-semibold">
+            {numberWithCommas(discountData?.discountPrice)} ریال
+          </span>
+        </div>}
 
         <div className="text-sm flex gap-3 items-center justify-between mt-5">
           <label className="font-semibold bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent">
             سود شما از خرید
           </label>
           <span className="font-semibold bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent">
-            {numberWithCommas(orderData?.profitAmount || 0)} ریال
+            {numberWithCommas((orderData?.profitAmount || 0) + (discountData?.discountPrice || 0))} ریال
           </span>
         </div>
       </div>
@@ -263,7 +330,7 @@ export default function PaymentPage() {
           <div className="flex justify-between text-white mb-2">
             <label className="text-sm"> {!requiredAmount && withdrawFromWallet ? "پرداخت از کیف پول" : "مبلغ قابل پرداخت"} </label>
             <span className="font-semibold">
-              {numberWithCommas(!requiredAmount && withdrawFromWallet ? withdrawFromWallet : requiredAmount || 0)} ریال
+              {numberWithCommas(!requiredAmount && withdrawFromWallet ? (withdrawFromWallet - (discountData?.discountPrice||0)) : requiredAmount - (discountData?.discountPrice || 0) || 0)} ریال
             </span>
           </div>
           <button
@@ -273,7 +340,7 @@ export default function PaymentPage() {
             disabled={!selectedGatewayId && !!requiredAmount}
           >
             {/* {`پرداخت ${numberWithCommas(requiredAmount || 0)} ${getCurrencyLabelFa(orderData?.currencyType)}`}   */}
-            {`پرداخت ${numberWithCommas(orderData?.payableAmount||0)} ${getCurrencyLabelFa(orderData?.currencyType)}`}
+            {`پرداخت ${numberWithCommas(((orderData?.payableAmount || 0) - (discountData?.discountPrice || 0)) || 0)} ${getCurrencyLabelFa(orderData?.currencyType)}`}
           </button>
         </footer>
         <div className="h-20" />

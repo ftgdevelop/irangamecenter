@@ -27,6 +27,7 @@ const nextConfig: NextConfig = {
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_IDENTITY: "identity.irangamecenter.com",
     PROJECT_SERVER_BLOG: "pn.irangamecenter.com",
+    PROJECT_SERVER_DISCOUNT: "blog.irangamecenter.com",
     PROJECT_SERVER_ECOMMERCE: "ecommerce.irangamecenter.com",
     PROJECT_SERVER_PAYMENT:"payline.irangamecenter.com",
     PORT: "",
