@@ -1,4 +1,6 @@
-import { Headers, Payment, ServerAddress } from "@/enum/url";
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
+import { Discount, Headers, Payment, ServerAddress } from "@/enum/url";
 import { GetTransactionParams } from "@/types/payment";
 import axios from "axios";
 
@@ -182,3 +184,49 @@ export const getTransactionDeposit2222222222222222222222 = async (params:GetTran
   }
 }
 
+
+export const registerDiscount = async ( params:{
+  promoCode: string;
+  reserveId: string;
+  username: string
+} , token: string) => {
+  
+  try {
+
+    const response = await axios.post(
+      `${ServerAddress.Type}${ServerAddress.Discount}${Discount.register}`,
+      params,
+      {
+        headers: {
+          ...Headers,
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+      return (response)
+    } catch (error: any) {
+      return error.response
+    }
+}
+export const removeDiscount = async ( params:{
+  reserveId: string;
+  username: string;
+  token: string;
+}) => {
+  
+  try {
+
+    const response = await axios.delete(
+      `${ServerAddress.Type}${ServerAddress.Discount}${Discount.remove}?ReserveId=${params.reserveId}&Username=${params.username}`,
+      {
+        headers: {
+          ...Headers,
+          Authorization: `Bearer ${params.token}`,
+        },
+      },
+    )
+      return (response)
+    } catch (error: any) {
+      return error.response
+    }
+}

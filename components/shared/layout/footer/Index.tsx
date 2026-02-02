@@ -15,22 +15,22 @@ const Footer = () => {
     }[] = [
             {
                 title: "تلگرام",
-                url: "#",
+                url: "https://t.me/irangamecenter_official",
                 iconUrl: '/images/icons/telegram.svg'
             },
             {
                 title: "آپارات",
-                url: "#",
+                url: "https://www.aparat.com/irangamecenter.com ",
                 iconUrl: '/images/icons/aparat.svg'
             },
             {
                 title: "ایکس",
-                url: "#",
+                url: "https://x.com/irangamecenter ",
                 iconUrl: '/images/icons/x.svg'
             },
             {
                 title: "اینستاگرام",
-                url: "#",
+                url: "https://www.instagram.com/irangamecenter_official",
                 iconUrl: '/images/icons/insta.svg'
             }
         ];
