@@ -118,13 +118,6 @@ const Home: NextPage<Props> = props => {
   const SupportNumberSubtitle = homeAboutData?.find(item => item.Keyword === "telNumber")?.Subtitle;
   const emailAddress = homeAboutData?.find(item => item.Keyword === "email")?.Description; 
 
-  if(props.backOrderProductsData){
-    //console.log(props.backOrderProductsData?.pagedResult?.items);
-    debugger;
-  }else{
-    debugger;
-  }
-
   return (
     <>
       <div className="p-3">

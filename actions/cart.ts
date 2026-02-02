@@ -2,8 +2,8 @@
 
 import { Cart, ServerAddress } from "@/enum/url";
 import { useAppSelector } from "@/hooks/use-store";
-import { UpdateUserParams } from "@/types/authentication";
 import {
+  CreateOrderParams,
   CreateOrderResponseType,
   GetCartByProductIdResponseType,
   GetCurrentProductResponseType,
@@ -135,11 +135,11 @@ const getCartByProductId = async (
     }
   };
 
-  const createOrder = async ( params?: UpdateUserParams ) => {
+  const createOrder = async ( params: CreateOrderParams ) => {
     try {
       const res = await axios.post<CreateOrderResponseType>(
         `${ServerAddress.Type}${ServerAddress.Commerce}${Cart.CreateOrder}`,
-        params || {},
+        params,
         { headers: getHeaders()}
       );
    
