@@ -120,12 +120,17 @@ const Footer = () => {
                         />
                     </a>
 
-                    <Image
+                    <Image 
+                        referrerPolicy='origin' 
+                        id='rgvjsizpfukzapfufukzrgvj' 
+                        className="h-24 w-auto cursor-pointer"
+                        onClick={() => {
+                            window.open("https://logo.samandehi.ir/Verify.aspx?id=396563&p=xlaopfvlgvkadshwgvkaxlao", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")
+                        }}
+                        alt='logo-samandehi'
                         src="/mock-images/resaneh.jpg"
-                        alt="ساماندهی"
                         width={81}
                         height={96}
-                        className="h-24 w-auto"
                     />
 
                     <a 
