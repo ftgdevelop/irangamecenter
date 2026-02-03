@@ -19,6 +19,7 @@ import {getProducts } from "@/actions/commerce";
 import { GetProductsDataType } from "@/types/commerce";
 import ProductsCarousel from "@/components/products/ProductsCarousel";
 import BannerLinks from "@/components/home/BannerLinks";
+import Head from "next/head";
 
 type HomeAboutDataType = {
   Keyword: "about_intro" | "icons" | "faq" | "telNumber" | "email";
@@ -82,6 +83,15 @@ type BannerItemType = {
 }
 
 type Props = {
+  strapiSeoData?: {
+    PageTitle?: string;
+    Schema?: any;
+    Metas?: {
+      id: number;
+      Type?: string;
+      Value?: string;
+    }[];
+  };
   homeSections?: HomeSections[];
   homeHighlights?: HighlightItemType[];
   homeAboutData?: HomeAboutDataType;
@@ -120,6 +130,21 @@ const Home: NextPage<Props> = props => {
 
   return (
     <>
+      <Head>
+        {props.strapiSeoData?.PageTitle && <title>{props.strapiSeoData.PageTitle}</title>}  
+        
+        {props.strapiSeoData?.Metas?.map(m => (
+          <meta name={m.Type || ""} content={m.Value || ""} key={m.id} />
+        ))}
+        
+        {props.strapiSeoData?.Schema && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: props.strapiSeoData.Schema }}
+          />
+        )}
+      </Head>
+
       <div className="p-3">
         <Search />
       </div>
@@ -194,7 +219,7 @@ const Home: NextPage<Props> = props => {
 
 export const getStaticProps = async (context: any) => {
 
-  const [strapiSectionResponse, strapiHighlightsResponse, strapiAboutSectionResponse, blogResponse, playstation5DataResponse,playstation4DataResponse,steamDataResponse,xboxOneDataResponse, xboxSeriesXsDataResponse,nintendoSwitch2DataResponse, backOrderProductsResponse ] = await Promise.all<any>([
+  const [strapiSectionResponse, strapiHighlightsResponse, strapiAboutSectionResponse, blogResponse, playstation5DataResponse,playstation4DataResponse,steamDataResponse,xboxOneDataResponse, xboxSeriesXsDataResponse,nintendoSwitch2DataResponse, backOrderProductsResponse, strapiSeoResponse ] = await Promise.all<any>([
     getStrapiPages('filters[Page][$eq]=Home&locale=fa&populate[Sections][on][shared.repeter][populate][Items][populate]=*'),
     getStrapiHighlight('locale=fa&populate[Item][populate]=*'),
     getStrapiPages('filters[Page][$eq]=aboutUs&locale=fa&populate[Sections][populate]=*'),
@@ -205,7 +230,8 @@ export const getStaticProps = async (context: any) => {
     getProducts({skipCount:0, maxResultCount:10, variants:["xbox-one"]}),
     getProducts({skipCount:0, maxResultCount:10, variants:["xbox-series-xs"]}),
     getProducts({skipCount:0, maxResultCount:10, variants:["nintendo-switch-2"]}),
-    getProducts({maxResultCount:9,skipCount:0,status : "OnBackOrder"})
+    getProducts({maxResultCount:9,skipCount:0,status : "OnBackOrder"}),
+    getStrapiPages('filters[Page][$eq]=Home&locale=fa&populate[Seo][populate]=*')
   ]);
 
   return ({
@@ -223,7 +249,8 @@ export const getStaticProps = async (context: any) => {
       xboxOneData: xboxOneDataResponse?.data?.result || null ,
       xboxSeriesXsData: xboxSeriesXsDataResponse?.data?.result || null,
       nintendoSwitch2Data: nintendoSwitch2DataResponse?.data?.result || null,
-      backOrderProductsData: backOrderProductsResponse?.data?.result || null
+      backOrderProductsData: backOrderProductsResponse?.data?.result || null,
+      strapiSeoData : strapiSeoResponse?.data?.data?.[0]?.Seo || null
     },
     revalidate: 3600
   })
