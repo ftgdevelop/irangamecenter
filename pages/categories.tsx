@@ -69,7 +69,7 @@ const Categories: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
                             <div className="text-left">
                                 <Link
                                     prefetch={false}
-                                    href={`/category/${activeItem?.Slug}`}
+                                    href={`/${activeItem?.Slug}`}
                                     className="border px-3 py-2 rounded-full inline-flex items-center gap-2 text-sm font-semibold whitespace-nowrap"
                                 >
                                     همه محصولات {activeItem?.Title}
@@ -82,7 +82,7 @@ const Categories: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
                                     <Link
                                         prefetch={false}
                                         key={item.id}
-                                        href={`/category/${item.Slug}`}
+                                        href={`/${item.Slug}`}
                                         className="text-xs block text-center shadow dark:box-shadow-none bg-white rounded-xl p-4 text-black"
                                     >
                                         <Image src={item.Image?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${item.Image.url}` : "/images/default-game.png"} alt={item.Title} width={100} height={100} className="w-12 h-12 block mb-2 mx-auto" />
