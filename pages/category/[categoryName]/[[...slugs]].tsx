@@ -147,9 +147,7 @@ const Products: NextPage<Props> = props => {
         }
     }
 
-
     const isFiltered = !!selectedFilterSlugs.length;
-
 
     const activeFilterColor = "text-white bg-gradient-orange"
     return (
