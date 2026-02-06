@@ -31,8 +31,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <MantineProvider theme={theme}>
       <Provider store={store}>
         <Head>
-          <title>1WC5RIB</title>
-          {/* <title> Iran Game Center </title> */}
+          <title> Iran Game Center </title>
           <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
           <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
           <link rel="shortcut icon" href="/favicon.ico" />
