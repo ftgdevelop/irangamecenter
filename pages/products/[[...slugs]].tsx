@@ -40,8 +40,8 @@ const Products: NextPage<Props> = props => {
         const fetchDatas = async () => {
             const parameters = { ...props.parameters };
             const res:any = await getProducts(parameters);
-            if(!products.length && res?.data?.result){
-                setProducts(res.data.result);
+            if(!products.length && res?.data?.result?.pagedResult?.items){
+                setProducts(res.data.result.pagedResult.items);
             }
         }
         fetchDatas();
@@ -311,6 +311,10 @@ export async function getServerSideProps(context: any) {
     }
     if (selectedFilterSlugs.find(x => x.includes("onBackOrder"))) {
         parameters.statuses = ["OnBackOrder"];
+    }
+
+    if (selectedFilterSlugs.find(x => x.includes("phrase"))) {
+        parameters.phrase = selectedFilterSlugs.find(x => x.includes("phrase"))?.split("phrase-")?.[1];
     }
 
     const productsResponse: GetProductsResponseType = await getProducts(parameters);

@@ -323,16 +323,20 @@ export async function getServerSideProps(context: any) {
         parameters.statuses = ["OnBackOrder"];
     }
 
+    if (selectedFilterSlugs.find(x => x.includes("phrase"))) {
+        parameters.phrase = selectedFilterSlugs.find(x => x.includes("phrase"))?.split("phrase-")?.[1];
+    }
+
     if(context?.query?.categoryName){        
         parameters.categories = [
             context.query.categoryName
         ]
     }
-      const [categoryResponse, productsResponse] = await Promise.all<any>([
+
+    const [categoryResponse, productsResponse] = await Promise.all<any>([
         getCategoryBySlug(context?.query?.categoryName),
         getProducts(parameters)
-      ]);
-
+    ]);
 
     return (
         {
