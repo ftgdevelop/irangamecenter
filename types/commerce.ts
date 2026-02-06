@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 export type PlatformSlugTypes = "playstation-5" | "playstation-4" | "steam" | "xbox-one" | "xbox-series-xs" | "nintendo-switch-2";
 
 export interface ProductItem {
@@ -766,3 +768,13 @@ export interface CreateOrderParams {
   metaSearchName?:string;
   metaSearchKey?:string;
 }
+
+export type StrapiSeoData = {
+  PageTitle?: string;
+  Schema?: any;
+  Metas?: {
+    id: number;
+    Type?: string;
+    Value?: string;
+  }[];
+};

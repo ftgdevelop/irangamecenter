@@ -4,7 +4,9 @@ import { getStrapiPages } from "@/actions/strapi";
 import Accordion from "@/components/shared/Accordion";
 import { useAppDispatch } from "@/hooks/use-store";
 import { setHeaderType2Params } from "@/redux/pages";
+import { StrapiSeoData } from "@/types/commerce";
 import { GetServerSideProps, NextPage } from "next";
+import Head from "next/head";
 import { useEffect } from "react";
 import Markdown from "react-markdown";
 
@@ -22,7 +24,7 @@ type FAQ = {
   }[]
 };
 
-const FaqDetail: NextPage = ({ faq }: {faq?: FAQ }) => {
+const FaqDetail: NextPage = ({ faq, strapiSeoData }: {faq?: FAQ,  strapiSeoData?: StrapiSeoData }) => {
 
     const dispatch = useAppDispatch();
   
@@ -47,6 +49,21 @@ const FaqDetail: NextPage = ({ faq }: {faq?: FAQ }) => {
     },[title]);
 
   return (
+  <>
+    <Head>
+      {strapiSeoData?.PageTitle && <title>{strapiSeoData.PageTitle}</title>}  
+      
+      {strapiSeoData?.Metas?.map(m => (
+        <meta name={m.Type || ""} content={m.Value || ""} key={m.id} />
+      ))}
+      
+      {strapiSeoData?.Schema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: strapiSeoData.Schema }}
+        />
+      )}
+    </Head>
     <div className="px-5">
       {faq?.Items?.map((item, index) => (
         <Accordion
@@ -58,6 +75,7 @@ const FaqDetail: NextPage = ({ faq }: {faq?: FAQ }) => {
         />
       ))}
     </div>
+  </>
   );
 }
 
@@ -65,14 +83,18 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const { query } = context;
 
-  const response: any = await getStrapiPages('filters[Page][$eq]=faq&locale=fa&populate[Sections][populate]=*')
+  const [response, strapiSeoResponse] = await Promise.all<any>([
+    getStrapiPages('filters[Page][$eq]=faq&locale=fa&populate[Sections][populate]=*'),
+    getStrapiPages('filters[Page][$eq]=faq&locale=fa&populate[Seo][populate]=*')
+  ]);
   
   return ({
     props: {
       context: {
         locales: context.locales || null
       },
-      faq: response?.data?.data?.[0]?.Sections?.find( (f:any) => f.Keyword === query.slug) || null
+      faq: response?.data?.data?.[0]?.Sections?.find( (f:any) => f.Keyword === query.slug) || null,
+      strapiSeoData : strapiSeoResponse?.data?.data?.[0]?.Seo || null
     }
   })
 

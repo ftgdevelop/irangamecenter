@@ -16,7 +16,7 @@ import { getBlogs } from "@/actions/blog";
 import { BlogItemType } from "@/types/blog";
 import BlogsCarousel from "@/components/blog/BlogsCarousel";
 import {getProducts } from "@/actions/commerce";
-import { GetProductsDataType } from "@/types/commerce";
+import { GetProductsDataType, StrapiSeoData } from "@/types/commerce";
 import ProductsCarousel from "@/components/products/ProductsCarousel";
 import BannerLinks from "@/components/home/BannerLinks";
 import Head from "next/head";
@@ -83,15 +83,7 @@ type BannerItemType = {
 }
 
 type Props = {
-  strapiSeoData?: {
-    PageTitle?: string;
-    Schema?: any;
-    Metas?: {
-      id: number;
-      Type?: string;
-      Value?: string;
-    }[];
-  };
+  strapiSeoData?: StrapiSeoData;
   homeSections?: HomeSections[];
   homeHighlights?: HighlightItemType[];
   homeAboutData?: HomeAboutDataType;

@@ -1,6 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { getStrapiContact } from "@/actions/strapi";
+import { getStrapiContact, getStrapiPages } from "@/actions/strapi";
 import { NextPage } from "next";
 import { useAppDispatch } from "@/hooks/use-store";
 import { useEffect } from "react";
@@ -12,6 +12,8 @@ import { ServerAddress } from "@/enum/url";
 import OnlineSupport from "@/components/contact/items/OnlineSupport";
 import Call from "@/components/contact/items/Call";
 import Image from "next/image";
+import Head from "next/head";
+import { StrapiSeoData } from "@/types/commerce";
 
 type FaqData = {
   Title?: string;
@@ -44,7 +46,7 @@ type ContactsData = {
   }[]
 }[]
 
-const Contact: NextPage = ({ contacts, faq }: { contacts?: ContactsData, faq?: FaqData }) => {
+const Contact: NextPage = ({ contacts, faq, strapiSeoData }: { contacts?: ContactsData, faq?: FaqData, strapiSeoData?:StrapiSeoData }) => {
 
   const dispatch = useAppDispatch();
 
@@ -71,10 +73,24 @@ const Contact: NextPage = ({ contacts, faq }: { contacts?: ContactsData, faq?: F
   const callData = contacts?.find(c => c.Keyword === "call");
   
   const addressData = contacts?.find(c => c.Keyword === "address");
-  debugger;
 
   return (
-    <>      
+    <> 
+        <Head>
+        {strapiSeoData?.PageTitle && <title>{strapiSeoData.PageTitle}</title>}  
+        
+        {strapiSeoData?.Metas?.map(m => (
+          <meta name={m.Type || ""} content={m.Value || ""} key={m.id} />
+        ))}
+        
+        {strapiSeoData?.Schema && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: strapiSeoData.Schema }}
+          />
+        )}
+      </Head>
+
       <div className="px-5 mb-5">
 
           <h3 className="text-[#ca54ff] font-bold text-sm mb-4">
@@ -143,10 +159,11 @@ const Contact: NextPage = ({ contacts, faq }: { contacts?: ContactsData, faq?: F
 
 export const getStaticProps = async (context: any) => {
 
-  const [contactUsResponse1,contactUsResponse2, faqResponse] = await Promise.all<any>([
+  const [contactUsResponse1,contactUsResponse2, faqResponse, strapiSeoResponse] = await Promise.all<any>([
     getStrapiContact('locale=fa&populate[ContactUs][populate]=*'),
     getStrapiContact('locale=fa&populate[ContactUs][populate][Items][populate]=*'),
-    getStrapiContact('locale=fa&populate[Faqs][populate]=*')
+    getStrapiContact('locale=fa&populate[Faqs][populate]=*'),
+    getStrapiPages('filters[Page][$eq]=contact&locale=fa&populate[Seo][populate]=*')
   ]);
 
   const contacts1:ContactsData = contactUsResponse1?.data?.data?.[0]?.ContactUs;
@@ -166,7 +183,8 @@ export const getStaticProps = async (context: any) => {
         locales: context.locales || null
       },
       contacts: contacts || null,
-      faq: faqResponse?.data?.data?.[0]?.Faqs || null
+      faq: faqResponse?.data?.data?.[0]?.Faqs || null,
+      strapiSeoData : strapiSeoResponse?.data?.data?.[0]?.Seo || null
     },
     revalidate: 3600
   })
