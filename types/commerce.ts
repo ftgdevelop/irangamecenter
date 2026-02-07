@@ -180,6 +180,10 @@ export interface ProductGalleryItem {
 }
 
 export interface ProductDetailData {
+    categories?: {      
+      name?: string;
+      slug?: "mobile-games" | "console-game";
+    }[];
     fileAltAttribute?: string;
     filePath?: string;
     fileTitleAttribute?: string;

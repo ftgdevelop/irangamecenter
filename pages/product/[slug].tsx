@@ -210,7 +210,6 @@ const DetailProduct: NextPage<any> = ({
     }
   }
 
-
   return (
     <>
       <Head>
@@ -221,39 +220,37 @@ const DetailProduct: NextPage<any> = ({
                 "@context": "https://schema.org",
                 "@type": "Product",
                 "name": productData.name,
+                "description": productData.page?.title || "" , 
+                "url": `https://irangamecenter.com/product/${productData.slug}`,
                 "image": [productData.filePath],
-                "description": productData.page?.title,
-                "sku": `ACC-${productData.slug}`,
                 "brand": {
                   "@type": "Brand",
-                  "name": productData.publisher || "PlayStation"
+                  "name": productData.publisher?.name || ""
                 },
-                "offers": {
-                  "@type": "Offer",
-                  "url": `https://irangamecenter.com/product/${productData.slug}`,
-                  "priceCurrency": productData.minVariant?.items?.[0]?.currencyType || "IRR",
-                  "price": productData.minVariant?.items?.[0]?.salePrice,
-                  "availability": "https://schema.org/InStock",
-                  "itemCondition": "https://schema.org/NewCondition"
+                "category":  productData.categories?.[0]?.name,                
+                "audience": {
+                  "@type": "Audience",
+                  "audienceType": productData.categories?.[0]?.slug === "console-game" ? "Console Gamers" : productData.categories?.[0]?.slug === "mobile-games" ? "Mobile Gamers" : "Gamers"
                 }
               })
             }}
-          />
+          />          
 
         {productData?.page?.title && <title> {productData.page.title} </title>}
 
         {metas?.map((meta, index) => (
           <meta key={index} property={meta.property} content={meta.content} />
         ))}
-
-        {productData?.page?.richSnippet && (
+        
+        {/* {productData?.page?.richSnippet && (
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
               __html: JSON.stringify(JSON.parse(productData.page.richSnippet)),
             }}
           />
-        )}
+        )} */}
+
       </Head>
       <ProductTabs
           tabs={[
@@ -591,7 +588,7 @@ export async function getServerSideProps(context: any) {
       serversideProductData: response.data?.result || null,
       slug: context?.query?.slug || null,
       platform : context?.query?.platform || null,
-      variantId : context?.query?.variant || null,
+      variantId : context?.query?.variant || null
     },
   };
 }

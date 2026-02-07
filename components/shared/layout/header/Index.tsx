@@ -9,12 +9,14 @@ import Loading from "@/components/icons/Loading";
 import CartIcon from "@/components/icons/CartIcon";
 import { toPersianDigits } from "@/helpers";
 import { useEffect, useState } from "react";
+import More from "./More";
 
 type Props = {
     type2Params?: {
         title?: string;
         backUrl?: string;
         backToPrev?: boolean;
+        withOptionBtn?: boolean;
         withShare?: boolean;
         withLogo?: boolean;
         hasCartLink?: boolean;
@@ -102,12 +104,13 @@ const Header: React.FC<Props> = props => {
                         )}
                     </Link>
                 )}    
-                {props.type2Params?.withShare ? (
+                {props.type2Params?.withOptionBtn?(
+                    <More />
+                ) : props.type2Params?.withShare ? (
                     <Share />
                 ):(
                     <MainMenu />
                 )}
-
 
             </div>
 
