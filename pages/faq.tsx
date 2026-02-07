@@ -4,7 +4,9 @@ import { getStrapiPages } from "@/actions/strapi";
 import { ServerAddress } from "@/enum/url";
 import { useAppDispatch } from "@/hooks/use-store";
 import { setHeaderType2Params } from "@/redux/pages";
+import { StrapiSeoData } from "@/types/commerce";
 import { NextPage } from "next";
+import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -18,7 +20,7 @@ type StrapiData = {
   }
 }[];
 
-const Faq: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
+const Faq: NextPage = ({ strapiData, strapiSeoData }: { strapiData?: StrapiData, strapiSeoData?: StrapiSeoData }) => {
 
     const dispatch = useAppDispatch();
   
@@ -39,6 +41,21 @@ const Faq: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
     },[]);
 
   return (
+  <>
+    <Head>
+      {strapiSeoData?.PageTitle && <title>{strapiSeoData.PageTitle}</title>}  
+      
+      {strapiSeoData?.Metas?.map(m => (
+        <meta name={m.Type || ""} content={m.Value || ""} key={m.id} />
+      ))}
+      
+      {strapiSeoData?.Schema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: strapiSeoData.Schema }}
+        />
+      )}
+    </Head>
     <div className="px-5 grid grid-cols-2 gap-5">
       {strapiData?.map(item => {
         const imagePath = item.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}${item.icon?.url}` : undefined;
@@ -62,19 +79,25 @@ const Faq: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
       )
       })}
     </div>
+  </>
   );
 }
 
 export const getStaticProps = async (context: any) => {
 
-  const response: any = await getStrapiPages('filters[Page][$eq]=faq&locale=fa&populate[Sections][populate]=*')
+
+  const [response, strapiSeoResponse] = await Promise.all<any>([
+    getStrapiPages('filters[Page][$eq]=faq&locale=fa&populate[Sections][populate]=*'),
+    getStrapiPages('filters[Page][$eq]=faq&locale=fa&populate[Seo][populate]=*')
+  ]);
 
   return ({
     props: {
       context: {
         locales: context.locales || null
       },
-      strapiData: response?.data?.data?.[0]?.Sections || null
+      strapiData: response?.data?.data?.[0]?.Sections || null,
+      strapiSeoData : strapiSeoResponse?.data?.data?.[0]?.Seo || null
     },
     revalidate: 3600
   })

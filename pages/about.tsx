@@ -9,6 +9,8 @@ import Intro from "@/components/about/Intro";
 import FAQ from "@/components/shared/FAQ";
 import Contacts from "@/components/shared/Contacts";
 import AboutIcons from "@/components/about/AboutIcons";
+import Head from "next/head";
+import { StrapiSeoData } from "@/types/commerce";
 
 type StrapiData = {
   Keyword: "about_intro" | "icons" | "faq" | "telNumber" | "email";
@@ -30,7 +32,7 @@ type StrapiData = {
   Url?: string;
 }[];
 
-const AboutUs: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
+const AboutUs: NextPage = ({ strapiData, strapiSeoData }: { strapiData?: StrapiData, strapiSeoData?: StrapiSeoData }) => {
 
   const dispatch = useAppDispatch();
 
@@ -62,6 +64,22 @@ const AboutUs: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
 
   return (
     <>
+
+      <Head>
+        {strapiSeoData?.PageTitle && <title>{strapiSeoData.PageTitle}</title>}  
+        
+        {strapiSeoData?.Metas?.map(m => (
+          <meta name={m.Type || ""} content={m.Value || ""} key={m.id} />
+        ))}
+        
+        {strapiSeoData?.Schema && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: strapiSeoData.Schema }}
+          />
+        )}
+      </Head>
+
       {!!aboutDescription && <Intro description={aboutDescription} />}
 
       {!!icons && <AboutIcons items={icons} />}
@@ -83,9 +101,10 @@ const AboutUs: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
 
 export const getStaticProps = async (context: any) => {
 
-  const [responseForAllSections, responseForIconsSection] = await Promise.all<any>([
+  const [responseForAllSections, responseForIconsSection, strapiSeoResponse] = await Promise.all<any>([
     getStrapiPages('filters[Page][$eq]=aboutUs&locale=fa&populate[Sections][populate]=*'),
-    getStrapiPages('filters[Page][$eq]=aboutUs&locale=fa&populate[Sections][on][shared.repeter][populate][Items][populate]=*')
+    getStrapiPages('filters[Page][$eq]=aboutUs&locale=fa&populate[Sections][on][shared.repeter][populate][Items][populate]=*'),
+    getStrapiPages('filters[Page][$eq]=aboutUs&locale=fa&populate[Seo][populate]=*')
   ]);
 
   const iconsSection = responseForIconsSection?.data?.data?.[0]?.Sections?.find((item:any) => item.Keyword==="icons");
@@ -97,7 +116,8 @@ export const getStaticProps = async (context: any) => {
       context: {
         locales: context.locales || null
       },
-      strapiData: AllSections || null
+      strapiData: AllSections || null,
+      strapiSeoData : strapiSeoResponse?.data?.data?.[0]?.Seo || null
     },
     revalidate: 3600
   })

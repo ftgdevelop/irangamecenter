@@ -319,6 +319,10 @@ export async function getServerSideProps(context: any) {
         parameters.statuses = ["OnBackOrder"];
     }
 
+    if (selectedFilterSlugs.find(x => x.includes("phrase"))) {
+        parameters.phrase = selectedFilterSlugs.find(x => x.includes("phrase"))?.split("phrase-")?.[1];
+    }    
+
     if(context?.query?.brandName){        
         parameters.brands = [
             context.query.brandName

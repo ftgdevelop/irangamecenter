@@ -150,6 +150,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         backUrl?: string;
         backToPrev?: boolean;
         withShare?: boolean;
+        withOptionBtn?: boolean;
         withLogo?: boolean;
         hasCartLink?: boolean;
     } | undefined = undefined;
@@ -242,7 +243,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     if (router.pathname.startsWith("/product/")) {
         headerType2Params = {
             title: "",
-            withShare: true,
+            withOptionBtn: true,
             withLogo: true,
             backToPrev: true,
             hasCartLink: true

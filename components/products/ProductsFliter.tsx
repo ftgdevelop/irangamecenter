@@ -1,7 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import ModalPortal from "../shared/layout/ModalPortal";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CheckboxGroup from "../shared/CheckboxGroup";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import { setBodiScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
@@ -27,6 +27,8 @@ const ProductsFliter: React.FC<Props> = props => {
     const [slideIn, setSlideIn] = useState<boolean>(false);
 
     const openedFilter = useAppSelector(state => state.products.openedFilter);
+
+    const searchInputRef = useRef<HTMLInputElement>(null);
 
 
     const dispatch = useAppDispatch();
@@ -61,20 +63,29 @@ const ProductsFliter: React.FC<Props> = props => {
     }, []);
 
     const changeFilterHandel = (values: string[], type: string) => {
+        
         const otherSlugs = slugs?.filter(item => !(item.includes(`${type}-`)));
-        const segments = [props.brandName ? `/brand/${props.brandName}`: props.categoryName? `/category/${props.categoryName}` :"/products", ...otherSlugs, ...(values.map(x => `${type}-${x}`))];
-        const newUrl = segments.join("/");
+        
+        const mainSegment = props.brandName ? `/brand/${props.brandName}`: props.categoryName? `/category/${props.categoryName}` :"/products";
+
+        const segments = [...otherSlugs, ...(values.map(x => `${type}-${x}`))];
+        const newUrl = segments.sort().join("/");
         router.push({
-            pathname: newUrl,
+             pathname: [mainSegment ,newUrl].join("/")
         });
     }
 
     const recetAllFilters = () => {
         const otherSlugs = slugs?.filter(x => (x.includes("sort-") || x.includes("page-"))) || [];
-        const segments = [props.brandName ? `/brand/${props.brandName}` : props.categoryName? `/category/${props.categoryName}`:"/products", ...otherSlugs];
-        const newUrl = segments.join("/");
+
+        const mainSegment = props.brandName ? `/brand/${props.brandName}`: props.categoryName? `/category/${props.categoryName}` :"/products";
+
+        const segments = [...otherSlugs];
+        
+        const newUrl = segments.sort().join("/");
+        
         router.push({
-            pathname: newUrl,
+            pathname: [mainSegment ,newUrl].join("/")
         });
     }
 
@@ -86,6 +97,25 @@ const ProductsFliter: React.FC<Props> = props => {
     const hasActiveFilter = selectedFilterSlugs.length;
 
     const openedFilterIsActive = (type: string) => !!(selectedFilterSlugs.find(item => item.includes(type)));
+
+
+    const filterSearchHandle = () => {
+        const searchedText = searchInputRef.current?.value;
+        if(searchedText?.trim()?.length){
+
+        changeFilterHandel([searchedText], "phrase")
+
+        }
+    }
+
+    const filteredPhrase = selectedFilter("phrase")?.[0];
+
+    useEffect(()=>{
+        if(filteredPhrase && searchInputRef.current ){
+            searchInputRef.current.value = filteredPhrase;
+        }
+    },[filteredPhrase, openedFilter]);
+
 
     return (
 
@@ -121,14 +151,21 @@ const ProductsFliter: React.FC<Props> = props => {
                         block
                         label="فقط محصولات موجود"
                         onChange={(checked: boolean) => {
+                            
                             const otherSlugs = slugs?.filter(item => !(item.includes("onlyAvailable")));
-                            const segments = [props.brandName ? `/brand/${props.brandName}`: props.categoryName? `/category/${props.categoryName}` :"/products", ...otherSlugs];
+
+                            const mainSegment = props.brandName ? `/brand/${props.brandName}`: props.categoryName? `/category/${props.categoryName}` :"/products";
+
+                            const segments = [...otherSlugs];
+
                             if(checked){
                                 segments.push("onlyAvailable")
                             }
-                            const newUrl = segments.join("/");
+                            
+                            const newUrl = segments.sort().join("/");
+
                             router.push({
-                                pathname: newUrl,
+                                pathname: [mainSegment ,newUrl].join("/"),
                             });
                         }}
                         value="OnlyAvailable"
@@ -142,20 +179,75 @@ const ProductsFliter: React.FC<Props> = props => {
                             block
                             label="فقط پیش فروش"
                             onChange={(checked: boolean) => {
+
                                 const otherSlugs = slugs?.filter(item => !(item.includes("onBackOrder")));
-                                const segments = [props.brandName ? `/brand/${props.brandName}` : props.categoryName? `/category/${props.categoryName}` :"/products", ...otherSlugs];
+                                
+                                const mainSegment = props.brandName ? `/brand/${props.brandName}` : props.categoryName? `/category/${props.categoryName}` :"/products";
+
+                                const segments = [...otherSlugs];
+                                
                                 if(checked){
                                     segments.push("onBackOrder")
                                 }
-                                const newUrl = segments.join("/");
+                                
+                                const newUrl = segments.sort().join("/");
+                                
                                 router.push({
-                                    pathname: newUrl,
+                                    pathname: [mainSegment , newUrl].join("/")
                                 });
                             }}
                             value="OnBackOrder "
                             checked={!!slugs.find(s => s.includes("onBackOrder"))}
                         />
                     )}
+
+                    { (openedFilter === "all" || openedFilter === "phrase") && (       
+                        <Accordion
+                            title={(
+                                <h5 className="font-semibold text-sm"> فیلتر بر اساس جستجوی نام
+                                    {/* {!!selectedFilter(filter.key)?.length && <span className={activeClass} />}  */}
+                                </h5>
+                            )}
+
+                            extraInTitle={filteredPhrase && 
+                                <div
+                                    className="border rounded-full font-normal text-xs text-[#ca8bfb] border-[#ca8bfb] inline-flex items-center pr-2 pl-0.5"
+                                >
+                                    {filteredPhrase}
+                                    <button
+                                        type="button"
+                                        onClick={() => { changeFilterHandel([], "phrase") }}
+                                    >
+                                        <CloseSimple className="w-5 h-5 fill-current" />
+                                    </button>
+                                </div>
+                            }
+
+                            content={(
+                                <div>
+                                    <input
+                                        ref={searchInputRef}
+                                        type="text"
+                                        className="w-full block py-3 text-sm px-5 rounded-full outline-none bg-[#ffffff] dark:bg-[#ffffff2b] border-neutral-300 dark:border-transparent"
+                                    />
+                                </div>
+                                // <CheckboxGroup
+                                //     items={filter.items?.map(item => ({
+                                //         label: `${item!.label} (${item.count})`,
+                                //         value: item!.value!
+                                //     })) || []}
+                                //     onChange={vals => { changeFilterHandel(vals, filter.key) }}
+                                //     values={selectedFilter(filter.key)}
+                                // />
+                            )}
+                            initiallyOpen={openedFilter === "phrase"}
+                            withArrowIcon
+                            rotateArrow180
+                            WrapperClassName="mb-4"
+                        />
+                    )}
+
+
 
                     {props.filters?.filter(item => ([item.key, "all"].includes(openedFilter))).map(filter => (
                         <Accordion
@@ -233,7 +325,10 @@ const ProductsFliter: React.FC<Props> = props => {
                     <button
                         type="button"
                         className="text-white bg-gradient-violet w-full rounded-full px-5 py-3 my-2 text-sm"
-                        onClick={() => { setSlideIn(false) }}
+                        onClick={() => { 
+                            filterSearchHandle();
+                            setSlideIn(false) 
+                        }}
                     >
                         اعمال تغییرات
                     </button>

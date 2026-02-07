@@ -4,8 +4,6 @@ export default function Document() {
   return (
     <Html lang="fa" dir="rtl">
       <Head>
-
-        <meta name="samandehi" content="783192255"/>
         
         {/* Google Tag Manager */}
         <script
