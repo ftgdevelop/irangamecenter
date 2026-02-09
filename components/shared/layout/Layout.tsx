@@ -137,23 +137,12 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             router.events.off('routeChangeComplete', handleComplete);
             router.events.off('routeChangeError', handleComplete);
         };
-        }, [router.asPath]);
-
-    const headerType2ParamsFromRedux = useAppSelector(state => state.pages.headerType2Params);
+    }, [router.asPath]);
 
     let showHeader = true;
     let showFooter = true;
     let showFixedNav = true;
     let hasInternalFixedFooter = false;
-    let headerType2Params: {
-        title: string;
-        backUrl?: string;
-        backToPrev?: boolean;
-        withShare?: boolean;
-        withOptionBtn?: boolean;
-        withLogo?: boolean;
-        hasCartLink?: boolean;
-    } | undefined = undefined;
 
     if (
         [
@@ -177,58 +166,31 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }
 
     if (router.pathname === "/terms") {
-        headerType2Params = {
-            backUrl: "/",
-            title: "قوانین و مقررات"
-        };
         showFooter = false;
         showFixedNav = false;
     }
     if (router.pathname === "/about") {
-        headerType2Params = {
-            backUrl: "/",
-            title: ""
-        };
         showHeader = true;
         showFooter = true;
         showFixedNav = false;
     }
     if (router.pathname === "/contact") {
-        headerType2Params = {
-            backUrl: "/",
-            title: ""
-        };
         showHeader = true;
         showFooter = false;
         showFixedNav = false;
     }
 
     if (router.pathname.startsWith("/faq")) {
-        headerType2Params = {
-            backUrl: "/",
-            title: "سوالات متداول"
-        };
         showFooter = false;
         showFixedNav = false;
     }
 
     if (router.pathname.includes("/orders")) {
-        headerType2Params = {
-            backUrl: "/",
-            title: "",
-            withLogo: true
-        };
         showFooter = false;
         showFixedNav = true;
     }
 
     if (router.pathname.startsWith("/blog/")) {
-        headerType2Params = {
-            title: "",
-            withShare: true,
-            withLogo: true,
-            backUrl: "/blogs"
-        };
         showFooter = true;
         showHeader = true;
         showFixedNav = false;
@@ -241,13 +203,6 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }
 
     if (router.pathname.startsWith("/product/")) {
-        headerType2Params = {
-            title: "",
-            withOptionBtn: true,
-            withLogo: true,
-            backToPrev: true,
-            hasCartLink: true
-        };
         showFooter = true;
         showHeader = true;
         showFixedNav = false;
@@ -255,44 +210,23 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }
 
     if (router.pathname === "/categories"){
-        headerType2Params = {
-            title: "",
-            withShare: false,
-            withLogo: true,
-            backUrl: "/"
-        };
         showFooter = false;
         showHeader = true;
         showFixedNav = true;
     }
     if (router.pathname === '/cart') {
-        headerType2Params = {
-            title: "",
-            withLogo: true,
-            backToPrev: true
-        };
         showFooter = false;
         showHeader = true;
         showFixedNav = false;
         hasInternalFixedFooter = true;
     }
     if (router.pathname === '/payment') {
-        headerType2Params = {
-            title: "",
-            withLogo: true,
-            backUrl: "/cart",
-        };
         showFooter = false;
         showHeader = true;
         showFixedNav = false;
         hasInternalFixedFooter = true;
     }
     if (router.pathname === '/confirm') {
-        headerType2Params = {
-            title: "",
-            withLogo: true,
-            backUrl: "/cart",
-        };
         showFooter = false;
         showHeader = true;
         showFixedNav = false;
@@ -300,11 +234,6 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }
     
     if (router.pathname === '/checkout') {
-        headerType2Params = {
-            title: "",
-            withLogo: true,
-            backUrl: "/cart",
-        };
         showFooter = false;
         showHeader = true;
         showFixedNav = false;
@@ -369,11 +298,6 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAuthenticated]);
 
-    let headerType2 = headerType2Params;
-    if (headerType2ParamsFromRedux.backUrl) {
-        headerType2 = headerType2ParamsFromRedux;
-    }
-
     let mainHeightClass : string = "";
     if(showFooter){
          mainHeightClass = "";
@@ -395,7 +319,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             <div className={`bg-[#fafafa] text-[#333333] dark:bg-[#011425] dark:text-white md:max-w-lg mx-auto ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`}>
                 <PageLoadingBar active={loading} />
                 {showHeader && <>
-                    <Header type2Params={headerType2} />
+                    <Header />
                     <div className="mt-[84px]" />
                 </>}
                 <main 

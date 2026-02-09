@@ -3,7 +3,7 @@
 import { getStrapiPages } from "@/actions/strapi";
 import Accordion from "@/components/shared/Accordion";
 import { useAppDispatch } from "@/hooks/use-store";
-import { setHeaderType2Params } from "@/redux/pages";
+import { setHeaderParams } from "@/redux/pages";
 import { StrapiSeoData } from "@/types/commerce";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
@@ -30,23 +30,20 @@ const FaqDetail: NextPage = ({ faq, strapiSeoData }: {faq?: FAQ,  strapiSeoData?
   
     const title = faq?.Title;
 
+
     useEffect(()=>{
   
-      if(title){
-        dispatch(setHeaderType2Params({
-          backUrl:"/faq",
+      dispatch(setHeaderParams({
+        headerParams:{
           title:title
-        }));
-      }
+        }
+      }));
   
       return(()=>{
-        dispatch(setHeaderType2Params({
-          backUrl:"",
-          title:""
-        }));
+        dispatch(setHeaderParams({headerParams: undefined}));
       })
   
-    },[title]);
+    },[]);
 
   return (
   <>

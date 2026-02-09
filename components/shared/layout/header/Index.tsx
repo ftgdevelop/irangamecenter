@@ -11,24 +11,17 @@ import { toPersianDigits } from "@/helpers";
 import { useEffect, useState } from "react";
 import More from "./More";
 
-type Props = {
-    type2Params?: {
-        title?: string;
-        backUrl?: string;
-        backToPrev?: boolean;
-        withOptionBtn?: boolean;
-        withShare?: boolean;
-        withLogo?: boolean;
-        hasCartLink?: boolean;
-    }
-}
+const Header: React.FC = () => {
 
-const Header: React.FC<Props> = props => {
     const { cartGeneralInfo, loading } = useAppSelector((state) => state.cart);
+
+    const headerParams = useAppSelector(state => state.pages.headerParams);
 
     const router = useRouter();
 
     const [scrolled, setScrolled] = useState<boolean>(false);
+
+    const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -49,9 +42,13 @@ const Header: React.FC<Props> = props => {
 
     return (
         <header className={`${scrolled?"headerShadow dark:no-box-shadow":""} fixed top-0 h-[84px] left-1/2 -translate-x-1/2 bg-[#fafafa] dark:bg-[#011425] z-10 w-full md:max-w-lg flex justify-between p-3`}>
-            {(props.type2Params?.backUrl || props.type2Params?.backToPrev)  ? (
-                <div className={`flex items-center py-3.5 gap-4 ${(props.type2Params?.withLogo && !props.type2Params?.title) ?"w-[104px]":""} `}>
-                    {props.type2Params.backToPrev ? (
+            {headerParams ? (
+                <div className={`flex items-center py-3.5 gap-4 ${(headerParams.logo && !headerParams.title) ?"w-[104px]":""} `}>
+                    {headerParams.backLink ? (
+                        <Link href={headerParams.backLink} className="w-8 h-8">
+                            <ArrowRight />
+                        </Link>
+                    ):(
                         <button
                             type="button"
                             className="w-8 h-8 outline-none"
@@ -62,12 +59,8 @@ const Header: React.FC<Props> = props => {
                         >
                             <ArrowRight />
                         </button>
-                    ):(
-                        <Link href={props.type2Params.backUrl!} className="w-8 h-8">
-                            <ArrowRight />
-                        </Link>
                     )}
-                    {props.type2Params?.title || ""}
+                    {headerParams.title || ""}
                 </div>
             ) : (
                 <Link href="/" className="flex gap-4">
@@ -83,14 +76,15 @@ const Header: React.FC<Props> = props => {
                 </Link>
             )}
 
-            {!!props.type2Params?.withLogo &&(
+            {!!headerParams?.logo &&(
                 <Link href={"/"}>
                     <Image src="/logo.svg" alt="irangamecenter" width={50} height={50} />
                 </Link>
             )}
-            <div className={`flex gap-5 justify-end items-center ${props.type2Params?.withLogo?"w-[104px]":""}`}>
+            
+            <div className={`flex gap-5 justify-end items-center ${headerParams?.logo?"w-[104px]":""}`}>
 
-                { props.type2Params?.hasCartLink && (
+                { headerParams?.cart && (
                     <Link href='/cart' className="relative w-fit cursor-pointer">
                         <CartIcon className="w-8 h-8 fill-current" />
                         {!!cartGeneralInfo?.totalQuantity && (
@@ -104,9 +98,10 @@ const Header: React.FC<Props> = props => {
                         )}
                     </Link>
                 )}    
-                {props.type2Params?.withOptionBtn?(
-                    <More />
-                ) : props.type2Params?.withShare ? (
+
+                {isAuthenticated && headerParams?.productId ?(
+                    <More productId={headerParams.productId} />
+                ) : headerParams?.share ? (
                     <Share />
                 ):(
                     <MainMenu />

@@ -6,7 +6,7 @@ import Skeleton from "@/components/shared/Skeleton";
 import { numberWithCommas } from "@/helpers";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 import { useAppDispatch } from "@/hooks/use-store";
-import { setHeaderType2Params } from "@/redux/pages";
+import { setHeaderParams } from "@/redux/pages";
 import { OrderDetail, OrderFormData } from "@/types/commerce";
 import { NextPage } from "next";
 import Image from "next/image";
@@ -43,24 +43,23 @@ const OrderItemDeatil: NextPage = () => {
 
     if (orderId) {
       fetchData(+orderId);
-      dispatch(
-        setHeaderType2Params({
-          backUrl: `/profile/orders/${orderId}`,
-          title: "",
-          withLogo: true,
-        })
-      );
     }
 
-    return () => {
-      dispatch(
-        setHeaderType2Params({
-          backUrl: "",
-          title: "",
-        })
-      );
-    };
   }, [orderId]);
+
+  useEffect(()=>{
+
+    dispatch(setHeaderParams({
+      headerParams:{
+        logo: true
+      }
+    }));
+
+    return(()=>{
+      dispatch(setHeaderParams({headerParams: undefined}));
+    })
+
+  },[]);
 
   useEffect(() => {
     const fetchData = async (id: number) => {

@@ -4,7 +4,7 @@ import { getStrapiContact, getStrapiPages } from "@/actions/strapi";
 import { NextPage } from "next";
 import { useAppDispatch } from "@/hooks/use-store";
 import { useEffect } from "react";
-import { setHeaderType2Params } from "@/redux/pages";
+import { setHeaderParams } from "@/redux/pages";
 import Accordion from "@/components/shared/Accordion";
 import Markdown from "react-markdown";
 import Ticketing from "@/components/contact/items/Ticketing";
@@ -52,16 +52,14 @@ const Contact: NextPage = ({ contacts, faq, strapiSeoData }: { contacts?: Contac
 
   useEffect(()=>{
 
-    dispatch(setHeaderType2Params({
-      backUrl:"/",
-      title:"تماس با ما"
+    dispatch(setHeaderParams({
+      headerParams:{
+        title:"تماس با ما"
+      }
     }));
 
     return(()=>{
-      dispatch(setHeaderType2Params({
-        backUrl:"",
-        title:""
-      }));
+      dispatch(setHeaderParams({headerParams: undefined}));
     })
 
   },[]);

@@ -4,6 +4,8 @@ import { approve, getOrderById } from "@/actions/commerce";
 import Home from "@/components/icons/Home";
 import Refresh from "@/components/icons/Refresh";
 import Steps from "@/components/payment/Steps";
+import { useAppDispatch } from "@/hooks/use-store";
+import { setHeaderParams } from "@/redux/pages";
 import { OrderDetail } from "@/types/commerce";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,14 +16,11 @@ import { ReactNode, useEffect, useState } from "react";
 export default function Confirm() {
 
   const router = useRouter();
-
+  const dispatch = useAppDispatch();
+  
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get("orderNumber");
   const orderId = searchParams.get("orderId");
-  
-  const urlUsername = searchParams.get("username");
-  const urlReserveId = searchParams.get("reserveId");
-
   const isDeposite = searchParams.get("deposite");
   const urlStatus = searchParams.get("status");
 
@@ -52,8 +51,8 @@ export default function Confirm() {
     if (orderId) {
       fetchOrder(orderId);
     }
-    if(urlStatus === "0" && urlUsername && urlReserveId){
-      router.push(`/payment?orderNumber=${urlUsername}&orderId=${urlReserveId}`);
+    if(urlStatus === "0" && orderNumber && orderId){
+      router.push(`/payment?orderNumber=${orderNumber}&orderId=${orderId}`);
     }
 
   }, [orderId, orderNumber, urlStatus]);
@@ -63,11 +62,11 @@ export default function Confirm() {
     const token = localStorage.getItem("Token");
     if(!token) return;
 
-    const confirm = async (params:{ reserveId : number; username: string } , token: string) => {
+    const confirm = async (params:{ orderId : number; orderNumber: string } , token: string) => {
       
       setMode("pending");
       
-      const approveResponse : any = await approve({orderId:params.reserveId, orderNumber: params.username, token:token});
+      const approveResponse : any = await approve({orderId:params.orderId, orderNumber: params.orderNumber, token:token});
       
       if(approveResponse?.data?.result?.success){
         setMode("success");
@@ -85,13 +84,29 @@ export default function Confirm() {
       console.log("approveResponse: ",approveResponse);
 
     }
-
-    if(isDeposite && token && orderId && orderNumber && token){
-      confirm({reserveId:+orderId, username:orderNumber}, token)
+    
+    if((isDeposite || urlStatus ==="1") && orderId && orderNumber && token){
+      confirm({orderId:+orderId, orderNumber:orderNumber}, token)
     }
 
-  },[isDeposite, orderId, orderNumber]);
+  },[isDeposite, orderId, orderNumber, urlStatus]);
   
+
+  useEffect(()=>{
+
+    dispatch(setHeaderParams({
+      headerParams:{
+        logo: true,
+        backLink:"/cart"
+      }
+    }));
+
+    return(()=>{
+      dispatch(setHeaderParams({headerParams: undefined}));
+    })
+
+  },[]);
+
   let element : ReactNode = "";
 
   if (mode === "success"){

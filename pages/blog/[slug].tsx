@@ -13,6 +13,8 @@ import Contacts from "@/components/shared/Contacts";
 import { useEffect, useState } from "react";
 import UserCircle from "@/components/icons/UserCircle";
 import BreadCrumpt from "@/components/shared/BreadCrumpt";
+import { useAppDispatch } from "@/hooks/use-store";
+import { setHeaderParams } from "@/redux/pages";
 
 
 const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags , relatedPosts}:
@@ -20,13 +22,29 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
 
     const [users, setUsers] = useState<{ id:number, name: string}[] | undefined>();
 
+    const dispatch = useAppDispatch();
+
     useEffect(()=>{
+        
         const fetchUsers = async () => {
             const response: any = await GetUsers();
             setUsers(response?.data);
             
         }
+        
         fetchUsers();
+
+        dispatch(setHeaderParams({
+            headerParams:{
+                logo: true,
+                share: true
+            }
+        }));
+    
+        return(()=>{
+            dispatch(setHeaderParams({headerParams: undefined}));
+        })
+
     },[]);
 
     const authorName = users?.find(user => user.id === post?.author)?.name;

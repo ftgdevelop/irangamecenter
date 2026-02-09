@@ -7,7 +7,7 @@ import Skeleton from "@/components/shared/Skeleton";
 import { numberWithCommas, toPersianDigits } from "@/helpers";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 import { useAppDispatch } from "@/hooks/use-store";
-import { setHeaderType2Params } from "@/redux/pages";
+import { setHeaderParams } from "@/redux/pages";
 import { OrderDetail } from "@/types/commerce";
 import { NextPage } from "next";
 import Image from "next/image";
@@ -27,17 +27,14 @@ const OrderDeatil: NextPage = () => {
 
   useEffect(()=>{
 
-    dispatch(setHeaderType2Params({
-      backUrl:"/profile/orders",
-      title:"",
-      withLogo: true
+    dispatch(setHeaderParams({
+      headerParams:{
+        logo: true
+      }
     }));
 
     return(()=>{
-      dispatch(setHeaderType2Params({
-        backUrl:"",
-        title:""
-      }));
+      dispatch(setHeaderParams({headerParams: undefined}));
     })
 
   },[]);

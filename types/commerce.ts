@@ -119,12 +119,13 @@ export interface RatingItemType {
 export interface ProductVariant {
     id: number;
     name?: string;
+    sku?: string;
     slug?: string;
     value?: string;
     children?: ProductVariant[];
     items?: {
         filePath?: string;
-        status?:  "InStock" | "OutOfStock" | "OnBackOrder";
+        status?:  "InStock" | "OutOfStock" | "OnBackOrder" | "ComingSoon";
         attributes?: {
             value?: string;
         }[];
@@ -133,22 +134,24 @@ export interface ProductVariant {
         profitPercentage?: number;
         profitPrice?: number;
         currencyType?: string;
+        inventory?: "Unlimited" | "Limited";
         id: number;
         description?: string;
     }[];
 }
 export interface SingleVariant {
   id:number;
+  sku?: string;
   description?: string;
   currencyType?: "IRR"|"USD";
   regularPrice?: number;
   salePrice?: number;
   name?: string;
-  status?:  "InStock" | "OutOfStock" | "OnBackOrder";
+  status?:  "InStock" | "OutOfStock" | "OnBackOrder" | "ComingSoon";
+  inventory?: "Unlimited" | "Limited";
   filePath?: string;
   // "productId": 1242,
   // "netPrice": 22.41,
-  // "inventory": "Unlimited",
   // "stockQuantity": 0,
   // "isActive": true,
   // "isVirtual": true,
@@ -170,11 +173,13 @@ export interface ProductGalleryItem {
     cdnPath?: string;
     mediaType?: "Image" | "Video";
     filePath?:string;
+    thumbnail?: string;
+    fileTitleAttribute?: string;
+    fileAltAttribute?: string;
+    duration?: number;
+    creationTime?: string;
 //   "isActive": true,
 //   "fileUniqKey": "1e5457dc-ce85-f011-bf76-000c29176f1e",
-//   "fileTitleAttribute": null,
-//   "fileAltAttribute": null,
-//   "thumbnail": "https://cdn.irangamecenter.com/videos/products/122/elden-ring-trailer-thumbnail-1.webp",
 //   "thumbnailUniqKey": "432755c9-ce85-f011-bf76-000c29176f1e",
     cdnThumbnail: string | null,
 }
@@ -284,6 +289,7 @@ export interface ProductDetailData {
         }
     }
     id: number;
+    igdb?: string;
     slug: string;
     minVariant?:{
       items?:{

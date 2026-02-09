@@ -3,7 +3,7 @@
 import { getStrapiPages } from "@/actions/strapi";
 import { ServerAddress } from "@/enum/url";
 import { useAppDispatch } from "@/hooks/use-store";
-import { setHeaderType2Params } from "@/redux/pages";
+import { setHeaderParams } from "@/redux/pages";
 import { StrapiSeoData } from "@/types/commerce";
 import { NextPage } from "next";
 import Head from "next/head";
@@ -24,21 +24,19 @@ const Faq: NextPage = ({ strapiData, strapiSeoData }: { strapiData?: StrapiData,
 
     const dispatch = useAppDispatch();
   
-    useEffect(()=>{
-  
-      dispatch(setHeaderType2Params({
-        backUrl:"/",
-        title:"سوالات متداول"
-      }));
-  
-      return(()=>{
-        dispatch(setHeaderType2Params({
-          backUrl:"",
-          title:""
+      useEffect(()=>{
+    
+        dispatch(setHeaderParams({
+          headerParams:{
+            title:"سوالات متداول"
+          }
         }));
-      })
-  
-    },[]);
+    
+        return(()=>{
+          dispatch(setHeaderParams({headerParams: undefined}));
+        })
+    
+      },[]);
 
   return (
   <>

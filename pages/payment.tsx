@@ -13,6 +13,7 @@ import { numberWithCommas } from "@/helpers";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import { setReduxError } from "@/redux/errorSlice";
+import { setHeaderParams } from "@/redux/pages";
 import { GatewayGroupItem } from "@/types/payment";
 import { Skeleton } from "@mantine/core";
 import { useSearchParams } from "next/navigation";
@@ -121,6 +122,21 @@ export default function PaymentPage() {
 
 
   }, [orderId, orderNumber]);
+  
+  useEffect(()=>{
+
+    dispatch(setHeaderParams({
+      headerParams:{
+        logo: true,
+        backLink:"/cart"
+      }
+    }));
+
+    return(()=>{
+      dispatch(setHeaderParams({headerParams: undefined}));
+    })
+
+  },[]);
 
   let requiredAmount: number = orderData?.payableAmount || 0;
 

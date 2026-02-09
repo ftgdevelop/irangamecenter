@@ -9,6 +9,8 @@ import SearchIcon from "@/components/icons/SearchIcon";
 import Pagination from "@/components/shared/Pagination";
 import Skeleton from "@/components/shared/Skeleton";
 import { toPersianDigits } from "@/helpers";
+import { useAppDispatch } from "@/hooks/use-store";
+import { setHeaderParams } from "@/redux/pages";
 import { OrderListItemType } from "@/types/commerce";
 import { NextPage } from "next";
 import Link from "next/link";
@@ -33,6 +35,21 @@ const Orders: NextPage = () => {
     totalRowsInProgress: number
   }>();
 
+  const dispatch = useAppDispatch();
+
+  useEffect(()=>{
+
+    dispatch(setHeaderParams({
+      headerParams:{
+        logo: true
+      }
+    }));
+
+    return(()=>{
+      dispatch(setHeaderParams({headerParams: undefined}));
+    })
+
+  },[]);
 
   useEffect(() => {
     const controller = new AbortController();

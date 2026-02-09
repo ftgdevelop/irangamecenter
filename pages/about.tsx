@@ -4,7 +4,7 @@ import { getStrapiPages } from "@/actions/strapi";
 import { NextPage } from "next";
 import { useAppDispatch } from "@/hooks/use-store";
 import { useEffect } from "react";
-import { setHeaderType2Params } from "@/redux/pages";
+import { setHeaderParams } from "@/redux/pages";
 import Intro from "@/components/about/Intro";
 import FAQ from "@/components/shared/FAQ";
 import Contacts from "@/components/shared/Contacts";
@@ -36,21 +36,17 @@ const AboutUs: NextPage = ({ strapiData, strapiSeoData }: { strapiData?: StrapiD
 
   const dispatch = useAppDispatch();
 
-  useEffect(()=>{
-
-    dispatch(setHeaderType2Params({
-      backUrl:"/",
-      title:""
-    }));
-
-    return(()=>{
-      dispatch(setHeaderType2Params({
-        backUrl:"",
-        title:""
+    useEffect(()=>{
+  
+      dispatch(setHeaderParams({
+        headerParams:{}
       }));
-    })
-
-  },[]);
+  
+      return(()=>{
+        dispatch(setHeaderParams({headerParams: undefined}));
+      })
+  
+    },[]);
 
   const aboutDescription = strapiData?.find(item => item.Keyword === "about_intro")?.Body;
 
