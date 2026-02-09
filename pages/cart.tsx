@@ -9,10 +9,11 @@ import { numberWithCommas } from "@/helpers";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import { setGeneralCartInfo, setGeneralCartLoading } from "@/redux/cartSlice";
+import { setHeaderParams } from "@/redux/pages";
 import { CreateOrderParams } from "@/types/commerce";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function CartPage() {
 
@@ -24,6 +25,18 @@ export default function CartPage() {
   const dispatch = useAppDispatch();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(()=>{
+    dispatch(setHeaderParams({
+      headerParams:{
+        logo: true
+      }
+    }));
+
+    return(()=>{
+      dispatch(setHeaderParams({headerParams: undefined}));
+    })
+  },[]);
 
   const { createOrder, getCart } = useCartApi();
 

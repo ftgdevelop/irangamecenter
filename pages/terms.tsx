@@ -5,10 +5,10 @@ import { NextPage } from "next";
 import Accordion from "@/components/shared/Accordion";
 import { useAppDispatch } from "@/hooks/use-store";
 import { useEffect } from "react";
-import { setHeaderType2Params } from "@/redux/pages";
 import Markdown from "react-markdown";
 import { StrapiSeoData } from "@/types/commerce";
 import Head from "next/head";
+import { setHeaderParams } from "@/redux/pages";
 
 type StrapiData = {
   Items: {
@@ -24,16 +24,14 @@ const Terms: NextPage = ({ strapiData, strapiSeoData }: { strapiData?: StrapiDat
 
   useEffect(()=>{
 
-    dispatch(setHeaderType2Params({
-      backUrl:"/",
-      title:"قوانین و مقررات"
+    dispatch(setHeaderParams({
+      headerParams:{
+        title:"قوانین و مقررات"
+      }
     }));
 
     return(()=>{
-      dispatch(setHeaderType2Params({
-        backUrl:"",
-        title:""
-      }));
+      dispatch(setHeaderParams({headerParams: undefined}));
     })
 
   },[]);

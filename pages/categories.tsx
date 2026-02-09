@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import ArrowTopLeft from "@/components/icons/ArrowTopLeft";
 import { getStrapiCategories } from "@/actions/strapi";
 import { ServerAddress } from "@/enum/url";
+import { useAppDispatch } from "@/hooks/use-store";
+import { setHeaderParams } from "@/redux/pages";
 
 type StrapiDataItem = {
     id: number;
@@ -25,6 +27,8 @@ type StrapiData = StrapiDataItem[];
 
 const Categories: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
 
+    const dispatch = useAppDispatch();
+
     const [activeItemId, setActiveItemId] = useState<number>(strapiData?.[0]?.id || 0);
 
     useEffect(() => {
@@ -34,6 +38,17 @@ const Categories: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
         }
 
         fetchData()
+        
+        dispatch(setHeaderParams({
+          headerParams:{
+            logo: true
+          }
+        }));
+    
+        return(()=>{
+          dispatch(setHeaderParams({headerParams: undefined}));
+        })
+
     }, []);
 
     const activeItem = strapiData?.find(x => x.id === activeItemId);

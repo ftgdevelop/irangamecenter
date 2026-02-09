@@ -1,41 +1,41 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type Page = {
-    headerType2Params:{
-        title: string;
-        backUrl: string;
-        withLogo?: boolean;
+    headerParams?:{
+        share?: boolean;
+        logo?: boolean;
+        title?: string;
+        productId?: number;
+        cart?: boolean;
+        backLink?: string;
     }
 };
 
 const initialState: Page = {
-    headerType2Params:{
-        backUrl:"",
-        title:"",
-        withLogo:false
-    }
+    headerParams:undefined
 };
 
 type PayloadParams = {
-    title: string;
-    backUrl: string;
-    withLogo?: boolean;
+    headerParams?:{
+        share?: boolean;
+        logo?: boolean;
+        title?: string;
+        productId?: number;
+        cart?: boolean;
+        backLink?: string;
+    }
 }
 
 export const pagesSlice = createSlice({
     name:"pages",
     initialState,
     reducers:{
-        setHeaderType2Params:(state, action:PayloadAction<PayloadParams>) =>{
-            state.headerType2Params.title = action.payload.title;
-            state.headerType2Params.backUrl = action.payload.backUrl;
-            if(action.payload.withLogo){
-                state.headerType2Params.withLogo = true
-            }
+        setHeaderParams:(state, action:PayloadAction<PayloadParams>) =>{
+            state.headerParams = action.payload.headerParams;
         }
     }
 });
 
-export const { setHeaderType2Params} = pagesSlice.actions
+export const { setHeaderParams} = pagesSlice.actions
 
 export default pagesSlice.reducer;

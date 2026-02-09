@@ -10,7 +10,7 @@ import Contacts from '@/components/shared/Contacts';
 import parse from 'html-react-parser';
 import Image from 'next/image';
 import RatingItem from '@/components/products/RatingItem';
-import { dateDiplayFormat } from '@/helpers';
+import { dateDiplayFormat, dateFormat } from '@/helpers';
 import Link from 'next/link';
 import ProductDetail from '@/components/products/ProductDetail';
 import AgeRatingDetail from '@/components/products/AgeRatingDetail';
@@ -24,17 +24,47 @@ import SimilarProducts from '@/components/products/SimilarProducts';
 import { useRouter } from 'next/router';
 import Skeleton from '@/components/shared/Skeleton';
 import VariantFooter from '@/components/products/VariantFooter';
+import { useAppDispatch } from '@/hooks/use-store';
+import { setHeaderParams } from '@/redux/pages';
 
 const DetailProduct: NextPage<any> = ({
   serversideProductData,
-  slug
+  slug,
+  serversideGalleryData,
+  serversideVariants,
+  serversideVariant
 }: {
   serversideProductData?: ProductDetailData;
   slug?: string;
+  serversideGalleryData?: ProductGalleryItem[];
+  serversideVariants?:ProductVariant[];
+  serversideVariant?:SingleVariant;
 }) => {
   const [detailActiveTab, setDetailActiveTab] = useState<string>('');
 
   const [productData, setProductData] = useState<ProductDetailData | undefined>(serversideProductData);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(()=>{
+
+    dispatch(setHeaderParams({
+      headerParams:{
+        logo: true,
+        cart: true,
+        productId: productData?.id,
+        share: true 
+      }
+    }));
+
+  },[productData?.id]);
+
+
+  useEffect(()=>{
+    return(()=>{
+      dispatch(setHeaderParams({headerParams: undefined}));
+    })
+  },[]);
 
   useEffect(()=>{
     setProductData(serversideProductData);
@@ -52,8 +82,6 @@ const DetailProduct: NextPage<any> = ({
     link?: string;
   }[] = [];
 
-  const [galleryData, setGalleryData] = useState<ProductGalleryItem[] | undefined>();
-  const [galleryLoading, setGalleryLoading] = useState<boolean>(true);
   const [variantsData, setVariantsData] = useState<ProductVariant[] | undefined>();
   const [variantsLoading, setVariantsLoading] = useState<boolean>(true);
 
@@ -81,15 +109,6 @@ const DetailProduct: NextPage<any> = ({
 
   useEffect(()=>{
 
-    const fetchGalleryData = async (s:string) => {
-      setGalleryLoading(true);
-      const response: any = await getProductGallries(s);
-      if(response.data?.result){
-        setGalleryData(response.data.result)
-      }
-      setGalleryLoading(false);
-    }
-
     const fetchVariants = async (s:string) => {
         setVariantsLoading(true);
       const response: any = await getProductVariants(s);
@@ -109,24 +128,22 @@ const DetailProduct: NextPage<any> = ({
     }
 
     if(slug){
-      fetchGalleryData(slug);
       if(queryVariant){
         fetchVariant(+queryVariant)
       }else{
         fetchVariants(slug);
       }
-
     }
 
   },[slug, queryVariant]);
 
   const sortedGalleryItems = useMemo(() => {
-    if (!galleryData) return [];
-    return [...galleryData].sort((a, b) => {
+    if (!serversideGalleryData) return [];
+    return [...serversideGalleryData].sort((a, b) => {
       if (a.mediaType === 'Image' && b.mediaType === 'Video') return 1;
       return -1;
     });
-  }, [galleryData?.[0]?.filePath]);
+  }, [serversideGalleryData?.[0]?.filePath]);
 
   const parsedShortDescription = useMemo(() => {
     if (!productData?.shortDescription) return null;
@@ -210,31 +227,243 @@ const DetailProduct: NextPage<any> = ({
     }
   }
 
+
+  function getLeafNodes(nodes: ProductVariant[]): ProductVariant[] {
+    const leaves: ProductVariant[] = [];
+
+    function traverse(currentNode: ProductVariant): void {
+      if (currentNode.children === null) {
+        leaves.push(currentNode);
+      } else {
+        currentNode.children?.forEach(child => traverse(child));
+      }
+    }
+
+    nodes.forEach(rootNode => traverse(rootNode));
+    
+    return leaves;
+  }
+
+  const flatedVariants = getLeafNodes (serversideVariants||[]);
+  console.dir(flatedVariants);
+
+
+  let schemaOffers : {
+      "@type": "Offer";
+      "sku": string;
+      "price": number;
+      "priceCurrency": "IRR" | string;
+      "availability": "https://schema.org/InStock" | string;
+      "seller": {
+        "@type": "Organization",
+        "name": "Iran Game Center"
+      }
+  }[] = [];
+
+  if(flatedVariants?.length){
+    schemaOffers =  flatedVariants.map(v => {
+      
+      let availabilityStatus = ""
+      switch(v.items?.[0]?.status){
+        case "ComingSoon":
+        case "OnBackOrder":
+          availabilityStatus = "PreOrder";
+          break;
+        case 'OutOfStock':
+          availabilityStatus = "OutOfStock";
+          break; 
+        case "InStock":
+          if(v.items?.[0]?.inventory === "Unlimited"){
+            availabilityStatus = "InStock";
+          }else{
+            availabilityStatus = "LimitedAvailability";
+          }
+          break;
+        default :
+          availabilityStatus = v.items?.[0]?.status || "";
+      }
+
+      return ({
+      "@type":"Offer",
+      priceCurrency: v.items?.[0]?.currencyType || "IRR",
+      price: v.items?.[0]?.salePrice || 0,
+      seller:{
+        "@type":"Organization",
+        "name":"Iran Game Center"
+      },
+      sku: v.sku || "no-data",
+      availability: availabilityStatus
+    })
+    })
+  }
+  
+  if(serversideVariant){
+    let availabilityStatus = ""
+    switch(serversideVariant.status){
+      case "ComingSoon":
+      case "OnBackOrder":
+        availabilityStatus = "PreOrder";
+        break;
+      case 'OutOfStock':
+        availabilityStatus = "OutOfStock";
+        break; 
+      case "InStock":
+        if(serversideVariant.inventory === "Unlimited"){
+          availabilityStatus = "InStock";
+        }else{
+          availabilityStatus = "LimitedAvailability";
+        }
+        break;
+      default :
+        availabilityStatus = serversideVariant.status || "";
+    }
+
+    schemaOffers = [{
+      "@type":"Offer",
+      sku: serversideVariant.sku||"no-data",
+      price: serversideVariant.salePrice || 0,
+      seller:{
+        "@type":"Organization",
+        "name":"Iran Game Center"
+      },
+      availability:availabilityStatus,
+      priceCurrency:serversideVariant.currencyType || "IRR"
+    }]
+  }
+
   return (
     <>
       <Head>
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(
+              {
                 "@context": "https://schema.org",
                 "@type": "Product",
                 "name": productData.name,
-                "description": productData.page?.title || "" , 
-                "url": `https://irangamecenter.com/product/${productData.slug}`,
-                "image": [productData.filePath],
+                "description": productData.page?.title || "" ,
                 "brand": {
                   "@type": "Brand",
                   "name": productData.publisher?.name || ""
                 },
-                "category":  productData.categories?.[0]?.name,                
+                "url": `https://irangamecenter.com/product/${productData.slug}`,
+                "image": [productData.filePath],
+                "category":  productData.categories?.[0]?.name,    
                 "audience": {
                   "@type": "Audience",
                   "audienceType": productData.categories?.[0]?.slug === "console-game" ? "Console Gamers" : productData.categories?.[0]?.slug === "mobile-games" ? "Mobile Gamers" : "Gamers"
-                }
-              })
+                },
+                
+                "identifier": [
+                  {
+                    "@type": "PropertyValue",
+                    "propertyID": "IGDB ID",
+                    "value": productData.igdb || ""
+                  }
+                ],
+                
+                "offers": schemaOffers
+              }                
+            )
+          }}
+        />  
+
+        {serversideGalleryData?.filter(g => g.mediaType === "Video")?.map(v => {
+
+          let formatedDuration = "";
+          if(v.duration && v.duration > 0){
+                          
+            const H = Math.floor(v.duration/3600);            
+            const M = Math.floor((v.duration % 3600) / 60);              
+            const S = Math.floor(v.duration%60 );
+            
+            formatedDuration = "PT";
+
+            if(H){
+              formatedDuration += `${H}H`;
+            }
+            if(M){
+              formatedDuration += `${M}M`;
+            }
+            if(S){
+              formatedDuration += `${S}S`;
+            }
+            
+          }
+          return (
+            <script
+              key={v.id}
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify(
+                    {
+                      "@type": "VideoObject",
+                      "name": v.fileAltAttribute,
+                      "description": v.fileTitleAttribute,
+                      "thumbnailUrl": v.filePath,
+                      "uploadDate": v.creationTime ? dateFormat(new Date(v.creationTime)) : "",
+                      "duration": formatedDuration,
+                      "contentUrl": "https://irangamecenter.com/video/ps-gift",
+                      embedUrl: v.cdnPath
+
+                    }               
+                )
+              }}
+            /> 
+          )
+        })}   
+
+        {!!productData.faqs?.length && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(
+                {
+                  "@type": "FAQPage",
+                  "mainEntity": productData.faqs.map(f => (
+                    {
+                      "@type": "Question",
+                      "name": f.questions,
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": f.answer
+                      }
+                    }
+                  ))
+                }             
+              )
             }}
-          />          
+          /> 
+        )}
+
+        
+        {!!productData.breadcrumbs?.length && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(
+                {
+                  "@type": "BreadcrumbList",
+                  "itemListElement": [
+                    {
+                      "@type": "ListItem",
+                      "position": 1,
+                      "name": "خانه",
+                      "item": "https://irangamecenter.com"
+                    },
+                    ...productData.breadcrumbs.map((b, index) => ({
+                      "@type": "ListItem",
+                      "position": index+2,
+                      "name": b.name,
+                      "item": b.url
+                    }))
+                  ]
+                }            
+              )
+            }}
+          /> 
+        )}
 
         {productData?.page?.title && <title> {productData.page.title} </title>}
 
@@ -400,8 +629,8 @@ const DetailProduct: NextPage<any> = ({
         </div>
       </div>
 
-      {!!galleryData?.length && sortedGalleryItems && (
-        <ProductGalleryCarousel galleries={sortedGalleryItems} galleryLoading={galleryLoading} />
+      {!!serversideGalleryData?.length && sortedGalleryItems && (
+        <ProductGalleryCarousel galleries={sortedGalleryItems} galleryLoading={false} />
       )}
 
       {!!productData?.shortDescription && (
@@ -576,16 +805,29 @@ const DetailProduct: NextPage<any> = ({
 };
 
 export async function getServerSideProps(context: any) {
-  const response: any = await getProductBySlug({
-    acceptLanguage:"fa-IR",
-    slug: context?.query?.slug,
-    platform: context?.query?.platform,
-    variantId:context?.query?.variant
-  });
+
+
+  const [response, galleryResponse, variantsResponse, variantResponse] = await Promise.all<any>([
+    getProductBySlug({
+      acceptLanguage:"fa-IR",
+      slug: context?.query?.slug,
+      platform: context?.query?.platform,
+      variantId:context?.query?.variant
+    }),
+    context?.query?.slug ? getProductGallries(context.query.slug): undefined,
+    (!context?.query?.variant && context?.query?.slug) ? getProductVariants(context.query.slug) : undefined,
+    context?.query?.variant ? getVariantById(context.query.variant) : undefined,
+  ]);
+
+
+
 
   return {
     props: {
       serversideProductData: response.data?.result || null,
+      serversideGalleryData: galleryResponse?.data?.result || null,
+      serversideVariants:variantsResponse?.data?.result || null,
+      serversideVariant:variantResponse?.data?.result || null,
       slug: context?.query?.slug || null,
       platform : context?.query?.platform || null,
       variantId : context?.query?.variant || null

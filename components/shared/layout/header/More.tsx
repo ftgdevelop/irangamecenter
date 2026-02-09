@@ -6,11 +6,14 @@ import { useEffect, useState } from "react";
 import { setBodiScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
 import { useAppDispatch } from "@/hooks/use-store";
 import CloseSimple from "@/components/icons/CloseSimple";
-import Heart from "@/components/icons/Heart";
 import ShareIcon2 from "@/components/icons/ShareIcon2";
 import Bell from "@/components/icons/Bell";
+import AddToWishList from "./AddToWishList";
 
-const More: React.FC = () => {
+type Props = {
+  productId: number;
+}
+const More: React.FC<Props> = props => {
   const dispatch = useAppDispatch();
 
   const [openDetails, setOpenDetails] = useState<boolean>(false);
@@ -58,7 +61,7 @@ const More: React.FC = () => {
         aria-label="بیشتر"
         onClick={()=>{setOpenDetails(true)}}
       >
-        <MoreIcon className="w-7 h-7 stroke-current stroke-2" />
+        <MoreIcon className="w-7 h-7 stroke-current fill-none stroke-2" />
       </button>
       <ModalPortal show={openDetails} selector="modal_portal">
         <div
@@ -84,13 +87,7 @@ const More: React.FC = () => {
             </div>
             <div className="px-4">
               <div className="py-4 border-b border-neutral-300 dark:border-white/30">
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-3"
-                >
-                  <Heart className="w-6 h-6 fill-current" />
-                  اضافه به علاقه مندی
-                </button>
+                <AddToWishList productId={props.productId} />
               </div>
               <div className="py-4 border-b border-neutral-300 dark:border-white/30">
                 <button
