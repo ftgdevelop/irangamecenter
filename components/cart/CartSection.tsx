@@ -103,14 +103,14 @@ const CartSection:React.FC<Props> = props => {
       >
         {!!cartGeneralInfo?.items?.length && (
           <div className="mt-4 flex flex-col gap-[30px] justify-between">
-            <div className="flex items-center justify-between">
+            {!!cartGeneralInfo.totalItemsPrice && <div className="flex items-center justify-between">
               <span className="font-semibold text-sm text-[#BBBBBB]">
                 قیمت کالاها ({cartGeneralInfo?.totalQuantity})
               </span>
               <span className="font-bold">
                 {numberWithCommas(cartGeneralInfo.totalItemsPrice)} {currency}
               </span>
-            </div>
+            </div>}
 
             <div className="flex items-center justify-between">
               <span className="font-semibold text-sm text-[#BBBBBB]">مبلغ قابل پرداخت</span>
@@ -119,14 +119,14 @@ const CartSection:React.FC<Props> = props => {
               </span>
             </div>
 
-            <div className="flex items-center justify-between">
+            {!!cartGeneralInfo.profitAmount && <div className="flex items-center justify-between">
               <span className="bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent font-bold drop-shadow">
                 سود شما از خرید
               </span>
               <span className="bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent font-bold drop-shadow">
                 {numberWithCommas(cartGeneralInfo.profitAmount)} {currency}
               </span>
-            </div>
+            </div>}
           </div>
         )}
       </div>

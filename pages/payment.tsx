@@ -306,14 +306,14 @@ export default function PaymentPage() {
           removeDiscountLoading={removeDiscountLoading}
         />
 
-        <div className="text-sm flex gap-3 items-center justify-between mt-5">
+        {!!orderData?.totalItemsPrice && <div className="text-sm flex gap-3 items-center justify-between mt-5">
           <label className="text-xs">
             قیمت کالاها ({orderData?.totalQuantity})
           </label>
           <span className="font-semibold">
             {numberWithCommas(orderData?.totalItemsPrice || 0)} ریال
           </span>
-        </div>
+        </div>}
 
         {!!withdrawFromWallet && (
         <div className="text-sm flex gap-3 items-center justify-between mt-5">
@@ -339,14 +339,15 @@ export default function PaymentPage() {
         </div>
 
 
-        <div className="text-sm flex gap-3 items-center justify-between mt-5">
+        {!!(orderData?.profitAmount || orderData?.totalDiscountPrice) && <div className="text-sm flex gap-3 items-center justify-between mt-5">
           <label className="font-semibold bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent">
             سود شما از خرید
           </label>
           <span className="font-semibold bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent">
             {numberWithCommas((orderData?.profitAmount || 0) + (Math.abs(orderData?.totalDiscountPrice || 0)))} ریال
           </span>
-        </div>
+        </div>}
+
       </div>
 
       <div className="h-[104px]" />
