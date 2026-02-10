@@ -35,14 +35,11 @@ const AddToWishList: React.FC<Props> = (props) => {
 
     setLoading(true);
     const response = await addToWishlist({
-      token: userToken,
       productId: props.productId,
-    });
+    }, userToken,);
 
     console.log(response);
     setLoading(false);
-
-    debugger;
 
     console.log(props.productId);
     setActive((state) => !state);
