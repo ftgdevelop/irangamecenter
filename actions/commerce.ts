@@ -384,9 +384,8 @@ export const getCategoryBySlug = async (params: {slug: string; token: string;}) 
 }
 
 export const addToWishlist = async ( params:{ 
-    productId: number;
-    token: string
-}) => {
+    productId: number
+}, token: string) => {
   try {
     const response = await axios.post(
       `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.AddToWishlist}`,
@@ -394,7 +393,7 @@ export const addToWishlist = async ( params:{
       {
         headers: {
         ...Headers,
-        Authorization: `Bearer ${params.token}`,          
+        Authorization: `Bearer ${token}`,          
         },
       },
     )
@@ -410,7 +409,7 @@ export const existInWishlist = async ( params:{
 }) => {
   try {
     const response = await axios.post(
-      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.ExistInWishlist}`,
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.ExistInWishlist}?productId=${params.productId}`,
       null,
       {
         headers: {
