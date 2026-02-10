@@ -93,7 +93,10 @@ export const Payment = {
     GetOrderDetailItem:"/api/services/app/LoginProvider/GetByOrderItemId",
     SubmitOrderForm:"/api/services/app/OrderItemProviderField/Submit",
     GetVariantById:"/api/services/app/Variant/Get",
-    GetCategoryBySlug:"/api/services/app/Category/GetBySlug"
+    GetCategoryBySlug:"/api/services/app/Category/GetBySlug",
+
+    AddToWishlist:"/api/services/app/Wishlist/Add",
+    ExistInWishlist:"/api/services/app/Wishlist/Exists"
   }
 
   export const Discount = {

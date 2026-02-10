@@ -88,12 +88,16 @@ const OrderDeatil: NextPage = () => {
       value: <span dir="ltr"> {creationTimeString} </span>
     },
     {
-      label:"مبلغ",
-      value: fetchingOrder ? ( <Skeleton className="h-3 w-12" dark /> ) : orderDetail?.payableAmount?  `${numberWithCommas(orderDetail.payableAmount)} ${getCurrencyLabelFa(orderDetail.currencyType)}`  : "-"
+      label:"قیمت کالاها",
+      value: fetchingOrder ? ( <Skeleton className="h-3 w-12" dark /> ) : orderDetail?.payableAmount?  `${numberWithCommas(orderDetail.totalItemsPrice)} ${getCurrencyLabelFa(orderDetail.currencyType)}`  : "-"
     },
     {
       label:"سود شما از خرید",
-      value: fetchingOrder ? ( <Skeleton className="h-3 w-12" dark /> ) : orderDetail?.profitAmount?  `${numberWithCommas(orderDetail.profitAmount)} ${getCurrencyLabelFa(orderDetail.currencyType)}`  : "-"
+      value: fetchingOrder ? ( <Skeleton className="h-3 w-12" dark /> ) : orderDetail?.profitAmount?  `${numberWithCommas(orderDetail.profitAmount + Math.abs(orderDetail.totalDiscountPrice||0))} ${getCurrencyLabelFa(orderDetail.currencyType)}`  : "-"
+    },
+    {
+      label:"مبلغ قابل پرداخت ",
+      value: fetchingOrder ? ( <Skeleton className="h-3 w-12" dark /> ) : orderDetail?.payableAmount?  `${numberWithCommas(orderDetail.payableAmount)} ${getCurrencyLabelFa(orderDetail.currencyType)}`  : "-"
     },
     {
       label:"نوع پرداخت",

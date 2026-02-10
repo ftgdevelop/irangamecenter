@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 import { setBodiScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
 import { useAppDispatch } from "@/hooks/use-store";
 import CloseSimple from "@/components/icons/CloseSimple";
-import ShareIcon2 from "@/components/icons/ShareIcon2";
 import Bell from "@/components/icons/Bell";
 import AddToWishList from "./AddToWishList";
+import Share from "./Share";
 
 type Props = {
   productId: number;
@@ -37,22 +37,6 @@ const More: React.FC<Props> = props => {
     }
   }, [slideInDetails]);
 
-  const shareHandle = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "",
-          text: "",
-          url: window.location.href,
-        });
-        console.log("Page shared successfully");
-      } catch (err: any) {
-        console.error("Share failed:", err.message);
-      }
-    } else {
-      alert("اشتراک‌ گذاری وب در مرورگر شما پشتیبانی نمی‌شود!");
-    }
-  };
 
   return (
     <>
@@ -90,21 +74,18 @@ const More: React.FC<Props> = props => {
                 <AddToWishList productId={props.productId} />
               </div>
               <div className="py-4 border-b border-neutral-300 dark:border-white/30">
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-3"
-                  onClick={shareHandle}
-                >
-                  <ShareIcon2 className="w-6 h-6 fill-current" />
-                  به اشتراک گذاری
-                </button>
+                <Share
+                  iconClassName="w-7 h-7 fill-current"
+                  buttonClassName="inline-flex items-center gap-3" 
+                  label="به اشتراک گذاری" 
+                />
               </div>
               <div className="py-4">
                 <button
                   type="button"
                   className="inline-flex items-center gap-3"
                 >
-                  <Bell className="w-6 h-6 fill-current" />
+                  <Bell className="w-7 h-7 fill-current" />
                   اطلاع رسانی شگفت انگیز
                 </button>
               </div>
