@@ -102,7 +102,7 @@ const Header: React.FC = () => {
                 {isAuthenticated && headerParams?.productId ?(
                     <More productId={headerParams.productId} />
                 ) : headerParams?.share ? (
-                    <Share />
+                    <Share iconClassName="w-8 h-8 fill-current" />
                 ):(
                     <MainMenu />
                 )}

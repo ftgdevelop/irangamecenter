@@ -203,7 +203,7 @@ const DetailProduct: NextPage<any> = ({
       alt={productData.fileAltAttribute || productData.name || ''}
       width={400}
       height={200}
-      className="h-auto w-24 block rounded-xl"
+      className="h-auto w-24 block rounded-xl object-cover"
       title={productData.fileTitleAttribute || productData.name}
     />
   }
@@ -221,7 +221,7 @@ const DetailProduct: NextPage<any> = ({
         alt={productData.fileAltAttribute || productData.name || ''}
         width={400}
         height={200}
-        className="h-auto w-24 block rounded-xl"
+        className="h-auto w-24 block rounded-xl object-cover"
         title={productData.fileTitleAttribute || productData.name}
       />
     }
@@ -244,8 +244,7 @@ const DetailProduct: NextPage<any> = ({
     return leaves;
   }
 
-  const flatedVariants = getLeafNodes (serversideVariants||[]);
-  console.dir(flatedVariants);
+  const flatedVariants = getLeafNodes(serversideVariants||[]).filter(v => !!(v.items?.[0]?.sku && v.items?.[0]?.salePrice));
 
 
   let schemaOffers : {
@@ -291,7 +290,7 @@ const DetailProduct: NextPage<any> = ({
         "@type":"Organization",
         "name":"Iran Game Center"
       },
-      sku: v.sku || "no-data",
+      sku: v.items?.[0].sku || "",
       availability: availabilityStatus
     })
     })

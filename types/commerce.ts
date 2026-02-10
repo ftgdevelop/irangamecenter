@@ -119,7 +119,6 @@ export interface RatingItemType {
 export interface ProductVariant {
     id: number;
     name?: string;
-    sku?: string;
     slug?: string;
     value?: string;
     children?: ProductVariant[];
@@ -134,6 +133,7 @@ export interface ProductVariant {
         profitPercentage?: number;
         profitPrice?: number;
         currencyType?: string;
+        sku?: string;
         inventory?: "Unlimited" | "Limited";
         id: number;
         description?: string;
@@ -711,6 +711,7 @@ export interface OrderDetail {
     currencyType: "IRR" | string;
     totalItemsPrice: number;
     payableAmount: number;
+    totalDiscountPrice?: number;
     totalQuantity: number;
     profitAmount: number;
     profitPercent: number;

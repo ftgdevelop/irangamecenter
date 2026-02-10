@@ -209,7 +209,7 @@ const VariantFooter = ({
 
           {!!variantItem?.salePrice && (
             <div className="text-left text-white">
-              {(variantItem?.profitPercentage || variantItem.profitPrice) && (
+              {!!(variantItem?.profitPercentage || variantItem.profitPrice) && (
                 <div className="flex flex-wrap justify-end gap-2 mb-1">
                   <span className="text-[#fe9f00] text-2xs font-semibold">
                     {variantItem.profitPercentage ? `${variantItem.profitPercentage} %   تخفیف` : `${(variantItem.profitPrice! * (currentVariantAddedQuantity || 1))} ${currency} تخفیف `}

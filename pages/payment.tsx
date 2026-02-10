@@ -36,6 +36,7 @@ export default function PaymentPage() {
     gender: boolean;
     id: number;
     items: any[];
+    totalDiscountPrice?: number;
     lastName?: string;
     orderNumber: string;
     payableAmount: number;
@@ -74,12 +75,9 @@ export default function PaymentPage() {
     }
   },[gateways?.length]);
 
-  useEffect(() => {
 
-    const fetchOrder = async (id: string) => {
+    const fetchOrder = async (id: string, token: string) => {
       
-      const token = localStorage.getItem("Token");
-
       if(!token){
         router.push("/");
       }
@@ -87,14 +85,19 @@ export default function PaymentPage() {
       const response: any = await getOrderById({
         id: +id,
         currency: "IRR",
-        token: token || "",
+        token: token
       });
 
       setOrderData(response?.data?.result);
     };
 
-    if (orderId) {
-      fetchOrder(orderId);
+  useEffect(() => {
+
+
+    const token = localStorage.getItem("Token");
+
+    if (orderId && token) {
+      fetchOrder(orderId, token);
     }
 
     const fetchBanks = async (orderId: number, orderNumber: string) => {
@@ -220,6 +223,9 @@ export default function PaymentPage() {
 
     if (response?.data?.result) {
       setDiscountData(response.data.result);
+      
+      fetchOrder(orderId, userToken);
+
     } else if (response?.data?.error) {
       setDiscountData(response.data?.error);
     }
@@ -243,6 +249,7 @@ export default function PaymentPage() {
 
     if (response?.data?.success) {
       setDiscountData(undefined);
+      fetchOrder(orderId, userToken);
     }
 
     setRemoveDiscountLoading(false);
@@ -292,7 +299,9 @@ export default function PaymentPage() {
           onRemoveAddedCode={removeDiscountHandle}
           onSubmit={submitDiscountCode}
           loading={discountLoading}
-          data={discountData}
+          data={discountData || orderData?.totalDiscountPrice ? {
+            isValid: true
+          } : undefined}
           onChangeText={()=>{setDiscountData(undefined);}}
           removeDiscountLoading={removeDiscountLoading}
         />
@@ -315,26 +324,27 @@ export default function PaymentPage() {
         </div>
         )}
 
+        {!!orderData?.totalDiscountPrice && <div className="text-sm flex gap-3 items-center justify-between mt-5">
+          <label className="text-xs"> کد تخفیف </label>
+          <span className="font-semibold">
+            {numberWithCommas(Math.abs(orderData.totalDiscountPrice))} ریال
+          </span>
+        </div>}
+
         <div className="text-sm flex gap-3 items-center justify-between mt-5">
           <label className="text-xs"> مبلغ قابل پرداخت </label>
           <span className="font-semibold">
-            {numberWithCommas(requiredAmount - (discountData?.discountPrice || 0) || 0) } ریال
+            {numberWithCommas(requiredAmount || 0) } ریال
           </span>
         </div>
 
-        {!!discountData?.discountPrice && <div className="text-sm flex gap-3 items-center justify-between mt-5">
-          <label className="text-xs"> کد تخفیف </label>
-          <span className="font-semibold">
-            {numberWithCommas(discountData?.discountPrice)} ریال
-          </span>
-        </div>}
 
         <div className="text-sm flex gap-3 items-center justify-between mt-5">
           <label className="font-semibold bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent">
             سود شما از خرید
           </label>
           <span className="font-semibold bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent">
-            {numberWithCommas((orderData?.profitAmount || 0) + (discountData?.discountPrice || 0))} ریال
+            {numberWithCommas((orderData?.profitAmount || 0) + (Math.abs(orderData?.totalDiscountPrice || 0)))} ریال
           </span>
         </div>
       </div>
@@ -346,7 +356,7 @@ export default function PaymentPage() {
           <div className="flex justify-between text-white mb-2">
             <label className="text-sm"> {!requiredAmount && withdrawFromWallet ? "پرداخت از کیف پول" : "مبلغ قابل پرداخت"} </label>
             <span className="font-semibold">
-              {numberWithCommas(!requiredAmount && withdrawFromWallet ? (withdrawFromWallet - (discountData?.discountPrice||0)) : requiredAmount - (discountData?.discountPrice || 0) || 0)} ریال
+              {numberWithCommas(!requiredAmount && withdrawFromWallet ? withdrawFromWallet : requiredAmount || 0)} ریال
             </span>
           </div>
           <button
@@ -355,8 +365,7 @@ export default function PaymentPage() {
             onClick = {onSubmit}
             disabled={!selectedGatewayId && !!requiredAmount}
           >
-            {/* {`پرداخت ${numberWithCommas(requiredAmount || 0)} ${getCurrencyLabelFa(orderData?.currencyType)}`}   */}
-            {`پرداخت ${numberWithCommas(((orderData?.payableAmount || 0) - (discountData?.discountPrice || 0)) || 0)} ${getCurrencyLabelFa(orderData?.currencyType)}`}
+            {`پرداخت ${numberWithCommas(orderData?.payableAmount || 0)} ${getCurrencyLabelFa(orderData?.currencyType)}`}
           </button>
         </footer>
         <div className="h-20" />

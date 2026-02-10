@@ -2,7 +2,12 @@
 
 import ShareIcon from "@/components/icons/ShareIcon";
 
-const Share : React.FC = () => {
+type Props = {
+  label?: string;
+  buttonClassName?: string;
+  iconClassName: string;
+}
+const Share : React.FC<Props> = props => {
     
   const shareHandle = async () => {
     if (navigator.share) {
@@ -26,9 +31,10 @@ const Share : React.FC = () => {
             type="button"
             onClick={shareHandle}
             aria-label="اشتراک گذاری"
+            className={props.buttonClassName || ""}
         >
-            <ShareIcon className="w-8 h-8 fill-current" />
-
+            <ShareIcon className={props.iconClassName} />
+            {props.label || "" }
         </button>
     )
 }

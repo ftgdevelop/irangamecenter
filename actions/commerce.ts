@@ -382,3 +382,45 @@ export const getCategoryBySlug = async (params: {slug: string; token: string;}) 
         return error
     }
 }
+
+export const addToWishlist = async ( params:{ 
+    productId: number;
+    token: string
+}) => {
+  try {
+    const response = await axios.post(
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.AddToWishlist}`,
+      params,
+      {
+        headers: {
+        ...Headers,
+        Authorization: `Bearer ${params.token}`,          
+        },
+      },
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+export const existInWishlist = async ( params:{ 
+    productId: number;
+    token: string
+}) => {
+  try {
+    const response = await axios.post(
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.ExistInWishlist}`,
+      null,
+      {
+        headers: {
+        ...Headers,
+        Authorization: `Bearer ${params.token}`,          
+        },
+      },
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
