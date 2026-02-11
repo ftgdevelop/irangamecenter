@@ -194,6 +194,9 @@ body {
   .bg-gradient-green{
     @apply bg-gradient-to-t from-[#028d7e] to-[#99feac];
   }
+  .bg-gradient-gray{
+    @apply bg-gradient-to-t from-[#aaaaaa] to-[#dddddd];
+  }
   .bg-gradient-green2{
     @apply bg-gradient-to-t from-[#028d7e] to-[#6edb83];
   }

@@ -137,13 +137,13 @@ const OrderDeatil: NextPage = () => {
         
         {orderDetail?.status === "Pending" && (
             <>
-                <div className="my-3 text-xs text-amber-600 dark:text-amber-400"> 
+                {/* <div className="my-3 text-xs text-amber-600 dark:text-amber-400"> 
                     <Image src={"/images/icons/error.svg"} alt="warning icon" className="w-5 h-5 object-contain inline-block align-middle ml-2" width={25} height={25} />
                     سفارش در صورت عدم پرداخت تا ۲۵ دقیقه دیگر لغو خواهد شد
-                </div>
+                </div> */}
                 <Link
                     href={`/payment?orderNumber=${orderDetail.orderNumber}&orderId=${orderDetail.id}`}
-                    className="block text-center bg-gradient-violet text-white rounded-full px-3 w-full text-sm py-3"
+                    className="block text-center bg-gradient-violet text-white rounded-full px-3 w-full text-sm py-3 my-3"
                 >
                     پرداخت {numberWithCommas(orderDetail.payableAmount)} {getCurrencyLabelFa(orderDetail.currencyType||"IRR")}
                 </Link>

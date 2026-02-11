@@ -330,139 +330,131 @@ const DetailProduct: NextPage<any> = ({
     }]
   }
 
+  const schemaGraphs : any[] = [
+    {
+      "@type": "Product",
+      "name": productData.name,
+      "description": productData.page?.title || "" ,
+      "brand": {
+        "@type": "Brand",
+        "name": productData.publisher?.name || ""
+      },
+      "url": `https://irangamecenter.com/product/${productData.slug}`,
+      "image": [productData.filePath],
+      "category":  productData.categories?.[0]?.name,    
+      "audience": {
+        "@type": "Audience",
+        "audienceType": productData.categories?.[0]?.slug === "console-game" ? "Console Gamers" : productData.categories?.[0]?.slug === "mobile-games" ? "Mobile Gamers" : "Gamers"
+      },
+      
+      "identifier": [
+        {
+          "@type": "PropertyValue",
+          "propertyID": "IGDB ID",
+          "value": productData.igdb || ""
+        }
+      ],                    
+      "offers": schemaOffers
+    }
+  ];
+
+  const schemaVideoItems = serversideGalleryData?.filter(g => g.mediaType === "Video");
+
+  if(schemaVideoItems?.length){
+    for (const v of schemaVideoItems){
+      let formatedDuration = "";
+      if(v.duration && v.duration > 0){
+                      
+        const H = Math.floor(v.duration/3600);            
+        const M = Math.floor((v.duration % 3600) / 60);              
+        const S = Math.floor(v.duration%60 );
+        
+        formatedDuration = "PT";
+
+        if(H){
+          formatedDuration += `${H}H`;
+        }
+        if(M){
+          formatedDuration += `${M}M`;
+        }
+        if(S){
+          formatedDuration += `${S}S`;
+        }
+        
+      }
+      schemaGraphs.push(
+        {
+          "@type": "VideoObject",
+          "name": v.fileAltAttribute,
+          "description": v.fileTitleAttribute ||"",
+          "thumbnailUrl": v.filePath || "",
+          "uploadDate": v.creationTime ? dateFormat(new Date(v.creationTime)) : "",
+          "duration": formatedDuration,
+          "contentUrl": "https://irangamecenter.com/video/ps-gift",
+          "embedUrl": v.cdnPath
+        }
+      )
+    }
+  }
+
+  if(productData.faqs?.length){
+    const mainEntity : any[] = [];
+    for (const f of productData.faqs){
+      mainEntity.push({
+        "@type": "Question",
+        "name": f.questions,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": f.answer
+        }                    
+      })
+    }
+    schemaGraphs.push({
+      "@type": "FAQPage",
+      "mainEntity": mainEntity
+    })
+  }
+
+  if(productData.breadcrumbs?.length){
+    const itemListElements : any[] = [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": "خانه",
+      "item": "https://irangamecenter.com"
+    }];
+    for (const [index, element]of productData.breadcrumbs.entries()){
+      itemListElements.push({
+        "@type": "ListItem",
+        "position": index+2,
+        "name": element.name,
+        "item": element.url
+      }) 
+    }
+
+    schemaGraphs.push(
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": itemListElements
+      } 
+    )
+  }
+
   return (
     <>
       <Head>
+
+        
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(
               {
                 "@context": "https://schema.org",
-                "@type": "Product",
-                "name": productData.name,
-                "description": productData.page?.title || "" ,
-                "brand": {
-                  "@type": "Brand",
-                  "name": productData.publisher?.name || ""
-                },
-                "url": `https://irangamecenter.com/product/${productData.slug}`,
-                "image": [productData.filePath],
-                "category":  productData.categories?.[0]?.name,    
-                "audience": {
-                  "@type": "Audience",
-                  "audienceType": productData.categories?.[0]?.slug === "console-game" ? "Console Gamers" : productData.categories?.[0]?.slug === "mobile-games" ? "Mobile Gamers" : "Gamers"
-                },
-                
-                "identifier": [
-                  {
-                    "@type": "PropertyValue",
-                    "propertyID": "IGDB ID",
-                    "value": productData.igdb || ""
-                  }
-                ],
-                
-                "offers": schemaOffers
-              }                
+                "@graph": schemaGraphs
+              }              
             )
           }}
         />  
-
-        {serversideGalleryData?.filter(g => g.mediaType === "Video")?.map(v => {
-
-          let formatedDuration = "";
-          if(v.duration && v.duration > 0){
-                          
-            const H = Math.floor(v.duration/3600);            
-            const M = Math.floor((v.duration % 3600) / 60);              
-            const S = Math.floor(v.duration%60 );
-            
-            formatedDuration = "PT";
-
-            if(H){
-              formatedDuration += `${H}H`;
-            }
-            if(M){
-              formatedDuration += `${M}M`;
-            }
-            if(S){
-              formatedDuration += `${S}S`;
-            }
-            
-          }
-          return (
-            <script
-              key={v.id}
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: JSON.stringify(
-                    {
-                      "@type": "VideoObject",
-                      "name": v.fileAltAttribute,
-                      "description": v.fileTitleAttribute,
-                      "thumbnailUrl": v.filePath,
-                      "uploadDate": v.creationTime ? dateFormat(new Date(v.creationTime)) : "",
-                      "duration": formatedDuration,
-                      "contentUrl": "https://irangamecenter.com/video/ps-gift",
-                      embedUrl: v.cdnPath
-
-                    }               
-                )
-              }}
-            /> 
-          )
-        })}   
-
-        {!!productData.faqs?.length && (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(
-                {
-                  "@type": "FAQPage",
-                  "mainEntity": productData.faqs.map(f => (
-                    {
-                      "@type": "Question",
-                      "name": f.questions,
-                      "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": f.answer
-                      }
-                    }
-                  ))
-                }             
-              )
-            }}
-          /> 
-        )}
-
-        
-        {!!productData.breadcrumbs?.length && (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(
-                {
-                  "@type": "BreadcrumbList",
-                  "itemListElement": [
-                    {
-                      "@type": "ListItem",
-                      "position": 1,
-                      "name": "خانه",
-                      "item": "https://irangamecenter.com"
-                    },
-                    ...productData.breadcrumbs.map((b, index) => ({
-                      "@type": "ListItem",
-                      "position": index+2,
-                      "name": b.name,
-                      "item": b.url
-                    }))
-                  ]
-                }            
-              )
-            }}
-          /> 
-        )}
 
         {productData?.page?.title && <title> {productData.page.title} </title>}
 
