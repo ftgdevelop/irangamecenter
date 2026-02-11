@@ -387,10 +387,10 @@ const DetailProduct: NextPage<any> = ({
           "@type": "VideoObject",
           "name": v.fileAltAttribute,
           "description": v.fileTitleAttribute ||"",
-          "thumbnailUrl": v.filePath || "",
+          "thumbnailUrl": v.thumbnail || "",
           "uploadDate": v.creationTime ? dateFormat(new Date(v.creationTime)) : "",
           "duration": formatedDuration,
-          "contentUrl": "https://irangamecenter.com/video/ps-gift",
+          "contentUrl": v.filePath,
           "embedUrl": v.cdnPath
         }
       )
@@ -427,7 +427,9 @@ const DetailProduct: NextPage<any> = ({
         "@type": "ListItem",
         "position": index+2,
         "name": element.name,
-        "item": element.url
+        "item": element.url?.startsWith("http")
+          ? element.url
+          : `https://irangamecenter.com${element.url}`
       }) 
     }
 
