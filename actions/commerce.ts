@@ -423,3 +423,29 @@ export const existInWishlist = async ( params:{
     return error
   }
 }
+
+
+
+
+export const notificationUpsert = async ( params:{ 
+  productId: number;
+  productVariantId?: number;
+  type: "ProductAvailable" | "AmazingDiscount";
+  channels: "None" | "Email" | "Sms" | "InAppNotification";
+}, token: string) => {
+  try {
+    const response = await axios.post(
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.ProductNotificationUpsert}`,
+      params,
+      {
+        headers: {
+        ...Headers,
+        Authorization: `Bearer ${token}`,          
+        },
+      },
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
