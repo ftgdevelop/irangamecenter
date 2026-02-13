@@ -388,7 +388,7 @@ const DetailProduct: NextPage<any> = ({
           "name": v.fileAltAttribute,
           "description": v.fileTitleAttribute ||"",
           "thumbnailUrl": v.thumbnail || "",
-          "uploadDate": v.creationTime || "",
+          "uploadDate": v.creationTime ? new Date(v.creationTime).toISOString() : "",
           "duration": formatedDuration,
           "contentUrl": v.filePath,
           "embedUrl": v.cdnPath
