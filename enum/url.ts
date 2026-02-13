@@ -96,6 +96,7 @@ export const Payment = {
     GetCategoryBySlug:"/api/services/app/Category/GetBySlug",
 
     AddToWishlist:"/api/services/app/Wishlist/Add",
+    RemoveWishlist:"/api/services/app/Wishlist/Remove",
     ExistInWishlist:"/api/services/app/Wishlist/Exists",
 
     ProductNotificationUpsert:"/api/services/app/ProductNotification/Upsert"

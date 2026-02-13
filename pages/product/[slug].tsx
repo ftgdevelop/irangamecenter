@@ -10,7 +10,7 @@ import Contacts from '@/components/shared/Contacts';
 import parse from 'html-react-parser';
 import Image from 'next/image';
 import RatingItem from '@/components/products/RatingItem';
-import { dateDiplayFormat, dateFormat } from '@/helpers';
+import { dateDiplayFormat} from '@/helpers';
 import Link from 'next/link';
 import ProductDetail from '@/components/products/ProductDetail';
 import AgeRatingDetail from '@/components/products/AgeRatingDetail';
@@ -388,7 +388,7 @@ const DetailProduct: NextPage<any> = ({
           "name": v.fileAltAttribute,
           "description": v.fileTitleAttribute ||"",
           "thumbnailUrl": v.thumbnail || "",
-          "uploadDate": v.creationTime ? dateFormat(new Date(v.creationTime)) : "",
+          "uploadDate": v.creationTime || "",
           "duration": formatedDuration,
           "contentUrl": v.filePath,
           "embedUrl": v.cdnPath

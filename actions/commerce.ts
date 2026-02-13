@@ -403,6 +403,25 @@ export const addToWishlist = async ( params:{
   }
 }
 
+export const removeWishlist = async ( params:{ 
+    productId: number
+}, token: string) => {
+  try {
+    const response = await axios.delete(
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.RemoveWishlist}?productId=${params.productId}`,
+      {
+        headers: {
+        ...Headers,
+        Authorization: `Bearer ${token}`,          
+        },
+      },
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
 export const existInWishlist = async ( params:{ 
     productId: number;
     token: string
@@ -431,7 +450,7 @@ export const notificationUpsert = async ( params:{
   productId: number;
   productVariantId?: number;
   type: "ProductAvailable" | "AmazingDiscount";
-  channels: "None" | "Email" | "Sms" | "InAppNotification";
+  channels: ("None" | "Email" | "Sms" | "InAppNotification")[];
 }, token: string) => {
   try {
     const response = await axios.post(
