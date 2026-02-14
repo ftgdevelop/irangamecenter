@@ -5,6 +5,7 @@ type Props = {
     values: string[];
     items: { value: string, label: React.ReactNode }[];
     onChange: (values: string[]) => void;
+    itemsClassname?:string;
 }
 
 const CheckboxGroup: React.FC<Props> = props => {
@@ -46,6 +47,7 @@ const CheckboxGroup: React.FC<Props> = props => {
                             value={item.value}
                             key={item.value}
                             checked={values.includes(item.value)}
+                            className={props.itemsClassname||""}
                         />
                     ))}
                 </div>
@@ -58,6 +60,7 @@ const CheckboxGroup: React.FC<Props> = props => {
                             value={item.value}
                             key={item.value}
                             checked={values.includes(item.value)}
+                            className={props.itemsClassname||""}
                         />
                     ))}
                 </div>
@@ -70,6 +73,7 @@ const CheckboxGroup: React.FC<Props> = props => {
                             value={item.value}
                             key={item.value}
                             checked={values.includes(item.value)}
+                            className={props.itemsClassname||""}
                         />
                     ))}
                 </div>}
@@ -87,6 +91,7 @@ const CheckboxGroup: React.FC<Props> = props => {
                     value={item.value}
                     key={item.value}
                     checked={values.includes(item.value)}
+                    className={props.itemsClassname||""}
                 />
             )}
         </>

@@ -443,9 +443,6 @@ export const existInWishlist = async ( params:{
   }
 }
 
-
-
-
 export const notificationUpsert = async ( params:{ 
   productId: number;
   productVariantId?: number;
@@ -459,7 +456,8 @@ export const notificationUpsert = async ( params:{
       {
         headers: {
         ...Headers,
-        Authorization: `Bearer ${token}`,          
+        Authorization: `Bearer ${token}`,
+        "Accept-Language": "fa-IR"
         },
       },
     )
