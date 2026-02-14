@@ -21,28 +21,39 @@ export default function Document() {
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@graph": [
+              "@type": "Organization",
+              "@id": "https://irangamecenter.com/#organization",
+              "name": "ایران گیم سنتر",
+              "alternateName": "Iran Game Center",
+              "legalName": "[شرکت جستجو گشت رامان]",
+              "url": "https://irangamecenter.com",
+              "logo": "https://cdn.irangamecenter.com/images/logo/igc-logo.svg",
+              "description": "ایران گیم سنتر، مرجع تخصصی خرید بازی‌های کنسول و PC، گیفت کارت و شارژ درون برنامه‌ای بازی‌های موبایل با تحویل سریع و پشتیبانی حرفه‌ای.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "IR",
+              },
+              "contactPoint": [
                 {
-                  "@type": "Organization",
-                  "@id": "https://irangamecenter.com/#organization",
-                  "name": "Iran Game Center",
-                  "url": "https://irangamecenter.com",
-                  "logo": {
-                    "@type": "ImageObject",
-                    "url": "https://irangamecenter.com/logo.svg",
-                    "width": 512,
-                    "height": 512
-                  }
+                  "@type": "ContactPoint",
+                  "telephone": "[+982182800104]",
+                  "contactType": "customer service",
+                  "areaServed": "IR",
+                  "availableLanguage": ["Persian"]
                 },
                 {
-                  "@type": "WebSite",
-                  "@id": "https://irangamecenter.com/#website",
-                  "url": "https://irangamecenter.com",
-                  "name": "Iran Game Center",
-                  "publisher": {
-                    "@id": "https://irangamecenter.com/#organization"
-                  }
+                  "@type": "ContactPoint",
+                  "email": "[info@irangamecenter.com]",
+                  "contactType": "technical support",
+                  "areaServed": "IR",
+                  "availableLanguage": ["Persian", "English"]
                 }
+              ],
+              "sameAs": [
+                "https://t.me/irangamecenter_official",
+                "https://www.instagram.com/irangamecenter_official",
+                "https://x.com/irangamecenter",
+                "https://www.aparat.com/irangamecenter.com"
               ]
             })
           }}
