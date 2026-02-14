@@ -184,6 +184,10 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         showFooter = false;
         showFixedNav = false;
     }
+    if (router.pathname === "/profile/wishlist") {
+        showFooter = false;
+        showFixedNav = true;
+    }
 
     if (router.pathname.includes("/orders")) {
         showFooter = false;

@@ -466,3 +466,28 @@ export const notificationUpsert = async ( params:{
     return error
   }
 }
+
+export const getUserWishlist = async (params: {
+    skipCount: number;
+    maxResultCount: number;
+    token: string;
+},acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
+    try {
+
+        const response = await axios.get(
+           `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetAllWishlist}?SkipCount=${params.skipCount}&MaxResultCount=${params.maxResultCount}`,
+            {
+                headers: {
+                    ...Headers,
+                    "Accept-Language": acceptLanguage,
+                    currency: "IRR",
+                    Authorization: `Bearer ${params.token}`,
+                },
+            },
+        )
+
+        return (response)
+    } catch (error: any) {
+        return error
+    }
+}

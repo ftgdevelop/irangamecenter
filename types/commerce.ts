@@ -789,3 +789,21 @@ export type StrapiSeoData = {
     Value?: string;
   }[];
 };
+
+export interface WishListItemType {
+    creationTime: string;
+    id: number;
+    product: {
+        id: number;
+      filePath?: string;
+      fileTitleAttribute?: string;
+      fileAltAttribute?: string;
+      name?: string;
+      slug?: string;
+
+      categories?: {      
+        name?: string;
+        slug?: string;
+      }[];
+    }
+}
