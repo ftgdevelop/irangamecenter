@@ -98,6 +98,7 @@ export const Payment = {
     AddToWishlist:"/api/services/app/Wishlist/Add",
     RemoveWishlist:"/api/services/app/Wishlist/Remove",
     ExistInWishlist:"/api/services/app/Wishlist/Exists",
+    GetAllWishlist:"/api/services/app/Wishlist/GetAll",
 
     ProductNotificationUpsert:"/api/services/app/ProductNotification/Upsert"
   }

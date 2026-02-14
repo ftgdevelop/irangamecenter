@@ -71,7 +71,7 @@ export default function Profile() {
         iconSvg : <CartIcon  className="w-7 h-7 fill-none stroke-current grow-0 shrink-0"/>
       },
       {
-        href: "#",
+        href: "/profile/wishlist",
         label: "مورد علاقه ها",
         title: "مورد علاقه ها",
         iconSvg : <HeartIcon  className="w-7 h-7 fill-none stroke-current grow-0 shrink-0"/>
