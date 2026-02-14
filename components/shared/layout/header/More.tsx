@@ -85,7 +85,7 @@ const More: React.FC<Props> = props => {
 
             <div className="px-4">
               {notificationSettingMode ? (
-                <ProductNotificationSetting />
+                <ProductNotificationSetting productId={props.productId} />
               ):(
                 <>
                   <div className="py-4 border-b border-neutral-300 dark:border-white/30">
