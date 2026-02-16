@@ -23,7 +23,6 @@ const CheckoutSection = () => {
     
     const router = useRouter();
 
-    const getUserLoading = useAppSelector((state) => state.authentication.getUserLoading);
     const isAuthenticated = useAppSelector((state) => state.authentication.isAuthenticated);
     const userInfo = useAppSelector((state) => state.authentication.user);
     const { createOrder, getCart } = useCartApi();
@@ -166,7 +165,7 @@ const CheckoutSection = () => {
         }
     }, [userInfo?.lastName]);
     
-    if (userInfo?.lastName || getUserLoading || goToPaymentLoading) {
+    if (userInfo?.lastName || goToPaymentLoading) {
         return <LoadingFull /> 
     }
     
@@ -231,7 +230,6 @@ const CheckoutSection = () => {
                                 setFieldValue('firstname', value, true)
                             }}
                             value={values.firstname}
-                            fieldClassName="h-auto text-xl leading-[29px] py-[22px]"
                             placeholder=" نام را وارد کنید "
                         />
 
@@ -259,13 +257,12 @@ const CheckoutSection = () => {
                                 setFieldValue('lastname', value, true)
                             }}
                             value={values.lastname}
-                            fieldClassName="h-auto text-xl leading-[29px] py-[22px]"
                             placeholder="نام خانوادگی  را وارد کنید"
                         />
+
                         <div className="self-stretch ">
                             <PhoneInput
                                 placeholder="شماره موبایل را وارد نمایید"
-                                heightClass="h-14 h-auto text-xl leading-[29px] py-[22px]"
                                 label={
                                     <div className="w-full flex justify-between items-center">
                                         <div className="flex gap-3 items-center">
@@ -319,14 +316,13 @@ const CheckoutSection = () => {
                                     setFieldValue('emailAddress', value, true)
                                 }}
                             value={values.emailAddress}
-                            fieldClassName="h-auto text-xl leading-[29px] py-[22px] mb-5"
                             placeholder="ایمیل را وارد نمایید"
 
                             />
 
                         <button
                             type="submit"
-                            className="h-auto text-xl leading-[29px] py-[22px] px-8 rounded-full bg-[#aa3aff] text-white flex justify-center gap-2 items-center w-full mb-5"
+                            className="h-11 font-semibold px-8 rounded-full bg-[#aa3aff] text-white flex justify-center gap-2 items-center w-full mb-5"
                             disabled={submitLoading}
                         >
                             ذخیره تغییرات
