@@ -499,8 +499,8 @@ const DetailProduct: NextPage<any> = ({
           <h2 className="text-lg font-semibold block pt-3">
             {productData?.name}
           </h2>
-          {!!variantData?.description && <h3 className="font-semibold block mb-2">
-            {variantData.description}
+          {!!variantData?.subTitle && <h3 className="font-semibold block mb-2">
+            {variantData.subTitle}
           </h3>}
           {firstRatingTag}
           {brandTag}
