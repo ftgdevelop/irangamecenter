@@ -103,7 +103,7 @@ const Footer = () => {
 
             <div className="py-5 border-t border-white/15">
                 <strong className="block text-center font-semibold mb-4"> نمادهای اعتماد </strong>
-                <div className="flex gap-4 bg-[#f0eff2] rounded-xl p-5">
+                <div className="flex gap-4 justify-center bg-[#f0eff2] rounded-xl p-5">
 
                     <a 
                         referrerPolicy="origin" 
@@ -128,7 +128,7 @@ const Footer = () => {
                             window.open("https://logo.samandehi.ir/Verify.aspx?id=396563&p=xlaopfvlgvkadshwgvkaxlao", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")
                         }}
                         alt='logo-samandehi'
-                        src="/mock-images/resaneh.jpg"
+                        src="/images/resaneh.jpg"
                         width={81}
                         height={96}
                     />
@@ -146,6 +146,19 @@ const Footer = () => {
                             height={96}
                             className="h-24 w-auto"
                         />
+                    </a>
+
+                    <a 
+                        href='https://emalls.ir/Shop/74254/' 
+                        target='_blank'>
+                            <Image 
+                                className="h-20 w-auto cursor-pointer"
+                                width={54}
+                                height={80}
+                                alt='نشان اعتباری ایمالز' 
+                                referrerPolicy='origin' 
+                                src='/images/emalls-neshan.svg' 
+                            />
                     </a>
 
                 </div>
