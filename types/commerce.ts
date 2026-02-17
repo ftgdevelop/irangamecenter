@@ -142,7 +142,7 @@ export interface ProductVariant {
 export interface SingleVariant {
   id:number;
   sku?: string;
-  description?: string;
+  subTitle?: string;
   currencyType?: "IRR"|"USD";
   regularPrice?: number;
   salePrice?: number;
