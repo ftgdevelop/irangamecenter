@@ -27,6 +27,7 @@ export const Strapi = {
 export const Identity = {
   SendOTP: "/api/services/app/OTP/SendOTP",
   LoginOTP:"/api/services/app/OTP/Login",
+  LoginByUtm:"/api/services/app/OTP/RegisterOrLoginByUtm",
   RegisterOTP:"/api/services/app/OTP/Register",
   ChangePasswordByAuthorizedUser:"/api/services/app/Account/ChangePasswordByAuthorizedUser",
   GetCurrentUserProfileForEdit: "/api/services/app/Profile/GetCurrentUserProfileForEdit",

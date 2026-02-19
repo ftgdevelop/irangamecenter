@@ -312,3 +312,23 @@ export const forgotPasswordResetPassword = async (params:{code: string; userId: 
         return error
     }
 }
+
+export const loginUtm = async (param: { utmName: string, utmToken: string }, acceptLanguage: string = 'fa-IR') => {
+
+    try {
+        const response = await axios.post(
+            `${ServerAddress.Type}${ServerAddress.Identity}${Identity.LoginByUtm}`,
+            param,
+            {
+                headers: {
+                    ...Headers,
+                    "Accept-Language": acceptLanguage
+                }
+            },
+        );
+
+        return response
+    } catch (error) {
+        return error
+    }
+}
