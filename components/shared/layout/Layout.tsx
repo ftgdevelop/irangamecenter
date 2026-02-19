@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import Error from "../Error";
 import Notification from "../Notification";
 import { setReduxBalance, setReduxUser } from "@/redux/authenticationSlice";
-import { getCurrentUserProfile } from "@/actions/identity";
+import { getCurrentUserProfile, loginUtm } from "@/actions/identity";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import FooterNavigation from "./footer/FooterNavigation";
 import { getUserBalance } from "@/actions/payment";
@@ -17,6 +17,7 @@ import { addDeviceId, setGeneralCartInfo, setGeneralCartLoading } from "@/redux/
 import { GetCookieDeviceId } from "@/helpers/order";
 import { useCartApi } from "@/actions/cart";
 import { GetCookieMode } from "@/helpers";
+import { setReduxNotification } from "@/redux/notificationSlice";
 
 type Props = {
     className?: string;
@@ -44,8 +45,71 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
   
     useEffect(() => {
         if(queryBasaUserToken){
+            
             const expDate = new Date();
-            expDate.setTime(expDate.getTime() + (20 * 60 * 1000)); //save in cookie only 20 minutes.
+            expDate.setTime(expDate.getTime() + (20 * 60 * 1000)); //save in cookie only 20 minutes.    
+
+            const loginByUtm = async () => {
+                
+                debugger;
+
+                const response: any = await loginUtm({
+                    utmName:"basa",
+                    utmToken:queryBasaUserToken as string
+                })
+
+                if (response.status == 200) {
+
+                    const token = response.data?.result?.accessToken;
+                    localStorage.setItem('Token', token);     
+                    localStorage.setItem('TokenExpire', expDate.toString());               
+
+                    dispatch(setReduxUser({
+                        isAuthenticated: true,
+                        user: response.data?.result?.user,
+                        getUserLoading: false
+                    }));
+
+                    const userFirstName = response.data?.result?.user?.firstName || "کاربر";
+
+                    dispatch(setReduxNotification({
+                        status: 'success',
+                        message: userFirstName + '  عزیز،  خوش آمدید.',
+                        isVisible: true
+                    }));
+
+                } else {
+                    const errorMessage = response?.response?.data?.error?.message;
+    
+                    let message = "";
+                    if (errorMessage) {
+                        message = response.response.data.error.message;
+                    }
+    
+                    if(errorMessage === "UserNotFound"){
+                        dispatch(setReduxUser({
+                            isAuthenticated: false,
+                            user: {},
+                            getUserLoading: false
+                        }));
+                    }else{
+                        dispatch(setReduxNotification({
+                            status: 'error',
+                            message: message,
+                            isVisible: true
+                        }));
+                        dispatch(setReduxUser({
+                            isAuthenticated: false,
+                            user: {},
+                            getUserLoading: false
+                        }));
+                    }
+                    
+                }
+            } 
+
+            loginByUtm();
+
             if (document) {
                 document.cookie = `basaUserToken=${queryBasaUserToken}; expires=${expDate.toUTCString()};path=/`;
             }        
@@ -253,7 +317,31 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }
 
     useEffect(() => {
-        const token = localStorage?.getItem('Token');
+
+        function getToken() {
+            
+            debugger;
+
+            const user_token = localStorage?.getItem('Token');
+            const user_expireTime = localStorage?.getItem('TokenExpire');
+
+            if (!user_token) {
+                localStorage.removeItem('TokenExpire');
+                return null;
+            }
+
+            const now = new Date().getTime();
+            if (user_expireTime && now > parseInt(user_expireTime, 10)) {
+                localStorage.removeItem('Token');
+                localStorage.removeItem('TokenExpire');
+                return null;
+            }
+
+            return user_token;
+        }
+
+        const token = getToken();
+
         if (token) {
             const getUserData = async () => {
                 dispatch(setReduxUser({
