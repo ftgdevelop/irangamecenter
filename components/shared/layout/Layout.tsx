@@ -40,6 +40,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     const {getCart} = useCartApi(); 
 
     const queryBasaUserToken = router.query?.ut;
+    const queryUtmSource = router.query?.utm_source;
   
     useEffect(() => {
         if(queryBasaUserToken){
@@ -49,7 +50,14 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
                 document.cookie = `basaUserToken=${queryBasaUserToken}; expires=${expDate.toUTCString()};path=/`;
             }        
         }
-    }, [queryBasaUserToken]);
+        if(queryUtmSource){
+            const expDate = new Date();
+            expDate.setTime(expDate.getTime() + (20 * 60 * 1000)); //save in cookie only 20 minutes.
+            if (document) {
+                document.cookie = `utmSourceName=${queryUtmSource}; expires=${expDate.toUTCString()};path=/`;
+            } 
+        }
+    }, [queryBasaUserToken, queryUtmSource]);
     
     useEffect(()=>{
         const id = GetCookieDeviceId();
