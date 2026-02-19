@@ -65,10 +65,14 @@ export default function CartPage() {
     try {
 
       let basaCookie ="";
+      let utmSourceName="";
       const cookies = decodeURIComponent(document?.cookie).split(';');
       for (const item of cookies) {
           if (item.includes("basaUserToken=")) {
               basaCookie = item.split("=")[1];
+          }
+          if (item.includes("utmSourceName=")) {
+              utmSourceName = item.split("=")[1];
           }
       }
 
@@ -83,6 +87,9 @@ export default function CartPage() {
       if ( basaCookie){
           params.metaSearchName = "basa";
           params.metaSearchKey = basaCookie;
+      }
+      if ( utmSourceName){
+          params.metaSearchName = utmSourceName;
       }
 
       const res: any = await createOrder(params);
