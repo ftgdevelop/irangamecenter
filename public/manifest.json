@@ -1,5 +1,9 @@
 {
  "name": "Iran Game Center",
+ "short_name": "Iran Game Center",
+ "start_url": "/",
+ "description": "Iran Game Center - اخبار و دانلود بازی",
+ "background_color": "#ffffff",
  "icons": [
   {
    "src": "\/android-icon-36x36.png",
