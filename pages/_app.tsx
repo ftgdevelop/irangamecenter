@@ -27,6 +27,21 @@ export default function App({ Component, pageProps }: AppProps) {
     };
   }, [router.events]);
 
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production") {
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/service-worker.js")
+            .then((reg) => console.log("SW registered:", reg.scope))
+            .catch((err) => console.log("SW failed:", err));
+        });
+      }
+    }
+  }, []);
+
+
   return (
     <MantineProvider theme={theme}>
       <Provider store={store}>
