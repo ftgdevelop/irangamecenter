@@ -1,11 +1,9 @@
-const CACHE_NAME = "igc-cache-v1";
-const urlsToCache = ["/"];
+const CACHE_NAME = "igc-cache-v2";
+const STATIC_ASSETS = ["/"];
 
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(urlsToCache);
-    })
+    caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS))
   );
   self.skipWaiting();
 });
@@ -26,15 +24,23 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("fetch", event => {
-  if (event.request.method !== "GET") return;
+  const { request } = event;
+
+  // ❌ API ها رو کش نکن
+  if (request.url.includes("/api/")) {
+    return;
+  }
+
+  // فقط GET
+  if (request.method !== "GET") return;
 
   event.respondWith(
-    caches.match(event.request).then(response => {
+    caches.match(request).then(response => {
       return (
         response ||
-        fetch(event.request).then(fetchRes => {
+        fetch(request).then(fetchRes => {
           return caches.open(CACHE_NAME).then(cache => {
-            cache.put(event.request, fetchRes.clone());
+            cache.put(request, fetchRes.clone());
             return fetchRes;
           });
         })
