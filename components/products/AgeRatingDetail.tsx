@@ -186,7 +186,7 @@ const AgeRatingDetail: React.FC<Props> = props => {
     return (
         <>
             {!!(pegi || esrb) && (
-                <div className={`${pegi && esrb ? "grid grid-cols-2" : ""}`}>
+                <div className={`lg:max-w-[600px] lg:mx-auto ${pegi && esrb ? "grid grid-cols-2" : ""}`}>
 
                     {!!pegi && (
                         <button
