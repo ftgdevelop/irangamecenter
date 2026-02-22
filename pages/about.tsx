@@ -75,12 +75,14 @@ const AboutUs: NextPage = ({ strapiData, strapiSeoData }: { strapiData?: StrapiD
           />
         )}
       </Head>
+      <div className="lg:py-5">
+        {!!aboutDescription && <Intro description={aboutDescription} />}
 
-      {!!aboutDescription && <Intro description={aboutDescription} />}
+        {!!icons && <AboutIcons items={icons} />}
 
-      {!!icons && <AboutIcons items={icons} />}
+        {!!FAQ_items?.length && <FAQ items={FAQ_items} answerParse="markDown" />}
+      </div>
 
-      {!!FAQ_items?.length && <FAQ items={FAQ_items} answerParse="markDown" />}
 
       <Contacts
         data={{

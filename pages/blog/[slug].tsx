@@ -12,7 +12,7 @@ import BlogsCarousel from "@/components/blog/BlogsCarousel";
 import Contacts from "@/components/shared/Contacts";
 import { useEffect, useState } from "react";
 import UserCircle from "@/components/icons/UserCircle";
-import BreadCrumpt from "@/components/shared/BreadCrumpt";
+import Breadcrumb from "@/components/shared/Breadcrumb";
 import { useAppDispatch } from "@/hooks/use-store";
 import { setHeaderParams } from "@/redux/pages";
 
@@ -75,13 +75,12 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
                 <title>{PostTitle}</title>
             </Head>
 
-            <BreadCrumpt 
+            <Breadcrumb 
                 items={[
                     {label:"وبلاگ", link:"/blogs"},
                     {label: post.title.rendered || "", link:""}
                 ]}
-                wrapperClassName="bg-[#e8ecf0] dark:bg-[#192a39] px-4 py-3 mb-4"
-                textColorClass="text-neutral-800 dark:text-neutral-300"
+                wrapperClassName="mb-4"
             />
             
 
@@ -91,77 +90,80 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, moduleDisabled, tags ,
                     alt={post.title.rendered}
                     width={750}
                     height={750}
-                    className="w-full h-auto block object-cover mb-3"
+                    className="w-full h-auto block object-cover mb-3 max-w-[1200px] mx-auto"
                 />}
-                
-                <h2 className="font-bold text-xl mb-3">{post.title?.rendered}</h2>
-                
-                <div className="flex gap-3 flex-wrap">
 
-                    {!!date && <div className="block border border-neutral-300 dark:border-white/15 p-4 rounded-xl text-xs">
-                        انتشار
-                        <b className="block font-semibold mt-2 text-sm">
-                            {toPersianDigits(dateDiplayFormat({
-                                date: date,
-                                format:"timeAgo",
-                                locale:"fa"
-                            }))}
-                        </b>
-                    </div>}
+                <div className="max-w-[900px] mx-auto py-5">
+                    <h2 className="font-bold text-xl mb-3 lg:text-2xl lg:mb-7">{post.title?.rendered}</h2>
+                    
+                    <div className="flex gap-3 flex-wrap lg:mb-12">
 
-                    {!!categories.length && (
-                        <Link
-                            className="block border border-neutral-300 dark:border-white/15 p-4 rounded-xl text-xs"
-                            href={`/blog/category/${categories[0]?.slug}`}
-                        >
-                            دسته بندی
+                        {!!date && <div className="block border border-neutral-300 dark:border-white/15 p-4 rounded-xl text-xs">
+                            انتشار
                             <b className="block font-semibold mt-2 text-sm">
-                                {categories[0]?.name}
+                                {toPersianDigits(dateDiplayFormat({
+                                    date: date,
+                                    format:"timeAgo",
+                                    locale:"fa"
+                                }))}
                             </b>
-                        </Link>
+                        </div>}
+
+                        {!!categories.length && (
+                            <Link
+                                className="block border border-neutral-300 dark:border-white/15 p-4 rounded-xl text-xs"
+                                href={`/blog/category/${categories[0]?.slug}`}
+                            >
+                                دسته بندی
+                                <b className="block font-semibold mt-2 text-sm">
+                                    {categories[0]?.name}
+                                </b>
+                            </Link>
+                        )}
+
+                        {!!acf?.time_read && <div className="block border border-neutral-300 dark:border-white/15 p-4 rounded-xl text-xs">
+                            مدت مطالعه
+                            <b className="block font-semibold mt-2 text-sm">
+                                {acf.time_read}
+                            </b>
+                        </div>}
+
+                    </div>
+
+                    {!!content?.rendered && (
+                        <div className="inserted-content">
+                            {parse(content.rendered)}
+                        </div>
                     )}
 
-                    {!!acf?.time_read && <div className="block border border-neutral-300 dark:border-white/15 p-4 rounded-xl text-xs">
-                        مدت مطالعه
-                        <b className="block font-semibold mt-2 text-sm">
-                            {acf.time_read}
-                        </b>
-                    </div>}
+                    {!!authorName && (
+                        <div className="flex items-center gap-1 my-8">
+                            <UserCircle className="w-6 h-6 fill-current" />
+                            <span className="text-sm">
+                                نویسنده مقاله: {authorName}
+                            </span>
+                        </div>
+                    )}
 
+                    {!!tags?.length && (
+                        <>
+                        <h4 className="text-lg font-semibold mb-4 mt-8 text-[#a93aff] dark:text-[#ffefb2]"> تگ های مرتبط </h4>
+                        <div className="flex gap-2 flex-wrap">
+                            {tags.map(tag => (
+                                <Link
+                                    key={tag.id}
+                                    href={`/tag/${tag.slug}`}
+                                    className="bg-[#a93aff] text-white dark:bg-[#161b3b] dark:text-[#a93aff] font-semibold p-4 text-xs rounded-xl block"
+                                >
+                                    #{tag.label}
+                                </Link>
+                            ))}
+                        </div>
+                        
+                        </>
+                    )}
                 </div>
-
-                 {!!content?.rendered && (
-                    <div className="inserted-content">
-                        {parse(content.rendered)}
-                    </div>
-                )}
-
-                {!!authorName && (
-                    <div className="flex items-center gap-1 my-8">
-                        <UserCircle className="w-6 h-6 fill-current" />
-                        <span className="text-sm">
-                            نویسنده مقاله: {authorName}
-                        </span>
-                    </div>
-                )}
-
-                {!!tags?.length && (
-                    <>
-                    <h4 className="text-lg font-semibold mb-4 mt-8 text-[#a93aff] dark:text-[#ffefb2]"> تگ های مرتبط </h4>
-                    <div className="flex gap-2 flex-wrap">
-                        {tags.map(tag => (
-                            <Link
-                                key={tag.id}
-                                href={`/tag/${tag.slug}`}
-                                className="bg-[#a93aff] text-white dark:bg-[#161b3b] dark:text-[#a93aff] font-semibold p-4 text-xs rounded-xl block"
-                            >
-                                #{tag.label}
-                            </Link>
-                        ))}
-                    </div>
-                    
-                    </>
-                )}
+                
 
             </div>
             {!!relatedPosts && <BlogsCarousel 

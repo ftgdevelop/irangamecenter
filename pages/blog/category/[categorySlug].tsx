@@ -4,7 +4,7 @@ import { getBlogs, GetCategories } from "@/actions/blog";
 import { NextPage } from "next";
 import { BlogItemType } from "@/types/blog";
 import Contacts from "@/components/shared/Contacts";
-import BreadCrumpt from "@/components/shared/BreadCrumpt";
+import Breadcrumb from "@/components/shared/Breadcrumb";
 import BlogListItem from "@/components/blog/BlogListItem";
 import Pagination from "@/components/shared/Pagination";
 import { useRouter } from "next/router";
@@ -16,16 +16,15 @@ const Category: NextPage<any> = ({ page, posts, totalPages, categoryName }: { pa
 
     return (
         <>
-            <BreadCrumpt
-                wrapperClassName="bg-[#e8ecf0] dark:bg-[#192a39] px-4 py-3 mb-4"
-                textColorClass="text-neutral-800 dark:text-neutral-300"
+            <Breadcrumb
+                wrapperClassName="mb-4"
                 items={[
                     // { label: "وبلاگ", link: "/blogs" },
                     {label:categoryName ||"دسته بندی نامشخص", link:""}
                 ]}
             />
 
-            <div className="px-4">
+            <div className="px-4 lg:grid lg:grid-cols-3 lg:gap-3 lg:py-10 max-w-[1200px] mx-auto">
                 {posts?.map(post => (
                     <BlogListItem
                         key={post.id}
@@ -33,13 +32,14 @@ const Category: NextPage<any> = ({ page, posts, totalPages, categoryName }: { pa
                         wrapperClassName="mb-4"
                     />
                 ))}
-
-                {totalPages > 1 && <Pagination
-                    totalItems={totalPages * 10}
-                    currentPage={page ? +page : 1}
-                    onChange={p => { router.push({ query: { ...routerQuery, page: p } }) }}
-
-                />}
+                <div className="lg:col-span-3">                    
+                    {totalPages > 1 && <Pagination
+                        totalItems={totalPages * 10}
+                        currentPage={page ? +page : 1}
+                        onChange={p => { router.push({ query: { ...routerQuery, page: p } }) }}
+                        wrapperClassName="lg:max-w-[380px] mx-auto"
+                    />}
+                </div>
             </div>
 
             <Contacts />

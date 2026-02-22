@@ -18,6 +18,7 @@ import { GetCookieDeviceId } from "@/helpers/order";
 import { useCartApi } from "@/actions/cart";
 import { GetCookieMode } from "@/helpers";
 import { setReduxNotification } from "@/redux/notificationSlice";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
 
 type Props = {
     className?: string;
@@ -26,6 +27,8 @@ type Props = {
 const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
     const router = useRouter();
+
+    const isDesktop = useIsDesktop();
 
     const dispatch = useAppDispatch();
 
@@ -416,14 +419,14 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         <>
             <Error />
             <Notification />
-            <div className={`bg-[#fafafa] text-[#333333] dark:bg-[#011425] dark:text-white md:max-w-lg mx-auto ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`}>
+            <div className={`bg-[#fafafa] text-[#333333] dark:bg-[#011425] dark:text-white lg:min-h-screen ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`}>
                 <PageLoadingBar active={loading} />
                 {showHeader && <>
                     <Header />
                     <div className="mt-[84px]" />
                 </>}
                 <main 
-                    className={mainHeightClass}
+                    className={`${isDesktop ? "": mainHeightClass}`}
                     style={{
                         position: (!isBodyScrollable && lastScrollPosition) ?"relative": "static",
                         top: -lastScrollPosition+"px"
@@ -431,8 +434,8 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
                 >
                     {props.children}
                 </main>
-                {showFooter && <Footer />}
-                {showFixedNav && <FooterNavigation />}
+                {(showFooter || isDesktop) && <Footer />}
+                {showFixedNav &&! isDesktop && <FooterNavigation />}
             </div>
         </>
 

@@ -7,20 +7,24 @@ import ModalPortal from "../shared/layout/ModalPortal";
 import Link from "next/link";
 import ArrowTopLeft2 from "../icons/ArrowTopLeft2";
 import { useAppDispatch } from "@/hooks/use-store";
-import { setBodiScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
+import { setBodyScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
 import CloseSimple from "../icons/CloseSimple";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
 
 type Props = {
-    productData?: ProductDetailData;
+    pegi?: ProductDetailData["pegi"];
+    esrb?: ProductDetailData["esrb"];
 }
 
 const AgeRatingDetail: React.FC<Props> = props => {
 
-    const { productData } = props;
+    const { esrb, pegi } = props;
 
     const dispatch = useAppDispatch();
 
     const [activeItem, setActiveItem] = useState<string>("");
+
+    const isDesktop = useIsDesktop();
 
     const tabItems: TabItem[] = [];
 
@@ -37,7 +41,7 @@ const AgeRatingDetail: React.FC<Props> = props => {
         if (openDetails) {
             setSlideInDetails(true);
             dispatch(setBodyScrollable(false));
-            dispatch(setBodiScrollPosition(window?.pageYOffset || 0));
+            dispatch(setBodyScrollPosition(window?.pageYOffset || 0));
         } else {
             setActiveItem("");
             dispatch(setBodyScrollable(true));
@@ -51,19 +55,19 @@ const AgeRatingDetail: React.FC<Props> = props => {
     }, [slideInDetails])
 
 
-    if (!productData) return null;
+    if (!esrb && !pegi) return null;
 
-    if (productData?.pegi?.name) {
+    if (pegi?.name) {
         tabItems.push({
             key: "pegi",
             label: "رده سنی اروپا (PEGI)",
             children: (
                 <>
                     <div className="flex gap-3 my-4">
-                        {productData?.pegi?.image && (
+                        {pegi?.image && (
                             <Image
-                                src={productData.pegi.image}
-                                alt={productData.pegi.title || productData.pegi.name || ""}
+                                src={pegi.image}
+                                alt={pegi.title || pegi.name || ""}
                                 width={48}
                                 height={48}
                                 className="w-12 h-12 text-4xs"
@@ -71,15 +75,15 @@ const AgeRatingDetail: React.FC<Props> = props => {
                         )}
                         <div>
                             <b className="block font-semibold mb-2 text-sm">
-                                {productData.pegi.name}
+                                {pegi.name}
                             </b>
                             <p className="text-xs">
-                                {productData.pegi.description}
+                                {pegi.description}
                             </p>
                         </div>
                     </div>
 
-                    {productData.pegi.items?.map(item => (
+                    {pegi.items?.map(item => (
 
                         <div
                             className="flex gap-3 my-4 border rounded-xl mb-5 border-neutral-300 dark:border-white/15 p-3"
@@ -112,17 +116,17 @@ const AgeRatingDetail: React.FC<Props> = props => {
     }
 
 
-    if (productData.esrb) {
+    if (esrb) {
         tabItems.push({
             key: "esrb",
             label: "رده سنی آمریکا (ESRB)",
             children: (
                 <>
                     <div className="flex gap-3 my-4">
-                        {productData?.esrb?.image && (
+                        {esrb?.image && (
                             <Image
-                                src={productData.esrb.image}
-                                alt={productData.esrb.title || productData.esrb.name || ""}
+                                src={esrb.image}
+                                alt={esrb.title || esrb.name || ""}
                                 width={48}
                                 height={48}
                                 className="w-12 h-12 text-4xs"
@@ -130,15 +134,15 @@ const AgeRatingDetail: React.FC<Props> = props => {
                         )}
                         <div>
                             <b className="block font-semibold mb-2 text-sm">
-                                {productData.esrb.name}
+                                {esrb.name}
                             </b>
                             <p className="text-xs">
-                                {productData.esrb.description}
+                                {esrb.description}
                             </p>
                         </div>
                     </div>
 
-                    {productData.esrb.items?.map(item => (
+                    {esrb.items?.map(item => (
 
                         <div
                             className="flex gap-3 my-4 border rounded-xl mb-5 border-neutral-300 dark:border-white/15 p-3"
@@ -171,25 +175,30 @@ const AgeRatingDetail: React.FC<Props> = props => {
     }
 
 
-    const hasPegi = productData.pegi;
-    const hasEsrb = productData.esrb;
+
+    let modalWrapperClass = `bg-white dark:bg-[#192a39] text-neutral-800 dark:text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full safePadding-b transition-all left-0 right-0 ${slideInDetails ? "bottom-0" : "-bottom-[80vh]"}`
+
+    if (isDesktop) {
+        modalWrapperClass = `bg-white dark:bg-[#192a39] text-neutral-800 dark:text-white rounded-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full max-w-2xl transition-all top-1/2 right-1/2 translate-x-1/2 ${slideInDetails ? "-translate-y-1/2 opacity-100" : "translate-y-0 opacity-0"}`
+    }
+
 
     return (
         <>
-            {!!(hasPegi || hasEsrb) && (
-                <div className={`${hasPegi && hasEsrb ? "grid grid-cols-2" : ""}`}>
+            {!!(pegi || esrb) && (
+                <div className={`${pegi && esrb ? "grid grid-cols-2" : ""}`}>
 
-                    {!!productData.pegi && (
+                    {!!pegi && (
                         <button
-                            className={`block border border-neutral-300 dark:border-white/15 p-2.5 text-xs mt-5 ${productData.esrb ? "rounded-r-xl border-l-0" : "rounded-xl"}`}
+                            className={`block border border-neutral-300 dark:border-white/15 p-2.5 text-xs mt-5 ${esrb ? "rounded-r-xl border-l-0" : "rounded-xl"}`}
                             type="button"
                             onClick={() => { setActiveItem("pegi") }}
                         >
                             <div className="flex gap-1 justify-center">
-                                {productData?.pegi?.image && (
+                                {pegi?.image && (
                                     <Image
-                                        src={productData.pegi.image}
-                                        alt={productData.pegi.title || productData.pegi.name || ""}
+                                        src={pegi.image}
+                                        alt={pegi.title || pegi.name || ""}
                                         width={40}
                                         height={40}
                                         className="w-10 h-10 text-4xs"
@@ -198,24 +207,24 @@ const AgeRatingDetail: React.FC<Props> = props => {
                                 <div className="w-40">
                                     رده سنی اروپا (PEGI)
                                     <b className="block font-semibold mt-2 text-xs">
-                                        {productData.pegi.name}
+                                        {pegi.name}
                                     </b>
                                 </div>
                             </div>
                         </button>
                     )}
 
-                    {!!productData.esrb && (
+                    {!!esrb && (
                         <button
-                            className={`block border border-neutral-300 dark:border-white/15 p-2.5 text-xs mt-5 ${productData.pegi ? "rounded-l-xl" : "rounded-xl"}`}
+                            className={`block border border-neutral-300 dark:border-white/15 p-2.5 text-xs mt-5 ${pegi ? "rounded-l-xl" : "rounded-xl"}`}
                             type="button"
                             onClick={() => { setActiveItem("esrb") }}
                         >
                             <div className="flex gap-1 justify-center">
-                                {productData?.esrb?.image && (
+                                {esrb?.image && (
                                     <Image
-                                        src={productData.esrb.image}
-                                        alt={productData.esrb.title || productData.esrb.name || ""}
+                                        src={esrb.image}
+                                        alt={esrb.title || esrb.name || ""}
                                         width={40}
                                         height={40}
                                         className="w-10 h-10 text-4xs"
@@ -224,7 +233,7 @@ const AgeRatingDetail: React.FC<Props> = props => {
                                 <div className="w-40">
                                     رده سنی آمریکا (ESRB)
                                     <b className="block font-semibold mt-2 text-xs">
-                                        {productData.esrb.name}
+                                        {esrb.name}
                                     </b>
                                 </div>
                             </div>
@@ -240,7 +249,7 @@ const AgeRatingDetail: React.FC<Props> = props => {
             >
                 <div className="bg-black/50 backdrop-blur-sm fixed top-0 left-0 right-0 bottom-0" onClick={() => { setSlideInDetails(false) }} />
 
-                <div className={`bg-white dark:bg-[#192a39] text-neutral-800 dark:text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full md:max-w-lg safePadding-b transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2 ${slideInDetails ? "bottom-0" : "-bottom-[80vh]"}`}>
+                <div className={modalWrapperClass}>
                     <div className="min-h-96 flex flex-col justify-between" >
                         <div>
 

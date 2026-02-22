@@ -21,6 +21,7 @@ type PayloadParams = {
         logo?: boolean;
         title?: string;
         productId?: number;
+        productVariantId?: number;
         cart?: boolean;
         backLink?: string;
     }

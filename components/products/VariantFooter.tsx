@@ -19,10 +19,12 @@ import CaretLeft from "../icons/CaretLeft";
 import Plus from "../icons/Plus";
 import Minus from "../icons/Minus";
 import Trash from "../icons/Trash";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
+import NotifyWhenAvailable from "./NotifyWhenAvailable";
 
 const VariantFooter = ({
   currentVariant,
-  productId,
+  productId
 }: {
   currentVariant?: ProductVariant;
   productId: number;
@@ -36,6 +38,7 @@ const VariantFooter = ({
   
   const { getCartByProductId, addItem, removeItem, getCart } = useCartApi();
 
+  const isDesktop = useIsDesktop();
 
   const dispatch = useAppDispatch();
 
@@ -70,7 +73,9 @@ const VariantFooter = ({
     loadCartByProductId();
   }, [deviceId]);
 
-  if (!currentVariant?.items?.[0]) return null;
+  if (!currentVariant?.items?.[0]){
+     return <NotifyWhenAvailable productId={productId} />
+  };
 
   const variantItem = currentVariant?.items?.[0];
 
@@ -156,11 +161,11 @@ const VariantFooter = ({
         </Alert>
       )}
 
-      <SimplePortal selector="fixed_bottom_portal">
-        <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 bg-white dark:text-white dark:bg-[#192a39] px-4 py-3 flex justify-between gap-2 items-center w-full md:max-w-lg transition-all duration-200">
+      <SimplePortal selector={isDesktop?"variant-footer-desktop-modal":"fixed_bottom_portal"}>
+        <footer className="max-lg:z-20 max-lg:min-h-20 max-lg:fixed bottom-0 left-0 max-lg:bg-white dark:text-white dark:max-lg:bg-[#192a39] max-lg:px-4 max-lg:py-3 flex lg:flex-col lg:gap-5 justify-between gap-2 max-lg:items-center w-full transition-all duration-200">
           
           {currentVariantAddedQuantity ? (
-          <div className="flex items-center gap-2 h-13 bg-[#EFEFF0]/10 rounded-full">
+          <div className="flex items-center gap-2 h-13 bg-[#EFEFF0]/10 rounded-full lg:order-2">
               <button
               className="text-[#011425] dark:text-white bg-gradient-to-t from-green-600 to-green-300 hover:bg-gradient-to-tr flex justify-center items-center p-2 h-13 w-13 rounded-full"
                 onClick={handleAddToCart}
@@ -168,7 +173,7 @@ const VariantFooter = ({
                 <Plus className="w-4 h-4 fill-current" />
               </button>
 
-              <span className="text-[#011425] dark:text-white flex justify-center items-center w-8 grow-0  font-medium">
+              <span className="text-[#011425] dark:text-white flex justify-center items-center w-8 grow font-medium">
                 {loading ? (
                   <Loading className="fill-current w-5 h-5 animate-spin" />
                 ) : (
@@ -187,14 +192,14 @@ const VariantFooter = ({
             </div>
           ) : (
             loading ? (
-              <div className="h-10 flex justify-center items-center px-6 bg-gradient-to-t from-green-600 to-green-300 rounded-full">
+              <div className="h-10 flex justify-center items-center px-6 bg-gradient-to-t from-green-600 to-green-300 rounded-full lg:order-2">
                 <Loading className="fill-current w-5 h-5 animate-spin" />
               </div>
             ) : (
             <button
               type="button"
               onClick={handleAddToCart}
-              className="bg-violet-500 hover:bg-violet-600 text-white rounded-full px-4 py-3 text-xs flex gap-2 items-center font-semibold transition-all duration-200"
+              className="bg-violet-500 hover:bg-violet-600 text-white rounded-full px-4 py-3 text-xs flex gap-2 items-center justify-center font-semibold transition-all duration-200 lg:order-2"
             >
               <Image
                 src="/images/icons/bag.svg"
@@ -208,11 +213,11 @@ const VariantFooter = ({
           ))}
 
           {!!variantItem?.salePrice && (
-            <div className="text-left text-white">
+            <div className="text-left text-white lg:order-1">
               {!!(variantItem?.profitPercentage || variantItem.profitPrice) && (
                 <div className="flex flex-wrap justify-end gap-2 mb-1">
                   <span className="text-[#fe9f00] text-2xs font-semibold">
-                    {variantItem.profitPercentage ? `${variantItem.profitPercentage} %   تخفیف` : `${(variantItem.profitPrice! * (currentVariantAddedQuantity || 1))} ${currency} تخفیف `}
+                    {variantItem.profitPercentage ? `${variantItem.profitPercentage} %   تخفیف` : `${numberWithCommas(variantItem.profitPrice! * (currentVariantAddedQuantity || 1))} ${currency} تخفیف `}
                   </span>
                   {!!variantItem.regularPrice && <span className="text-xs text-[#5f5f5f] dark:text-white/70 line-through">
                     {numberWithCommas(variantItem.regularPrice * (currentVariantAddedQuantity || 1))} {currency}
@@ -226,7 +231,7 @@ const VariantFooter = ({
             </div>
           )}
         </footer>
-        <div className="h-20" />
+        {!isDesktop && <div className="h-20 lg:hidden" />}
       </SimplePortal>
     </>
   );

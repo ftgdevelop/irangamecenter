@@ -5,6 +5,7 @@ import { BlogItemType } from "@/types/blog";
 import { toPersianDigits } from "@/helpers";
 import parse from 'html-react-parser';
 import dynamic from "next/dynamic";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
 
 const Carousel = dynamic(() => import("../shared/Carousel"), {
   ssr: false,
@@ -32,27 +33,29 @@ const BlogsCarousel: React.FC<Props> = props => {
         date: toPersianDigits(blog.date)
     }));
 
+    const isDesktop = useIsDesktop();
 
     if (!items?.length) {
         return null
     }
 
     return (
-        <section className="bg-[#e8ecf0] dark:bg-[#192b39] py-6">
+        <section className="bg-[#e8ecf0] dark:bg-[#192b39] py-6 lg:px-3">
 
-            <h3 className="px-4 text-[#ff7189] font-bold flex gap-2 items-center text-md mb-4">
+            <h3 className="max-lg:px-4 lg:px-2 text-[#ff7189] font-bold flex gap-2 items-center text-md mb-4">
                 <Image src="/images/icons/blog.svg" alt="offer" width={36} height={36} className="w-9 h-9" />
                 {props.title || "مجله خبری ایران گیم سنتر"}
             </h3>
 
             {items.length > 1 ? (
                 <Carousel
+                    numberOfSlides={isDesktop?4:undefined}
                     showDots
                     items={items.map(item => (
                         {
                             key: item.title,
                             content: (
-                                <div className="px-4" key={item.title} dir="rtl">
+                                <div className="px-4 lg:px-2" key={item.title} dir="rtl">
                                     <div className="bg-[#fff] dark:bg-[#011425] rounded-large">
                                         <Image
                                             src={item.image || "default-game.png"}

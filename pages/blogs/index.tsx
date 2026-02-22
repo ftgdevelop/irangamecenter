@@ -4,7 +4,7 @@ import { getBlogs } from "@/actions/blog";
 import { NextPage } from "next";
 import { BlogItemType } from "@/types/blog";
 import Contacts from "@/components/shared/Contacts";
-import BreadCrumpt from "@/components/shared/BreadCrumpt";
+import Breadcrumb from "@/components/shared/Breadcrumb";
 import BlogListItem from "@/components/blog/BlogListItem";
 import { useEffect, useRef, useState } from "react";
 import Skeleton from "@/components/shared/Skeleton";
@@ -81,13 +81,14 @@ const Blogs: NextPage<Props> = props => {
 
     return (
         <>
-            <BreadCrumpt
-                wrapperClassName="bg-[#e8ecf0] dark:bg-[#192a39] px-4 py-3 mb-4"
-                textColorClass="text-neutral-800 dark:text-neutral-300"
+            <Breadcrumb
+                wrapperClassName="mb-4 lg:mb-0"
                 items={[{ label: "وبلاگ", link: "" }]}
             />
 
-            <div className="px-4">
+            <h3 className="py-10 hidden lg:block text-3xl font-bold border-b border-neutral-300 dark:border-white/15 text-center text-white"> وبلاگ </h3>
+
+            <div className="px-4 lg:grid lg:grid-cols-3 lg:gap-3 lg:py-10 max-w-[1200px] mx-auto">
                 {posts?.map(post => (
                     <BlogListItem
                         key={post.id}
@@ -108,16 +109,18 @@ const Blogs: NextPage<Props> = props => {
                         </div>
                     </div>
                 ))}
-
-                <button
-                    ref={loadMoreWrapper}
-                    type="button"
-                    className="text-sm text-white dark:text-[#ca54ff] bg-[#ca54ff] dark:bg-[#161b39] w-full px-5 py-3 flex rounded-full justify-center gap-3"
-                    onClick={addItems}
-                >
-                    <Add />
-                    مطالب بیشتر
-                </button>
+                
+                <div className="lg:col-span-3">
+                    <button
+                        ref={loadMoreWrapper}
+                        type="button"
+                        className="text-sm text-white dark:text-[#ca54ff] bg-[#ca54ff] dark:bg-[#161b39] w-full lg:max-w-[380px] mx-auto px-5 py-3 flex rounded-full justify-center gap-3"
+                        onClick={addItems}
+                    >
+                        <Add />
+                        مطالب بیشتر
+                    </button>
+                </div>
 
             </div>
 

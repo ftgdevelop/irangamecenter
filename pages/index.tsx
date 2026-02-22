@@ -20,6 +20,7 @@ import { GetProductsDataType, StrapiSeoData } from "@/types/commerce";
 import ProductsCarousel from "@/components/products/ProductsCarousel";
 import BannerLinks from "@/components/home/BannerLinks";
 import Head from "next/head";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
 
 type HomeAboutDataType = {
   Keyword: "about_intro" | "icons" | "faq" | "telNumber" | "email";
@@ -99,6 +100,8 @@ type Props = {
 
 const Home: NextPage<Props> = props => {
 
+  const isDesktop = useIsDesktop();
+
   const {homeAboutData, homeHighlights, homeSections,recentBlogs, playstation4Data, playstation5Data, steamData, xboxOneData, xboxSeriesXsData, nintendoSwitch2Data} = props;
 
   const categoris = homeSections?.find(section => section.Keyword === "category");
@@ -137,7 +140,12 @@ const Home: NextPage<Props> = props => {
         )}
       </Head>
 
-      <div className="p-3">
+      <div className="p-3 px-5 lg:border-b lg:border-neutral-300 dark:lg:border-white/10 lg:pb-5 lg:mb-2">
+        {isDesktop && <div className="pb-3 text-center">
+          <h1 className="mb-2 text-2xl font-semibold"> ایران گیم سنتر </h1>
+          <h2 className="text-sm"> فروشگاه آنلاین اکانت بازی </h2>
+        </div>}
+
         <Search />
       </div>
 
@@ -167,6 +175,7 @@ const Home: NextPage<Props> = props => {
       {!!(props.backOrderProductsData?.pagedResult?.items?.length) && <ProductsCarousel 
         products={props.backOrderProductsData?.pagedResult?.items}
         title="پیش خرید"
+        numberOfSlides={isDesktop? 4 : undefined}
       />}
       <br/>
 
@@ -216,13 +225,13 @@ export const getStaticProps = async (context: any) => {
     getStrapiHighlight('locale=fa&populate[Item][populate]=*'),
     getStrapiPages('filters[Page][$eq]=aboutUs&locale=fa&populate[Sections][populate]=*'),
     getBlogs({page:1,per_page:5}),
-    getProducts({skipCount:0, maxResultCount:10, variants:["playstation-5"]}),
-    getProducts({skipCount:0, maxResultCount:10, variants:["playstation-4"]}),
-    getProducts({skipCount:0, maxResultCount:10, variants:["steam"]}),
-    getProducts({skipCount:0, maxResultCount:10, variants:["xbox-one"]}),
-    getProducts({skipCount:0, maxResultCount:10, variants:["xbox-series-xs"]}),
-    getProducts({skipCount:0, maxResultCount:10, variants:["nintendo-switch-2"]}),
-    getProducts({maxResultCount:9,skipCount:0,status : "OnBackOrder"}),
+    getProducts({skipCount:0, maxResultCount:12, variants:["playstation-5"]}),
+    getProducts({skipCount:0, maxResultCount:12, variants:["playstation-4"]}),
+    getProducts({skipCount:0, maxResultCount:12, variants:["steam"]}),
+    getProducts({skipCount:0, maxResultCount:12, variants:["xbox-one"]}),
+    getProducts({skipCount:0, maxResultCount:12, variants:["xbox-series-xs"]}),
+    getProducts({skipCount:0, maxResultCount:12, variants:["nintendo-switch-2"]}),
+    getProducts({maxResultCount:18,skipCount:0,status : "OnBackOrder"}),
     getStrapiPages('filters[Page][$eq]=Home&locale=fa&populate[Seo][populate]=*')
   ]);
 

@@ -9,7 +9,7 @@ import gregorian from "react-date-object/calendars/gregorian";
 import gregorian_en from "react-date-object/locales/gregorian_en";
 import ModalPortal from "./layout/ModalPortal";
 import { useAppDispatch } from "@/hooks/use-store";
-import { setBodiScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
+import { setBodyScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
 import { dateDiplayFormat, dateFormat } from "@/helpers";
 import CalendarIcon from "../icons/CalendarIcon";
 
@@ -49,7 +49,7 @@ const DatePickerM: React.FC<Props> = props => {
         if (open) {
             setSlideIn(true);
             dispatch(setBodyScrollable(false));
-            dispatch(setBodiScrollPosition(window?.pageYOffset || 0));
+            dispatch(setBodyScrollPosition(window?.pageYOffset || 0));
         } else {
             dispatch(setBodyScrollable(true));
         }

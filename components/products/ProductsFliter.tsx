@@ -4,7 +4,7 @@ import ModalPortal from "../shared/layout/ModalPortal";
 import { useEffect, useRef, useState } from "react";
 import CheckboxGroup from "../shared/CheckboxGroup";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
-import { setBodiScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
+import { setBodyScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
 import CloseSimple from "../icons/CloseSimple";
 import Accordion from "../shared/Accordion";
 import { openFilter } from "@/redux/productsSlice";
@@ -37,7 +37,7 @@ const ProductsFliter: React.FC<Props> = props => {
         if (openedFilter) {
             setSlideIn(true);
             dispatch(setBodyScrollable(false));
-            dispatch(setBodiScrollPosition(window?.pageYOffset || 0));
+            dispatch(setBodyScrollPosition(window?.pageYOffset || 0));
         } else {
             dispatch(setBodyScrollable(true));
         }

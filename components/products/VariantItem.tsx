@@ -49,6 +49,7 @@ const VariantItem: React.FC<VariantItemProps> = ({
 
 
   const renderNestedOrFooter = () => {
+
     if (currentVariant?.children?.length) {
       return (
         <VariantItem
@@ -58,32 +59,31 @@ const VariantItem: React.FC<VariantItemProps> = ({
       );
     }
 
-    if (currentVariant?.items?.[0]?.status !== "OutOfStock") {
-      return (
-        <VariantFooter
-          currentVariant={currentVariant}
-          productId={productId}
-        />
-      );
-    }
-
-    return null;
+    return (
+      <VariantFooter
+        currentVariant={currentVariant}
+        productId={productId}
+      />
+    );
+    
   };
+
+  const someVariantsHasImage = variantGroup?.children?.find(x => x.items?.[0]?.filePath);
 
   return (
     <>
       {variantGroup?.children && (
         <>
-          <label className="text-sm pointer-events-none block px-4 mt-7">
+          <label className="text-sm pointer-events-none block max-lg:px-4 mt-7">
             انتخاب {variantGroup?.children?.[0]?.name}
           </label>
 
           <div
-            className={`max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip pb-3 pl-3 ${
+            className={`w-full max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip pb-3 pl-3 ${
               isFading ? "opacity-0" : "opacity-100 transition-all duration-100"
             }`}
           >
-            <div className="flex px-4 gap-3 pt-2">
+            <div className="flex max-lg:px-4 gap-3 pt-2">
               {variantGroup.children.map((child) => {
                 const item = child.items?.[0];
                 const disabled = item?.status === "OutOfStock";
@@ -94,15 +94,13 @@ const VariantItem: React.FC<VariantItemProps> = ({
                   <button
                     key={child.id}
                     disabled={disabled}
-                    onClick={() =>
-                      !disabled && setCurrentVariantId(child.id)
-                    }
-                    className={`flex flex-col justify-center relative w-40 shrink-0 rounded-xl px-4 min-h-16 outline-none font-semibold py-3 ${
+                    onClick={disabled ? ()=>{debugger} : () => {setCurrentVariantId(child.id)}}
+                    className={`flex flex-col ${someVariantsHasImage?"justify-start":"justify-center"} relative w-40 shrink-0 rounded-xl px-4 min-h-16 outline-none font-semibold py-3 ${
                       disabled
-                        ? "bg-transparent border border-neutral-300 dark:border-white/15 cursor-not-allowed"
+                        ? "bg-transparent border border-neutral-300 lg:border-white/50 dark:border-white/15 cursor-not-allowed"
                         : isSelected
                         ? "bg-gradient-green text-neutral-800"
-                        : "bg-[#eeeeee] dark:bg-[#192a39]"
+                        : "bg-[#eeeeee] dark:bg-[#192a39] lg:bg-white/15 lg:dark:bg-white/15"
                     }`}
                   >
                     {disabled && (
@@ -117,13 +115,13 @@ const VariantItem: React.FC<VariantItemProps> = ({
                       </span>
                     )}
 
-                    {item?.filePath && (
+                    {(item?.filePath || someVariantsHasImage) && (
                       <Image 
-                        src={item.filePath}
+                        src={item?.filePath || "/images/default-game.png"}
                         alt={item?.description || child.value || ""}
                         width={128}
                         height={128}
-                        className="w-full square mb-2 rounded-xl"
+                        className="w-full aspect-square object-cover mb-2 rounded-xl"
                       />
                     )}
 
@@ -131,7 +129,7 @@ const VariantItem: React.FC<VariantItemProps> = ({
                       {item?.description || child.value}
                     </div>
 
-                    {item?.salePrice && (
+                    {!!item?.salePrice && (
                       <div
                         className={`border-t pt-2 mt-2 ${
                           isSelected

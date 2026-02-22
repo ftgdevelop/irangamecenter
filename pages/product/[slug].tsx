@@ -4,7 +4,6 @@ import { NextPage } from 'next';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { getProductBySlug, getProductGallries, getProductVariants, getVariantById } from '@/actions/commerce';
 import { PlatformSlugTypes, ProductDetailData, ProductGalleryItem, ProductVariant, SingleVariant } from '@/types/commerce';
-import BreadCrumpt from '@/components/shared/BreadCrumpt';
 import FAQ from '@/components/shared/FAQ';
 import Contacts from '@/components/shared/Contacts';
 import parse from 'html-react-parser';
@@ -26,6 +25,14 @@ import Skeleton from '@/components/shared/Skeleton';
 import VariantFooter from '@/components/products/VariantFooter';
 import { useAppDispatch } from '@/hooks/use-store';
 import { setHeaderParams } from '@/redux/pages';
+import Breadcrumb from '@/components/shared/Breadcrumb';
+import { useIsDesktop } from '@/hooks/use-is-desktop';
+import MoreWrapper from '@/components/shared/layout/header/MoreWrapper';
+import ProductSpecificationSection from '@/components/products/productDetailDesktop/ProductSpecificationSection';
+import ProductDescriptionSection from '@/components/products/productDetailDesktop/ProductDescriptionSection';
+import ProductRatingSection from '@/components/products/productDetailDesktop/ProductRatingSection';
+import ProductAwardsSection from '@/components/products/productDetailDesktop/ProductAwardsSection';
+import ProductFAQSection from '@/components/products/productDetailDesktop/ProductFAQSection';
 
 const DetailProduct: NextPage<any> = ({
   serversideProductData,
@@ -44,7 +51,9 @@ const DetailProduct: NextPage<any> = ({
 
   const [productData, setProductData] = useState<ProductDetailData | undefined>(serversideProductData);
 
+  const [hasSimilars, setHasSimilars] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const isDesktop = useIsDesktop();
 
   useEffect(()=>{
 
@@ -441,72 +450,41 @@ const DetailProduct: NextPage<any> = ({
     )
   }
 
-  return (
+  const breadcrumb = !!breadcrumbsItems.length && (
+    <Breadcrumb
+      items={breadcrumbsItems}
+      wrapperClassName="max-lg:mb-4"
+    />
+  );
+
+  const intro = (
     <>
-      <Head>
+      <h2 className="text-lg lg:text-2xl font-semibold block pt-3">
+        {productData?.name}
+      </h2>
+      {!!variantData?.subTitle && <h3 className="font-semibold block mb-2">
+        {variantData.subTitle}
+      </h3>}
+      {firstRatingTag}
+      {brandTag}
+    </>
+  );
 
-        
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(
-              {
-                "@context": "https://schema.org",
-                "@graph": schemaGraphs
-              }              
-            )
-          }}
-        />  
+  const productTab = (
+    <ProductTabs
+      tabs={[
+        { id: 'specs', label: 'مشخصات', isActive: !!productData },
+        { id: 'description', label: 'توضیحات', isActive: !!productData?.shortDescription },
+        { id: 'ratings', label: 'امتیازها', isActive: !!productData?.rating?.length },
+        { id: 'awards', label: 'جوایز', isActive: !!productData?.awards?.length },
+        { id: 'faq', label: 'سوالات متداول', isActive: !!productData?.faqs?.length },
+        { id: 'similar', label: 'محصولات مشابه', isActive: hasSimilars },
+      ]}
+    />
+  )
 
-        {productData?.page?.title && <title> {productData.page.title} </title>}
-
-        {metas?.map((meta, index) => (
-          <meta key={index} property={meta.property} content={meta.content} />
-        ))}
-        
-        {/* {productData?.page?.richSnippet && (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(JSON.parse(productData.page.richSnippet)),
-            }}
-          />
-        )} */}
-
-      </Head>
-      <ProductTabs
-          tabs={[
-            { id: 'specs', label: 'مشخصات', isActive: !!productData },
-            { id: 'description', label: 'توضیحات', isActive: !!productData?.shortDescription },
-            { id: 'ratings', label: 'امتیازها', isActive: !!productData?.rating?.length },
-            { id: 'awards', label: 'جوایز', isActive: !!productData?.awards?.length },
-            { id: 'faq', label: 'سوالات متداول', isActive: !!productData?.faqs?.length },
-            { id: 'similar', label: 'محصولات مشابه', isActive: !!productData?.similar?.length },
-          ]}
-        />
-
-      {!!breadcrumbsItems.length && (
-        <BreadCrumpt
-          items={breadcrumbsItems}
-          wrapperClassName="bg-[#e8ecf0] dark:bg-[#192a39] px-4 py-3 mb-4"
-          textColorClass="text-neutral-800 dark:text-neutral-300"
-        />
-      )}
-
-      <div className="flex gap-4 p-4">
-      {mainImage}
-        <div>
-          <h2 className="text-lg font-semibold block pt-3">
-            {productData?.name}
-          </h2>
-          {!!variantData?.subTitle && <h3 className="font-semibold block mb-2">
-            {variantData.subTitle}
-          </h3>}
-          {firstRatingTag}
-          {brandTag}
-        </div>
-      </div>
-
+  const specs = (
+    <>
       <div id="specs" className="px-4">
         <div className="flex justify-between items-top mb-5">
           <strong className="text-sm"> مشخصات بازی </strong>
@@ -621,32 +599,33 @@ const DetailProduct: NextPage<any> = ({
           <div className="w-1 shrink-0" />
         </div>
       </div>
+    </>
+  );
 
-      {!!serversideGalleryData?.length && sortedGalleryItems && (
-        <ProductGalleryCarousel galleries={sortedGalleryItems} galleryLoading={false} />
-      )}
+  const mobileGallery = (serversideGalleryData?.length && sortedGalleryItems) ? (
+    <ProductGalleryCarousel galleries={sortedGalleryItems} galleryLoading={false} />
+  ) : null;
 
-      {!!productData?.shortDescription && (
-        <div id="description" className="pt-2 px-4">
-          <h3 className="text-lg font-semibold mb-4"> {productData.name}</h3>
-          <div className="inserted-content">
-            {parsedShortDescription}
+  const description = productData?.shortDescription ? (
+    <>
+      <div id="description" className="pt-2 px-4">
+        <h3 className="text-lg font-semibold mb-4"> {productData.name}</h3>
+        <div className="inserted-content">
+          {parsedShortDescription}
 
-            {!!productData.description && (
-              <button
-                type="button"
-                className="text-violet-500 inline-block text-sm font-semibold"
-                onClick={() => {
-                  setDetailActiveTab('descriptions');
-                }}
-              >
-                بیشتر
-              </button>
-            )}
-          </div>
+          {!!productData.description && (
+            <button
+              type="button"
+              className="text-violet-500 inline-block text-sm font-semibold"
+              onClick={() => {
+                setDetailActiveTab('descriptions');
+              }}
+            >
+              بیشتر
+            </button>
+          )}
         </div>
-      )}
-
+      </div>
       <div className="px-4">
         <div
           className={`mt-6 bg-[#dddddd] dark:bg-[#192a39] p-2.5 rounded-xl ${
@@ -716,18 +695,25 @@ const DetailProduct: NextPage<any> = ({
           )}
         </div>
 
-        <AgeRatingDetail productData={productData} />
-      </div>
+        <AgeRatingDetail esrb={productData.esrb} pegi={productData.pegi} />
+      </div>      
+    </>
+  ) : null;
 
-      {!!variantsData?.length && !variantsLoading && (
+  let variant : ReactNode = null;
+
+  if(variantsData?.length && !variantsLoading){
+    variant = (
         <VariantSection 
           productId={productData.id} 
           productVariants={variantsData} 
           platform={queryPlatform || undefined}
         />
-      )}
+    )
+  }
 
-      {!!variantData?.salePrice && (
+  if(variantData?.salePrice){
+    variant = (
         <VariantFooter 
           productId={productData.id}
           currentVariant={{
@@ -736,61 +722,190 @@ const DetailProduct: NextPage<any> = ({
             items:[variantData]
           }}
         />
-      )}
+    )
+  }
 
-      {!!productData?.rating?.length && (
-        <section id="ratings" className='pt-8'>
-          <strong  className="px-4 text-lg font-semibold mb-0 text-[#fd7e14] dark:text-[#ffefb2] block">
-            امتیاز در وبسایت های معتبر
-          </strong>
-          <div className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip py-3 pl-3">
-            <div className="flex gap-3 pr-4">
-              {productData.rating.map((rating, index) => (
-                <RatingItem key={rating.id} rating={rating} index={index} />
-              ))}
-              <div className="h-2 w-1 shrink-0" />
+  const rating = !!productData?.rating?.length && (
+    <section id="ratings" className='pt-8'>
+      <strong  className="px-4 text-lg font-semibold mb-0 text-[#fd7e14] dark:text-[#ffefb2] block">
+        امتیاز در وبسایت های معتبر
+      </strong>
+      <div className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip py-3 pl-3">
+        <div className="flex gap-3 pr-4">
+          {productData.rating.map((rating, index) => (
+            <RatingItem key={rating.id} rating={rating} index={index} />
+          ))}
+          <div className="h-2 w-1 shrink-0" />
+        </div>
+      </div>
+    </section>
+  )
+
+  const awards = !!productData?.awards?.length && (
+    <section id="awards" className="px-4 pt-8">
+        <strong className="text-lg font-semibold mb-3  text-[#fd7e14] dark:text-[#ffefb2] block">
+          جوایز و دستاوردها
+        </strong>
+        {productData.awards.map((award) => (
+          <div className="flex items-center gap-2 mb-2 text-sm" key={award}>
+            <Image
+              src="/images/icons/award.svg"
+              alt="award"
+              className="w-7 h-7 "
+              width={28}
+              height={28}
+            />
+            {award}
+          </div>
+        ))}
+    </section>
+  )
+  const faq = !!productData?.faqs?.length && (
+  <section id="faq">
+      <h5  className="px-4 text-lg font-semibold mb-4 mt-8 text-[#fd7e14] dark:text-[#ffefb2]">
+        سوالات متداول درباره {productData.name}
+      </h5>
+      <FAQ
+        answerParse="parse"
+        items={productData.faqs.map((faq) => ({
+          id: faq.id,
+          Answer: faq.answer,
+          Question: faq.questions,
+        }))}
+      />
+    </section>
+  )
+
+  const similar = !!slug && <SimilarProducts productSlug={slug} onHasSimilarItems={()=>{setHasSimilars(true)}} />;
+
+  const head = (
+    <Head>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            {
+              "@context": "https://schema.org",
+              "@graph": schemaGraphs
+            }              
+          )
+        }}
+      />  
+      {productData?.page?.title && <title> {productData.page.title} </title>}
+
+      {metas?.map((meta, index) => (
+        <meta key={index} property={meta.property} content={meta.content} />
+      ))}
+      
+      {/* {productData?.page?.richSnippet && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(JSON.parse(productData.page.richSnippet)),
+          }}
+        />
+      )} */}
+
+    </Head>
+  );
+
+  if(isDesktop){
+    return(
+      <>
+      {head}
+
+      {breadcrumb}
+
+      <div
+        style={{ backgroundImage: serversideProductData?.filePath ? `url(${serversideProductData.filePath})` : "linear-gradient(45deg, transparent, #ffe1e37a, transparent)" }}
+        className='bg-green-200 bg-cover bg-center'
+      >
+        <div className='p-4 xl:p-10 backdrop-blur-xl bg-black/45 grid grid-cols-12 gap-5 relative'>
+          
+          <div className='col-span-2 xl:col-span-4 self-start sticky top-100'>
+            <div className='relative'>
+              <Image
+                src={serversideProductData?.filePath || "/images/default-game.png"}
+                alt={serversideProductData?.fileAltAttribute || ""}
+                title={serversideProductData?.fileTitleAttribute || ""}
+                className='w-full h-auto aspect-square rounded-3xl'
+                width={550}
+                height={550}
+              />
+              <MoreWrapper             
+                productId={productData.id}
+              />
             </div>
           </div>
-        </section>
-      )}
-      {!!productData?.awards?.length && (
-        <section id="awards" className="px-4 pt-8">
-            <strong className="text-lg font-semibold mb-3  text-[#fd7e14] dark:text-[#ffefb2] block">
-              جوایز و دستاوردها
-            </strong>
-            {productData.awards.map((award) => (
-              <div className="flex items-center gap-2 mb-2 text-sm" key={award}>
-                <Image
-                  src="/images/icons/award.svg"
-                  alt="award"
-                  className="w-7 h-7 "
-                  width={28}
-                  height={28}
-                />
-                {award}
-              </div>
-            ))}
-        </section>
-      )}
 
-      {!!productData?.faqs?.length && (
-          <section id="faq">
+          <div className='col-span-7 xl:col-span-6 text-white'>
+            {intro}
 
-          <h5  className="px-4 text-lg font-semibold mb-4 mt-8 text-[#fd7e14] dark:text-[#ffefb2]">
-            سوالات متداول درباره {productData.name}
-          </h5>
-          <FAQ
-            answerParse="parse"
-            items={productData.faqs.map((faq) => ({
-              id: faq.id,
-              Answer: faq.answer,
-              Question: faq.questions,
-            }))}
-          />
-        </section>
-      )}
+            {variant}
+          </div>
 
-      {!!slug && <SimilarProducts productSlug={slug} />}
+          <div id="variant-footer-desktop-modal" className='bg-gradient-to-t from-[#011426] to-transparent flex flex-col justify-end p-4 xl:p-6 rounded-2xl col-span-3 xl:col-span-2' />
+
+        </div>
+        
+      </div>
+      
+      {productTab}
+
+      <ProductSpecificationSection
+        productData={productData}
+      />
+
+      <ProductDescriptionSection 
+        description={productData.description} 
+        shortDescription={productData.shortDescription} 
+        esrb={productData.esrb}
+        pegi={productData.pegi}
+      />
+
+      {!!productData.rating?.length && <ProductRatingSection rating={productData.rating} />}
+
+      {!!productData.awards?.length && <ProductAwardsSection awards={productData.awards} />}
+
+      <ProductFAQSection faqs={productData.faqs} />
+
+      {similar}
+
+      <Contacts />
+      </>
+    )
+  }
+
+  return (
+    <>
+      {head}
+
+      {breadcrumb}
+
+      <div className="flex gap-4 p-4">
+        {mainImage}
+        <div>
+            {intro}
+        </div>
+      </div>
+      
+      {productTab}
+
+      {specs}
+
+      {mobileGallery}
+
+      {description}
+
+      {variant}
+
+      {rating}
+
+      {awards}
+
+      {faq}
+
+      {similar}
 
       <Contacts />
     </>

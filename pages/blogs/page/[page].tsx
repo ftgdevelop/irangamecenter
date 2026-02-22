@@ -4,7 +4,7 @@ import { getBlogs } from "@/actions/blog";
 import { NextPage } from "next";
 import { BlogItemType } from "@/types/blog";
 import Contacts from "@/components/shared/Contacts";
-import BreadCrumpt from "@/components/shared/BreadCrumpt";
+import Breadcrumb from "@/components/shared/Breadcrumb";
 import BlogListItem from "@/components/blog/BlogListItem";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -23,9 +23,8 @@ const Blogs: NextPage<any> = ({ page, posts, totalPages }: { page?: number, post
 
         return (
             <>
-                <BreadCrumpt
-                    wrapperClassName="bg-[#e8ecf0] dark:bg-[#192a39] px-4 py-3 mb-4"
-                    textColorClass="text-neutral-800 dark:text-neutral-300"
+                <Breadcrumb
+                    wrapperClassName="mb-4"
                     items={[{ label: "وبلاگ", link: "" }]}
                 />
 

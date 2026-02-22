@@ -113,6 +113,13 @@ body {
   .rtl{
     direction: rtl;
   }
+
+  .search-result-max-h{
+    max-height: calc(100vh - 220px);
+  }
+  .search-result-max-h-desktop{
+    max-height: calc(100vh - 350px);
+  }
   
   .text-shadow {
     text-shadow: 0 0 2px #000000c9;
@@ -137,6 +144,9 @@ body {
   }
   .writing-tb {
     writing-mode: tb;
+  }
+  .writing-inherit {
+    writing-mode:inherit;
   }
   .clip-radius{
     clip-path: path('M0,0.5V90h89.5C40.1,90,0,49.9,0,0.5z');
@@ -182,6 +192,9 @@ body {
   }
   .min-h-screen-nav-header{
     min-height: calc(100vh - 164px);
+  }
+  .min-h-desktop{
+    min-height: calc(100vh - 84px);
   }
   .min-h-screen-header{
      min-height: calc(100vh - 84px);
@@ -322,10 +335,6 @@ body {
 }
 .safePadding-b{
   padding-bottom: calc(10px + env(safe-area-inset-bottom));
-}
-
-.search-result-max-h{
-  max-height: calc(100vh - 220px);
 }
 
 .embla {

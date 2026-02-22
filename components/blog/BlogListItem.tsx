@@ -20,7 +20,7 @@ const BlogListItem: React.FC<Props> = props => {
                 height={214}
                 className="h-18 w-18 rounded-2xl aspect-square object-cover"
             />
-            <div className="grow py-3">
+            <div className="grow py-2">
                 <strong className="block mb-1 text-sm">
                     {data.title?.rendered}
                 </strong>

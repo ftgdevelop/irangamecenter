@@ -6,6 +6,8 @@ import Link from "next/link";
 type Props = {
     product: ProductItemExtented;
     onClick?: ()=> void;
+    bgClass?: string;
+    wrapperClassName?: string;
 }
 
 const ProductListItem: React.FC<Props> = props => {
@@ -34,7 +36,7 @@ const ProductListItem: React.FC<Props> = props => {
         productUrl = `/product/${product.slug}`
     }
     return (
-        <div className="mb-[15px] bg-[#fafafa] dark:bg-[#011425] rounded-2xl">
+        <div className={`rounded-2xl ${props.bgClass || "bg-[#fafafa] dark:bg-[#011425]"} ${props.wrapperClassName||""}`}>
             <Link prefetch={false} href={productUrl} className="flex" onClick={()=>{if(props.onClick){props.onClick()}}}>
                 <Image
                     src={product.filePath || "/images/default-game.png"}
@@ -58,7 +60,7 @@ const ProductListItem: React.FC<Props> = props => {
                             )}
 
                             {salePrice ? (
-                                <div className="text-xs text-left">
+                                <div className="text-xs text-left whitespace-nowrap">
                                 {!!regularPrice && (
                                     <div className="text-[11px] line-through">{numberWithCommas(regularPrice)} {currencyType} </div>
                                 )}

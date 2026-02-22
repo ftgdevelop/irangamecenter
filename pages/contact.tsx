@@ -89,7 +89,7 @@ const Contact: NextPage = ({ contacts, faq, strapiSeoData }: { contacts?: Contac
         )}
       </Head>
 
-      <div className="px-5 mb-5">
+      <div className="px-5 mb-5 lg:py-5">
 
           <h3 className="text-[#ca54ff] font-bold text-sm mb-4">
             ارتباط با پشتیبانی

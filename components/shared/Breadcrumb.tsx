@@ -10,20 +10,17 @@ type Props = {
     }[];
     hideHome?: boolean;
     wrapperClassName?: string;
-    textColorClass?: string;
 }
 
-const BreadCrumpt: React.FC<Props> = props => {
-
-    const linksClassName = props.textColorClass || "text-neutral-700";
+const Breadcrumb: React.FC<Props> = props => {
     
     const carret = <CaretLeft className="w-3.5 h-3.5 fill-[#a93aff] shrink-0" />
 
     return (
-        <div className={`overflow-auto hidden-scrollbar text-2xs ${props.wrapperClassName || ""}`}>
+        <div className={`overflow-auto hidden-scrollbar text-2xs bg-[#e8ecf0] dark:bg-[#192a39] lg:dark:bg-[#011425] px-4 lg:px-5 py-3 lg:border-b lg:border-neutral-300 dark:lg:border-white/15  ${props.wrapperClassName || ""}`}>
             <div className="w-auto flex whitespace-nowrap items-center gap-2">
                 {!props.hideHome && <Fragment>
-                    <Link href="/" className={`shrink-0 ${linksClassName}`} aria-label="home">
+                    <Link href="/" className="shrink-0 text-neutral-800 dark:text-neutral-300" aria-label="home">
                         <Home2 className="w-5 h-5 mb-1.5 fill-current" />
                     </Link>
                     {carret}
@@ -32,9 +29,9 @@ const BreadCrumpt: React.FC<Props> = props => {
                     <Fragment key={item.label}>
                         {!!index && carret}
                         {item.link ? (
-                            <Link prefetch={false} href={item.link} className={`shrink-0 ${linksClassName}`}> {item.label} </Link>
+                            <Link prefetch={false} href={item.link} className="shrink-0 text-neutral-800 dark:text-neutral-300"> {item.label} </Link>
                         ) : (
-                            <span className={`shrink-0 ${linksClassName}`}> {item.label} </span>
+                            <span className="shrink-0 text-neutral-800 dark:text-neutral-300"> {item.label} </span>
                         )}
                     </Fragment>
                 ))}
@@ -45,4 +42,4 @@ const BreadCrumpt: React.FC<Props> = props => {
     )
 }
 
-export default BreadCrumpt;
+export default Breadcrumb;

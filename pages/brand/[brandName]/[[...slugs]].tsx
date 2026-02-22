@@ -2,7 +2,7 @@
 
 import { NextPage } from "next";
 import Contacts from "@/components/shared/Contacts";
-import BreadCrumpt from "@/components/shared/BreadCrumpt";
+import Breadcrumb from "@/components/shared/Breadcrumb";
 import { useEffect, useRef, useState } from "react";
 import Skeleton from "@/components/shared/Skeleton";
 import { getBrandBySlug, getProducts, ProductSortKeywords } from "@/actions/commerce";
@@ -20,6 +20,7 @@ import { groupByPrefix } from "@/helpers";
 import AvailableFilterTag from "@/components/products/AvailableFilterTag";
 import BackOrderFilterTag from "@/components/products/BackOrderFilterTag";
 import Image from "next/image";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
 
 type Props = {
     brandName?: string;
@@ -40,6 +41,8 @@ type Props = {
 const Products: NextPage<Props> = props => {
 
     const router = useRouter();
+    
+    const isDesktop = useIsDesktop();
 
     const dispatch = useAppDispatch();
 
@@ -101,7 +104,7 @@ const Products: NextPage<Props> = props => {
 
     useEffect(() => {
         if (fetchMode) {
-            if (products.length < 50 && !props.page) {
+            if (products.length < 100 && !props.page) {
                 addItems();
             } else {
                 removeListener();
@@ -111,7 +114,7 @@ const Products: NextPage<Props> = props => {
 
     const addItems = async () => {
 
-        const page = Math.ceil(products.length / 10) + 1;
+        const page = Math.ceil(products.length / 20) + 1;
 
         if (props.productsData?.pagedResult?.totalCount && products.length >= props.productsData.pagedResult.totalCount) {
             removeListener();
@@ -120,7 +123,7 @@ const Products: NextPage<Props> = props => {
         setLoading(true);
 
         const parameters = { ...props.parameters };
-        parameters.skipCount = (page - 1) * 10;
+        parameters.skipCount = (page - 1) * 20;
 
         const productsResponse: GetProductsResponseType = await getProducts(parameters);
 
@@ -150,13 +153,12 @@ const Products: NextPage<Props> = props => {
     const activeFilterColor = "text-white bg-gradient-orange"
     return (
         <>
-            <BreadCrumpt
+            <Breadcrumb
                 items={[
                     { label: "محصولات", link: "/products" },
                     { label: brandData?.name || "نامشخص", link: "" }
                 ]}
-                wrapperClassName="bg-[#e8ecf0] dark:bg-[#192a39] px-4 py-3 mb-4"
-                textColorClass="text-neutral-800 dark:text-neutral-300"
+                wrapperClassName="mb-4"
             />
 
             {brandData?.filePath && <Image
@@ -213,31 +215,33 @@ const Products: NextPage<Props> = props => {
 
             <div className="px-4 mb-12">
 
-                {products?.map(item => <ProductListItem product={item} key={item.id} />)}
+                <div className="max-w-[1000px] mx-auto lg:py-10 grid grid-cols-1 gap-3 md:gap-5 md:grid-cols-2">
+                    {products?.map(item => <ProductListItem product={item} key={item.id} bgClass={isDesktop?"bg-[#fafafa] dark:bg-[#0d1f2f]":"bg-[#fafafa] dark:bg-[#011425]"} />)}
 
-                {!!loading && [1, 2, 3, 4, 5].map(item => (
-                    <div className="flex gap-3 mb-4" key={item}>
-                        <Skeleton
-                            dark
-                            type="image"
-                            className="w-18 h-18 block shrink-0 rounded-2xl"
-                        />
-                        <div className="w-full">
-                            <Skeleton className="h-4 w-full mt-2 mb-4" dark />
-                            <Skeleton className="w-1/2" dark />
+                    {!!loading && [1, 2, 3, 4, 5].map(item => (
+                        <div className="flex gap-3 mb-4" key={item}>
+                            <Skeleton
+                                dark
+                                type="image"
+                                className="w-18 h-18 block shrink-0 rounded-2xl"
+                            />
+                            <div className="w-full">
+                                <Skeleton className="h-4 w-full mt-2 mb-4" dark />
+                                <Skeleton className="w-1/2" dark />
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
 
                 {!!(props.productsData?.pagedResult?.totalCount && products.length < props.productsData.pagedResult.totalCount) && (
                     <div ref={loadMoreWrapper}>
-                        {products.length < 50 && !selectedPage ? (
+                        {products.length < 100 && !selectedPage ? (
                             <br />
                         ) : (
                             <Pagination2
                                 onChange={e => { changePageHandel(e) }}
                                 totalItems={props.productsData.pagedResult.totalCount}
-                                itemsPerPage={10}
+                                itemsPerPage={20}
                                 currentPage={selectedPage || 5}
                             />
                         )}
@@ -281,8 +285,8 @@ export async function getServerSideProps(context: any) {
 
 
     const parameters: GetAllProductsParams = {
-        skipCount: selectedPage ? (selectedPage - 1) * 10 : 0,
-        maxResultCount: 10
+        skipCount: selectedPage ? (selectedPage - 1) * 20 : 0,
+        maxResultCount: 20
     }
 
     if (selectedSort) {
