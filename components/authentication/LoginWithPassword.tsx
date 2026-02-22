@@ -38,7 +38,10 @@ const LoginWithPassword: React.FC<Props> = props => {
     const onSuccessLogin = (response: any) => {
         if (response && response.status === 200) {
 
-            const token = response.data?.result?.accessToken
+            const token = response.data?.result?.accessToken;
+            const expDate = new Date();
+            expDate.setTime(expDate.getTime() + (24 * 60 * 60 * 1000)); //save 24 hours
+            localStorage.setItem('TokenExpire', expDate.toString());   
             localStorage.setItem('Token', token);
 
             dispatch(setReduxUser({
