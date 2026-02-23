@@ -73,7 +73,7 @@ export const Payment = {
   export const Blog = {
     getPosts: "//wp-json/wp/v2/posts",
     getBestCategories: '/wp-json/wp/v2/best_category',
-    getCategoeyName: '/wp-json/wp/v2/categories',
+    getCategoryName: '/wp-json/wp/v2/categories',
     getUsers: "/wp-json/wp/v2/users",
     getTagName: '/wp-json/wp/v2/tags'
   }
@@ -85,7 +85,7 @@ export const Payment = {
     GetAllForSiteMap:"/api/services/app/Product/GetAllForSiteMap",
     GetSimilar:"/api/services/app/Product/GetSimilar",
     GetOrderById:"/api/services/app/Order/Get",
-    GetProductGallries:"/api/services/app/Product/GetGallries",
+    GetProductGalleries:"/api/services/app/Product/GetGallries",
     GetProductVariants:"/api/services/app/Product/GetVariants",
     Approve:"/api/services/app/Order/Approve",
     GetAllVariants:"/api/services/app/Variant/GetAll",
