@@ -334,7 +334,8 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             }
 
             const now = new Date().getTime();
-            if (user_expireTime && now > parseInt(user_expireTime, 10)) {
+            const expireTime = user_expireTime ? new Date(user_expireTime).getTime() : undefined;
+            if ( !expireTime ||  now > expireTime) {
                 localStorage.removeItem('Token');
                 localStorage.removeItem('TokenExpire');
                 return null;

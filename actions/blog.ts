@@ -86,7 +86,7 @@ export const GetBestCategoryById = async (id : number) => {
 export const GetCategories = async () => {
     try {
       const res = await axios.get(
-        `${ServerAddress.Type}${ServerAddress.Blog}${Blog.getCategoeyName}`,
+        `${ServerAddress.Type}${ServerAddress.Blog}${Blog.getCategoryName}`,
         {
           headers: {
             // "Content-Type": "application/json",
