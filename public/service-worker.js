@@ -1,50 +1,93 @@
-const CACHE_NAME = "igc-cache-v2";
-const STATIC_ASSETS = ["/"];
+const CACHE_STATIC = "igc-static-v4";
+const CACHE_DYNAMIC = "igc-dynamic-v4";
+const OFFLINE_URL = "/offline.html";
 
+// ================= INSTALL =================
 self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS))
-  );
   self.skipWaiting();
+
+  event.waitUntil(
+    caches.open(CACHE_STATIC).then(cache => {
+      return cache.addAll([
+        "/",
+        OFFLINE_URL,
+      ]);
+    })
+  );
 });
 
+// ================= ACTIVATE =================
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
         keys.map(key => {
-          if (key !== CACHE_NAME) {
+          if (key !== CACHE_STATIC && key !== CACHE_DYNAMIC) {
             return caches.delete(key);
           }
         })
       )
     )
   );
+
   self.clients.claim();
 });
 
+// ================= FETCH =================
 self.addEventListener("fetch", event => {
   const { request } = event;
 
-  // ❌ API ها رو کش نکن
-  if (request.url.includes("/api/")) {
+  if (request.method !== "GET") return;
+
+  const url = new URL(request.url);
+
+  // ---------------- HTML → Network First ----------------
+  if (request.mode === "navigate") {
+    event.respondWith(
+      fetch(request)
+        .then(response => {
+          const clone = response.clone();
+          caches.open(CACHE_DYNAMIC).then(cache => {
+            cache.put(request, clone);
+          });
+          return response;
+        })
+        .catch(() => {
+          return caches.match(request)
+            .then(res => res || caches.match(OFFLINE_URL));
+        })
+    );
     return;
   }
 
-  // فقط GET
-  if (request.method !== "GET") return;
+  // ---------------- Static Files → Cache First ----------------
+  if (
+    url.origin === location.origin &&
+    (
+      request.destination === "style" ||
+      request.destination === "script" ||
+      request.destination === "image" ||
+      request.destination === "font"
+    )
+  ) {
+    event.respondWith(
+      caches.match(request).then(cached => {
+        if (cached) return cached;
 
-  event.respondWith(
-    caches.match(request).then(response => {
-      return (
-        response ||
-        fetch(request).then(fetchRes => {
-          return caches.open(CACHE_NAME).then(cache => {
-            cache.put(request, fetchRes.clone());
-            return fetchRes;
+        return fetch(request).then(response => {
+          const clone = response.clone();
+          caches.open(CACHE_STATIC).then(cache => {
+            cache.put(request, clone);
           });
-        })
-      );
-    })
+          return response;
+        });
+      })
+    );
+    return;
+  }
+
+  // ---------------- Other Requests → Network First ----------------
+  event.respondWith(
+    fetch(request).catch(() => caches.match(request))
   );
 });

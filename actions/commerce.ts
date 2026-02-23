@@ -98,7 +98,7 @@ export const getProductGallries = async (slug: string, acceptLanguage: "fa-IR" |
     try {
         const response: any = await axios({
             method: "get",
-            url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetProductGallries}?Slug=${slug}`,
+            url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetProductGalleries}?Slug=${slug}`,
             headers: {
                 ...Headers,
                 "Accept-Language": acceptLanguage,
