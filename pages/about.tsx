@@ -75,23 +75,27 @@ const AboutUs: NextPage = ({ strapiData, strapiSeoData }: { strapiData?: StrapiD
           />
         )}
       </Head>
-      <div className="lg:py-5">
-        {!!aboutDescription && <Intro description={aboutDescription} />}
+      <div className="max-w-[600px] mx-auto">
+        <div className="lg:py-5">
+          {!!aboutDescription && <Intro description={aboutDescription} />}
 
-        {!!icons && <AboutIcons items={icons} />}
+          {!!icons && <AboutIcons items={icons} />}
 
-        {!!FAQ_items?.length && <FAQ items={FAQ_items} answerParse="markDown" />}
+          {!!FAQ_items?.length && <FAQ items={FAQ_items} answerParse="markDown" />}
+        </div>
+        
+        <Contacts
+          data={{
+            emailAddress:emailAddress,
+            supportNUmberUrl : SupportNumberUrl,
+            supportNumber:SupportNumber,
+            supportNumberSubtitle:SupportNumberSubtitle
+          }}
+        />
+
       </div>
 
 
-      <Contacts
-        data={{
-          emailAddress:emailAddress,
-          supportNUmberUrl : SupportNumberUrl,
-          supportNumber:SupportNumber,
-          supportNumberSubtitle:SupportNumberSubtitle
-        }}
-      />
       
     </>
   );
