@@ -17,7 +17,8 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "cdn.irangamecenter.com", pathname: "**" },
       { protocol: "http", hostname: "cdn.irangamecenter.com", pathname: "**" },
       { protocol: "https", hostname: "igc1.storage.c2.liara.space", pathname: "**" },
-      { protocol: "https", hostname: "secure.gravatar.com", pathname: "**" }
+      { protocol: "https", hostname: "secure.gravatar.com", pathname: "**" },
+      { protocol: "https", hostname: "dkstatics-public.digikala.com", pathname: "**" }
     ],
     formats: ["image/avif", "image/webp"],
   },
