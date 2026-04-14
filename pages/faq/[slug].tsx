@@ -61,7 +61,7 @@ const FaqDetail: NextPage = ({ faq, strapiSeoData }: {faq?: FAQ,  strapiSeoData?
         />
       )}
     </Head>
-    <div className="px-5">
+    <div className="px-5 lg:max-w-[500px] lg:mx-auto lg:py-10">
       {faq?.Items?.map((item, index) => (
         <Accordion
           key={item.id}

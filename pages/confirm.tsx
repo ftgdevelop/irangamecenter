@@ -111,7 +111,7 @@ export default function Confirm() {
 
   if (mode === "success"){
     element = (
-      <div className="bg-[#231c51] text-white p-5 confirm-min-h flex flex-col justify-center text-center items-center rounded-xl">
+      <div className="bg-[#231c51] text-white p-5 max-lg:confirm-min-h lg:w-[1000px] lg:mx-auto flex flex-col justify-center text-center items-center rounded-xl lg:py-12">
         <div className="bg-[#011425] p-3 rounded-full mb-3">
           <Image src={'/images/icons/check-violet.svg'} width={28} height={28} className="w-7 h-7" alt="check mark"/>
         </div>
@@ -125,7 +125,7 @@ export default function Confirm() {
         </p>
         {!!orderData?.id && <Link
           href={`/profile/orders/${orderData?.id}`}
-          className="flex items-center justify-center h-11 w-full mb-5 text-white bg-gradient-violet rounded-full text-sm"
+          className="flex items-center justify-center h-11 w-full lg:w-48 mb-5 text-white bg-gradient-violet rounded-full text-sm"
         >
           {orderData?.items.some(x => x.allowNewLoginSubmission) ? "ثبت اطلاعات اکانت" : "جزییات سفارش"}
         </Link>}
@@ -136,7 +136,7 @@ export default function Confirm() {
 
   if(mode === "error"){
    element = ( 
-   <div className="bg-[#34142a] text-white p-5 confirm-min-h flex flex-col justify-center text-center items-center rounded-xl">
+   <div className="bg-[#34142a] text-white p-5 max-lg:confirm-min-h lg:w-[1000px] lg:mx-auto lg:py-12 flex flex-col justify-center text-center items-center rounded-xl">
       <div className="bg-[#011425] p-2.5 rounded-full mb-3">
         <Image src={'/images/icons/error.svg'} width={28} height={28} className="w-8 h-8" alt="error"/>
       </div>
@@ -147,14 +147,14 @@ export default function Confirm() {
       
       <Link
         href={`/payment?orderNumber=${orderNumber}&orderId=${orderId}`}
-        className="flex gap-3 items-center justify-center h-11 w-full mb-5 text-white bg-gradient-violet rounded-full text-sm"
+        className="flex gap-3 items-center justify-center h-11 w-full lg:w-64 mb-5 text-white bg-gradient-violet rounded-full text-sm"
       >
         <Refresh className="w-4 h-4 fill-current" />
         تلاش مجدد برای پرداخت
       </Link>
       <Link
         href="/"
-        className="flex gap-3 items-center justify-center h-11 w-full mb-5 text-white bg-gradient-orange rounded-full text-sm"
+        className="flex gap-3 items-center justify-center h-11 w-full lg:w-64 mb-5 text-white bg-gradient-orange rounded-full text-sm"
       >
         <Home className="w-4 h-4 fill-current" />
         بازگشت به فروشگاه
@@ -165,7 +165,7 @@ export default function Confirm() {
 
   if(mode === "pending"){
    element = ( 
-   <div className="bg-[#231c50] text-white p-5 confirm-min-h flex flex-col justify-center text-center items-center rounded-xl">
+   <div className="bg-[#231c50] text-white p-5 lg:py-12 max-lg:confirm-min-h lg:w-[1000px] lg:mx-auto flex flex-col justify-center text-center items-center rounded-xl">
       <div className="bg-[#011425] rounded-full mb-3">
         <Image src={'/images/loading.gif'} width={280} height={280} className="w-16 h-16" alt="error"/>
       </div>
@@ -184,7 +184,7 @@ export default function Confirm() {
     <>
       <Steps activeStepKey="payment" />
 
-      <div className="p-5">
+      <div className="max-lg:p-5 lg:pb-10">
         {element}        
       </div>
     </>

@@ -19,6 +19,7 @@ import { useCartApi } from "@/actions/cart";
 import { GetCookieMode } from "@/helpers";
 import { setReduxNotification } from "@/redux/notificationSlice";
 import { useIsDesktop } from "@/hooks/use-is-desktop";
+import DesktopFooter from "./footer/DesktopFooter";
 
 type Props = {
     className?: string;
@@ -53,8 +54,6 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             expDate.setTime(expDate.getTime() + (20 * 60 * 1000)); //save in cookie only 20 minutes.    
 
             const loginByUtm = async () => {
-                
-                debugger;
 
                 const response: any = await loginUtm({
                     utmName:"basa",
@@ -221,22 +220,27 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
     if (
         [
-            "/login",
-            "/profile/edit",
-            "/profile/change-password",
-            "/profile/forget-password",
-            "/profile/wallet",
-            "/profile/wallet/charge",
-            "/profile/wallet/faq",
-            "/profile/wallet/transactions"
+            "/login"
         ].includes(router.pathname)) {
         showFooter = false;
         showHeader = false;
         showFixedNav = false;
     }
 
+    if([
+            "/profile/change-password",
+            "/profile/forget-password",
+            "/profile//profile/edit",
+            "/profile/wallet",
+            "/profile/wallet/charge",
+            "/profile/wallet/faq",
+            "/profile/wallet/transactions"
+        ].includes(router.pathname)){
+        showFooter = false;
+        showFixedNav = false;
+    }
+
     if (router.pathname === "/profile") {
-        showHeader = false;
         showFooter = false;
     }
 
@@ -321,9 +325,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
     useEffect(() => {
 
-        function getToken() {
-            
-            debugger;
+        function getToken() {        
 
             const user_token = localStorage?.getItem('Token');
             const user_expireTime = localStorage?.getItem('TokenExpire');
@@ -416,6 +418,19 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }else{
           mainHeightClass = "min-h-screen";
     }
+
+    let footerElement = null;
+
+    if(isDesktop){
+        // if(router.pathname === '/'){
+        //     footerElement =  <HomeDesktopFooter />;
+        // }else{
+        // }
+        footerElement =  <DesktopFooter />;
+    }else if (showFooter){
+        footerElement = <Footer />;
+    }
+
     return (
         <>
             <Error />
@@ -424,7 +439,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
                 <PageLoadingBar active={loading} />
                 {showHeader && <>
                     <Header />
-                    <div className="mt-[84px]" />
+                    <div className="pt-[84px]" />
                 </>}
                 <main 
                     className={`${isDesktop ? "": mainHeightClass}`}
@@ -435,8 +450,10 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
                 >
                     {props.children}
                 </main>
-                {(showFooter || isDesktop) && <Footer />}
-                {showFixedNav &&! isDesktop && <FooterNavigation />}
+                
+                {footerElement}
+
+                {showFixedNav && !isDesktop && <FooterNavigation />}
             </div>
         </>
 

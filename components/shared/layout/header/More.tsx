@@ -10,6 +10,7 @@ import Bell from "@/components/icons/Bell";
 
 type Props = {
   productId: number;
+  variantId?: number;
 };
 
 const More: React.FC<Props> = (props) => {
@@ -53,6 +54,7 @@ const More: React.FC<Props> = (props) => {
       <div className="max-lg:py-4 lg:p-1">
         <ProductNotificationSetting
           productId={props.productId}
+          variantId={props.variantId}
           type="AmazingDiscount"
           buttonClassName="relative group flex w-full justify-between items-center"
         >

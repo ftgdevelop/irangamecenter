@@ -6,6 +6,7 @@ type Page = {
         logo?: boolean;
         title?: string;
         productId?: number;
+        variantId?:number;
         cart?: boolean;
         backLink?: string;
     }

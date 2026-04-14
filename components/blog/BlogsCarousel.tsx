@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import ArrowTopLeft from "../icons/ArrowTopLeft";
-import { BlogItemType } from "@/types/blog";
+import {  BlogListItemType } from "@/types/blog";
 import { toPersianDigits } from "@/helpers";
 import parse from 'html-react-parser';
 import dynamic from "next/dynamic";
@@ -12,7 +12,7 @@ const Carousel = dynamic(() => import("../shared/Carousel"), {
 });
 
 type Props = {
-    blogs: BlogItemType[];
+    blogs: BlogListItemType[];
     title?: string;
 };
 const BlogsCarousel: React.FC<Props> = props => {
@@ -25,12 +25,12 @@ const BlogsCarousel: React.FC<Props> = props => {
         url: string;
         date: string
     }[] = props.blogs.map(blog => ({
-        image: blog.jetpack_featured_media_url || "/images/no-image.jpg",
-        title: blog.title.rendered || "",
+        image: blog.postMainMediaUrl || "/images/default-game.png",
+        title: blog.title || "",
         url: `/blog/${blog.slug}`,
-        imageAlt: blog.title.rendered || "",
-        subTitle: blog.excerpt.rendered || "",
-        date: toPersianDigits(blog.date)
+        imageAlt: blog.title || "",
+        subTitle: blog.excerpt || "",
+        date: toPersianDigits(blog.creationTime)
     }));
 
     const isDesktop = useIsDesktop();

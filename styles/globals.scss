@@ -120,7 +120,9 @@ body {
   .search-result-max-h-desktop{
     max-height: calc(100vh - 350px);
   }
-  
+  .cart-min-h{
+    min-height: calc(100vh - 162px);
+  }
   .text-shadow {
     text-shadow: 0 0 2px #000000c9;
   }
@@ -221,6 +223,12 @@ body {
   }
   .bg-gradient-dark-violet{
     @apply bg-gradient-to-t from-[#161b39] to-[#161b39];
+  }
+  .bg-gradient-light-violet{
+    @apply bg-gradient-to-l from-[#eedaf7] to-[#f4e4fb];
+  }
+  .bg-gradient-dark-violet2{
+    @apply bg-gradient-to-l from-[#12183b] to-[#031426];
   }
   .bg-gradient-dark-green{
     @apply bg-gradient-to-t from-[#012431] to-[#0f2b32];
@@ -358,7 +366,4 @@ body {
 
 .confirm-min-h {
     min-height: calc(100vh - 200px);
-}
-.cart-min-h{
-  min-height: calc(100vh - 162px);
 }

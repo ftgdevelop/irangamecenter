@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "cdn.irangamecenter.com", pathname: "**" },
       { protocol: "http", hostname: "cdn.irangamecenter.com", pathname: "**" },
       { protocol: "https", hostname: "igc1.storage.c2.liara.space", pathname: "**" },
+      { protocol: "https", hostname: "secure.gravatar.com", pathname: "**" }
     ],
     formats: ["image/avif", "image/webp"],
   },
@@ -26,7 +27,7 @@ const nextConfig: NextConfig = {
     SITE_NAME: "https://irangamecenter.com",
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_IDENTITY: "identity.irangamecenter.com",
-    PROJECT_SERVER_BLOG: "pn.irangamecenter.com",
+    PROJECT_SERVER_BLOG:"ticketing.irangamecenter.com",
     PROJECT_SERVER_DISCOUNT: "blog.irangamecenter.com",
     PROJECT_SERVER_ECOMMERCE: "ecommerce.irangamecenter.com",
     PROJECT_SERVER_PAYMENT:"payline.irangamecenter.com",

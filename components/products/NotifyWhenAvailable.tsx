@@ -5,6 +5,7 @@ import ProductNotificationSetting from "../shared/layout/header/ProductNotificat
 
 type Props = {
   productId: number;
+  variantId?: number;
 };
 
 const NotifyWhenAvailable: React.FC<Props> = (props) => {
@@ -19,6 +20,7 @@ const NotifyWhenAvailable: React.FC<Props> = (props) => {
       <footer className="max-lg:z-50 max-lg:min-h-20 max-lg:fixed bottom-0 left-0 max-lg:bg-white dark:text-white dark:max-lg:bg-[#192a39] max-lg:px-4 max-lg:py-3 w-full transition-all duration-200">
         <ProductNotificationSetting
           productId={props.productId}
+          variantId={props.variantId}
           type="ProductAvailable"
           buttonClassName="bg-violet-500 hover:bg-violet-600 text-white rounded-full px-4 py-3.5 text-xs flex gap-2 items-center justify-center w-full font-semibold transition-all duration-200"
         >

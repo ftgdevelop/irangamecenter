@@ -97,6 +97,7 @@ const LoginWithPassword: React.FC<Props> = props => {
             onSuccessLogin(response);
 
         } else {
+            //debugger;
 
             dispatch(setReduxUser({
                 isAuthenticated: false,

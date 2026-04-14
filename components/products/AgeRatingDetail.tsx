@@ -253,7 +253,7 @@ const AgeRatingDetail: React.FC<Props> = props => {
                     <div className="min-h-96 flex flex-col justify-between" >
                         <div>
 
-                            <div className="mb-5 flex justify-between items-center pt-5 px-4 mb-4">
+                            <div className="flex justify-between items-center pt-5 px-4 mb-4">
                                 <h2 className="text-lg font-semibold block"> رده‌بندی سنی </h2>
                                 <button
                                     type="button"

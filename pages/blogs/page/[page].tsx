@@ -1,9 +1,8 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { getBlogs } from "@/actions/blog";
+import { getBlogsList } from "@/actions/blog";
 import { NextPage } from "next";
-import { BlogItemType } from "@/types/blog";
-import Contacts from "@/components/shared/Contacts";
+import { BlogListItemType } from "@/types/blog";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import BlogListItem from "@/components/blog/BlogListItem";
 import { useRouter } from "next/router";
@@ -11,15 +10,26 @@ import Link from "next/link";
 import CaretRight from "@/components/icons/CaretRight";
 import CaretLeft from "@/components/icons/CaretLeft";
 
-const Blogs: NextPage<any> = ({ page, posts, totalPages }: { page?: number, posts?: BlogItemType[], totalPages: number }) => {
+type Props = {
+    total: number;
+    page?: number;
+    posts?: BlogListItemType[];
+
+}
+
+//TODO %%%%%%%%%%%%%   check this page. TODO
+
+const Blogs: NextPage<Props> = props => {
+
+    const {page, total, posts} = props;
 
     const router = useRouter();
     
-    if(!page || page === 1 || (totalPages && totalPages < page+5)){
+    if(!page || page === 1 || (total && total < page+5)){
         router.push("/blogs");
     }
 
-    if (totalPages)
+    if (total)
 
         return (
             <>
@@ -37,7 +47,7 @@ const Blogs: NextPage<any> = ({ page, posts, totalPages }: { page?: number, post
                         />
                     ))}
 
-                    {totalPages > 6 && (
+                    {total > 6 && (
                         <div className="flex justify-between items-center bg-[#1a1e3b] rounded-full p-2">
 
                             {page && page > 1 ? (
@@ -56,10 +66,10 @@ const Blogs: NextPage<any> = ({ page, posts, totalPages }: { page?: number, post
                             <div className="bg-[#011425] rounded-full px-5 py-2 text-sm font-semibold">
                                 <span className="text-[#d35cfe]"> {page} </span>
                                 از
-                                <span> {totalPages - 5} </span>
+                                <span> {total - 5} </span>
                             </div>
 
-                            {page && page < (+totalPages - 5) ? (
+                            {page && page < (+total - 5) ? (
                                 <Link
                                     href={`/blogs/page/${page + 1}`}
                                     className={`w-10 h-10 flex justify-center items-center rounded-full bg-[#011425] active:from-[#a93aff] active:bg-gradient-to-t active:to-[#fe80ff]`}
@@ -74,8 +84,6 @@ const Blogs: NextPage<any> = ({ page, posts, totalPages }: { page?: number, post
                         </div>
                     )}
                 </div >
-
-                <Contacts />
 
             </>
         )
@@ -95,24 +103,16 @@ export async function getServerSideProps(context: any) {
 
     const page = context.query?.page || 1;
 
-    const blogs: any = await getBlogs({
-        per_page: 10,
-        page: page + 5
+    const blogs: any = await  getBlogsList({
+        MaxResultCount:10,
+        SkipCount: (page+4)*10
     })
-
-    let blogsFirstPageItems: any;
-    if (!blogs?.data) {
-        blogsFirstPageItems = await getBlogs({
-            per_page: 10,
-            page: page
-        });
-    }
 
     return (
         {
             props: {
-                posts: blogs?.data || null,
-                totalPages: +blogs?.headers?.['x-wp-totalpages'] || +blogsFirstPageItems?.headers?.['x-wp-totalpages'] || null,
+                total: blogs?.data?.result?.totalCount || 0,
+                posts: blogs?.data?.result?.items || null,
                 page: +page,
 
             }

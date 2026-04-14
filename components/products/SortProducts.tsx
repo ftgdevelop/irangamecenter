@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import SortIcon from "../icons/SortIcon";
 import { useAppDispatch } from "@/hooks/use-store";
 import { setBodyScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
 
 type Props = {
     activeKeyword?: ProductSortKeywords;
@@ -14,6 +15,8 @@ type Props = {
 }
 
 const SortProducts: React.FC<Props> = props => {
+
+    const isDesktop = useIsDesktop();
 
     // const [selected, setSelected] = useState<ProductSortKeywords | undefined>(props.activeKeyword);
 
@@ -41,6 +44,13 @@ const SortProducts: React.FC<Props> = props => {
 
     const selectedSortLabel = productSortOptions?.find(option => option.keywords === props.activeKeyword)?.label || "مرتب سازی";
 
+    let modalWrapperClass = `bg-white dark:bg-[#192a39] text-neutral-800 dark:text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full safePadding-b transition-all left-0 right-0 ${slideIn ? "bottom-0" : "-bottom-[80vh]"}`
+
+    if (isDesktop) {
+        modalWrapperClass = `bg-white dark:bg-[#192a39] text-neutral-800 dark:text-white rounded-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full max-w-2xl transition-all top-1/2 right-1/2 translate-x-1/2 ${slideIn ? "-translate-y-1/2 opacity-100" : "translate-y-0 opacity-0"}`
+    }
+
+
     return (
         <>
 
@@ -59,7 +69,7 @@ const SortProducts: React.FC<Props> = props => {
             >
                 <div className="bg-black/50 backdrop-blur-sm fixed top-0 left-0 right-0 bottom-0" onClick={() => { setSlideIn(false) }} />
 
-                <div className={`bg-[#ffffff] dark:bg-[#192a39] dark:text-white rounded-t-2xl fixed w-full md:max-w-lg safePadding-b overflow-y-auto max-h-[50vh] transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2  bottom-0 ${slideIn ? "translate-y-0" : "translate-y-[80vh]"}`}>
+                <div className={modalWrapperClass}>
                     <div className="px-4 pt-8">
 
                         <div className="mb-4 flex justify-between items-center">

@@ -1,7 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { NextPage } from "next";
-import Contacts from "@/components/shared/Contacts";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import { useEffect, useRef, useState } from "react";
 import Skeleton from "@/components/shared/Skeleton";
@@ -15,7 +14,7 @@ import { useAppDispatch } from "@/hooks/use-store";
 import { openFilter } from "@/redux/productsSlice";
 import Filter from "@/components/icons/Filter";
 import { DownCaretThick } from "@/components/icons/DownCaretThick";
-import ProductsFliter from "@/components/products/ProductsFliter";
+import ProductsFilter from "@/components/products/ProductsFilter";
 import { groupByPrefix } from "@/helpers";
 import AvailableFilterTag from "@/components/products/AvailableFilterTag";
 import BackOrderFilterTag from "@/components/products/BackOrderFilterTag";
@@ -250,9 +249,7 @@ const Products: NextPage<Props> = props => {
 
             </div>
 
-            <Contacts />
-
-            {!!(props.productsData?.facets?.length) && <ProductsFliter brandName={props.brandName} filters={props.productsData?.facets} />}
+            {!!(props.productsData?.facets?.length) && <ProductsFilter brandName={props.brandName} filters={props.productsData?.facets} />}
 
         </>
     )

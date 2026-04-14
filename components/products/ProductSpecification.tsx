@@ -1,6 +1,6 @@
 import { ProductDetailData } from "@/types/commerce";
 import Link from "next/link";
-import { dateDiplayFormat } from "@/helpers";
+import { dateDisplayFormat } from "@/helpers";
 
 type Props = {
   productData: ProductDetailData;
@@ -76,7 +76,7 @@ const ProductSpecification: React.FC<Props> = (props) => {
         <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5 last:border-0">
           <div className="whitespace-nowrap"> تاریخ انتشار </div>
           <div className="text-left text-[#099268] dark:text-teal-500 lg:text-black dark:lg:text-white">
-            {dateDiplayFormat({
+            {dateDisplayFormat({
               date: productData.releaseDate,
               locale: "fa",
               format: "dd mm yyyy",

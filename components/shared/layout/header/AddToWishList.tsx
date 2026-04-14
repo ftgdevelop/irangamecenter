@@ -199,7 +199,7 @@ const AddToWishList: React.FC<Props> = (props) => {
             <Loading className="w-7 h-7 lg:w-6 lg:h-6 fill-current animate-spin" />
           ) : (
             <LikeIcon
-              className={`w-7 h-7 lg:w-6 lg:h-6 stroke-2 transition-all ${active ? "fill-red-500 stroke-red-500" : "stroke-neutral-800 dark:stroke-white fill-transparent"}`}
+              className={`w-7 h-7 lg:w-6 lg:h-6 stroke-2 transition-all ${active ? "fill-red-500 stroke-red-500" : "stroke-neutral-800 dark:stroke-white lg:stroke-white fill-transparent"}`}
             />
           )}
           <span className="lg:hidden">{title}</span>

@@ -2,14 +2,13 @@
 
 import { NextPage } from 'next';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
-import { getProductBySlug, getProductGallries, getProductVariants, getVariantById } from '@/actions/commerce';
-import { PlatformSlugTypes, ProductDetailData, ProductGalleryItem, ProductVariant, SingleVariant } from '@/types/commerce';
+import { getProductBySlug, getProductGalleries, getProductQuestions, getProductVariants, getVariantById } from '@/actions/commerce';
+import { QuestionItemType, PlatformSlugTypes, ProductDetailData, ProductGalleryItem, ProductVariant, SingleVariant } from '@/types/commerce';
 import FAQ from '@/components/shared/FAQ';
-import Contacts from '@/components/shared/Contacts';
 import parse from 'html-react-parser';
 import Image from 'next/image';
 import RatingItem from '@/components/products/RatingItem';
-import { dateDiplayFormat} from '@/helpers';
+import { dateDisplayFormat} from '@/helpers';
 import Link from 'next/link';
 import ProductDetail from '@/components/products/ProductDetail';
 import AgeRatingDetail from '@/components/products/AgeRatingDetail';
@@ -22,7 +21,6 @@ import Star from '@/components/icons/Star';
 import SimilarProducts from '@/components/products/SimilarProducts';
 import { useRouter } from 'next/router';
 import Skeleton from '@/components/shared/Skeleton';
-import VariantFooter from '@/components/products/VariantFooter';
 import { useAppDispatch } from '@/hooks/use-store';
 import { setHeaderParams } from '@/redux/pages';
 import Breadcrumb from '@/components/shared/Breadcrumb';
@@ -33,27 +31,35 @@ import ProductDescriptionSection from '@/components/products/productDetailDeskto
 import ProductRatingSection from '@/components/products/productDetailDesktop/ProductRatingSection';
 import ProductAwardsSection from '@/components/products/productDetailDesktop/ProductAwardsSection';
 import ProductFAQSection from '@/components/products/productDetailDesktop/ProductFAQSection';
+import UserQuestionAnswer from '@/components/products/userQuestions/UserQuestionAnswer';
 
-const DetailProduct: NextPage<any> = ({
-  serversideProductData,
-  slug,
-  serversideGalleryData,
-  serversideVariants,
-  serversideVariant
-}: {
-  serversideProductData?: ProductDetailData;
+type Props = {
+  serverSideProductData?: ProductDetailData;
   slug?: string;
-  serversideGalleryData?: ProductGalleryItem[];
-  serversideVariants?:ProductVariant[];
-  serversideVariant?:SingleVariant;
-}) => {
+  serverSideGalleryData?: ProductGalleryItem[];
+  serverSideVariants?:ProductVariant[];
+  serverSideVariant?:SingleVariant;
+  serverSideQuestions?: {items:QuestionItemType[], totalCount: number};
+}
+
+const DetailProduct: NextPage<Props> = props => {
+
+  const {serverSideGalleryData, serverSideProductData, serverSideVariant, serverSideVariants, slug} = props;
+
   const [detailActiveTab, setDetailActiveTab] = useState<string>('');
 
-  const [productData, setProductData] = useState<ProductDetailData | undefined>(serversideProductData);
+  const [productData, setProductData] = useState<ProductDetailData | undefined>(serverSideProductData);
 
-  const [hasSimilars, setHasSimilars] = useState<boolean>(false);
+  const [hasSimilar, setHasSimilar] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const isDesktop = useIsDesktop();
+
+  const router = useRouter();
+
+  const {query} = router;
+
+  const queryVariant = query.variant as string|undefined;
+  const queryPlatform = query.platform as PlatformSlugTypes || undefined;  
 
   useEffect(()=>{
 
@@ -62,7 +68,8 @@ const DetailProduct: NextPage<any> = ({
         logo: true,
         cart: true,
         productId: productData?.id,
-        share: true 
+        share: true,
+        productVariantId: queryVariant? +queryVariant : undefined
       }
     }));
 
@@ -76,16 +83,9 @@ const DetailProduct: NextPage<any> = ({
   },[]);
 
   useEffect(()=>{
-    setProductData(serversideProductData);
-  },[serversideProductData?.id]);
+    setProductData(serverSideProductData);
+  },[serverSideProductData?.id]);
 
-  const router = useRouter();
-
-  const {query} = router;
-
-  const queryVariant = query.variant;
-  const queryPlatform = query.platform as PlatformSlugTypes || undefined;
-  
   const breadcrumbsItems: {
     label: string;
     link?: string;
@@ -98,7 +98,7 @@ const DetailProduct: NextPage<any> = ({
   const [variantLoading, setVariantLoading] = useState<boolean>(true);
 
   useEffect(()=>{
-    const fetchProductDatainClientForDebugging = async (s:string) => {
+    const fetchProductDataInClientForDebugging = async (s:string) => {
       const response: any = await getProductBySlug({
         acceptLanguage:"fa-IR",
         slug: s,
@@ -111,7 +111,7 @@ const DetailProduct: NextPage<any> = ({
     }
     
     if(slug){
-      fetchProductDatainClientForDebugging(slug);
+      fetchProductDataInClientForDebugging(slug);
     }
 
   },[slug]);
@@ -139,20 +139,19 @@ const DetailProduct: NextPage<any> = ({
     if(slug){
       if(queryVariant){
         fetchVariant(+queryVariant)
-      }else{
-        fetchVariants(slug);
       }
+      fetchVariants(slug);
     }
 
   },[slug, queryVariant]);
 
   const sortedGalleryItems = useMemo(() => {
-    if (!serversideGalleryData) return [];
-    return [...serversideGalleryData].sort((a, b) => {
+    if (!serverSideGalleryData) return [];
+    return [...serverSideGalleryData].sort((a, b) => {
       if (a.mediaType === 'Image' && b.mediaType === 'Video') return 1;
       return -1;
     });
-  }, [serversideGalleryData?.[0]?.filePath]);
+  }, [serverSideGalleryData?.[0]?.filePath]);
 
   const parsedShortDescription = useMemo(() => {
     if (!productData?.shortDescription) return null;
@@ -253,7 +252,7 @@ const DetailProduct: NextPage<any> = ({
     return leaves;
   }
 
-  const flatedVariants = getLeafNodes(serversideVariants||[]).filter(v => !!(v.items?.[0]?.sku && v.items?.[0]?.salePrice));
+  const flattedVariants = getLeafNodes(serverSideVariants||[]).filter(v => !!(v.items?.[0]?.sku && v.items?.[0]?.salePrice));
 
 
   let schemaOffers : {
@@ -268,8 +267,8 @@ const DetailProduct: NextPage<any> = ({
       }
   }[] = [];
 
-  if(flatedVariants?.length){
-    schemaOffers =  flatedVariants.map(v => {
+  if(flattedVariants?.length){
+    schemaOffers =  flattedVariants.map(v => {
       
       let availabilityStatus = ""
       switch(v.items?.[0]?.status){
@@ -305,9 +304,9 @@ const DetailProduct: NextPage<any> = ({
     })
   }
   
-  if(serversideVariant){
+  if(serverSideVariant){
     let availabilityStatus = ""
-    switch(serversideVariant.status){
+    switch(serverSideVariant.status){
       case "ComingSoon":
       case "OnBackOrder":
         availabilityStatus = "PreOrder";
@@ -316,26 +315,26 @@ const DetailProduct: NextPage<any> = ({
         availabilityStatus = "OutOfStock";
         break; 
       case "InStock":
-        if(serversideVariant.inventory === "Unlimited"){
+        if(serverSideVariant.inventory === "Unlimited"){
           availabilityStatus = "InStock";
         }else{
           availabilityStatus = "LimitedAvailability";
         }
         break;
       default :
-        availabilityStatus = serversideVariant.status || "";
+        availabilityStatus = serverSideVariant.status || "";
     }
 
     schemaOffers = [{
       "@type":"Offer",
-      sku: serversideVariant.sku||"no-data",
-      price: serversideVariant.salePrice || 0,
+      sku: serverSideVariant.sku||"no-data",
+      price: serverSideVariant.salePrice || 0,
       seller:{
         "@type":"Organization",
         "name":"Iran Game Center"
       },
       availability:availabilityStatus,
-      priceCurrency:serversideVariant.currencyType || "IRR"
+      priceCurrency:serverSideVariant.currencyType || "IRR"
     }]
   }
 
@@ -367,27 +366,27 @@ const DetailProduct: NextPage<any> = ({
     }
   ];
 
-  const schemaVideoItems = serversideGalleryData?.filter(g => g.mediaType === "Video");
+  const schemaVideoItems = serverSideGalleryData?.filter(g => g.mediaType === "Video");
 
   if(schemaVideoItems?.length){
     for (const v of schemaVideoItems){
-      let formatedDuration = "";
+      let formattedDuration = "";
       if(v.duration && v.duration > 0){
                       
         const H = Math.floor(v.duration/3600);            
         const M = Math.floor((v.duration % 3600) / 60);              
         const S = Math.floor(v.duration%60 );
         
-        formatedDuration = "PT";
+        formattedDuration = "PT";
 
         if(H){
-          formatedDuration += `${H}H`;
+          formattedDuration += `${H}H`;
         }
         if(M){
-          formatedDuration += `${M}M`;
+          formattedDuration += `${M}M`;
         }
         if(S){
-          formatedDuration += `${S}S`;
+          formattedDuration += `${S}S`;
         }
         
       }
@@ -398,7 +397,7 @@ const DetailProduct: NextPage<any> = ({
           "description": v.fileTitleAttribute ||"",
           "thumbnailUrl": v.thumbnail || "",
           "uploadDate": v.creationTime ? new Date(v.creationTime).toISOString() : "",
-          "duration": formatedDuration,
+          "duration": formattedDuration,
           "contentUrl": v.filePath,
           "embedUrl": v.cdnPath
         }
@@ -478,7 +477,8 @@ const DetailProduct: NextPage<any> = ({
         { id: 'ratings', label: 'امتیازها', isActive: !!productData?.rating?.length },
         { id: 'awards', label: 'جوایز', isActive: !!productData?.awards?.length },
         { id: 'faq', label: 'سوالات متداول', isActive: !!productData?.faqs?.length },
-        { id: 'similar', label: 'محصولات مشابه', isActive: hasSimilars },
+        { id: 'similar', label: 'محصولات مشابه', isActive: hasSimilar },
+        { id: 'userQuestions', label: 'پرسش ها', isActive: hasSimilar },
       ]}
     />
   )
@@ -587,7 +587,7 @@ const DetailProduct: NextPage<any> = ({
                 <ArrowTopLeft className="w-3.5 h-3.5 fill-current" />
               </div>
               <b className="block font-semibold mt-2 text-xs h-8 overflow-hidden">
-                {dateDiplayFormat({
+                {dateDisplayFormat({
                   date: productData.releaseDate,
                   locale: 'fa',
                   format: 'dd mm yyyy',
@@ -602,7 +602,7 @@ const DetailProduct: NextPage<any> = ({
     </>
   );
 
-  const mobileGallery = (serversideGalleryData?.length && sortedGalleryItems) ? (
+  const mobileGallery = (serverSideGalleryData?.length && sortedGalleryItems) ? (
     <ProductGalleryCarousel galleries={sortedGalleryItems} galleryLoading={false} />
   ) : null;
 
@@ -711,17 +711,23 @@ const DetailProduct: NextPage<any> = ({
         />
     )
   }
-
-  if(variantData?.salePrice){
+  if(variantsLoading){
     variant = (
-        <VariantFooter 
-          productId={productData.id}
-          currentVariant={{
-            id:variantData.id,
-            name: productData.name,
-            items:[variantData]
-          }}
-        />
+      <div className='max-lg:px-4'>
+        <Skeleton className='w-24 h-5 mb-3 mt-7' dark />
+        <div className='flex mb-5 gap-4'>
+          {[1,2,3].map(x => (
+          <Skeleton className='w-36 h-16 rounded-xl grow-0' dark type='button' key={x} />
+          ))}
+        </div>
+
+        <Skeleton className='w-24 h-5 mb-3 mt-10' dark />
+        <div className='flex mb-5 gap-4'>
+          {[1,2].map(x => (
+          <Skeleton className='w-36 h-16 rounded-xl grow-0' dark type='button' key={x} />
+          ))}
+        </div>
+      </div>
     )
   }
 
@@ -776,7 +782,7 @@ const DetailProduct: NextPage<any> = ({
     </section>
   )
 
-  const similar = !!slug && <SimilarProducts productSlug={slug} onHasSimilarItems={()=>{setHasSimilars(true)}} />;
+  const similar = !!slug && <SimilarProducts productSlug={slug} onHasSimilarItems={()=>{setHasSimilar(true)}} />;
 
   const head = (
     <Head>
@@ -809,6 +815,14 @@ const DetailProduct: NextPage<any> = ({
     </Head>
   );
 
+  const userQuestionAnswer = (
+    <UserQuestionAnswer 
+      productId={productData.id} 
+      items={props.serverSideQuestions?.items} 
+      total={props.serverSideQuestions?.totalCount} 
+    />
+  );
+
   if(isDesktop){
     return(
       <>
@@ -817,17 +831,18 @@ const DetailProduct: NextPage<any> = ({
       {breadcrumb}
 
       <div
-        style={{ backgroundImage: serversideProductData?.filePath ? `url(${serversideProductData.filePath})` : "linear-gradient(45deg, transparent, #ffe1e37a, transparent)" }}
-        className='bg-green-200 bg-cover bg-center'
+        style={{ backgroundImage: serverSideProductData?.filePath ? `url(${serverSideProductData.filePath})` : "linear-gradient(45deg, transparent, #ffe1e37a, transparent)" }}
+        className='bg-green-200 bg-cover bg-center relative'
       >
-        <div className='p-4 xl:p-10 backdrop-blur-xl bg-black/45 grid grid-cols-12 gap-5 relative'>
+        <div className='backdrop-blur-xl absolute top-0 left-0 right-0 bottom-0' />
+        <div className='p-4 2xl:p-10 bg-black/45 grid grid-cols-12 gap-3 2xl:gap-5 relative'>
           
-          <div className='col-span-2 xl:col-span-4 self-start sticky top-100'>
+          <div className='col-span-3 self-start sticky top-100'>
             <div className='relative'>
               <Image
-                src={serversideProductData?.filePath || "/images/default-game.png"}
-                alt={serversideProductData?.fileAltAttribute || ""}
-                title={serversideProductData?.fileTitleAttribute || ""}
+                src={serverSideProductData?.filePath || "/images/default-game.png"}
+                alt={serverSideProductData?.fileAltAttribute || ""}
+                title={serverSideProductData?.fileTitleAttribute || ""}
                 className='w-full h-auto aspect-square rounded-3xl'
                 width={550}
                 height={550}
@@ -838,13 +853,26 @@ const DetailProduct: NextPage<any> = ({
             </div>
           </div>
 
-          <div className='col-span-7 xl:col-span-6 text-white'>
+          <div className='col-span-6 2xl:col-span-7 text-white min-h-480'>
             {intro}
 
             {variant}
           </div>
 
-          <div id="variant-footer-desktop-modal" className='bg-gradient-to-t from-[#011426] to-transparent flex flex-col justify-end p-4 xl:p-6 rounded-2xl col-span-3 xl:col-span-2' />
+          <div 
+            id="variant-footer-desktop-modal" 
+            className='flex flex-col justify-end p-4 2xl:p-6 rounded-2xl col-span-3 2xl:col-span-2 bg-gradient-to-t from-[#011426] to-transparent' 
+          >
+            {variantsLoading && (
+              <>
+                <div className='text-left'>
+                  <Skeleton className='h-4 mb-4 w-17 inline-block' dark />
+                </div>
+                <Skeleton className='h-11 rounded-full' dark type='button' />
+              </>
+            )}
+
+          </div>
 
         </div>
         
@@ -871,7 +899,8 @@ const DetailProduct: NextPage<any> = ({
 
       {similar}
 
-      <Contacts />
+      {userQuestionAnswer}
+
       </>
     )
   }
@@ -907,13 +936,13 @@ const DetailProduct: NextPage<any> = ({
 
       {similar}
 
-      <Contacts />
+      {userQuestionAnswer}
+      
     </>
   );
 };
 
 export async function getServerSideProps(context: any) {
-
 
   const [response, galleryResponse, variantsResponse, variantResponse] = await Promise.all<any>([
     getProductBySlug({
@@ -922,23 +951,28 @@ export async function getServerSideProps(context: any) {
       platform: context?.query?.platform,
       variantId:context?.query?.variant
     }),
-    context?.query?.slug ? getProductGallries(context.query.slug): undefined,
-    (!context?.query?.variant && context?.query?.slug) ? getProductVariants(context.query.slug) : undefined,
-    context?.query?.variant ? getVariantById(context.query.variant) : undefined,
+    context?.query?.slug ? getProductGalleries(context.query.slug): undefined,
+    getProductVariants(context.query.slug),
+    getVariantById(context.query.variant)
   ]);
 
-
-
+  const QuestionsResponse : any = await getProductQuestions({
+    MaxResultCount:5,
+    SkipCount:0,
+    ProductId: response.data?.result?.id,
+    SortType:"Newest"
+  });
 
   return {
     props: {
-      serversideProductData: response.data?.result || null,
-      serversideGalleryData: galleryResponse?.data?.result || null,
-      serversideVariants:variantsResponse?.data?.result || null,
-      serversideVariant:variantResponse?.data?.result || null,
+      serverSideProductData: response.data?.result || null,
+      serverSideGalleryData: galleryResponse?.data?.result || null,
+      serverSideVariants:variantsResponse?.data?.result || null,
+      serverSideVariant:variantResponse?.data?.result || null,
       slug: context?.query?.slug || null,
       platform : context?.query?.platform || null,
-      variantId : context?.query?.variant || null
+      variantId : context?.query?.variant || null,
+      serverSideQuestions: QuestionsResponse?.data?.result || null
     },
   };
 }

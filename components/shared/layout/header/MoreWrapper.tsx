@@ -11,6 +11,7 @@ import { useIsDesktop } from "@/hooks/use-is-desktop";
 
 type Props = {
   productId: number;
+  variantId?: number;
 };
 
 const MoreWrapper: React.FC<Props> = (props) => {
@@ -42,8 +43,8 @@ const MoreWrapper: React.FC<Props> = (props) => {
 
   if(isDesktop){
     return(
-      <div className="absolute top-3 right-3 bg-black/60 flex flex-col gap-3 rounded-lg p-3">
-        <More productId={props.productId} />
+      <div className="absolute top-3 right-3 bg-black/60 flex flex-col gap-3 rounded-lg p-3 lg:text-white">
+        <More productId={props.productId} variantId={props.variantId} />
       </div>
     )
   }
@@ -83,7 +84,7 @@ const MoreWrapper: React.FC<Props> = (props) => {
             </div>
 
             <div className="px-4">              
-              <More productId={props.productId} />
+              <More productId={props.productId} variantId={props.variantId} />
             </div>
           </div>
         </div>

@@ -43,7 +43,7 @@ const OnlineSupport : React.FC<Props> = props => {
         <button
             onClick={()=>{setOpen(true)}}
             type="button"
-            className="text-right font-semibold text-sm text-white justify-between min-h-20 flex w-full mb-3 py-4 px-5 items-center bg-gradient-to-t from-[#01212e] to-[#102c33] rounded-xl gap-4"
+            className="text-right font-semibold text-sm dark:text-white justify-between min-h-20 flex w-full mb-3 py-4 px-5 items-center bg-gradient-to-t from-[#eeeeee] to-[#e1e1e1] dark:from-[#01212e] dark:to-[#102c33] rounded-xl gap-4"
         >
             <div className="flex gap-4 items-center">
                 {!!props.icon && <Image 

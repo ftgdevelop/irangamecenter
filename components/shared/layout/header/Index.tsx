@@ -105,7 +105,7 @@ const Header: React.FC = () => {
                     )}    
     
                     {headerParams?.productId ?(
-                        <MoreWrapper productId={headerParams.productId} />
+                        <MoreWrapper productId={headerParams.productId} variantId={headerParams.variantId} />
                     ):(
                         <MainMenu />
                     )}

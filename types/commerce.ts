@@ -124,7 +124,7 @@ export interface ProductVariant {
     children?: ProductVariant[];
     items?: {
         filePath?: string;
-        status?:  "InStock" | "OutOfStock" | "OnBackOrder" | "ComingSoon";
+        status?:  "InStock" | "OutOfStock" | "OnBackOrder" | "ComingSoon" | "OnDemand";
         attributes?: {
             value?: string;
         }[];
@@ -392,15 +392,8 @@ type VariantType = {
     variantAttributeValues?: VariantAttributeValue[];
     attributes?:string[]
 };
-export interface GetCurrentProductType {
+export interface GetCurrentProductItemType{
   id: number;
-  deviceId: string;
-  payableAmount: number;
-  profitAmount: number;
-  totalItemsPrice: number;
-  totalQuantity: number;
-  items: {
-    id: number;
     variantId: number;
     quantity: number;
     profitPercent: number;
@@ -410,7 +403,15 @@ export interface GetCurrentProductType {
     totalPrice: number;           
     totalDiscountAmount: number; 
     variant: VariantType;
-  }[]
+}
+export interface GetCurrentProductType {
+  id: number;
+  deviceId: string;
+  payableAmount: number;
+  profitAmount: number;
+  totalItemsPrice: number;
+  totalQuantity: number;
+  items: GetCurrentProductItemType []
 }
 export interface GetCurrentProductResponseType {
     result?: GetCurrentProductType;
@@ -806,4 +807,33 @@ export interface WishListItemType {
         slug?: string;
       }[];
     }
+}
+
+export type AnswerItemType = {
+    id: number;
+    questionId: number;
+    userId: number;
+    userDisplayName?: string;
+    isAnonymous: boolean;
+    answerText?: string;
+    isVerifiedBuyer: boolean;
+    status: "Approved" | "Pending" | "Rejected";
+    likeCount: number;
+    dislikeCount: number;
+    creationTime?: string;
+}
+
+export type QuestionItemType = {
+    productId: number;
+    userId: number;
+    questionText?: string;
+    userDisplayName?: string;
+    isAnonymous: boolean;
+    isVerifiedBuyer: boolean;
+    status: "Approved" | "Pending" | "Rejected";
+    likeCount: number;
+    dislikeCount: number;
+    id: number;
+    creationTime?: string;
+    answers: AnswerItemType[];
 }

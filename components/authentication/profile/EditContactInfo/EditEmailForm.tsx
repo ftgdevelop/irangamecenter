@@ -122,7 +122,7 @@ const EditEmailForm = () => {
                         }, 100)
                     }
                     return (
-                        <Form className="mx-3 pb-1" autoComplete="off">
+                        <Form className="pb-1" autoComplete="off">
 
                             <FormikField
                                 labelLeft={values.emailAddress && !userInfo?.isEmailConfirmed ? (

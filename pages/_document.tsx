@@ -76,6 +76,7 @@ export default function Document() {
           <div id="menu_portal" className="fixed top-0 left-0 right-0 z-[20]" />
           <div id="fixed_bottom_portal" />
           <div id="modal_portal" className="relative z-[50]" />
+          <div id="modal_portal2" className="relative z-[50]" />
           <div id="error_modal_portal" className="relative z-[20]" />
           <div id="notification_modal_portal" className="relative z-[50]" />
         </div>

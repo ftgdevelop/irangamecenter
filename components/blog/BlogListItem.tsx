@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { BlogItemType } from "@/types/blog";
-import { dateDiplayFormat, toPersianDigits } from "@/helpers";
+import { BlogListItemType } from "@/types/blog";
+import { dateDisplayFormat, toPersianDigits } from "@/helpers";
 
 type Props = {
-    data: BlogItemType;
+    data: BlogListItemType;
     wrapperClassName?: string;
 };
 const BlogListItem: React.FC<Props> = props => {
@@ -14,19 +14,19 @@ const BlogListItem: React.FC<Props> = props => {
     return (
         <Link prefetch={false} href={`/blog/${data.slug}`} className={`flex gap-3 ${props.wrapperClassName || ""}`}>
             <Image
-                src={data.jetpack_featured_media_url || "/images/no-image.jpg"}
-                alt={data.title?.rendered || ""}
+                src={data.postMainMediaUrl || "/images/default-game.png"}
+                alt={data.title || ""}
                 width={488}
                 height={214}
-                className="h-18 w-18 rounded-2xl aspect-square object-cover"
+                className="h-18 w-18 rounded-2xl aspect-square object-cover text-[9px]"
             />
             <div className="grow py-2">
                 <strong className="block mb-1 text-sm">
-                    {data.title?.rendered}
+                    {data.title}
                 </strong>
-                {!!data.date && <div className="block mt-2 text-xs">
-                    {toPersianDigits(dateDiplayFormat({
-                        date: data.date,
+                {!!data.creationTime && <div className="block mt-2 text-xs">
+                    {toPersianDigits(dateDisplayFormat({
+                        date: data.creationTime,
                         format: "timeAgo",
                         locale: "fa"
                     }))}

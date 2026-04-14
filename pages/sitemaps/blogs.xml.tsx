@@ -1,6 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { getBlogs } from "@/actions/blog";
+import { getBlogsList } from "@/actions/blog";
 
 function createSiteMap(total: number) {
 
@@ -32,11 +32,11 @@ export const getServerSideProps = async ({ res }: { res: any }) => {
   let sitemap: any;
 
   if (process.env.PROJECT_SERVER_BLOG) {
-    const postsResponse: any = await getBlogs({
-      per_page:1,
-      page:1
+    const postsResponse: any = await getBlogsList({
+      MaxResultCount:1,
+      SkipCount:0
     });
-    sitemap = createSiteMap(Math.ceil(+postsResponse?.headers?.['x-wp-totalpages']/100 || 0));
+    sitemap = createSiteMap(Math.ceil(postsResponse?.data?.result?.totalCount /100 || 0));
   } else {
     sitemap = createSiteMap(0);
   }

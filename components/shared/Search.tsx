@@ -15,7 +15,7 @@ import { toPersianDigits } from "@/helpers";
 import Skeleton from "./Skeleton";
 import History from "../icons/History";
 import ArrowTopLeft from "../icons/ArrowTopLeft";
-import { BlogItemType } from "@/types/blog";
+import { BlogListItemType } from "@/types/blog";
 import SearchIcon from "../icons/SearchIcon";
 import { useIsDesktop } from "@/hooks/use-is-desktop";
 
@@ -29,7 +29,7 @@ const Search = () => {
     const [slideIn, setSlideIn] = useState<boolean>(false);
 
     const [products, setProducts] = useState<ProductItem[]>();
-    const [blogs, setBlogs] = useState<BlogItemType[]>();
+    const [blogs, setBlogs] = useState<BlogListItemType[]>();
 
     const [text, setText] = useState<string>("");
 
@@ -126,18 +126,18 @@ const Search = () => {
 
     const fetchBlogs = async (val: string) => {
 
-        try {
+        try {       
 
             const axiosParams = {
                 method: "get",
-                url: `${ServerAddress.Type}${ServerAddress.Blog}${Blog.getPosts}?search=${val}&per_page=${25}&page=1`,
+                url: `${ServerAddress.Type}${ServerAddress.Blog}${Blog.getPosts}?Search=${val}&MaxResultCount=${25}&SkipCount=0`,
                 cancelToken: source.token
             }
 
             const response = await axios(axiosParams);
 
-            if (response?.data?.length) {
-                setBlogs(response.data);
+            if (response?.data?.result?.items?.length) {
+                setBlogs(response.data.result.items);
             } else if (response?.data) {
                 setBlogs([]);
             }
@@ -334,14 +334,14 @@ const Search = () => {
                                         ) : blogs?.length ? blogs.map(blog => (
                                             <Link prefetch={false} key={blog.id} href={`/blog/${blog.slug}`} className="flex items-center gap-4 border-b border-black/30 dark:border-white/30 py-3" >
                                                 <Image
-                                                    src={blog.jetpack_featured_media_url || "/images/no-image.jpg"}
-                                                    alt={blog.title?.rendered || ""}
+                                                    src={blog.postMainMediaUrl || "/images/default-game.png"}
+                                                    alt={blog.title || ""}
                                                     width={72}
                                                     height={72}
                                                     className="block w-18 h-18 rounded-2xl"
-                                                    title={blog.title?.rendered || ""}
+                                                    title={blog.title || ""}
                                                 />
-                                                <h4 className="text-xs"> {toPersianDigits(blog.title?.rendered || "")} </h4>
+                                                <h4 className="text-xs"> {toPersianDigits(blog.title || "")} </h4>
                                             </Link>
                                         )) : blogs ? (
                                             <div className="text-sm py-5 mb-5"> مطلبی یافت نشد </div>

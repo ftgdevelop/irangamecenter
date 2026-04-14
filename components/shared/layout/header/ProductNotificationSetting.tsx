@@ -16,6 +16,7 @@ import CheckboxGroup from "../../CheckboxGroup";
 type Props = {
   className?: string;
   productId: number;
+  variantId?: number;
   type: "ProductAvailable" | "AmazingDiscount";
   buttonClassName: string;
 };
@@ -67,6 +68,7 @@ const ProductNotificationSetting: React.FC<PropsWithChildren<Props>> = (props) =
       {
         channels: selectedTypes,
         productId: props.productId,
+        productVariantId: props.variantId || undefined,
         type: props.type,
       },
       userToken,

@@ -1,7 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { NextPage } from "next";
-import Contacts from "@/components/shared/Contacts";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import { useEffect, useRef, useState } from "react";
 import Skeleton from "@/components/shared/Skeleton";
@@ -15,7 +14,7 @@ import { useAppDispatch } from "@/hooks/use-store";
 import { openFilter } from "@/redux/productsSlice";
 import Filter from "@/components/icons/Filter";
 import { DownCaretThick } from "@/components/icons/DownCaretThick";
-import ProductsFliter from "@/components/products/ProductsFliter";
+import ProductsFilter from "@/components/products/ProductsFilter";
 import { groupByPrefix } from "@/helpers";
 import AvailableFilterTag from "@/components/products/AvailableFilterTag";
 import BackOrderFilterTag from "@/components/products/BackOrderFilterTag";
@@ -40,14 +39,14 @@ const Products: NextPage<Props> = props => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        const fetchDatas = async () => {
+        const fetchData = async () => {
             const parameters = { ...props.parameters };
             const res:any = await getProducts(parameters);
             if(!products.length && res?.data?.result?.pagedResult?.items){
                 setProducts(res.data.result.pagedResult.items);
             }
         }
-        fetchDatas();
+        fetchData();
     }, []);
 
     useEffect(() => {
@@ -231,9 +230,10 @@ const Products: NextPage<Props> = props => {
                 {!!(props.productsData?.pagedResult?.totalCount && products.length < props.productsData.pagedResult.totalCount) && (
                     <div ref={loadMoreWrapper}>
                         {products.length < 100 && !selectedPage ? (
-                            <br />
+                            <div className="h-40" />
                         ) : (
                             <Pagination2
+                                wrapperClassName="max-w-[450px] mx-auto mt-6"
                                 onChange={e => { changePageHandel(e) }}
                                 totalItems={props.productsData.pagedResult.totalCount}
                                 itemsPerPage={20}
@@ -245,9 +245,7 @@ const Products: NextPage<Props> = props => {
 
             </div>
 
-            <Contacts />
-
-            {!!(props.productsData?.facets?.length) && <ProductsFliter filters={props.productsData?.facets} />}
+            {!!(props.productsData?.facets?.length) && <ProductsFilter filters={props.productsData?.facets} />}
 
         </>
     )

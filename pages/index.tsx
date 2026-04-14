@@ -11,9 +11,8 @@ import { NextPage } from "next";
 import { ServerAddress } from "@/enum/url";
 import Highlights from "@/components/home/highlights";
 import { HighlightItemType } from "@/types/highlight";
-import Contacts from "@/components/shared/Contacts";
-import { getBlogs } from "@/actions/blog";
-import { BlogItemType } from "@/types/blog";
+import { getBlogsList } from "@/actions/blog";
+import { BlogListItemType } from "@/types/blog";
 import BlogsCarousel from "@/components/blog/BlogsCarousel";
 import {getProducts } from "@/actions/commerce";
 import { GetProductsDataType, StrapiSeoData } from "@/types/commerce";
@@ -88,7 +87,7 @@ type Props = {
   homeSections?: HomeSections[];
   homeHighlights?: HighlightItemType[];
   homeAboutData?: HomeAboutDataType;
-  recentBlogs?: BlogItemType[];
+  recentBlogs?: BlogListItemType[];
   playstation5Data?: GetProductsDataType;
   playstation4Data?: GetProductsDataType;
   steamData?: GetProductsDataType;
@@ -118,11 +117,6 @@ const Home: NextPage<Props> = props => {
 
   const FAQ_items = homeAboutData?.find(item => item.Keyword === "faq")?.Items;
   
-  const SupportNumber = homeAboutData?.find(item => item.Keyword === "telNumber")?.Description;
-  const SupportNumberUrl = homeAboutData?.find(item => item.Keyword === "telNumber")?.Url;
-  const SupportNumberSubtitle = homeAboutData?.find(item => item.Keyword === "telNumber")?.Subtitle;
-  const emailAddress = homeAboutData?.find(item => item.Keyword === "email")?.Description; 
-
   return (
     <>
       <Head>
@@ -205,14 +199,7 @@ const Home: NextPage<Props> = props => {
 
       {!!FAQ_items?.length && <FAQ items={FAQ_items} answerParse="markDown" />}
 
-      {<Contacts 
-        data={{
-          emailAddress:emailAddress,
-          supportNUmberUrl : SupportNumberUrl,
-          supportNumber:SupportNumber,
-          supportNumberSubtitle:SupportNumberSubtitle
-        }}
-      />}
+      {isDesktop && <div className="h-14" />}
 
     </>
   );
@@ -224,7 +211,7 @@ export const getStaticProps = async (context: any) => {
     getStrapiPages('filters[Page][$eq]=Home&locale=fa&populate[Sections][on][shared.repeter][populate][Items][populate]=*'),
     getStrapiHighlight('locale=fa&populate[Item][populate]=*'),
     getStrapiPages('filters[Page][$eq]=aboutUs&locale=fa&populate[Sections][populate]=*'),
-    getBlogs({page:1,per_page:5}),
+    getBlogsList({MaxResultCount:5,SkipCount:0}),
     getProducts({skipCount:0, maxResultCount:12, variants:["playstation-5"]}),
     getProducts({skipCount:0, maxResultCount:12, variants:["playstation-4"]}),
     getProducts({skipCount:0, maxResultCount:12, variants:["steam"]}),
@@ -243,7 +230,7 @@ export const getStaticProps = async (context: any) => {
       homeSections: strapiSectionResponse?.data?.data?.[0]?.Sections || null,
       homeHighlights: strapiHighlightsResponse?.data?.data || null,
       homeAboutData: strapiAboutSectionResponse?.data?.data?.[0]?.Sections || null,
-      recentBlogs:blogResponse?.data || null,
+      recentBlogs:blogResponse?.data?.result?.items || null,
       playstation5Data: playstation5DataResponse?.data?.result || null ,
       playstation4Data: playstation4DataResponse?.data?.result || null ,
       steamData: steamDataResponse?.data?.result || null ,

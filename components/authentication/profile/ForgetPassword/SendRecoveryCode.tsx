@@ -49,7 +49,6 @@ const SendRecoveryCode: React.FC<Props> = props => {
             const errorMessage = response?.response?.data?.error?.message;
 
             dispatch(setReduxError({
-                status: 'error',
                 message: errorMessage || "ارسال اطلاعات ناموفق",
                 isVisible: true
             }));
@@ -82,7 +81,7 @@ const SendRecoveryCode: React.FC<Props> = props => {
                     }, 100)
                 }
                 return (
-                    <Form className="p-5" autoComplete="off">
+                    <Form autoComplete="off">
 
 
                         <PhoneInput

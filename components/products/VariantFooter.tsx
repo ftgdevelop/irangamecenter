@@ -24,10 +24,12 @@ import NotifyWhenAvailable from "./NotifyWhenAvailable";
 
 const VariantFooter = ({
   currentVariant,
-  productId
+  productId,
+  productVariantId
 }: {
   currentVariant?: ProductVariant;
   productId: number;
+  productVariantId?: number;
 }) => {
 
   const [cartData, setCartData] = useState<GetCartByProductIdType | null>(null);
@@ -51,6 +53,12 @@ const VariantFooter = ({
     dispatch(setGeneralCartLoading(false));
   };
 
+  useEffect(()=>{
+    return(()=>{
+      setShowSuccessAlert(false)
+    })
+  },[]);
+
   const deviceId = useAppSelector((state) => state.cart?.deviceId);
 
   const loadCartByProductId = (params?:{deviceId?:string;userToken?:string}) => {
@@ -73,8 +81,8 @@ const VariantFooter = ({
     loadCartByProductId();
   }, [deviceId]);
 
-  if (!currentVariant?.items?.[0]){
-     return <NotifyWhenAvailable productId={productId} />
+  if (currentVariant?.items?.[0]?.status === "OutOfStock" ){
+     return <NotifyWhenAvailable productId={productId} variantId={productVariantId} />
   };
 
   const variantItem = currentVariant?.items?.[0];
@@ -131,7 +139,7 @@ const VariantFooter = ({
     }
   };
 
-  const currentVariantAddedQuantity = cartData?.items.find(x => x.variantId === variantItem.id)?.quantity || 0;
+  const currentVariantAddedQuantity = cartData?.items.find(x => x.variantId === variantItem?.id)?.quantity || 0;
   
   return (
     <>
@@ -139,7 +147,7 @@ const VariantFooter = ({
         <Alert 
           closable 
           autoClose
-          wrapperClassName="fixed bottom-[100px] left-0 right-0 flex justify-center items-center px-4 z-50"
+          wrapperClassName="fixed max-lg:bottom-[100px] max-lg:left-0 max-lg:right-0 flex justify-center items-center lg:bottom-10 lg:left-1/2 lg:-translate-x-1/2 lg:min-w-[400px] px-4 z-50"
         >
           <div className="flex flex-wrap gap-2 justify-between items-center text-sm">
             <span className="text-gradient-logo-linear">
@@ -147,7 +155,7 @@ const VariantFooter = ({
             </span>
           <button
             type="button"
-            className="w-fit h-full text-neutral-700 text-white flex items-end"
+            className="w-fit h-full text-white flex items-end"
             onClick={async () => {
               dispatch(setProgressLoading(true)); 
               await router.push("/cart");
@@ -167,13 +175,13 @@ const VariantFooter = ({
           {currentVariantAddedQuantity ? (
           <div className="flex items-center gap-2 h-13 bg-[#EFEFF0]/10 rounded-full lg:order-2">
               <button
-              className="text-[#011425] dark:text-white bg-gradient-to-t from-green-600 to-green-300 hover:bg-gradient-to-tr flex justify-center items-center p-2 h-13 w-13 rounded-full"
+              className="text-[#011425] dark:text-white lg:text-white/70 bg-gradient-to-t from-green-600 to-green-300 hover:bg-gradient-to-tr flex justify-center items-center p-2 h-13 w-13 rounded-full"
                 onClick={handleAddToCart}
               >
                 <Plus className="w-4 h-4 fill-current" />
               </button>
 
-              <span className="text-[#011425] dark:text-white flex justify-center items-center w-8 grow font-medium">
+              <span className="text-[#011425] lg:text-white dark:text-white flex justify-center items-center w-8 grow font-medium">
                 {loading ? (
                   <Loading className="fill-current w-5 h-5 animate-spin" />
                 ) : (
@@ -182,7 +190,7 @@ const VariantFooter = ({
               </span>
 
               <button
-                className="text-[#5F5F5F] dark:text-white/70 bg-gradient-to-t hover:bg-gradient-to-tr from-[#00B59C]/10 to-[#9CFFAC]/10 flex justify-center items-center p-2 h-13 w-13 rounded-full"
+                className="text-[#5F5F5F] lg:text-white/70  dark:text-white/70 bg-gradient-to-t hover:bg-gradient-to-tr from-[#00B59C]/10 to-[#9CFFAC]/10 flex justify-center items-center p-2 h-13 w-13 rounded-full"
                 onClick={handleRemoveFromCart}
                 >
                   {
@@ -219,13 +227,13 @@ const VariantFooter = ({
                   <span className="text-[#fe9f00] text-2xs font-semibold">
                     {variantItem.profitPercentage ? `${variantItem.profitPercentage} %   تخفیف` : `${numberWithCommas(variantItem.profitPrice! * (currentVariantAddedQuantity || 1))} ${currency} تخفیف `}
                   </span>
-                  {!!variantItem.regularPrice && <span className="text-xs text-[#5f5f5f] dark:text-white/70 line-through">
+                  {!!variantItem.regularPrice && <span className="text-xs text-[#5f5f5f] lg:text-white dark:text-white/70 line-through">
                     {numberWithCommas(variantItem.regularPrice * (currentVariantAddedQuantity || 1))} {currency}
                   </span>}
                 </div>
               )}
 
-              <b className="text-[#011425] dark:text-white text-base font-semibold block">
+              <b className="text-[#011425] lg:text-white dark:text-white text-base font-semibold block">
                 {numberWithCommas(variantItem.salePrice * (currentVariantAddedQuantity || 1))} {currency}
               </b>
             </div>

@@ -1,5 +1,5 @@
 import ArrowTopLeft from "@/components/icons/ArrowTopLeft";
-import { dateDiplayFormat, numberWithCommas } from "@/helpers";
+import { dateDisplayFormat, numberWithCommas } from "@/helpers";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
 import { OrderListItemType } from "@/types/commerce";
 import Image from "next/image";
@@ -33,7 +33,7 @@ const OrderItem : React.FC<Props> = props => {
                 {order?.creationTime && (
                     <div> 
                         <span className="dark:font-white/50 ml-2"> تاریخ ثبت سفارش </span> 
-                        <span className="font-semibold"> {dateDiplayFormat({
+                        <span className="font-semibold"> {dateDisplayFormat({
                             date:order.creationTime,
                             format:"dd mm yyyy",
                             locale:"fa"

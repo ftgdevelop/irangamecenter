@@ -63,7 +63,7 @@ const Categories: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
                     <title>دسته بندی</title>
                 </Head>
                 
-                <h3 className="py-10 hidden lg:block text-3xl font-bold border-b border-neutral-300 dark:border-white/15 text-center text-white"> دسته بندی </h3>
+                <h3 className="py-10 hidden lg:block text-3xl font-bold border-b border-neutral-300 dark:border-white/15 text-center dark:text-white"> دسته بندی </h3>
 
                 {strapiData ? (
                     <>
@@ -98,7 +98,7 @@ const Categories: NextPage = ({ strapiData }: { strapiData?: StrapiData }) => {
                             ))}
                         </div>
 
-                        <div className="text-center">
+                        <div className="text-center lg:mb-10">
                             <Link
                                 prefetch={false}
                                 href={`${activeItem?.Slug}`}

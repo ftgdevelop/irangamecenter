@@ -93,7 +93,7 @@ export const getVariantById = async (id: number, acceptLanguage: "fa-IR" | "en-U
 }
 
 
-export const getProductGallries = async (slug: string, acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
+export const getProductGalleries = async (slug: string, acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
 
     try {
         const response: any = await axios({
@@ -491,3 +491,97 @@ export const getUserWishlist = async (params: {
         return error
     }
 }
+
+
+export const getProductQuestions = async (
+  params: {
+    SkipCount: number;
+    MaxResultCount: number;
+    ProductId : number;
+    SortType: "MostAnswered" | "Newest";
+  }
+) => {
+  try {
+    const res: any = await axios({
+      method: "get",
+      url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetProductQuestions}?ProductId=${params.ProductId}&SortType=${params.SortType}&SkipCount=${params.SkipCount}&MaxResultCount=${params.MaxResultCount}`,
+      headers: {
+        ...Headers,
+        "Accept-Language": "fa-IR",
+        currency: "IRR"
+      }
+    });
+
+    return res;
+  } catch (error: any) {
+    return error;
+  }
+};
+
+
+export const createQuestion = async ( params:{ 
+    isAnonymous: boolean;
+    productId: number;
+    questionText:string;
+ }, token?: string) => {
+  try {
+    const headers: Record<string, any> = {...Headers};
+    if(token) headers["Authorization"] =  `Bearer ${token}`;
+
+    const response = await axios.post(
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.CreateQuestion}`,
+      params,
+      {
+        headers: headers,
+      }
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+export const createAnswer = async ( params:{ 
+  questionId:number;
+  answerText: string;
+  isAnonymous: boolean;
+ }, token?: string) => {
+  try {
+    const headers: Record<string, any> = {...Headers};
+    if(token) headers["Authorization"] =  `Bearer ${token}`;
+
+    const response = await axios.post(
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.CreateAnswer}`,
+      params,
+      {
+        headers: headers,
+      }
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+export const voteAnswer = async ( params:{ 
+  answerId: number;
+  questionId: number;
+  voteType: "Like" | "Dislike";
+ }, token?: string) => {
+  try {
+    const headers: Record<string, any> = {...Headers};
+    if(token) headers["Authorization"] =  `Bearer ${token}`;
+
+    const response = await axios.post(
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.VoteAnswer}`,
+      params,
+      {
+        headers: headers,
+      }
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
+

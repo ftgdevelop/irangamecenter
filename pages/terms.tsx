@@ -52,7 +52,7 @@ const Terms: NextPage = ({ strapiData, strapiSeoData }: { strapiData?: StrapiDat
         />
       )}
     </Head>
-    <div className="px-5">
+    <div className="px-5 lg:max-w-[500px] lg:mx-auto">
       {strapiData?.Items?.map((item, index) => (
         <Accordion
           key={item.id}

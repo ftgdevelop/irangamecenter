@@ -61,7 +61,7 @@ const ProductTabs = ({ tabs }: ProductTabsProps) => {
       ref={tabRef}
       className={`w-full backdrop-blur-md  bg-white dark:bg-[#0f1f2e]/80 lg:dark:bg-[#011425] z-[10] transition-all duration-100 max-lg:-mt-10 sticky top-[84px] ${isVisible ? "opacity-100 visible" : "max-lg:invisible max-lg:opacity-0"}`}
     >
-      <div className="flex styled-scrollbar overflow-x-auto border-b border-neutral-300 dark:border-white/10 lg:px-10">
+      <div className="flex  max-lg:hidden-scrollbar lg:styled-scrollbar overflow-x-auto border-b border-neutral-300 dark:border-white/10 lg:px-10">
         {tabs
           .filter((t) => t.isActive)
           .map((tab) => {
@@ -70,7 +70,7 @@ const ProductTabs = ({ tabs }: ProductTabsProps) => {
               <button
                 key={tab.id}
                 onClick={() => scrollToSection(tab.id)}
-                className={`grow-0 relative flex-1 min-w-fit px-4 py-3 lg:py-5 text-sm font-medium transition-all duration-200 ${
+                className={`dark:font-semibold grow-0 relative flex-1 min-w-fit px-4 py-3 lg:py-5 text-sm font-medium transition-all duration-200 ${
                   isActive
                     ? "text-transparent bg-clip-text bg-gradient-to-r from-[#A93AFF] to-[#FF81FF] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-gradient-to-r after:from-[#A93AFF] after:to-[#FF81FF]"
                     : "dark:text-black hover:text-black dark:text-white/70 dark:hover:text-white"
