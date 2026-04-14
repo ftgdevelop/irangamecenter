@@ -42,7 +42,7 @@ export default function Profile() {
       </div>
       <div className="max-lg:hidden lg:p-4 lg:col-span-2">
         <div>
-          پروفایل کاربری
+          
         </div>
       </div>
     </div>

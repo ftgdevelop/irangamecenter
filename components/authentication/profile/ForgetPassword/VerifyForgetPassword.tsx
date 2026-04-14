@@ -244,7 +244,7 @@ const VerifyForgetPassword: React.FC<Props> = props => {
                     }}
                     disabled={!codeIsEntered || verificationLoading}
                     type="button"
-                    className={`flex gap-4 items-center justify-center mb-5 h-14 w-full text-center rounded-full text-sm ${codeIsEntered ? "bg-[#aa3aff]" : "bg-[#231c50]"}`}
+                    className="flex gap-4 items-center justify-center mb-5 h-14 w-full text-center rounded-full text-white text-sm bg-[#aa3aff]"
                 >
                     تایید
 

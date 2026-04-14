@@ -214,110 +214,112 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }, [router.asPath]);
 
     let showHeader = true;
-    let showFooter = true;
+    let showMobileFooter = true;
+    let showDesktopFooter = true;
     let showFixedNav = true;
     let hasInternalFixedFooter = false;
 
     if (
         [
-            "/login"
+            "/login",
+            "/forget-password"
         ].includes(router.pathname)) {
-        showFooter = false;
+        showMobileFooter = false;
         showHeader = false;
+        showDesktopFooter = false;
         showFixedNav = false;
     }
 
     if([
             "/profile/change-password",
-            "/profile/forget-password",
             "/profile//profile/edit",
             "/profile/wallet",
             "/profile/wallet/charge",
             "/profile/wallet/faq",
             "/profile/wallet/transactions"
         ].includes(router.pathname)){
-        showFooter = false;
+        showMobileFooter = false;
         showFixedNav = false;
     }
 
     if (router.pathname === "/profile") {
-        showFooter = false;
+        showMobileFooter = false;
     }
 
     if (router.pathname === "/terms") {
-        showFooter = false;
+        showMobileFooter = false;
         showFixedNav = false;
     }
     if (router.pathname === "/about") {
         showHeader = true;
-        showFooter = true;
+        showMobileFooter = true;
         showFixedNav = false;
     }
     if (router.pathname === "/contact") {
         showHeader = true;
-        showFooter = false;
+        showMobileFooter = false;
         showFixedNav = false;
     }
 
     if (router.pathname.startsWith("/faq")) {
-        showFooter = false;
+        showMobileFooter = false;
         showFixedNav = false;
     }
     if (router.pathname === "/profile/wishlist") {
-        showFooter = false;
+        showMobileFooter = false;
         showFixedNav = true;
     }
 
     if (router.pathname.includes("/orders")) {
-        showFooter = false;
+        showMobileFooter = false;
         showFixedNav = true;
     }
 
     if (router.pathname.startsWith("/blog/")) {
-        showFooter = true;
+        showMobileFooter = true;
         showHeader = true;
         showFixedNav = false;
     }
 
     if (router.pathname === "/blogs") {
-        showFooter = true;
+        showMobileFooter = true;
         showHeader = true;
         showFixedNav = false;
     }
 
     if (router.pathname.startsWith("/product/")) {
-        showFooter = true;
+        showMobileFooter = true;
         showHeader = true;
         showFixedNav = false;
         hasInternalFixedFooter = true;
     }
 
     if (router.pathname === "/categories"){
-        showFooter = false;
+        showMobileFooter = false;
         showHeader = true;
         showFixedNav = true;
     }
     if (router.pathname === '/cart') {
-        showFooter = false;
+        showMobileFooter = false;
         showHeader = true;
         showFixedNav = false;
         hasInternalFixedFooter = true;
     }
     if (router.pathname === '/payment') {
-        showFooter = false;
+        showMobileFooter = false;
         showHeader = true;
         showFixedNav = false;
         hasInternalFixedFooter = true;
     }
     if (router.pathname === '/confirm') {
-        showFooter = false;
+        showMobileFooter = false;
         showHeader = true;
         showFixedNav = false;
         hasInternalFixedFooter = false;
     }
     
     if (router.pathname === '/checkout') {
-        showFooter = false;
+        showMobileFooter = false;
         showHeader = true;
         showFixedNav = false;
         hasInternalFixedFooter = false;
@@ -405,7 +407,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }, [isAuthenticated]);
 
     let mainHeightClass : string = "";
-    if(showFooter){
+    if(showMobileFooter){
          mainHeightClass = "";
     }else if (showFixedNav || hasInternalFixedFooter){
         if(showHeader){
@@ -421,13 +423,9 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
     let footerElement = null;
 
-    if(isDesktop){
-        // if(router.pathname === '/'){
-        //     footerElement =  <HomeDesktopFooter />;
-        // }else{
-        // }
+    if(isDesktop && showDesktopFooter){
         footerElement =  <DesktopFooter />;
-    }else if (showFooter){
+    }else if (showMobileFooter){
         footerElement = <Footer />;
     }
 
