@@ -68,7 +68,7 @@ const AboutUs: NextPage = ({ strapiData, strapiSeoData }: { strapiData?: StrapiD
           />
         )}
       </Head>
-      <div className="lg:max-w-[500px] lg:mx-auto">
+      <div className="lg:max-w-[1000px] lg:mx-auto lg:py-10">
         <div className="lg:py-5">
           {!!aboutDescription && <Intro description={aboutDescription} />}
 

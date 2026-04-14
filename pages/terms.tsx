@@ -52,13 +52,13 @@ const Terms: NextPage = ({ strapiData, strapiSeoData }: { strapiData?: StrapiDat
         />
       )}
     </Head>
-    <div className="px-5 lg:max-w-[500px] lg:mx-auto">
+    <div className="px-5 lg:max-w-[1000px] lg:mx-auto lg:py-10">
       {strapiData?.Items?.map((item, index) => (
         <Accordion
           key={item.id}
           title={item.Question}
           content={<Markdown>{item.Answer}</Markdown>}
-          WrapperClassName={`border-b border-neutral-300 dark:border-white/15 py-2 ${index ? "" : "border-t"}`}
+          WrapperClassName={`border-b border-neutral-300 dark:border-white/15 py-2 ${index ? "" : "max-lg:border-t"}`}
           initiallyOpen={!index}
         />
       ))}
