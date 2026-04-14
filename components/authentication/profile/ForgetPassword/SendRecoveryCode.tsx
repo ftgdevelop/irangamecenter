@@ -102,7 +102,7 @@ const SendRecoveryCode: React.FC<Props> = props => {
                             name='phoneNumber'
                             isTouched={touched.phoneNumber}
                             errorText={errors.phoneNumber}
-                            className="mb-5"
+                            className="mb-5 lg:mb-10"
                         />
 
                         <button

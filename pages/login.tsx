@@ -35,7 +35,7 @@ export default function Login() {
   }, [isAuthenticated, router])
 
   return (
-    <div className='lg:max-w-[500px] lg:mx-auto'>
+    <div className='lg:max-w-[500px] lg:mx-auto lg:pt-3'>
       <header className="relative p-4 mb-1">
         <Link
           href={"/"}

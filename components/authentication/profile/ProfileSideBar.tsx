@@ -145,7 +145,7 @@ const ProfileSideBar: React.FC<Props> = props => {
                 {fullName.trim().length ? fullName : userName}
                 </span>
                 {userInfo?.phoneNumber && (
-                    <div dir="ltr" className="text-xs mt-1">
+                    <div dir="ltr" className="text-xs mt-1 text-right">
                         {toPersianDigits(userInfo?.phoneNumber.replace("+98", "0"))}
                     </div>
                 )}
