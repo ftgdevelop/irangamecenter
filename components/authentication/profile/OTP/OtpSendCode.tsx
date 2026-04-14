@@ -72,13 +72,10 @@ const OtpSendCode: React.FC<Props> = props => {
                                 </button>
 
                                 <p className=" text-[10px]">
-                                    ورود شما به معناى پذيرش
-                                    <Link
+                                    ورود شما به معناى پذيرش <Link
                                     href="/terms"
-                                    className=" text-[#A93AFF]  hover:text-[#A93AFF]/50 transition"
-                                    >
-                                     شرايط ايران كيم 
-                                    </Link> و  <Link
+                                    className=" text-[#A93AFF] mx-0.5 hover:text-[#A93AFF]/50 transition"
+                                    > شرايط ايران كيم </Link> و  <Link
                                     href="/privacy"
                                     className=" text-[#A93AFF] hover:text-[#A93AFF]/50 transition"
                                     >

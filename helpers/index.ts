@@ -19,7 +19,7 @@ export const numberWithCommas = (x: number) => {
     }
 }
 
-export const dateDiplayFormat = ({ date, format, locale }: { date: string; format?: "ISO" | "timeAgo" | "weekDayNumber" | "m" | "d" | "HH:mm"|"HH:mm:ss"| "dd mm"| "ddd dd mm"| "ddd dd mm yyyy" | "dd mm yyyy" | "yyyy/mm/dd" | "YYYY-MM-DD" | "yyyy/mm/dd h:m" | "yyyy MMM" , locale?: string }): string => {
+export const dateDisplayFormat = ({ date, format, locale }: { date: string; format?: "ISO" | "timeAgo" | "weekDayNumber" | "m" | "d" | "HH:mm"|"HH:mm:ss"| "dd mm"| "ddd dd mm"| "ddd dd mm yyyy" | "dd mm yyyy" | "yyyy/mm/dd" | "YYYY-MM-DD" | "yyyy/mm/dd h:m" | "yyyy MMM" , locale?: string }): string => {
 
     if (!date) return "";
 
@@ -417,4 +417,13 @@ export function escapeXml(value: string = "") {
     ?.replace(/>/g, "&gt;")
     ?.replace(/"/g, "&quot;")
     ?.replace(/'/g, "&apos;");
+}
+
+export  const scrollToTop = ()=>{
+    if(document.documentElement){
+        window?.scrollTo({
+        top: document.documentElement.offsetTop,
+        behavior: "smooth",
+        });
+    }
 }

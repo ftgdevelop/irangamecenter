@@ -2,7 +2,12 @@
 
 import ShareIcon from "@/components/icons/ShareIcon";
 
-const Share : React.FC = () => {
+type Props = {
+  label?: string;
+  buttonClassName?: string;
+  iconClassName: string;
+}
+const Share : React.FC<Props> = props => {
     
   const shareHandle = async () => {
     if (navigator.share) {
@@ -22,14 +27,22 @@ const Share : React.FC = () => {
   };
 
     return(
+      <div className="relative group flex items-center justify-start lg:justify-center">
         <button
             type="button"
             onClick={shareHandle}
             aria-label="اشتراک گذاری"
+            className={props.buttonClassName || ""}
         >
-            <ShareIcon className="w-8 h-8 fill-current" />
-
+            <ShareIcon className={props.iconClassName} />
+            <span className="lg:hidden">
+              {props.label}
+            </span>
         </button>
+        <div className="max-lg:hidden opacity-0 invisible lg:group-hover:opacity-100 lg:group-hover:visible absolute right-full top-1/2 -translate-y-1/2 text-xs bg-white/70 p-3 whitespace-nowrap text-black rounded-lg mr-2 group-hover:mr-1 transition-all">
+          {props.label}
+        </div>         
+      </div>
     )
 }
 

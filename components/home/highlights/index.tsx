@@ -37,7 +37,7 @@ useEffect(() => {
   // useEffect(() => {
   //   if (activeHighlightId) {
   //     dispatch(setBodyScrollable(false));
-  //     dispatch(setBodiScrollPosition(0));
+  //     dispatch(setBodyScrollPosition(0));
   //   } else {
   //     dispatch(setBodyScrollable(true));
   //   }
@@ -45,8 +45,8 @@ useEffect(() => {
 
   if (highlights.length) {
     return (
-      <section className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip py-3">
-        <div className="flex items-start gap-3 px-3" dir={props.direction}>
+      <section className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:px-5 lg:pb-2 lg:mb-2 overflow-x-auto overflow-y-clip py-3">
+        <div className="flex items-start gap-3 max-lg:px-3" dir={props.direction}>
           {highlights.map((highlight) => (
             <HightlightItemLink
               open={() => {
@@ -61,6 +61,7 @@ useEffect(() => {
               key={highlight.id}
             />
           ))}
+          <div className='p-0.5 inline-block' />
         </div>
 
         <ModalPortal

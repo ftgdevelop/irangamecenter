@@ -78,7 +78,6 @@ const FormItem: React.FC<Props> = (props) => {
 
     if(response.message){
       dispatch(setReduxError({
-        status: 'error',
         message: response.message || "ارسال اطلاعات ناموفق",
         isVisible: true
       }))

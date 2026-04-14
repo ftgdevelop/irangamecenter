@@ -113,7 +113,16 @@ body {
   .rtl{
     direction: rtl;
   }
-  
+
+  .search-result-max-h{
+    max-height: calc(100vh - 220px);
+  }
+  .search-result-max-h-desktop{
+    max-height: calc(100vh - 350px);
+  }
+  .cart-min-h{
+    min-height: calc(100vh - 162px);
+  }
   .text-shadow {
     text-shadow: 0 0 2px #000000c9;
   }
@@ -137,6 +146,9 @@ body {
   }
   .writing-tb {
     writing-mode: tb;
+  }
+  .writing-inherit {
+    writing-mode:inherit;
   }
   .clip-radius{
     clip-path: path('M0,0.5V90h89.5C40.1,90,0,49.9,0,0.5z');
@@ -183,6 +195,9 @@ body {
   .min-h-screen-nav-header{
     min-height: calc(100vh - 164px);
   }
+  .min-h-desktop{
+    min-height: calc(100vh - 84px);
+  }
   .min-h-screen-header{
      min-height: calc(100vh - 84px);
   }
@@ -193,6 +208,9 @@ body {
 
   .bg-gradient-green{
     @apply bg-gradient-to-t from-[#028d7e] to-[#99feac];
+  }
+  .bg-gradient-gray{
+    @apply bg-gradient-to-t from-[#aaaaaa] to-[#dddddd];
   }
   .bg-gradient-green2{
     @apply bg-gradient-to-t from-[#028d7e] to-[#6edb83];
@@ -205,6 +223,12 @@ body {
   }
   .bg-gradient-dark-violet{
     @apply bg-gradient-to-t from-[#161b39] to-[#161b39];
+  }
+  .bg-gradient-light-violet{
+    @apply bg-gradient-to-l from-[#eedaf7] to-[#f4e4fb];
+  }
+  .bg-gradient-dark-violet2{
+    @apply bg-gradient-to-l from-[#12183b] to-[#031426];
   }
   .bg-gradient-dark-green{
     @apply bg-gradient-to-t from-[#012431] to-[#0f2b32];
@@ -321,10 +345,6 @@ body {
   padding-bottom: calc(10px + env(safe-area-inset-bottom));
 }
 
-.search-result-max-h{
-  max-height: calc(100vh - 220px);
-}
-
 .embla {
   overflow: hidden;
 }
@@ -346,7 +366,4 @@ body {
 
 .confirm-min-h {
     min-height: calc(100vh - 200px);
-}
-.cart-min-h{
-  min-height: calc(100vh - 162px);
 }

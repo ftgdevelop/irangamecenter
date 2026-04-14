@@ -10,16 +10,16 @@ type Props = {
 
 const WalletFaq: React.FC<Props> = props => {
     return (
-        <div className="px-3">
+        <>
             {props.items.map((item, index) => (
                 <Accordion
                     key={item.key}
                     title={item.title}
                     content={item.content}
-                    WrapperClassName={`border-b border-neutral-300 dark:border-white/15 py-2 ${index ? "" : "border-t"}`}
+                    WrapperClassName={`max-lg:border-b border-neutral-300 dark:border-white/15 py-2 ${index ? "lg:border-t" : "max-lg:border-t"}`}
                 />
             ))}
-        </div>
+        </>
     )
 }
 

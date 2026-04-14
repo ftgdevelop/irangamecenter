@@ -44,9 +44,9 @@ const Call : React.FC<Props> = props => {
         <button
             onClick={()=>{setOpen(true)}}
             type="button"
-            className={`text-right text-white min-h-20 w-full mb-3 py-4 px-5 rounded-xl ${isActive?"bg-gradient-to-t from-[#01212e] to-[#102c33]":"bg-[#1a1e2e]"}`}
+            className={`text-right dark:text-white min-h-20 w-full mb-3 py-4 px-5 rounded-xl ${isActive?"bg-gradient-to-t from-[#eeeeee] to-[#e1e1e1] dark:from-[#01212e] dark:to-[#102c33]":"text-neutral-300 bg-[#efefef] dark:bg-[#1a1e2e]"}`}
         >
-            <div className="mb-4 flex justify-between gap-4 items-center font-semibold text-sm text-white">
+            <div className="mb-4 flex justify-between gap-4 items-center font-semibold text-sm dark:text-white">
                 <div className="flex gap-4 items-center">
                     {!!props.icon && <Image 
                         src={props.icon}

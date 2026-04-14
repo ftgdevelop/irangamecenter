@@ -4,6 +4,8 @@ import { approve, getOrderById } from "@/actions/commerce";
 import Home from "@/components/icons/Home";
 import Refresh from "@/components/icons/Refresh";
 import Steps from "@/components/payment/Steps";
+import { useAppDispatch } from "@/hooks/use-store";
+import { setHeaderParams } from "@/redux/pages";
 import { OrderDetail } from "@/types/commerce";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,14 +16,11 @@ import { ReactNode, useEffect, useState } from "react";
 export default function Confirm() {
 
   const router = useRouter();
-
+  const dispatch = useAppDispatch();
+  
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get("orderNumber");
   const orderId = searchParams.get("orderId");
-  
-  const urlUsername = searchParams.get("username");
-  const urlReserveId = searchParams.get("reserveId");
-
   const isDeposite = searchParams.get("deposite");
   const urlStatus = searchParams.get("status");
 
@@ -52,8 +51,8 @@ export default function Confirm() {
     if (orderId) {
       fetchOrder(orderId);
     }
-    if(urlStatus === "0" && urlUsername && urlReserveId){
-      router.push(`/payment?orderNumber=${urlUsername}&orderId=${urlReserveId}`);
+    if(urlStatus === "0" && orderNumber && orderId){
+      router.push(`/payment?orderNumber=${orderNumber}&orderId=${orderId}`);
     }
 
   }, [orderId, orderNumber, urlStatus]);
@@ -63,11 +62,11 @@ export default function Confirm() {
     const token = localStorage.getItem("Token");
     if(!token) return;
 
-    const confirm = async (params:{ reserveId : number; username: string } , token: string) => {
+    const confirm = async (params:{ orderId : number; orderNumber: string } , token: string) => {
       
       setMode("pending");
       
-      const approveResponse : any = await approve({orderId:params.reserveId, orderNumber: params.username, token:token});
+      const approveResponse : any = await approve({orderId:params.orderId, orderNumber: params.orderNumber, token:token});
       
       if(approveResponse?.data?.result?.success){
         setMode("success");
@@ -85,18 +84,34 @@ export default function Confirm() {
       console.log("approveResponse: ",approveResponse);
 
     }
-
-    if(isDeposite && token && orderId && orderNumber && token){
-      confirm({reserveId:+orderId, username:orderNumber}, token)
+    
+    if((isDeposite || urlStatus ==="1") && orderId && orderNumber && token){
+      confirm({orderId:+orderId, orderNumber:orderNumber}, token)
     }
 
-  },[isDeposite, orderId, orderNumber]);
+  },[isDeposite, orderId, orderNumber, urlStatus]);
   
+
+  useEffect(()=>{
+
+    dispatch(setHeaderParams({
+      headerParams:{
+        logo: true,
+        backLink:"/cart"
+      }
+    }));
+
+    return(()=>{
+      dispatch(setHeaderParams({headerParams: undefined}));
+    })
+
+  },[]);
+
   let element : ReactNode = "";
 
   if (mode === "success"){
     element = (
-      <div className="bg-[#231c51] text-white p-5 confirm-min-h flex flex-col justify-center text-center items-center rounded-xl">
+      <div className="bg-[#231c51] text-white p-5 max-lg:confirm-min-h lg:w-[1000px] lg:mx-auto flex flex-col justify-center text-center items-center rounded-xl lg:py-12">
         <div className="bg-[#011425] p-3 rounded-full mb-3">
           <Image src={'/images/icons/check-violet.svg'} width={28} height={28} className="w-7 h-7" alt="check mark"/>
         </div>
@@ -110,7 +125,7 @@ export default function Confirm() {
         </p>
         {!!orderData?.id && <Link
           href={`/profile/orders/${orderData?.id}`}
-          className="flex items-center justify-center h-11 w-full mb-5 text-white bg-gradient-violet rounded-full text-sm"
+          className="flex items-center justify-center h-11 w-full lg:w-48 mb-5 text-white bg-gradient-violet rounded-full text-sm"
         >
           {orderData?.items.some(x => x.allowNewLoginSubmission) ? "ثبت اطلاعات اکانت" : "جزییات سفارش"}
         </Link>}
@@ -121,7 +136,7 @@ export default function Confirm() {
 
   if(mode === "error"){
    element = ( 
-   <div className="bg-[#34142a] text-white p-5 confirm-min-h flex flex-col justify-center text-center items-center rounded-xl">
+   <div className="bg-[#34142a] text-white p-5 max-lg:confirm-min-h lg:w-[1000px] lg:mx-auto lg:py-12 flex flex-col justify-center text-center items-center rounded-xl">
       <div className="bg-[#011425] p-2.5 rounded-full mb-3">
         <Image src={'/images/icons/error.svg'} width={28} height={28} className="w-8 h-8" alt="error"/>
       </div>
@@ -132,14 +147,14 @@ export default function Confirm() {
       
       <Link
         href={`/payment?orderNumber=${orderNumber}&orderId=${orderId}`}
-        className="flex gap-3 items-center justify-center h-11 w-full mb-5 text-white bg-gradient-violet rounded-full text-sm"
+        className="flex gap-3 items-center justify-center h-11 w-full lg:w-64 mb-5 text-white bg-gradient-violet rounded-full text-sm"
       >
         <Refresh className="w-4 h-4 fill-current" />
         تلاش مجدد برای پرداخت
       </Link>
       <Link
         href="/"
-        className="flex gap-3 items-center justify-center h-11 w-full mb-5 text-white bg-gradient-orange rounded-full text-sm"
+        className="flex gap-3 items-center justify-center h-11 w-full lg:w-64 mb-5 text-white bg-gradient-orange rounded-full text-sm"
       >
         <Home className="w-4 h-4 fill-current" />
         بازگشت به فروشگاه
@@ -150,7 +165,7 @@ export default function Confirm() {
 
   if(mode === "pending"){
    element = ( 
-   <div className="bg-[#231c50] text-white p-5 confirm-min-h flex flex-col justify-center text-center items-center rounded-xl">
+   <div className="bg-[#231c50] text-white p-5 lg:py-12 max-lg:confirm-min-h lg:w-[1000px] lg:mx-auto flex flex-col justify-center text-center items-center rounded-xl">
       <div className="bg-[#011425] rounded-full mb-3">
         <Image src={'/images/loading.gif'} width={280} height={280} className="w-16 h-16" alt="error"/>
       </div>
@@ -169,7 +184,7 @@ export default function Confirm() {
     <>
       <Steps activeStepKey="payment" />
 
-      <div className="p-5">
+      <div className="max-lg:p-5 lg:pb-10">
         {element}        
       </div>
     </>

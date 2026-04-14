@@ -46,10 +46,10 @@ const Contacts: React.FC<Props> = props => {
     const {emailAddress, supportNUmberUrl, supportNumber, supportNumberSubtitle} = data;
 
     return (
-        <div className="px-4 text-white">
+        <div className={`text-white grid grid-cols-1 lg:p-b-5 gap-5 ${supportNumber&& emailAddress?"lg:grid-cols-2":""}`}>
             {!!supportNumber && <Link
                 href={supportNUmberUrl ? `tel:${supportNUmberUrl}` : "#"}
-                className="bg-blue-600 text-shadow flex justify-between items-center gap-5 mb-4 mt-6 rounded-full px-5 h-14"
+                className="bg-blue-600 text-shadow flex justify-between items-center gap-5 rounded-full px-5 h-14"
             >
                 <div className="flex gap-3 items-center">
                     <Image src='/images/icons/phone.svg' alt="contact number" className="w-8 h-8" width={32} height={32} />
@@ -65,7 +65,7 @@ const Contacts: React.FC<Props> = props => {
 
             {!!emailAddress && <Link
                 href={`mailto:${emailAddress}`}
-                className="bg-emerald-600 text-shadow flex justify-between items-center gap-5 mb-6 rounded-full px-5 h-14"
+                className="bg-emerald-600 text-shadow flex justify-between items-center gap-5 rounded-full px-5 h-14"
             >
                 <div className="flex gap-3 items-center">
                     <Image src='/images/icons/email.svg' alt="contact number" className="w-8 h-8" width={32} height={32} />

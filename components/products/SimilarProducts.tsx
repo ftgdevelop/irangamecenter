@@ -7,6 +7,8 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { getSimilarsBySlug } from "@/actions/commerce";
 import { useRouter } from "next/router";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
+import ProductDesktopSection from "./productDetailDesktop/ProductDesktopSection";
 
 const Carousel = dynamic(() => import("../shared/Carousel"), {
     ssr: false,
@@ -14,6 +16,7 @@ const Carousel = dynamic(() => import("../shared/Carousel"), {
 
 type Props = {
     productSlug: string;
+    onHasSimilarItems:()=>void;
 };
 const SimilarProducts: React.FC<Props> = props => {
 
@@ -22,6 +25,8 @@ const SimilarProducts: React.FC<Props> = props => {
     const router = useRouter();
 
     const {query} = router;
+
+    const isDesktop = useIsDesktop();
 
     const queryVariant = query.variant;
     const queryPlatform = query.platform as PlatformSlugTypes || undefined;
@@ -37,6 +42,7 @@ const SimilarProducts: React.FC<Props> = props => {
             });
             if (response.data?.result.length) {
                 setSimilarProducts(response.data.result);
+                props.onHasSimilarItems();
             }
         }
 
@@ -62,10 +68,40 @@ const SimilarProducts: React.FC<Props> = props => {
 
     if (!props.productSlug) return null;
 
-    return (
-        <section className="bg-[#e8ecf0] dark:bg-[#192b39] py-6 pr-[7.5px] relative">
+    if(isDesktop){
+        return(
+             <ProductDesktopSection  id="similar" title="محصولات مشابه">
+                {products.length > 1 ? (
+                    <Carousel
+                        wrapperClassName="relative pb-10"
+                        numberOfSlides={3}
+                        showDots
+                        infinite
+                        items={products.map(productsGroup => (
+                            {
+                                key: productsGroup[0].id,
+                                content: (
+                                    <div className="flex flex-col gap-3 px-1.5" dir="rtl">
+                                        {productsGroup.map(product => <ProductListItem key={product.id} product={product} />)}
+                                    </div>
+                                )
+                            }
+                        ))}
+                        dotsWrapperClassName="absolute bottom-0 left-1/2"
+                    />
+                ) : (
+                    <div className="flex flex-col gap-3 px-1.5" dir="rtl">
+                        {products[0].map(product => <ProductListItem key={product.id} product={product} />)}
+                    </div>
+                )}
+             </ProductDesktopSection> 
+        )
+    }
 
-            <h3 className="px-[7.5px] text-[#ff7189] font-bold flex gap-2 items-center text-md mb-4">
+    return (
+        <section id="similar" className={`bg-[#e8ecf0] dark:bg-[#192b39] py-6 lg:px-5 relative ${products.length > 1 ?"pr-1.5":"px-1.5"}`}>
+
+            <h3 className="text-[#ff7189] font-bold flex gap-2 items-center text-md mb-4 px-1.5">
                 <Image src="/images/icons/curl.svg" alt="offer" width={36} height={36} className="w-9 h-9" />
                 محصولات مشابه
             </h3>
@@ -79,7 +115,7 @@ const SimilarProducts: React.FC<Props> = props => {
                         {
                             key: productsGroup[0].id,
                             content: (
-                                <div className="px-[7.5px]" dir="rtl">
+                                <div className="flex flex-col gap-3 px-1.5" dir="rtl">
                                     {productsGroup.map(product => <ProductListItem key={product.id} product={product} />)}
                                 </div>
                             )
@@ -88,7 +124,7 @@ const SimilarProducts: React.FC<Props> = props => {
                     dotsWrapperClassName="absolute top-6 left-4"
                 />
             ) : (
-                <div className="px-4" dir="rtl">
+                <div className="flex flex-col gap-3 px-1.5" dir="rtl">
                     {products[0].map(product => <ProductListItem key={product.id} product={product} />)}
                 </div>
             )}

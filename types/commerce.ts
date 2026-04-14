@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 export type PlatformSlugTypes = "playstation-5" | "playstation-4" | "steam" | "xbox-one" | "xbox-series-xs" | "nintendo-switch-2";
 
 export interface ProductItem {
@@ -122,7 +124,7 @@ export interface ProductVariant {
     children?: ProductVariant[];
     items?: {
         filePath?: string;
-        status?:  "InStock" | "OutOfStock" | "OnBackOrder";
+        status?:  "InStock" | "OutOfStock" | "OnBackOrder" | "ComingSoon" | "OnDemand";
         attributes?: {
             value?: string;
         }[];
@@ -131,22 +133,25 @@ export interface ProductVariant {
         profitPercentage?: number;
         profitPrice?: number;
         currencyType?: string;
+        sku?: string;
+        inventory?: "Unlimited" | "Limited";
         id: number;
         description?: string;
     }[];
 }
 export interface SingleVariant {
   id:number;
-  description?: string;
+  sku?: string;
+  subTitle?: string;
   currencyType?: "IRR"|"USD";
   regularPrice?: number;
   salePrice?: number;
   name?: string;
-  status?:  "InStock" | "OutOfStock" | "OnBackOrder";
+  status?:  "InStock" | "OutOfStock" | "OnBackOrder" | "ComingSoon";
+  inventory?: "Unlimited" | "Limited";
   filePath?: string;
   // "productId": 1242,
   // "netPrice": 22.41,
-  // "inventory": "Unlimited",
   // "stockQuantity": 0,
   // "isActive": true,
   // "isVirtual": true,
@@ -168,16 +173,22 @@ export interface ProductGalleryItem {
     cdnPath?: string;
     mediaType?: "Image" | "Video";
     filePath?:string;
+    thumbnail?: string;
+    fileTitleAttribute?: string;
+    fileAltAttribute?: string;
+    duration?: number;
+    creationTime?: string;
 //   "isActive": true,
 //   "fileUniqKey": "1e5457dc-ce85-f011-bf76-000c29176f1e",
-//   "fileTitleAttribute": null,
-//   "fileAltAttribute": null,
-//   "thumbnail": "https://cdn.irangamecenter.com/videos/products/122/elden-ring-trailer-thumbnail-1.webp",
 //   "thumbnailUniqKey": "432755c9-ce85-f011-bf76-000c29176f1e",
     cdnThumbnail: string | null,
 }
 
 export interface ProductDetailData {
+    categories?: {      
+      name?: string;
+      slug?: "mobile-games" | "console-game";
+    }[];
     fileAltAttribute?: string;
     filePath?: string;
     fileTitleAttribute?: string;
@@ -278,6 +289,7 @@ export interface ProductDetailData {
         }
     }
     id: number;
+    igdb?: string;
     slug: string;
     minVariant?:{
       items?:{
@@ -380,15 +392,8 @@ type VariantType = {
     variantAttributeValues?: VariantAttributeValue[];
     attributes?:string[]
 };
-export interface GetCurrentProductType {
+export interface GetCurrentProductItemType{
   id: number;
-  deviceId: string;
-  payableAmount: number;
-  profitAmount: number;
-  totalItemsPrice: number;
-  totalQuantity: number;
-  items: {
-    id: number;
     variantId: number;
     quantity: number;
     profitPercent: number;
@@ -398,7 +403,15 @@ export interface GetCurrentProductType {
     totalPrice: number;           
     totalDiscountAmount: number; 
     variant: VariantType;
-  }[]
+}
+export interface GetCurrentProductType {
+  id: number;
+  deviceId: string;
+  payableAmount: number;
+  profitAmount: number;
+  totalItemsPrice: number;
+  totalQuantity: number;
+  items: GetCurrentProductItemType []
 }
 export interface GetCurrentProductResponseType {
     result?: GetCurrentProductType;
@@ -699,6 +712,7 @@ export interface OrderDetail {
     currencyType: "IRR" | string;
     totalItemsPrice: number;
     payableAmount: number;
+    totalDiscountPrice?: number;
     totalQuantity: number;
     profitAmount: number;
     profitPercent: number;
@@ -765,4 +779,61 @@ export interface CreateOrderParams {
   specialRequest?:string;
   metaSearchName?:string;
   metaSearchKey?:string;
+}
+
+export type StrapiSeoData = {
+  PageTitle?: string;
+  Schema?: any;
+  Metas?: {
+    id: number;
+    Type?: string;
+    Value?: string;
+  }[];
+};
+
+export interface WishListItemType {
+    creationTime: string;
+    id: number;
+    product: {
+        id: number;
+      filePath?: string;
+      fileTitleAttribute?: string;
+      fileAltAttribute?: string;
+      name?: string;
+      slug?: string;
+
+      categories?: {      
+        name?: string;
+        slug?: string;
+      }[];
+    }
+}
+
+export type AnswerItemType = {
+    id: number;
+    questionId: number;
+    userId: number;
+    userDisplayName?: string;
+    isAnonymous: boolean;
+    answerText?: string;
+    isVerifiedBuyer: boolean;
+    status: "Approved" | "Pending" | "Rejected";
+    likeCount: number;
+    dislikeCount: number;
+    creationTime?: string;
+}
+
+export type QuestionItemType = {
+    productId: number;
+    userId: number;
+    questionText?: string;
+    userDisplayName?: string;
+    isAnonymous: boolean;
+    isVerifiedBuyer: boolean;
+    status: "Approved" | "Pending" | "Rejected";
+    likeCount: number;
+    dislikeCount: number;
+    id: number;
+    creationTime?: string;
+    answers: AnswerItemType[];
 }

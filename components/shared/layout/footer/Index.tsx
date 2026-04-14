@@ -5,6 +5,7 @@ import Faq from "@/components/icons/Faq";
 import GameOutline from "@/components/icons/GameOutline";
 import Phone from "@/components/icons/Phone";
 import CaretLeft from "@/components/icons/CaretLeft";
+import Contacts from "../../Contacts";
 
 const Footer = () => {
 
@@ -39,120 +40,136 @@ const Footer = () => {
             {
                 url:"/about",
                 label:"درباره ما",
-                icon: <GameOutline className="w-5 h-5 fill-current" />
+                icon: <GameOutline className="w-5 h-5 fill-current lg:hidden" />
             },
             {
                 url:"/contact",
                 label:"تماس با ما",
-                icon: <Phone className="w-5 h-5 fill-none stroke-current" />
+                icon: <Phone className="w-5 h-5 fill-none stroke-current lg:hidden" />
             },
             {
                 url:"/terms",
                 label:"قوانین و راهنما",
-                icon: <InfoCircleOutline className="w-5 h-5 fill-none stroke-current" />
+                icon: <InfoCircleOutline className="w-5 h-5 fill-none stroke-current lg:hidden" />
             },
             {
                 url:"/faq",
                 label:"سوالات متداول",
-                icon: <Faq className="w-5 h-5 fill-none stroke-current" />
+                icon: <Faq className="w-5 h-5 fill-none stroke-current lg:hidden" />
             }
         ]
 
     return (
-        <footer className="p-3 px-5">
+        <footer className="p-3 px-5 dark:lg:bg-[#192a39]">
 
-            {/* <Accordion
-                title="لینک های مهم"
-                content="لینک های مهم"
-                WrapperClassName={`border-b border-t border-neutral-300 dark:border-white/15 py-3`}
-                withArrowIcon
-            /> */}
 
-            {contactLinks.map((item, index) => (
-                <Link 
-                    prefetch={false}
-                    key={item.label}
-                    href={item.url} 
-                    className={`flex justify-between items-center px-2 py-4 border-neutral-300 dark:border-white/15 text-sm ${index ? "border-t" : ""}`}
-                >
-                    <span className="flex gap-3 items-center">
-                        {item.icon}
-                        {item.label}
-                    </span>
-                    <CaretLeft className="w-4 h-4 fill-current" />
-                </Link>
-            ))}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                <div className="lg:col-span-3">
+                    <Contacts />
+                </div>
+                                
+                <div>
+                    <strong className="block text-center px-2 lg:text-right font-semibold mb-4"> لینک های مهم </strong>
+                    <div>
+                        {contactLinks.map((item, index) => (
+                            <Link 
+                                prefetch={false}
+                                key={item.label}
+                                href={item.url} 
+                                className={`flex justify-between items-center px-2 py-4 lg:py-0  lg:mb-3 border-neutral-300 dark:border-white/15 text-sm ${index ? "border-t" : ""} lg:border-none`}
+                            >
+                                <span className="flex gap-3 items-center">
+                                    {item.icon}
+                                    {item.label}
+                                </span>
+                                <CaretLeft className="w-4 h-4 fill-current lg:hidden" />
+                            </Link>
+                        ))}
+                    </div>
+                </div>                
 
-            
+                <div>
+                    <strong className="block text-center px-2 lg:text-right font-semibold mb-4"> شبکه های اجتماعی </strong>
+                    <div className="flex gap-4 justify-center lg:justify-start">
+                        {socialMediaLink.map(item => (
+                            <Link
+                                key={item.title}
+                                title={item.title}
+                                href={item.url}
+                                className="block p-2 rounded-full bg-black/10 dark:bg-white/15"
+                            >
+                                <Image src={item.iconUrl} alt={item.title} className="w-8 h-8" width={32} height={32} />
+                            </Link>
+                        ))}
+                    </div>
+                </div>
 
-            <div className="py-5">
-                <strong className="block text-center font-semibold mb-4"> شبکه های اجتماعی </strong>
-                <div className="flex gap-4 justify-center">
-                    {socialMediaLink.map(item => (
-                        <Link
-                            key={item.title}
-                            title={item.title}
-                            href={item.url}
-                            className="block p-2 rounded-full bg-black/10 dark:bg-white/15"
+                <div className="py-5 max-lg:border-t max-lg:border-white/15">
+                    <strong className="block text-center px-2 lg:text-right font-semibold mb-4"> نمادهای اعتماد </strong>
+                    <div className="flex gap-4 justify-center bg-[#f0eff2] rounded-xl p-5">
+
+                        <a 
+                            referrerPolicy="origin" 
+                            target="_blank" 
+                            href="https://trustseal.enamad.ir/?id=665612&Code=KA7pgQKtQ7wh1GDHIjmy2QSoVfv9WZou"
                         >
-                            <Image src={item.iconUrl} alt={item.title} className="w-8 h-8" width={32} height={32} />
-                        </Link>
-                    ))}
+                            <Image
+                                referrerPolicy="origin"
+                                src="/images/enamad.png"
+                                alt="نماد اعتماد"
+                                width={80}
+                                height={96}
+                                className="h-24 w-auto"
+                            />
+                        </a>
+
+                        <Image 
+                            referrerPolicy='origin' 
+                            id='rgvjsizpfukzapfufukzrgvj' 
+                            className="h-24 w-auto cursor-pointer"
+                            onClick={() => {
+                                window.open("https://logo.samandehi.ir/Verify.aspx?id=396563&p=xlaopfvlgvkadshwgvkaxlao", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")
+                            }}
+                            alt='logo-samandehi'
+                            src="/images/resaneh.jpg"
+                            width={81}
+                            height={96}
+                        />
+
+                        <a 
+                            referrerPolicy="origin" 
+                            target="_blank" 
+                            href="https://qr.mojavez.ir/track/19893812"
+                        >
+                            <Image
+                                referrerPolicy="origin"
+                                src="/images/kasbokar.png"
+                                alt="نماد کسب و کار های مجازی"
+                                width={80}
+                                height={96}
+                                className="h-24 w-auto"
+                            />
+                        </a>
+
+                        <a 
+                            href='https://emalls.ir/Shop/74254/' 
+                            target='_blank'>
+                                <Image 
+                                    className="h-20 w-auto cursor-pointer"
+                                    width={54}
+                                    height={80}
+                                    alt='نشان اعتباری ایمالز' 
+                                    referrerPolicy='origin' 
+                                    src='/images/emalls-neshan.svg' 
+                                />
+                        </a>
+
+                    </div>
                 </div>
             </div>
 
-            <div className="py-5 border-t border-white/15">
-                <strong className="block text-center font-semibold mb-4"> نمادهای اعتماد </strong>
-                <div className="flex gap-4 bg-[#f0eff2] rounded-xl p-5">
-
-                    <a 
-                        referrerPolicy="origin" 
-                        target="_blank" 
-                        href="https://trustseal.enamad.ir/?id=665612&Code=KA7pgQKtQ7wh1GDHIjmy2QSoVfv9WZou"
-                    >
-                        <Image
-                            referrerPolicy="origin"
-                            src="/images/enamad.png"
-                            alt="نماد اعتماد"
-                            width={80}
-                            height={96}
-                            className="h-24 w-auto"
-                        />
-                    </a>
-
-                    <Image 
-                        referrerPolicy='origin' 
-                        id='rgvjsizpfukzapfufukzrgvj' 
-                        className="h-24 w-auto cursor-pointer"
-                        onClick={() => {
-                            window.open("https://logo.samandehi.ir/Verify.aspx?id=396563&p=xlaopfvlgvkadshwgvkaxlao", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")
-                        }}
-                        alt='logo-samandehi'
-                        src="/mock-images/resaneh.jpg"
-                        width={81}
-                        height={96}
-                    />
-
-                    <a 
-                        referrerPolicy="origin" 
-                        target="_blank" 
-                        href="https://qr.mojavez.ir/track/19893812"
-                    >
-                        <Image
-                            referrerPolicy="origin"
-                            src="/images/kasbokar.png"
-                            alt="نماد کسب و کار های مجازی"
-                            width={80}
-                            height={96}
-                            className="h-24 w-auto"
-                        />
-                    </a>
-
-                </div>
-            </div>
 
             <div className="text-[11px] border-t border-neutral-300 dark:border-white/15 py-5">
-
                 © ۱۴۰۳ - تمام حقوق مربوط به وب سایت ایران گیم سنتر می باشد.
             </div>
 

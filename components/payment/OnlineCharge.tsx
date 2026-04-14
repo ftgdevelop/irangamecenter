@@ -157,9 +157,9 @@ const OnlineCharge: React.FC<Props> = props => {
                 selector="modal_portal"
                 show={statusModal === "error"}
             >
-                <div className="fixed bottom-0 left-0 h-screen w-screen overflow-auto">
-                    <div className="text-white bg-[#011425] p-4 md:max-w-lg md:mx-auto min-h-screen flex flex-col justift-between">
-                        <div className="flex justify-between items-center pb-4">
+                <div className="fixed bottom-0 left-0 h-screen w-screen overflow-auto bg-black/50 backdrop-blur-md lg:flex lg:flex-col lg:justify-center lg:items-start">
+                    <div className="text-white bg-[#011425] p-4 md:max-w-lg md:mx-auto max-lg:min-h-screen flex flex-col justify-between">
+                        <div className="flex justify-between items-center pb-4 lg:hidden">
                             <Home className="w-6 h-6 fill-current" />
                             <h5 className="text-sm"> نتیجه تراکنش </h5>
                             <div className="h-px w-6" />

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type Notification = {
     status: ""|"success"|"error"
@@ -12,11 +12,17 @@ const initialState: Notification = {
     isVisible: false
 };
 
+type PayloadParams = {
+    status:  ""|"success"|"error";
+    message?: string;
+    isVisible: boolean;
+}
+
 export const notificationSlice = createSlice({
     name:"notification",
     initialState,
     reducers:{
-        setReduxNotification:(state, action) =>{
+        setReduxNotification:(state, action:PayloadAction<PayloadParams>) =>{
             state.status = action.payload.status || "";
             state.message = action.payload.message;
             state.isVisible = action.payload.isVisible;

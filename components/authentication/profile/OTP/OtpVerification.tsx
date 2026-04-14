@@ -127,6 +127,11 @@ const OtpVerification: React.FC<Props> = props => {
 
                 if(errorMessage === "UserNotFound"){
                     setRegisterMode(true);
+                    dispatch(setReduxUser({
+                        isAuthenticated: false,
+                        user: {},
+                        getUserLoading: false
+                    }));
                 }else{
 
                     dispatch(setReduxNotification({

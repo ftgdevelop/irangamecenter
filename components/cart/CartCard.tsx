@@ -17,7 +17,7 @@ import Trash from "../icons/Trash";
 
 
 
-const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][number], loading: boolean }) => {
+const CartCard = ({ item, loading, isFirst } : {isFirst: boolean; item: GetCurrentProductType['items'][number], loading: boolean }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
 
@@ -89,9 +89,9 @@ const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][num
   }
 
   return (
-    <div className="dark:text-white flex flex-col gap-5 pt-4 justify-between items-center pb-4 border-b border-[#192b39]/50 w-full">
+    <div className={`dark:text-white flex flex-col gap-5 pt-4 justify-between items-center pb-4 border-neutral-200 dark:border-white/15 w-full ${isFirst?"":"border-t"}`}>
       <div className="flex w-full items-start gap-5">
-        <Link prefetch={false} href={`/product/${item.variant.product.slug}`} className="relative max-w-[100px] w-1/4 block bg-black/25 " >
+        <Link prefetch={false} href={`/product/${item.variant.product.slug}`} className="relative max-w-[100px] w-1/4 block " >
           <Image
             src={item.variant.filePath || item.variant.product.filePath || "/placeholder.png"}
             alt={item.variant.product.fileTitleAttribute || "محصول"}
@@ -114,7 +114,7 @@ const CartCard = ({ item, loading } : { item: GetCurrentProductType['items'][num
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-5 w-full justify-between">
+      <div className="flex flex-wrap gap-5 w-full max-lg:justify-between lg:items-center">
           <div className="flex items-center h-[42px] bg-[#eeeeee] dark:bg-[#EFEFF0]/10 rounded-full">
           <button
             onClick={handleAddToCart}

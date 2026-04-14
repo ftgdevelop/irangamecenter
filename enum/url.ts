@@ -27,6 +27,7 @@ export const Strapi = {
 export const Identity = {
   SendOTP: "/api/services/app/OTP/SendOTP",
   LoginOTP:"/api/services/app/OTP/Login",
+  LoginByUtm:"/api/services/app/OTP/RegisterOrLoginByUtm",
   RegisterOTP:"/api/services/app/OTP/Register",
   ChangePasswordByAuthorizedUser:"/api/services/app/Account/ChangePasswordByAuthorizedUser",
   GetCurrentUserProfileForEdit: "/api/services/app/Profile/GetCurrentUserProfileForEdit",
@@ -69,14 +70,13 @@ export const Payment = {
   // MakeToken:"/api/services/app/ReserveBankGateway/MakeToken",
 };
 
-  export const Blog = {
-    getPosts: "//wp-json/wp/v2/posts",
-    getBestCategories: '/wp-json/wp/v2/best_category',
-    getCategoeyName: '/wp-json/wp/v2/categories',
-    getUsers: "/wp-json/wp/v2/users",
-    getTagName: '/wp-json/wp/v2/tags'
-  }
-
+export const Blog = {
+  getPosts: "/api/services/app/Post/GetAll",
+  getPost: "/api/services/app/Post/GetBySlug",
+  getCategory:"/api/services/app/Category/GetBySlug",
+  getTag: "/api/services/app/Tag/GetBySlug",
+  getSimilarPosts:"/api/services/app/Post/GetSimilar",
+}
   export const Commerce = {
     GetAllProducts:"/api/services/app/Product/SearchWithFacets",
     GetBySlug:"/api/services/app/Product/GetBySlug",
@@ -84,7 +84,7 @@ export const Payment = {
     GetAllForSiteMap:"/api/services/app/Product/GetAllForSiteMap",
     GetSimilar:"/api/services/app/Product/GetSimilar",
     GetOrderById:"/api/services/app/Order/Get",
-    GetProductGallries:"/api/services/app/Product/GetGallries",
+    GetProductGalleries:"/api/services/app/Product/GetGallries",
     GetProductVariants:"/api/services/app/Product/GetVariants",
     Approve:"/api/services/app/Order/Approve",
     GetAllVariants:"/api/services/app/Variant/GetAll",
@@ -93,7 +93,20 @@ export const Payment = {
     GetOrderDetailItem:"/api/services/app/LoginProvider/GetByOrderItemId",
     SubmitOrderForm:"/api/services/app/OrderItemProviderField/Submit",
     GetVariantById:"/api/services/app/Variant/Get",
-    GetCategoryBySlug:"/api/services/app/Category/GetBySlug"
+    GetCategoryBySlug:"/api/services/app/Category/GetBySlug",
+
+    AddToWishlist:"/api/services/app/Wishlist/Add",
+    RemoveWishlist:"/api/services/app/Wishlist/Remove",
+    ExistInWishlist:"/api/services/app/Wishlist/Exists",
+    GetAllWishlist:"/api/services/app/Wishlist/GetAll",
+
+    ProductNotificationUpsert:"/api/services/app/ProductNotification/Upsert",
+
+
+    GetProductQuestions:"/api/services/app/ProductQuestion/GetAllQuestions",
+    CreateQuestion:"/api/services/app/ProductQuestion/CreateQuestion",
+    CreateAnswer:"/api/services/app/ProductQuestion/CreateAnswer",
+    VoteAnswer:"/api/services/app/ProductQuestion/VoteAnswer"
   }
 
   export const Discount = {

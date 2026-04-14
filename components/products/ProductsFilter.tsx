@@ -1,16 +1,17 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import ModalPortal from "../shared/layout/ModalPortal";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CheckboxGroup from "../shared/CheckboxGroup";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
-import { setBodiScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
+import { setBodyScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
 import CloseSimple from "../icons/CloseSimple";
 import Accordion from "../shared/Accordion";
 import { openFilter } from "@/redux/productsSlice";
 import { useRouter } from "next/router";
 import { Facet } from "@/types/commerce";
 import Checkbox from "../shared/Checkbox";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
 
 type Props = {
     filters: Facet[];
@@ -18,7 +19,9 @@ type Props = {
     categoryName?: string;
 }
 
-const ProductsFliter: React.FC<Props> = props => {
+const ProductsFilter: React.FC<Props> = props => {
+
+    const isDesktop = useIsDesktop();
 
     const router = useRouter();
 
@@ -28,6 +31,8 @@ const ProductsFliter: React.FC<Props> = props => {
 
     const openedFilter = useAppSelector(state => state.products.openedFilter);
 
+    const searchInputRef = useRef<HTMLInputElement>(null);
+
 
     const dispatch = useAppDispatch();
 
@@ -35,7 +40,7 @@ const ProductsFliter: React.FC<Props> = props => {
         if (openedFilter) {
             setSlideIn(true);
             dispatch(setBodyScrollable(false));
-            dispatch(setBodiScrollPosition(window?.pageYOffset || 0));
+            dispatch(setBodyScrollPosition(window?.pageYOffset || 0));
         } else {
             dispatch(setBodyScrollable(true));
         }
@@ -61,20 +66,29 @@ const ProductsFliter: React.FC<Props> = props => {
     }, []);
 
     const changeFilterHandel = (values: string[], type: string) => {
+        
         const otherSlugs = slugs?.filter(item => !(item.includes(`${type}-`)));
-        const segments = [props.brandName ? `/brand/${props.brandName}`: props.categoryName? `/category/${props.categoryName}` :"/products", ...otherSlugs, ...(values.map(x => `${type}-${x}`))];
-        const newUrl = segments.join("/");
+        
+        const mainSegment = props.brandName ? `/brand/${props.brandName}`: props.categoryName? `/category/${props.categoryName}` :"/products";
+
+        const segments = [...otherSlugs, ...(values.map(x => `${type}-${x}`))];
+        const newUrl = segments.sort().join("/");
         router.push({
-            pathname: newUrl,
+             pathname: [mainSegment ,newUrl].join("/")
         });
     }
 
     const recetAllFilters = () => {
         const otherSlugs = slugs?.filter(x => (x.includes("sort-") || x.includes("page-"))) || [];
-        const segments = [props.brandName ? `/brand/${props.brandName}` : props.categoryName? `/category/${props.categoryName}`:"/products", ...otherSlugs];
-        const newUrl = segments.join("/");
+
+        const mainSegment = props.brandName ? `/brand/${props.brandName}`: props.categoryName? `/category/${props.categoryName}` :"/products";
+
+        const segments = [...otherSlugs];
+        
+        const newUrl = segments.sort().join("/");
+        
         router.push({
-            pathname: newUrl,
+            pathname: [mainSegment ,newUrl].join("/")
         });
     }
 
@@ -87,6 +101,32 @@ const ProductsFliter: React.FC<Props> = props => {
 
     const openedFilterIsActive = (type: string) => !!(selectedFilterSlugs.find(item => item.includes(type)));
 
+
+    const filterSearchHandle = () => {
+        const searchedText = searchInputRef.current?.value;
+        if(searchedText?.trim()?.length){
+
+        changeFilterHandel([searchedText], "phrase")
+
+        }
+    }
+
+    const filteredPhrase = selectedFilter("phrase")?.[0];
+
+    useEffect(()=>{
+        if(filteredPhrase && searchInputRef.current ){
+            searchInputRef.current.value = filteredPhrase;
+        }
+    },[filteredPhrase, openedFilter]);
+
+
+    let modalWrapperClass = `bg-white dark:bg-[#192a39] text-neutral-800 dark:text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full safePadding-b transition-all left-0 right-0 ${slideIn ? "bottom-0" : "-bottom-[80vh]"}`
+
+    if (isDesktop) {
+        modalWrapperClass = `bg-white dark:bg-[#192a39] text-neutral-800 dark:text-white rounded-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full max-w-2xl transition-all top-1/2 right-1/2 translate-x-1/2 ${slideIn ? "-translate-y-1/2 opacity-100" : "translate-y-0 opacity-0"}`
+    }
+
+
     return (
 
         <ModalPortal
@@ -95,7 +135,7 @@ const ProductsFliter: React.FC<Props> = props => {
         >
             <div className="bg-black/50 backdrop-blur-sm fixed top-0 left-0 right-0 bottom-0" onClick={() => { setSlideIn(false) }} />
 
-            <div className={`bg-white dark:bg-[#192a39] text-neutral-800 dark:text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full md:max-w-lg transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2 ${slideIn ? "bottom-0" : "-bottom-[80vh]"}`}>
+            <div className={modalWrapperClass}>
                 <div className="px-4 pt-8 pb-3">
 
                     <div className="mb-5 flex justify-between items-center">
@@ -121,14 +161,21 @@ const ProductsFliter: React.FC<Props> = props => {
                         block
                         label="فقط محصولات موجود"
                         onChange={(checked: boolean) => {
+                            
                             const otherSlugs = slugs?.filter(item => !(item.includes("onlyAvailable")));
-                            const segments = [props.brandName ? `/brand/${props.brandName}`: props.categoryName? `/category/${props.categoryName}` :"/products", ...otherSlugs];
+
+                            const mainSegment = props.brandName ? `/brand/${props.brandName}`: props.categoryName? `/category/${props.categoryName}` :"/products";
+
+                            const segments = [...otherSlugs];
+
                             if(checked){
                                 segments.push("onlyAvailable")
                             }
-                            const newUrl = segments.join("/");
+                            
+                            const newUrl = segments.sort().join("/");
+
                             router.push({
-                                pathname: newUrl,
+                                pathname: [mainSegment ,newUrl].join("/"),
                             });
                         }}
                         value="OnlyAvailable"
@@ -142,20 +189,75 @@ const ProductsFliter: React.FC<Props> = props => {
                             block
                             label="فقط پیش فروش"
                             onChange={(checked: boolean) => {
+
                                 const otherSlugs = slugs?.filter(item => !(item.includes("onBackOrder")));
-                                const segments = [props.brandName ? `/brand/${props.brandName}` : props.categoryName? `/category/${props.categoryName}` :"/products", ...otherSlugs];
+                                
+                                const mainSegment = props.brandName ? `/brand/${props.brandName}` : props.categoryName? `/category/${props.categoryName}` :"/products";
+
+                                const segments = [...otherSlugs];
+                                
                                 if(checked){
                                     segments.push("onBackOrder")
                                 }
-                                const newUrl = segments.join("/");
+                                
+                                const newUrl = segments.sort().join("/");
+                                
                                 router.push({
-                                    pathname: newUrl,
+                                    pathname: [mainSegment , newUrl].join("/")
                                 });
                             }}
                             value="OnBackOrder "
                             checked={!!slugs.find(s => s.includes("onBackOrder"))}
                         />
                     )}
+
+                    { (openedFilter === "all" || openedFilter === "phrase") && (       
+                        <Accordion
+                            title={(
+                                <h5 className="font-semibold text-sm"> فیلتر بر اساس جستجوی نام
+                                    {/* {!!selectedFilter(filter.key)?.length && <span className={activeClass} />}  */}
+                                </h5>
+                            )}
+
+                            extraInTitle={filteredPhrase && 
+                                <div
+                                    className="border rounded-full font-normal text-xs text-[#ca8bfb] border-[#ca8bfb] inline-flex items-center pr-2 pl-0.5"
+                                >
+                                    {filteredPhrase}
+                                    <button
+                                        type="button"
+                                        onClick={() => { changeFilterHandel([], "phrase") }}
+                                    >
+                                        <CloseSimple className="w-5 h-5 fill-current" />
+                                    </button>
+                                </div>
+                            }
+
+                            content={(
+                                <div>
+                                    <input
+                                        ref={searchInputRef}
+                                        type="text"
+                                        className="w-full block py-3 text-sm px-5 rounded-full outline-none bg-[#ffffff] dark:bg-[#ffffff2b] border-neutral-300 dark:border-transparent"
+                                    />
+                                </div>
+                                // <CheckboxGroup
+                                //     items={filter.items?.map(item => ({
+                                //         label: `${item!.label} (${item.count})`,
+                                //         value: item!.value!
+                                //     })) || []}
+                                //     onChange={vals => { changeFilterHandel(vals, filter.key) }}
+                                //     values={selectedFilter(filter.key)}
+                                // />
+                            )}
+                            initiallyOpen={openedFilter === "phrase"}
+                            withArrowIcon
+                            rotateArrow180
+                            WrapperClassName="mb-4"
+                        />
+                    )}
+
+
 
                     {props.filters?.filter(item => ([item.key, "all"].includes(openedFilter))).map(filter => (
                         <Accordion
@@ -233,7 +335,10 @@ const ProductsFliter: React.FC<Props> = props => {
                     <button
                         type="button"
                         className="text-white bg-gradient-violet w-full rounded-full px-5 py-3 my-2 text-sm"
-                        onClick={() => { setSlideIn(false) }}
+                        onClick={() => { 
+                            filterSearchHandle();
+                            setSlideIn(false) 
+                        }}
                     >
                         اعمال تغییرات
                     </button>
@@ -246,4 +351,4 @@ const ProductsFliter: React.FC<Props> = props => {
     )
 }
 
-export default ProductsFliter;
+export default ProductsFilter;

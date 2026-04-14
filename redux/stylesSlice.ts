@@ -24,7 +24,7 @@ export const stylesSlice = createSlice({
         setBodyScrollable: (state, action : PayloadAction<boolean>) => {
             state.bodyScrollable = action.payload;
         },
-        setBodiScrollPosition: (state, action : PayloadAction<number>) => {            
+        setBodyScrollPosition: (state, action : PayloadAction<number>) => {            
             state.lastScrollPosition = action.payload;
         }, 
         setHeaderUnderMain: (state, action) => {
@@ -39,6 +39,6 @@ export const stylesSlice = createSlice({
     }
 });
 
-export const { setBodyScrollable, setHeaderUnderMain , setProgressLoading, setBodiScrollPosition, setMode} = stylesSlice.actions
+export const { setBodyScrollable, setHeaderUnderMain , setProgressLoading, setBodyScrollPosition, setMode} = stylesSlice.actions
 
 export default stylesSlice.reducer;

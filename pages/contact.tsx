@@ -1,10 +1,10 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { getStrapiContact } from "@/actions/strapi";
+import { getStrapiContact, getStrapiPages } from "@/actions/strapi";
 import { NextPage } from "next";
 import { useAppDispatch } from "@/hooks/use-store";
 import { useEffect } from "react";
-import { setHeaderType2Params } from "@/redux/pages";
+import { setHeaderParams } from "@/redux/pages";
 import Accordion from "@/components/shared/Accordion";
 import Markdown from "react-markdown";
 import Ticketing from "@/components/contact/items/Ticketing";
@@ -12,6 +12,8 @@ import { ServerAddress } from "@/enum/url";
 import OnlineSupport from "@/components/contact/items/OnlineSupport";
 import Call from "@/components/contact/items/Call";
 import Image from "next/image";
+import Head from "next/head";
+import { StrapiSeoData } from "@/types/commerce";
 
 type FaqData = {
   Title?: string;
@@ -44,22 +46,20 @@ type ContactsData = {
   }[]
 }[]
 
-const Contact: NextPage = ({ contacts, faq }: { contacts?: ContactsData, faq?: FaqData }) => {
+const Contact: NextPage = ({ contacts, faq, strapiSeoData }: { contacts?: ContactsData, faq?: FaqData, strapiSeoData?:StrapiSeoData }) => {
 
   const dispatch = useAppDispatch();
 
   useEffect(()=>{
 
-    dispatch(setHeaderType2Params({
-      backUrl:"/",
-      title:"تماس با ما"
+    dispatch(setHeaderParams({
+      headerParams:{
+        title:"تماس با ما"
+      }
     }));
 
     return(()=>{
-      dispatch(setHeaderType2Params({
-        backUrl:"",
-        title:""
-      }));
+      dispatch(setHeaderParams({headerParams: undefined}));
     })
 
   },[]);
@@ -71,71 +71,88 @@ const Contact: NextPage = ({ contacts, faq }: { contacts?: ContactsData, faq?: F
   const callData = contacts?.find(c => c.Keyword === "call");
   
   const addressData = contacts?.find(c => c.Keyword === "address");
-  debugger;
 
   return (
-    <>      
-      <div className="px-5 mb-5">
-
-          <h3 className="text-[#ca54ff] font-bold text-sm mb-4">
-            ارتباط با پشتیبانی
-          </h3>
-
-          <Ticketing 
-            icon={ticketingData?.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${ticketingData.icon.url}` : ""}
-            label={ticketingData?.Title}
-            url={ticketingData?.Url}
+    <> 
+        <Head>
+        {strapiSeoData?.PageTitle && <title>{strapiSeoData.PageTitle}</title>}  
+        
+        {strapiSeoData?.Metas?.map(m => (
+          <meta name={m.Type || ""} content={m.Value || ""} key={m.id} />
+        ))}
+        
+        {strapiSeoData?.Schema && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: strapiSeoData.Schema }}
           />
+        )}
+      </Head>
 
-          <OnlineSupport 
-            icon={onlineSupportData?.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${onlineSupportData.icon.url}` : ""}
-            label={onlineSupportData?.Title}
-            items = {onlineSupportData?.Items}
-          />
+      <div className="lg:max-w-[500px] lg:mx-auto">
+        <div className="px-5 mb-5 lg:py-5">
 
-          <Call 
-            icon={callData?.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${callData.icon.url}` : ""}
-            label={callData?.Title}    
-            description={callData?.Subtitle} 
-            InnerData={callData?.Items?.[0]}     
-          />
+            <h3 className="text-[#ca54ff] font-bold text-sm mb-4">
+              ارتباط با پشتیبانی
+            </h3>
+
+            <Ticketing 
+              icon={ticketingData?.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${ticketingData.icon.url}` : ""}
+              label={ticketingData?.Title}
+              url={ticketingData?.Url}
+            />
+
+            <OnlineSupport 
+              icon={onlineSupportData?.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${onlineSupportData.icon.url}` : ""}
+              label={onlineSupportData?.Title}
+              items = {onlineSupportData?.Items}
+            />
+
+            <Call 
+              icon={callData?.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${callData.icon.url}` : ""}
+              label={callData?.Title}    
+              description={callData?.Subtitle} 
+              InnerData={callData?.Items?.[0]}     
+            />
 
 
-        <div
-            className="mb-3 text-white py-4 min-h-20 px-5 bg-gradient-to-t from-[#01212e] to-[#102c33] rounded-xl"
-        >
-          <div className="text-sm font-semibold flex gap-4 items-center mb-3">
-            <Image 
-                src={addressData?.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${addressData.icon.url}` : ""}
-                alt={addressData?.Title ||""}
-                width={36}
-                height={36}
-                className="w-9 h-9"
-            />            
-            {addressData?.Title}
+          <div
+              className="mb-3 text-white py-4 min-h-20 px-5 bg-gradient-to-t from-[#01212e] to-[#102c33] rounded-xl"
+          >
+            <div className="text-sm font-semibold flex gap-4 items-center mb-3">
+              <Image 
+                  src={addressData?.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${addressData.icon.url}` : ""}
+                  alt={addressData?.Title ||""}
+                  width={36}
+                  height={36}
+                  className="w-9 h-9"
+              />            
+              {addressData?.Title}
+            </div>
+
+            <p className="text-xs w-full"> {addressData?.Subtitle} </p>
+
           </div>
 
-          <p className="text-xs w-full"> {addressData?.Subtitle} </p>
+
 
         </div>
 
-
-
+          {!!faq?.Items?.length && (<div className="px-5 py-5">
+              <h3 className="text-[#ca54ff] font-bold text-sm mb-4">
+                {faq.Title || "سوالات متداول"}
+              </h3>
+              {faq.Items.map((item, index) => (
+                <Accordion
+                    key={item.id}
+                    title={item.Question}
+                    content={<Markdown>{item.Answer}</Markdown>}
+                    WrapperClassName={`border-b border-neutral-300 dark:border-white/15 py-2 ${index ? "" : "border-t"}`}
+                />
+              ))}
+          </div>)}
       </div>
 
-        {!!faq?.Items?.length && (<div className="px-5 py-5">
-            <h3 className="text-[#ca54ff] font-bold text-sm mb-4">
-              {faq.Title || "سوالات متداول"}
-            </h3>
-            {faq.Items.map((item, index) => (
-              <Accordion
-                  key={item.id}
-                  title={item.Question}
-                  content={<Markdown>{item.Answer}</Markdown>}
-                  WrapperClassName={`border-b border-neutral-300 dark:border-white/15 py-2 ${index ? "" : "border-t"}`}
-              />
-            ))}
-        </div>)}
       
     </>
   );
@@ -143,10 +160,11 @@ const Contact: NextPage = ({ contacts, faq }: { contacts?: ContactsData, faq?: F
 
 export const getStaticProps = async (context: any) => {
 
-  const [contactUsResponse1,contactUsResponse2, faqResponse] = await Promise.all<any>([
+  const [contactUsResponse1,contactUsResponse2, faqResponse, strapiSeoResponse] = await Promise.all<any>([
     getStrapiContact('locale=fa&populate[ContactUs][populate]=*'),
     getStrapiContact('locale=fa&populate[ContactUs][populate][Items][populate]=*'),
-    getStrapiContact('locale=fa&populate[Faqs][populate]=*')
+    getStrapiContact('locale=fa&populate[Faqs][populate]=*'),
+    getStrapiPages('filters[Page][$eq]=contact&locale=fa&populate[Seo][populate]=*')
   ]);
 
   const contacts1:ContactsData = contactUsResponse1?.data?.data?.[0]?.ContactUs;
@@ -166,7 +184,8 @@ export const getStaticProps = async (context: any) => {
         locales: context.locales || null
       },
       contacts: contacts || null,
-      faq: faqResponse?.data?.data?.[0]?.Faqs || null
+      faq: faqResponse?.data?.data?.[0]?.Faqs || null,
+      strapiSeoData : strapiSeoResponse?.data?.data?.[0]?.Seo || null
     },
     revalidate: 3600
   })

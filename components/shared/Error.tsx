@@ -1,7 +1,7 @@
 import Router from "next/router";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
-import { setBodiScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
+import { setBodyScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
 import { setReduxError } from "@/redux/errorSlice";
 import ModalPortal from "./layout/ModalPortal";
 import Image from "next/image";
@@ -15,7 +15,7 @@ const Error: React.FC = () => {
     useEffect(()=>{
         if(storedError?.isVisible){
             dispatch(setBodyScrollable(false));
-            dispatch(setBodiScrollPosition(window?.pageYOffset || 0));
+            dispatch(setBodyScrollPosition(window?.pageYOffset || 0));
         }else{
             dispatch(setBodyScrollable(true));
         }

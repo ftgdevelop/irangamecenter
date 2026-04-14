@@ -93,12 +93,12 @@ export const getVariantById = async (id: number, acceptLanguage: "fa-IR" | "en-U
 }
 
 
-export const getProductGallries = async (slug: string, acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
+export const getProductGalleries = async (slug: string, acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
 
     try {
         const response: any = await axios({
             method: "get",
-            url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetProductGallries}?Slug=${slug}`,
+            url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetProductGalleries}?Slug=${slug}`,
             headers: {
                 ...Headers,
                 "Accept-Language": acceptLanguage,
@@ -382,3 +382,206 @@ export const getCategoryBySlug = async (params: {slug: string; token: string;}) 
         return error
     }
 }
+
+export const addToWishlist = async ( params:{ 
+    productId: number
+}, token: string) => {
+  try {
+    const response = await axios.post(
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.AddToWishlist}`,
+      params,
+      {
+        headers: {
+        ...Headers,
+        Authorization: `Bearer ${token}`,          
+        },
+      },
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+export const removeWishlist = async ( params:{ 
+    productId: number
+}, token: string) => {
+  try {
+    const response = await axios.delete(
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.RemoveWishlist}?productId=${params.productId}`,
+      {
+        headers: {
+        ...Headers,
+        Authorization: `Bearer ${token}`,          
+        },
+      },
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+export const existInWishlist = async ( params:{ 
+    productId: number;
+    token: string
+}) => {
+  try {
+    const response = await axios.post(
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.ExistInWishlist}?productId=${params.productId}`,
+      null,
+      {
+        headers: {
+        ...Headers,
+        Authorization: `Bearer ${params.token}`,          
+        },
+      },
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+export const notificationUpsert = async ( params:{ 
+  productId: number;
+  productVariantId?: number;
+  type: "ProductAvailable" | "AmazingDiscount";
+  channels: ("None" | "Email" | "Sms" | "InAppNotification")[];
+}, token: string) => {
+  try {
+    const response = await axios.post(
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.ProductNotificationUpsert}`,
+      params,
+      {
+        headers: {
+        ...Headers,
+        Authorization: `Bearer ${token}`,
+        "Accept-Language": "fa-IR"
+        },
+      },
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+export const getUserWishlist = async (params: {
+    skipCount: number;
+    maxResultCount: number;
+    token: string;
+},acceptLanguage: "fa-IR" | "en-US" | "ar-AE" = "fa-IR") => {
+    try {
+
+        const response = await axios.get(
+           `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetAllWishlist}?SkipCount=${params.skipCount}&MaxResultCount=${params.maxResultCount}`,
+            {
+                headers: {
+                    ...Headers,
+                    "Accept-Language": acceptLanguage,
+                    currency: "IRR",
+                    Authorization: `Bearer ${params.token}`,
+                },
+            },
+        )
+
+        return (response)
+    } catch (error: any) {
+        return error
+    }
+}
+
+
+export const getProductQuestions = async (
+  params: {
+    SkipCount: number;
+    MaxResultCount: number;
+    ProductId : number;
+    SortType: "MostAnswered" | "Newest";
+  }
+) => {
+  try {
+    const res: any = await axios({
+      method: "get",
+      url: `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.GetProductQuestions}?ProductId=${params.ProductId}&SortType=${params.SortType}&SkipCount=${params.SkipCount}&MaxResultCount=${params.MaxResultCount}`,
+      headers: {
+        ...Headers,
+        "Accept-Language": "fa-IR",
+        currency: "IRR"
+      }
+    });
+
+    return res;
+  } catch (error: any) {
+    return error;
+  }
+};
+
+
+export const createQuestion = async ( params:{ 
+    isAnonymous: boolean;
+    productId: number;
+    questionText:string;
+ }, token?: string) => {
+  try {
+    const headers: Record<string, any> = {...Headers};
+    if(token) headers["Authorization"] =  `Bearer ${token}`;
+
+    const response = await axios.post(
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.CreateQuestion}`,
+      params,
+      {
+        headers: headers,
+      }
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+export const createAnswer = async ( params:{ 
+  questionId:number;
+  answerText: string;
+  isAnonymous: boolean;
+ }, token?: string) => {
+  try {
+    const headers: Record<string, any> = {...Headers};
+    if(token) headers["Authorization"] =  `Bearer ${token}`;
+
+    const response = await axios.post(
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.CreateAnswer}`,
+      params,
+      {
+        headers: headers,
+      }
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+export const voteAnswer = async ( params:{ 
+  answerId: number;
+  questionId: number;
+  voteType: "Like" | "Dislike";
+ }, token?: string) => {
+  try {
+    const headers: Record<string, any> = {...Headers};
+    if(token) headers["Authorization"] =  `Bearer ${token}`;
+
+    const response = await axios.post(
+      `${ServerAddress.Type}${ServerAddress.Commerce}${Commerce.VoteAnswer}`,
+      params,
+      {
+        headers: headers,
+      }
+    )
+    return response
+  } catch (error) {
+    return error
+  }
+}
+

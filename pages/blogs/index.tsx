@@ -1,36 +1,54 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { getBlogs } from "@/actions/blog";
+import { getBlogsList } from "@/actions/blog";
 import { NextPage } from "next";
-import { BlogItemType } from "@/types/blog";
-import Contacts from "@/components/shared/Contacts";
-import BreadCrumpt from "@/components/shared/BreadCrumpt";
+import { BlogListItemType } from "@/types/blog";
+import Breadcrumb from "@/components/shared/Breadcrumb";
 import BlogListItem from "@/components/blog/BlogListItem";
 import { useEffect, useRef, useState } from "react";
 import Skeleton from "@/components/shared/Skeleton";
 import Add from "@/components/icons/Add";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
 
 type Props = {
-    posts?: BlogItemType[];
-    totalPages: number;
+    posts?: BlogListItemType[];
+    total: number;
 }
 const Blogs: NextPage<Props> = props => {
 
-    const [posts, setPosts] = useState<BlogItemType[]>(props.posts || []);
+    const [posts, setPosts] = useState<BlogListItemType[]>(props.posts || []);
     const [fetchMode, setFetchMode] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
+    const [total, setTotal] = useState(props.total);
 
+    const isDesktop = useIsDesktop();
 
-    const loadMoreWrapper = useRef<HTMLButtonElement>(null);
+    const loadMoreWrapper = useRef<HTMLDivElement>(null);
 
     const removeListener = () => {
         document.removeEventListener('scroll', checkIsInView);
         window.removeEventListener("resize", checkIsInView);
     }
 
+    useEffect(()=>{
+        const fetchData = async (isDesk:boolean) => {
+            const blogs: any = await  getBlogsList({
+                MaxResultCount: isDesk ? 20 : 10,
+                SkipCount:0
+            });
+            if(blogs?.data?.result){
+                setTotal(blogs?.data?.result?.totalCount);
+                setPosts(blogs?.data?.result?.items)
+            }
+        }
+        
+        fetchData(isDesktop);
+
+    },[isDesktop]);
+
     useEffect(() => {
         if (fetchMode) {
-            if(posts.length < 20){
+            if(posts.length < (isDesktop ? 50 : 20)){
                 addItems();
             }else{
                removeListener(); 
@@ -40,19 +58,18 @@ const Blogs: NextPage<Props> = props => {
 
     const addItems = async () => {
 
-        const page = Math.ceil(posts.length / 10) + 1;
-
-        if (page > props.totalPages) {
+        if (posts.length >= total) {
             removeListener();
             return;
         }
         setLoading(true);
-        const blogs: any = await getBlogs({
-            per_page: 10,
-            page: page
+        const blogs: any = await getBlogsList({
+            MaxResultCount:isDesktop ? 20 : 10,
+            SkipCount: posts.length
         });
-        if (blogs?.data) {
-            setPosts(prevPosts => [...prevPosts, ...blogs?.data]);
+        if (blogs?.data?.result?.items) {
+            setPosts(prevPosts => [...prevPosts, ...blogs.data.result.items]);
+            setTotal(blogs.data.result.totalCount)
         } else {
             removeListener();
         }
@@ -81,13 +98,14 @@ const Blogs: NextPage<Props> = props => {
 
     return (
         <>
-            <BreadCrumpt
-                wrapperClassName="bg-[#e8ecf0] dark:bg-[#192a39] px-4 py-3 mb-4"
-                textColorClass="text-neutral-800 dark:text-neutral-300"
+            <Breadcrumb
+                wrapperClassName="mb-4 lg:mb-0"
                 items={[{ label: "وبلاگ", link: "" }]}
             />
 
-            <div className="px-4">
+            <h3 className="py-10 hidden lg:block text-3xl font-bold border-b border-neutral-300 dark:border-white/15 text-center text-white"> وبلاگ </h3>
+
+            <div className="px-4 lg:grid lg:grid-cols-3 lg:gap-3 lg:py-10 max-w-[1200px] mx-auto">
                 {posts?.map(post => (
                     <BlogListItem
                         key={post.id}
@@ -99,29 +117,29 @@ const Blogs: NextPage<Props> = props => {
                 {!!loading && [1, 2, 3, 4, 5].map(item => (
                     <div className="flex gap-3 mb-4" key={item}>
                         <Skeleton
+                            dark
                             type="image"
                             className="w-18 h-18 aspect-square rounded-2xl"
                         />
                         <div className="grow">
-                            <Skeleton className="h-4 w-full mt-5 mb-4" />
-                            <Skeleton className="w-1/2" />
+                            <Skeleton className="h-4 w-full mt-5 mb-4" dark />
+                            <Skeleton className="w-1/2" dark />
                         </div>
                     </div>
                 ))}
-
-                <button
-                    ref={loadMoreWrapper}
-                    type="button"
-                    className="text-sm text-white dark:text-[#ca54ff] bg-[#ca54ff] dark:bg-[#161b39] w-full px-5 py-3 flex rounded-full justify-center gap-3"
-                    onClick={addItems}
-                >
-                    <Add />
-                    مطالب بیشتر
-                </button>
+                
+                <div className="lg:col-span-3" ref={loadMoreWrapper}>
+                    { total > posts.length &&  <button
+                        type="button"
+                        className="text-sm text-white dark:text-[#ca54ff] bg-[#ca54ff] dark:bg-[#161b39] w-full lg:max-w-[380px] mx-auto px-5 py-3 flex rounded-full justify-center gap-3"
+                        onClick={addItems}
+                    >
+                        <Add />
+                        مطالب بیشتر
+                    </button>}
+                </div>
 
             </div>
-
-            <Contacts />
 
         </>
     )
@@ -139,16 +157,17 @@ export async function getServerSideProps() {
         )
     }
 
-    const blogs: any = await getBlogs({
-        per_page: 10,
-        page: 1
+
+    const blogs: any = await  getBlogsList({
+        MaxResultCount:10,
+        SkipCount:0
     })
 
     return (
         {
             props: {
-                posts: blogs?.data || null,
-                totalPages: +blogs?.headers?.['x-wp-totalpages'] || null
+                posts: blogs?.data?.result?.items || null,
+                totalPages: blogs?.data?.result?.totalCount || null
             }
         }
     )

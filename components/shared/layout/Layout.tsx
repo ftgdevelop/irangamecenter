@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import Error from "../Error";
 import Notification from "../Notification";
 import { setReduxBalance, setReduxUser } from "@/redux/authenticationSlice";
-import { getCurrentUserProfile } from "@/actions/identity";
+import { getCurrentUserProfile, loginUtm } from "@/actions/identity";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import FooterNavigation from "./footer/FooterNavigation";
 import { getUserBalance } from "@/actions/payment";
@@ -17,6 +17,9 @@ import { addDeviceId, setGeneralCartInfo, setGeneralCartLoading } from "@/redux/
 import { GetCookieDeviceId } from "@/helpers/order";
 import { useCartApi } from "@/actions/cart";
 import { GetCookieMode } from "@/helpers";
+import { setReduxNotification } from "@/redux/notificationSlice";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
+import DesktopFooter from "./footer/DesktopFooter";
 
 type Props = {
     className?: string;
@@ -25,6 +28,8 @@ type Props = {
 const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
     const router = useRouter();
+
+    const isDesktop = useIsDesktop();
 
     const dispatch = useAppDispatch();
 
@@ -40,16 +45,85 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     const {getCart} = useCartApi(); 
 
     const queryBasaUserToken = router.query?.ut;
+    const queryUtmSource = router.query?.utm_source;
   
     useEffect(() => {
         if(queryBasaUserToken){
+            
             const expDate = new Date();
-            expDate.setTime(expDate.getTime() + (20 * 60 * 1000)); //save in cookie only 20 minutes.
+            expDate.setTime(expDate.getTime() + (20 * 60 * 1000)); //save in cookie only 20 minutes.    
+
+            const loginByUtm = async () => {
+
+                const response: any = await loginUtm({
+                    utmName:"basa",
+                    utmToken:queryBasaUserToken as string
+                })
+
+                if (response.status == 200) {
+
+                    const token = response.data?.result?.accessToken;
+                    localStorage.setItem('Token', token);     
+                    localStorage.setItem('TokenExpire', expDate.toString());               
+
+                    dispatch(setReduxUser({
+                        isAuthenticated: true,
+                        user: response.data?.result?.user,
+                        getUserLoading: false
+                    }));
+
+                    const userFirstName = response.data?.result?.user?.firstName || "کاربر";
+
+                    dispatch(setReduxNotification({
+                        status: 'success',
+                        message: userFirstName + '  عزیز،  خوش آمدید.',
+                        isVisible: true
+                    }));
+
+                } else {
+                    const errorMessage = response?.response?.data?.error?.message;
+    
+                    let message = "";
+                    if (errorMessage) {
+                        message = response.response.data.error.message;
+                    }
+    
+                    if(errorMessage === "UserNotFound"){
+                        dispatch(setReduxUser({
+                            isAuthenticated: false,
+                            user: {},
+                            getUserLoading: false
+                        }));
+                    }else{
+                        dispatch(setReduxNotification({
+                            status: 'error',
+                            message: message,
+                            isVisible: true
+                        }));
+                        dispatch(setReduxUser({
+                            isAuthenticated: false,
+                            user: {},
+                            getUserLoading: false
+                        }));
+                    }
+                    
+                }
+            } 
+
+            loginByUtm();
+
             if (document) {
                 document.cookie = `basaUserToken=${queryBasaUserToken}; expires=${expDate.toUTCString()};path=/`;
             }        
         }
-    }, [queryBasaUserToken]);
+        if(queryUtmSource){
+            const expDate = new Date();
+            expDate.setTime(expDate.getTime() + (20 * 60 * 1000)); //save in cookie only 20 minutes.
+            if (document) {
+                document.cookie = `utmSourceName=${queryUtmSource}; expires=${expDate.toUTCString()};path=/`;
+            } 
+        }
+    }, [queryBasaUserToken, queryUtmSource]);
     
     useEffect(()=>{
         const id = GetCookieDeviceId();
@@ -137,97 +211,69 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             router.events.off('routeChangeComplete', handleComplete);
             router.events.off('routeChangeError', handleComplete);
         };
-        }, [router.asPath]);
-
-    const headerType2ParamsFromRedux = useAppSelector(state => state.pages.headerType2Params);
+    }, [router.asPath]);
 
     let showHeader = true;
     let showFooter = true;
     let showFixedNav = true;
     let hasInternalFixedFooter = false;
-    let headerType2Params: {
-        title: string;
-        backUrl?: string;
-        backToPrev?: boolean;
-        withShare?: boolean;
-        withLogo?: boolean;
-        hasCartLink?: boolean;
-    } | undefined = undefined;
 
     if (
         [
-            "/login",
-            "/profile/edit",
-            "/profile/change-password",
-            "/profile/forget-password",
-            "/profile/wallet",
-            "/profile/wallet/charge",
-            "/profile/wallet/faq",
-            "/profile/wallet/transactions"
+            "/login"
         ].includes(router.pathname)) {
         showFooter = false;
         showHeader = false;
         showFixedNav = false;
     }
 
+    if([
+            "/profile/change-password",
+            "/profile/forget-password",
+            "/profile//profile/edit",
+            "/profile/wallet",
+            "/profile/wallet/charge",
+            "/profile/wallet/faq",
+            "/profile/wallet/transactions"
+        ].includes(router.pathname)){
+        showFooter = false;
+        showFixedNav = false;
+    }
+
     if (router.pathname === "/profile") {
-        showHeader = false;
         showFooter = false;
     }
 
     if (router.pathname === "/terms") {
-        headerType2Params = {
-            backUrl: "/",
-            title: "قوانین و مقررات"
-        };
         showFooter = false;
         showFixedNav = false;
     }
     if (router.pathname === "/about") {
-        headerType2Params = {
-            backUrl: "/",
-            title: ""
-        };
         showHeader = true;
         showFooter = true;
         showFixedNav = false;
     }
     if (router.pathname === "/contact") {
-        headerType2Params = {
-            backUrl: "/",
-            title: ""
-        };
         showHeader = true;
         showFooter = false;
         showFixedNav = false;
     }
 
     if (router.pathname.startsWith("/faq")) {
-        headerType2Params = {
-            backUrl: "/",
-            title: "سوالات متداول"
-        };
         showFooter = false;
         showFixedNav = false;
     }
+    if (router.pathname === "/profile/wishlist") {
+        showFooter = false;
+        showFixedNav = true;
+    }
 
     if (router.pathname.includes("/orders")) {
-        headerType2Params = {
-            backUrl: "/",
-            title: "",
-            withLogo: true
-        };
         showFooter = false;
         showFixedNav = true;
     }
 
     if (router.pathname.startsWith("/blog/")) {
-        headerType2Params = {
-            title: "",
-            withShare: true,
-            withLogo: true,
-            backUrl: "/blogs"
-        };
         showFooter = true;
         showHeader = true;
         showFixedNav = false;
@@ -240,13 +286,6 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }
 
     if (router.pathname.startsWith("/product/")) {
-        headerType2Params = {
-            title: "",
-            withShare: true,
-            withLogo: true,
-            backToPrev: true,
-            hasCartLink: true
-        };
         showFooter = true;
         showHeader = true;
         showFixedNav = false;
@@ -254,44 +293,23 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }
 
     if (router.pathname === "/categories"){
-        headerType2Params = {
-            title: "",
-            withShare: false,
-            withLogo: true,
-            backUrl: "/"
-        };
         showFooter = false;
         showHeader = true;
         showFixedNav = true;
     }
     if (router.pathname === '/cart') {
-        headerType2Params = {
-            title: "",
-            withLogo: true,
-            backToPrev: true
-        };
         showFooter = false;
         showHeader = true;
         showFixedNav = false;
         hasInternalFixedFooter = true;
     }
     if (router.pathname === '/payment') {
-        headerType2Params = {
-            title: "",
-            withLogo: true,
-            backUrl: "/cart",
-        };
         showFooter = false;
         showHeader = true;
         showFixedNav = false;
         hasInternalFixedFooter = true;
     }
     if (router.pathname === '/confirm') {
-        headerType2Params = {
-            title: "",
-            withLogo: true,
-            backUrl: "/cart",
-        };
         showFooter = false;
         showHeader = true;
         showFixedNav = false;
@@ -299,11 +317,6 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }
     
     if (router.pathname === '/checkout') {
-        headerType2Params = {
-            title: "",
-            withLogo: true,
-            backUrl: "/cart",
-        };
         showFooter = false;
         showHeader = true;
         showFixedNav = false;
@@ -311,7 +324,30 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }
 
     useEffect(() => {
-        const token = localStorage?.getItem('Token');
+
+        function getToken() {        
+
+            const user_token = localStorage?.getItem('Token');
+            const user_expireTime = localStorage?.getItem('TokenExpire');
+
+            if (!user_token) {
+                localStorage.removeItem('TokenExpire');
+                return null;
+            }
+
+            const now = new Date().getTime();
+            const expireTime = user_expireTime ? new Date(user_expireTime).getTime() : undefined;
+            if ( !expireTime ||  now > expireTime) {
+                localStorage.removeItem('Token');
+                localStorage.removeItem('TokenExpire');
+                return null;
+            }
+
+            return user_token;
+        }
+
+        const token = getToken();
+
         if (token) {
             const getUserData = async () => {
                 dispatch(setReduxUser({
@@ -368,11 +404,6 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAuthenticated]);
 
-    let headerType2 = headerType2Params;
-    if (headerType2ParamsFromRedux.backUrl) {
-        headerType2 = headerType2ParamsFromRedux;
-    }
-
     let mainHeightClass : string = "";
     if(showFooter){
          mainHeightClass = "";
@@ -387,18 +418,31 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }else{
           mainHeightClass = "min-h-screen";
     }
+
+    let footerElement = null;
+
+    if(isDesktop){
+        // if(router.pathname === '/'){
+        //     footerElement =  <HomeDesktopFooter />;
+        // }else{
+        // }
+        footerElement =  <DesktopFooter />;
+    }else if (showFooter){
+        footerElement = <Footer />;
+    }
+
     return (
         <>
             <Error />
             <Notification />
-            <div className={`bg-[#fafafa] text-[#333333] dark:bg-[#011425] dark:text-white md:max-w-lg mx-auto ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`}>
+            <div className={`bg-[#fafafa] text-[#333333] dark:bg-[#011425] dark:text-white lg:min-h-screen ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`}>
                 <PageLoadingBar active={loading} />
                 {showHeader && <>
-                    <Header type2Params={headerType2} />
-                    <div className="mt-[84px]" />
+                    <Header />
+                    <div className="pt-[84px]" />
                 </>}
                 <main 
-                    className={mainHeightClass}
+                    className={`${isDesktop ? "": mainHeightClass}`}
                     style={{
                         position: (!isBodyScrollable && lastScrollPosition) ?"relative": "static",
                         top: -lastScrollPosition+"px"
@@ -406,8 +450,10 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
                 >
                     {props.children}
                 </main>
-                {showFooter && <Footer />}
-                {showFixedNav && <FooterNavigation />}
+                
+                {footerElement}
+
+                {showFixedNav && !isDesktop && <FooterNavigation />}
             </div>
         </>
 

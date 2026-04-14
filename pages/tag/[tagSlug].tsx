@@ -1,30 +1,38 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { getBlogs, GetTagBySlug } from "@/actions/blog";
+import { getBlogsList, GetTagBySlug } from "@/actions/blog";
 import { NextPage } from "next";
-import { BlogItemType } from "@/types/blog";
-import Contacts from "@/components/shared/Contacts";
-import BreadCrumpt from "@/components/shared/BreadCrumpt";
+import { BlogListItemType } from "@/types/blog";
+import Breadcrumb from "@/components/shared/Breadcrumb";
 import BlogListItem from "@/components/blog/BlogListItem";
 import Pagination from "@/components/shared/Pagination";
 import { useRouter } from "next/router";
 
-const Tag: NextPage<any> = ({ page, posts, totalPages, tagName }: { page?: string, posts?: BlogItemType[], totalPages: number, tagName?: string }) => {
+type Props = {
+    posts?:BlogListItemType[];
+    total: number;
+    tagName?: string;
+    tagSlug?: string;
+    page: number;
+}
+
+const Tag: NextPage<Props> = props => {
 
     const router = useRouter();
     const routerQuery: any = useRouter().query;
 
+    const {page, posts, tagName, total} = props;
+
     return (
         <>
-            <BreadCrumpt
-                wrapperClassName="bg-[#e8ecf0] dark:bg-[#192a39] px-4 py-3 mb-4"
-                textColorClass="text-neutral-800 dark:text-neutral-300"
+            <Breadcrumb
+                wrapperClassName="mb-4"
                 items={[
                     { label: tagName || "برچسب نامشخص", link: "" }
                 ]}
             />
 
-            <div className="px-4">
+            <div className="px-4 lg:grid lg:grid-cols-3 lg:gap-3 lg:py-10 max-w-[1200px] mx-auto">
                 {posts?.map(post => (
                     <BlogListItem
                         key={post.id}
@@ -32,16 +40,18 @@ const Tag: NextPage<any> = ({ page, posts, totalPages, tagName }: { page?: strin
                         wrapperClassName="mb-4"
                     />
                 ))}
+                <div className="lg:col-span-3">
 
-                {totalPages > 1 && <Pagination
-                    totalItems={totalPages * 10}
-                    currentPage={page ? +page : 1}
-                    onChange={p => { router.push({ query: { ...routerQuery, page: p } }) }}
+                    {total > 10 && <Pagination
+                        totalItems={total * 10}
+                        currentPage={page ? +page : 1}
+                        onChange={p => { router.push({ query: { ...routerQuery, page: p } }) }}
+                        wrapperClassName="lg:max-w-[380px] mx-auto"
 
-                />}
+                    />}
+                </div>
+
             </div>
-
-            <Contacts />
 
         </>
     )
@@ -59,29 +69,31 @@ export async function getServerSideProps(context: any) {
         )
     }
 
-    const page = context.query?.page || 1;
 
-    const tagSlug = context.query.tagSlug;
+        const tagSlug = context.query.tagSlug;
+        const page = context.query?.page || 1;
+    
+        const [blogs, tag] = await Promise.all<any>([
+            getBlogsList({
+                MaxResultCount:10,
+                SkipCount:(page -1) * 10,
+                Tags:[tagSlug]
+            }),
+            GetTagBySlug(tagSlug)
+        ]);
+    
+        const tagName = tag?.data?.result?.name;
 
-    const res: any = await GetTagBySlug(tagSlug);
-    const tagId = res.data?.[0]?.id;
-    const tagName = res.data?.[0]?.name;
-
-    const blogs : any = await getBlogs({
-        per_page: 10,
-        page: page,
-        tags: tagId
-    });
 
 
     return (
         {
             props: {
-                posts: blogs?.data || null,
-                totalPages: +blogs?.headers?.['x-wp-totalpages'] || null,
-                page: page,
+                posts: blogs?.data?.result?.items || null,
+                total: blogs?.data?.result?.totalCount || null,
                 tagName: tagName || null,
-                slug: tagSlug || null
+                tagSlug: tagSlug || null,
+                page: page
             }
         }
     )

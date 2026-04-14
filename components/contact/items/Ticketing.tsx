@@ -11,7 +11,7 @@ const Ticketing : React.FC<Props> = props => {
     return(
         <Link
             prefetch={false}
-            className="font-semibold text-sm mb-3 text-white flex py-4 min-h-20 px-5 items-center bg-gradient-to-t from-[#01212e] to-[#102c33] rounded-xl gap-4"
+            className="font-semibold text-sm mb-3 dark:text-white flex py-4 min-h-20 px-5 items-center bg-gradient-to-t from-[#eeeeee] to-[#e1e1e1] dark:from-[#01212e] dark:to-[#102c33] rounded-xl gap-4"
             href={props.url||"#"}
         >
             {!!props.icon && <Image 
