@@ -1,5 +1,6 @@
 import ModalPortal from "@/components/shared/layout/ModalPortal";
 import { ServerAddress } from "@/enum/url";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -22,6 +23,8 @@ type Props = {
 
 const OnlineSupport : React.FC<Props> = props => {
 
+    const isDesktop = useIsDesktop();
+
     const [open, setOpen] = useState<boolean>(false);
     const [slideIn, setSlideIn] = useState<boolean>(false);
 
@@ -37,6 +40,12 @@ const OnlineSupport : React.FC<Props> = props => {
         }
     }, [slideIn]);
 
+
+    let modalWrapperClass = `bg-white dark:bg-[#192a39] text-neutral-800 dark:text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full safePadding-b transition-all left-0 right-0 ${slideIn ? "bottom-0" : "-bottom-[80vh]"}`
+
+    if (isDesktop) {
+        modalWrapperClass = `bg-white dark:bg-[#192a39] text-neutral-800 dark:text-white rounded-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full max-w-lg transition-all top-1/2 right-1/2 translate-x-1/2 ${slideIn ? "-translate-y-1/2 opacity-100" : "translate-y-0 opacity-0"}`
+    }
 
     return(
         <>
@@ -69,57 +78,59 @@ const OnlineSupport : React.FC<Props> = props => {
         >
             <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen">
 
-                <div className="relative w-full md:max-w-lg md:mx-auto h-screen">
+                <div className="relative w-full h-screen">
 
                     <div className="bg-[#cccccc]/50 dark:bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideIn(false) }} />
 
-                    <div className={`flex flex-col gap-6 items-center p-5 py-10 bg-white dark:bg-[#192a39] text-[#666666] dark:text-white rounded-2xl absolute transition-all left-5 right-5 ${slideIn ? "bottom-5" : "-bottom-[80vh]"}`}>
+                    <div className={modalWrapperClass}>
+                        <div className={`flex flex-col gap-6 items-center p-5 py-10 bg-white dark:bg-[#192a39] text-[#666666] dark:text-white rounded-2xl`}>
 
-                        <div className="bg-[#eeeeee] dark:bg-[#011425] p-3 rounded-full" >
-                            <Image 
-                                src="/images/icons/onlineSupportIcon.svg"
-                                alt="پشتیبانی آنلاین"
-                                width={48}
-                                height={48}
-                                className="w-12 h-12"
-                            />
-                        </div>
-
-                        {props.items?.map(item => {
-                            
-                            const iconUrl = item.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${item.icon.url}` : "";
-                            const icon = iconUrl ? (
+                            <div className="bg-[#eeeeee] dark:bg-[#011425] p-3 rounded-full" >
                                 <Image 
-                                    src={iconUrl}
-                                    alt={item.Name || ""}
-                                    width={150}
-                                    height={32}
-                                    className="w-auto h-8"
+                                    src="/images/icons/onlineSupportIcon.svg"
+                                    alt="پشتیبانی آنلاین"
+                                    width={48}
+                                    height={48}
+                                    className="w-12 h-12"
                                 />
-                            ) :null; 
+                            </div>
 
-                            return(
-                                <Link
-                                    prefetch={false}
-                                    key={item.id}
-                                    href={item.url || "#"}
-                                    className={`block py-3 px-4 min-h-14 w-full text-center text-white bg-[#a93aff] rounded-full flex items-center ${icon?" justify-between":" justify-center"}`}
-                                    style={{backgroundColor:item.backgroundColorCode || "#bbb"}}
-                                >
-                                    {item.Name||""}
-                                    {icon}
-                                </Link>
-                            )
-                        })}
+                            {props.items?.map(item => {
+                                
+                                const iconUrl = item.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${item.icon.url}` : "";
+                                const icon = iconUrl ? (
+                                    <Image 
+                                        src={iconUrl}
+                                        alt={item.Name || ""}
+                                        width={150}
+                                        height={32}
+                                        className="w-auto h-8"
+                                    />
+                                ) :null; 
 
-                        <button
-                            type="button"
-                            onClick={()=>{setSlideIn(false)}}
-                            className="block p-4 w-full text-center rounded-full bg-[#dddddd] dark:bg-[#011425]"
-                        >
-                            انصراف
-                        </button>
+                                return(
+                                    <Link
+                                        prefetch={false}
+                                        key={item.id}
+                                        href={item.url || "#"}
+                                        className={`block py-3 px-4 min-h-14 w-full text-center text-white bg-[#a93aff] rounded-full flex items-center ${icon?" justify-between":" justify-center"}`}
+                                        style={{backgroundColor:item.backgroundColorCode || "#bbb"}}
+                                    >
+                                        {item.Name||""}
+                                        {icon}
+                                    </Link>
+                                )
+                            })}
 
+                            <button
+                                type="button"
+                                onClick={()=>{setSlideIn(false)}}
+                                className="block p-4 w-full text-center rounded-full bg-[#dddddd] dark:bg-[#011425]"
+                            >
+                                انصراف
+                            </button>
+
+                        </div>
                     </div>
                 </div>
 

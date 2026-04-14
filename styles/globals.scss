@@ -201,6 +201,9 @@ body {
   .min-h-screen-header{
      min-height: calc(100vh - 84px);
   }
+  .mainDesktopHeightClass{
+    min-height: calc(100vh - 275px);
+  }
 
   .h-highlight{
     height: calc(100svh - 90px);

@@ -440,7 +440,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
                     <div className="pt-[84px]" />
                 </>}
                 <main 
-                    className={`${isDesktop ? "": mainHeightClass}`}
+                    className={isDesktop ? "mainDesktopHeightClass": mainHeightClass}
                     style={{
                         position: (!isBodyScrollable && lastScrollPosition) ?"relative": "static",
                         top: -lastScrollPosition+"px"
