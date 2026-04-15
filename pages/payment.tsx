@@ -306,10 +306,9 @@ export default function PaymentPage() {
             onRemoveAddedCode={removeDiscountHandle}
             onSubmit={submitDiscountCode}
             loading={discountLoading}
-            data={discountData || orderData?.totalDiscountPrice ? {
-              isValid: true
-            } : undefined}
-            onChangeText={()=>{setDiscountData(undefined);}}
+            data={discountData}
+            orderTotalDiscountPrice = {orderData?.totalDiscountPrice}
+            onChangeText={()=>{setDiscountData(undefined)}}
             removeDiscountLoading={removeDiscountLoading}
           />
 
