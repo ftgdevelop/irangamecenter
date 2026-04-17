@@ -136,9 +136,15 @@ const OrderDetailItem : React.FC<Props> = props => {
                                         {data.timeLines?.map((t, i)=>(
                                             <div key={t.id} className="text-sm flex gap-4">
                                                 <div className="flex flex-col gap-2 items-center mb-2">
-                                                    <div className="w-7 h-7 rounded-full bg-gradient-violet flex justify-center items-center">
-                                                        <CheckIcon className="w-5 h-5 fill-white" />
-                                                    </div>
+                                                    {t.isDone ? (
+                                                        <div className="w-7 h-7 rounded-full bg-gradient-violet flex justify-center items-center">
+                                                            <CheckIcon className="w-5 h-5 fill-white" />
+                                                        </div>
+                                                    ):(
+                                                        <div className="w-7 h-7 text-neutral-800 pt-1 rounded-full bg-gradient-gray flex justify-center items-center">
+                                                            {toPersianDigits((i+1).toString())}
+                                                        </div>
+                                                    )}
                                                     { i < data.timeLines!.length-1 ? <div className="w-[2px] grow bg-neutral-400 dark:bg-white/50" /> : null}
                                                 </div>
                                                 <div className="pb-5">

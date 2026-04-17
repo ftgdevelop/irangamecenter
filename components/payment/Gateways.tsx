@@ -73,15 +73,15 @@ const Gateways: React.FC<Props> = (props) => {
           }}
         >
           <div
-            className={`flex rounded-[13px] items-center justify-between p-5 ${
+            className={`flex rounded-[13px] items-center justify-between p-3.5 sm:p-5 ${
               selectedGatewayId === gatewayItem.id
                 ? "bg-gradient-to-t from-[#e6fcf5] to-[#ebfbee] text-[#04b69c] dark:from-[#012431] dark:to-[#0f2b32] dark:text-white"
                 : ""
             }`}
           >
-            <div className="flex gap-3 items-center">
+            <div className="flex gap-2 sm:gap-3 items-center">
               <div
-                className={`w-7 h-7 rounded-full border inline-flex justify-center items-center ${
+                className={`shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full border inline-flex justify-center items-center ${
                   selectedGatewayId === gatewayItem.id
                     ? "bg-gradient-to-t from-[#01b59c] to-[#9afeab] border-[#01b59c]"
                     : "border-[#cccccc] dark:border-white"
@@ -91,14 +91,21 @@ const Gateways: React.FC<Props> = (props) => {
                   <CheckIcon className="w-5 h-5 fill-white" />
                 )}
               </div>
-              {gatewayItem.displayName || gatewayItem.name}
+
+              <div className="text-right text-sm">
+                {gatewayItem.displayName || gatewayItem.name}
+                {gatewayItem.subtitle && (
+                  <p className="text-xs mt-2"> {gatewayItem.subtitle} </p>
+                )}
+              </div>
+
             </div>
 
             <Image
               src={gatewayItem.image?.path || "/images/default-game.png"}
               alt={gatewayItem.image?.altAttribute || item.name || ""}
               title={gatewayItem.image?.titleAttribute || item.name}
-              className="w-7 h-7 object-contain object-center block"
+              className="w-8 h-8 object-contain object-center block shrink-0"
               width={24}
               height={24}
             />

@@ -27,7 +27,7 @@ type DataItemType = {
   }
 }
 
-const HightlightItemSlider: React.FC<Props> = (props) => {
+const HighlightItemSlider: React.FC<Props> = (props) => {
   const duration = 4000
 
   const [activeIndex, setActiveIndex] = useState<number>(0)
@@ -169,7 +169,7 @@ const HightlightItemSlider: React.FC<Props> = (props) => {
               className={`shadow absolute top-3.5 rounded-full overflow-hidden bg-neutral-500 z-10 ${props.direction === "ltr" ? "left-4 right-10" : "left-10 right-4"}`}
             >
               <div
-                className={`bg-white h-[3px] highlight-progresbar ${isPaused ? 'animation-paused' : ''
+                className={`bg-white h-[3px] highlight-progressbar ${isPaused ? 'animation-paused' : ''
                   }`}
               />
             </div>
@@ -219,13 +219,13 @@ const HightlightItemSlider: React.FC<Props> = (props) => {
           </div>
 
           <div
-            className={`absolute w-20 top-0 bottom-24 bottom-0 ${props.direction === "ltr" ? "-right-3" : "-left-3"}`}
+            className={`absolute w-20 top-0 bottom-0 ${props.direction === "ltr" ? "-right-3" : "-left-3"}`}
             onClick={() => {
               goToNextSlide()
             }}
           />
           <div
-            className={`absolute w-20 top-0 bottom-24 bottom-0 ${props.direction === "ltr" ? "-left-3" : "-right-3"}`}
+            className={`absolute w-20 top-0 bottom-0 ${props.direction === "ltr" ? "-left-3" : "-right-3"}`}
             onClick={() => {
               goToPreviousSlide()
             }}
@@ -246,4 +246,4 @@ const HightlightItemSlider: React.FC<Props> = (props) => {
   )
 }
 
-export default HightlightItemSlider
+export default HighlightItemSlider

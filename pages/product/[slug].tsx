@@ -21,7 +21,7 @@ import Star from '@/components/icons/Star';
 import SimilarProducts from '@/components/products/SimilarProducts';
 import { useRouter } from 'next/router';
 import Skeleton from '@/components/shared/Skeleton';
-import { useAppDispatch } from '@/hooks/use-store';
+import { useAppDispatch, useAppSelector } from '@/hooks/use-store';
 import { setHeaderParams } from '@/redux/pages';
 import Breadcrumb from '@/components/shared/Breadcrumb';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
@@ -32,6 +32,9 @@ import ProductRatingSection from '@/components/products/productDetailDesktop/Pro
 import ProductAwardsSection from '@/components/products/productDetailDesktop/ProductAwardsSection';
 import ProductFAQSection from '@/components/products/productDetailDesktop/ProductFAQSection';
 import UserQuestionAnswer from '@/components/products/userQuestions/UserQuestionAnswer';
+import ModalPortal from '@/components/shared/layout/ModalPortal';
+import Otp from '@/components/authentication/profile/OTP';
+import LoginWithPassword from '@/components/authentication/LoginWithPassword';
 
 type Props = {
   serverSideProductData?: ProductDetailData;
@@ -46,6 +49,9 @@ const DetailProduct: NextPage<Props> = props => {
 
   const {serverSideGalleryData, serverSideProductData, serverSideVariant, serverSideVariants, slug} = props;
 
+  const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
+  const getUserLoading = useAppSelector(state => state.authentication.getUserLoading);
+
   const [detailActiveTab, setDetailActiveTab] = useState<string>('');
 
   const [productData, setProductData] = useState<ProductDetailData | undefined>(serverSideProductData);
@@ -59,7 +65,20 @@ const DetailProduct: NextPage<Props> = props => {
   const {query} = router;
 
   const queryVariant = query.variant as string|undefined;
-  const queryPlatform = query.platform as PlatformSlugTypes || undefined;  
+  const queryPlatform = query.platform as PlatformSlugTypes | undefined;  
+
+  const queryTorob = query.utm_source === "Torob";
+
+  const [loginType, setLoginType] = useState<"otp" | "password">("otp");
+  const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
+
+  useEffect(()=>{
+    if(!isAuthenticated && !getUserLoading && queryTorob){
+      setShowLoginModal(true);
+    }else{
+      setShowLoginModal(false);
+    }
+  },[isAuthenticated,getUserLoading,queryTorob ]);
 
   useEffect(()=>{
 
@@ -823,11 +842,60 @@ const DetailProduct: NextPage<Props> = props => {
     />
   );
 
+
+  const loginModalWrapperClass = `max-sm:w-[90vw] lg:bg-white/75 dark:lg:bg-[#011425]/60 z-[50] text-neutral-800 pb-5 dark:text-white rounded-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full max-w-lg transition-all top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 ${showLoginModal ? "-translate-y-1/2 opacity-100" : "translate-y-0 opacity-0"}`;
+  const loginModal = (
+    <ModalPortal
+        show={showLoginModal}
+        selector='modal_portal'
+    >
+        <div className="bg-white/65 dark:bg-black/50 lg:bg-white/25 lg:dark:bg-black/25 backdrop-blur-sm fixed top-0 left-0 right-0 bottom-0" />
+
+        <div className={loginModalWrapperClass}>
+            <div className="lg:pt-8">
+              <div className="pt-10">
+                {loginType === "otp" ? (
+                  <Otp
+                    toggleLoginType={() => {
+                      setLoginType("password");
+                    }}
+                    title={
+                      <h3 className="font-semibold text-lg lg:text-xl text-[#ff7189] text-center mb-10 px-5">
+                        فقط یه قدم تا دسترسی کامل! <br/>  شماره موبایلت رو وارد کن.
+                      </h3>
+                    }
+                    onLoginSuccess={() => {
+                      setShowLoginModal(false);
+                    }}
+                    hideAllLinks
+                  />
+                ) : (
+                  <LoginWithPassword
+                    onLoginSuccess={() => {
+                      setShowLoginModal(false);
+                    }}
+                    toggleLoginType={() => {
+                      setLoginType("otp");
+                    }}
+                    title={
+                      <h3 className="font-semibold text-lg lg:text-xl text-[#ff7189] text-center mb-10 px-5">
+                        فقط یه قدم تا دسترسی کامل! <br/>  شماره موبایلت رو وارد کن.
+                      </h3>
+                    }
+                    hideAllLinks
+                  />
+                )}
+              </div>
+            </div>
+        </div>
+    </ModalPortal>
+  )
+
   if(isDesktop){
     return(
       <>
       {head}
-
+      {loginModal}
       {breadcrumb}
 
       <div
@@ -908,7 +976,7 @@ const DetailProduct: NextPage<Props> = props => {
   return (
     <>
       {head}
-
+      {loginModal}
       {breadcrumb}
 
       <div className="flex gap-4 p-4">
