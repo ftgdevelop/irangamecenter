@@ -12,6 +12,7 @@ type Props = {
     toggleLoginType: () => void;
     submitHandler: (phoneNumber: string) => void
     title?: ReactNode;
+    hideAllLinks?: boolean;
 }
 
 const OtpSendCode: React.FC<Props> = props => {
@@ -30,7 +31,7 @@ const OtpSendCode: React.FC<Props> = props => {
                 {({ errors, touched, values, setFieldValue }) => {
                     return (
 
-                        <Form className='px-5 text-sm flex flex-col items-center justify-center gap-[60px] leading-6' autoComplete='off' >
+                        <Form className='px-5 text-sm flex flex-col items-center justify-center gap-9 leading-6' autoComplete='off' >
                             <div className="self-stretch ">
                                 <PhoneInput
                                     placeholder="شماره موبایل را وارد نمایید"
@@ -50,17 +51,17 @@ const OtpSendCode: React.FC<Props> = props => {
                                     name='phoneNumber'
                                     isTouched={touched.phoneNumber}
                                     errorText={errors.phoneNumber}
-                                    className="mb-5"
+                                    className="mb-3"
                                 />
                                 <p>
                                 مثلا: ۰۹۱۲۱۲۳۴۵۶۷۸۹
                                 </p>          
                             </div>
     
-                            <div className="text-neutral-700 dark:text-white w-full rounded-2xl  space-y-2">
+                            <div className="text-neutral-700 dark:text-white w-full rounded-2xl space-y-2">
                                 <button
                                     type="submit"
-                                    className="flex gap-4 items-center mb-2.5 justify-center h-14 w-full text-white bg-[#aa3aff] rounded-full text-sm"
+                                    className="flex gap-4 items-center justify-center h-14 w-full text-white bg-[#aa3aff] rounded-full text-sm"
                                 >
                                     تایید و دریافت کد
 
@@ -71,7 +72,7 @@ const OtpSendCode: React.FC<Props> = props => {
                                     )}
                                 </button>
 
-                                <p className=" text-[10px]">
+                                {!props.hideAllLinks && <p className=" text-[10px]">
                                     ورود شما به معناى پذيرش <Link
                                     href="/terms"
                                     className=" text-[#A93AFF] mx-0.5 hover:text-[#A93AFF]/50 transition"
@@ -81,7 +82,7 @@ const OtpSendCode: React.FC<Props> = props => {
                                     >
                                     قوانين حريم خصوصى
                                     </Link> است.
-                                </p>
+                                </p>}
            
                             </div>
                             <div className="flex flex-col gap-[30px] pb-10">
@@ -93,12 +94,12 @@ const OtpSendCode: React.FC<Props> = props => {
                                 ورود با کلمه عبور
                             </button>
 
-                            <Link
+                            {!props.hideAllLinks && <Link
                                 href={"/forget-password"}
                                 className="text-[#2ac99f] font-semibold text-sm"
                             >
                                 فراموشی رمز عبور
-                            </Link>
+                            </Link>}
 
                             </div>
 

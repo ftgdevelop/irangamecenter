@@ -513,6 +513,7 @@ export interface OrderDetailItemTimelineItem {
   step: "Created" | string;
   stepStr?: string;
   status: "Pending" | string;
+  isDone: boolean;
   creationTime: string;
   isFinal:boolean;
   "reasonCode": "None",

@@ -13,6 +13,7 @@ type Props = {
     toggleLoginType: () => void;
     title?: ReactNode;
     onLoginSuccess?: () => void;
+    hideAllLinks?: boolean;
 }
 
 const Otp: React.FC<Props> = props => {
@@ -132,6 +133,7 @@ const Otp: React.FC<Props> = props => {
                 });
             }}
             title={props.title}
+            hideAllLinks
         />
     )
 }
