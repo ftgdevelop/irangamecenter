@@ -200,6 +200,7 @@ export const registerDiscount = async ( params:{
         headers: {
           ...Headers,
           Authorization: `Bearer ${token}`,
+          "Accept-Language": "fa-IR",
         },
       },
     )

@@ -7,7 +7,6 @@ import { useEffect } from "react";
 import { setHeaderParams } from "@/redux/pages";
 import Intro from "@/components/about/Intro";
 import FAQ from "@/components/shared/FAQ";
-import Contacts from "@/components/shared/Contacts";
 import AboutIcons from "@/components/about/AboutIcons";
 import Head from "next/head";
 import { StrapiSeoData } from "@/types/commerce";
@@ -52,12 +51,6 @@ const AboutUs: NextPage = ({ strapiData, strapiSeoData }: { strapiData?: StrapiD
 
   const FAQ_items = strapiData?.find(item => item.Keyword === "faq")?.Items;
   const icons = strapiData?.find(item => item.Keyword === "icons")?.Items;
-  
-  const SupportNumber = strapiData?.find(item => item.Keyword === "telNumber")?.Description;
-  const SupportNumberUrl = strapiData?.find(item => item.Keyword === "telNumber")?.Url;
-  const SupportNumberSubtitle = strapiData?.find(item => item.Keyword === "telNumber")?.Subtitle;
-  const emailAddress = strapiData?.find(item => item.Keyword === "email")?.Description;
-
   return (
     <>
 
@@ -75,21 +68,16 @@ const AboutUs: NextPage = ({ strapiData, strapiSeoData }: { strapiData?: StrapiD
           />
         )}
       </Head>
+      <div className="lg:max-w-[1000px] lg:mx-auto lg:py-10">
+        <div className="lg:py-5">
+          {!!aboutDescription && <Intro description={aboutDescription} />}
 
-      {!!aboutDescription && <Intro description={aboutDescription} />}
+          {!!icons && <AboutIcons items={icons} />}
 
-      {!!icons && <AboutIcons items={icons} />}
+          {!!FAQ_items?.length && <FAQ items={FAQ_items} answerParse="markDown" />}
+        </div>
 
-      {!!FAQ_items?.length && <FAQ items={FAQ_items} answerParse="markDown" />}
-
-      <Contacts
-        data={{
-          emailAddress:emailAddress,
-          supportNUmberUrl : SupportNumberUrl,
-          supportNumber:SupportNumber,
-          supportNumberSubtitle:SupportNumberSubtitle
-        }}
-      />
+      </div>
       
     </>
   );

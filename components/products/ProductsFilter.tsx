@@ -4,13 +4,14 @@ import ModalPortal from "../shared/layout/ModalPortal";
 import { useEffect, useRef, useState } from "react";
 import CheckboxGroup from "../shared/CheckboxGroup";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
-import { setBodiScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
+import { setBodyScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
 import CloseSimple from "../icons/CloseSimple";
 import Accordion from "../shared/Accordion";
 import { openFilter } from "@/redux/productsSlice";
 import { useRouter } from "next/router";
 import { Facet } from "@/types/commerce";
 import Checkbox from "../shared/Checkbox";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
 
 type Props = {
     filters: Facet[];
@@ -18,7 +19,9 @@ type Props = {
     categoryName?: string;
 }
 
-const ProductsFliter: React.FC<Props> = props => {
+const ProductsFilter: React.FC<Props> = props => {
+
+    const isDesktop = useIsDesktop();
 
     const router = useRouter();
 
@@ -37,7 +40,7 @@ const ProductsFliter: React.FC<Props> = props => {
         if (openedFilter) {
             setSlideIn(true);
             dispatch(setBodyScrollable(false));
-            dispatch(setBodiScrollPosition(window?.pageYOffset || 0));
+            dispatch(setBodyScrollPosition(window?.pageYOffset || 0));
         } else {
             dispatch(setBodyScrollable(true));
         }
@@ -117,6 +120,13 @@ const ProductsFliter: React.FC<Props> = props => {
     },[filteredPhrase, openedFilter]);
 
 
+    let modalWrapperClass = `bg-white dark:bg-[#192a39] text-neutral-800 dark:text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full safePadding-b transition-all left-0 right-0 ${slideIn ? "bottom-0" : "-bottom-[80vh]"}`
+
+    if (isDesktop) {
+        modalWrapperClass = `bg-white dark:bg-[#192a39] text-neutral-800 dark:text-white rounded-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full max-w-2xl transition-all top-1/2 right-1/2 translate-x-1/2 ${slideIn ? "-translate-y-1/2 opacity-100" : "translate-y-0 opacity-0"}`
+    }
+
+
     return (
 
         <ModalPortal
@@ -125,7 +135,7 @@ const ProductsFliter: React.FC<Props> = props => {
         >
             <div className="bg-black/50 backdrop-blur-sm fixed top-0 left-0 right-0 bottom-0" onClick={() => { setSlideIn(false) }} />
 
-            <div className={`bg-white dark:bg-[#192a39] text-neutral-800 dark:text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full md:max-w-lg transition-all left-0 max-md:right-0 md:right-1/2 md:translate-x-1/2 ${slideIn ? "bottom-0" : "-bottom-[80vh]"}`}>
+            <div className={modalWrapperClass}>
                 <div className="px-4 pt-8 pb-3">
 
                     <div className="mb-5 flex justify-between items-center">
@@ -341,4 +351,4 @@ const ProductsFliter: React.FC<Props> = props => {
     )
 }
 
-export default ProductsFliter;
+export default ProductsFilter;

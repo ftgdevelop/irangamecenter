@@ -19,6 +19,7 @@ type Props = {
     initialPhoneNumber?: string;
     title?: ReactNode;
     onLoginSuccess?: () => void;
+    hideAllLinks?: boolean;
 }
 
 const LoginWithPassword: React.FC<Props> = props => {
@@ -97,6 +98,7 @@ const LoginWithPassword: React.FC<Props> = props => {
             onSuccessLogin(response);
 
         } else {
+            //debugger;
 
             dispatch(setReduxUser({
                 isAuthenticated: false,
@@ -152,7 +154,6 @@ const LoginWithPassword: React.FC<Props> = props => {
                                     name='phoneNumber'
                                     isTouched={touched.phoneNumber}
                                     errorText={errors.phoneNumber}
-                                    className="mb-5"
                                 />
                             </div>
 
@@ -162,7 +163,7 @@ const LoginWithPassword: React.FC<Props> = props => {
                                     ref={passwordRef}
                                     heightClassName="h-14"
                                     isPassword
-                                    className="mb-8"
+                                    className="mb-6"
                                     fieldClassName="pl-12 placeholder:text-right ltr"
                                     setFieldValue={setFieldValue}
                                     //onChange={()=>{setError(false);}}
@@ -200,12 +201,12 @@ const LoginWithPassword: React.FC<Props> = props => {
                                 ورود با رمز یک بار مصرف
                             </button>
 
-                            <Link
-                                href={"/profile/forget-password"}
+                            {!props.hideAllLinks && <Link
+                                href={"/forget-password"}
                                 className="text-[#2ac99f] font-semibold text-sm mb-5"
                             >
                                 فراموشی رمز عبور
-                            </Link>
+                            </Link>}
 
                         </Form>
                     )

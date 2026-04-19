@@ -6,7 +6,8 @@ export default function Document() {
       <Head>
         
         {/* Google Tag Manager */}
-        <script
+        {/* TODO enable this comment: */}
+        {/* <script
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
               new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -14,7 +15,7 @@ export default function Document() {
               'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
             })(window,document,'script','dataLayer','GTM-N6VRBVVG');`,
           }}
-        />  
+        />   */}
 
         <script
           type="application/ld+json"
@@ -62,22 +63,24 @@ export default function Document() {
       </Head>
       <body className="antialiased font-iranyekan bg-white dark:bg-black" >
          
-        <noscript>
+         {/* TODO enable this comment: */}
+        {/* <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-N6VRBVVG"
             height="0"
             width="0"
             style={{ display: 'none', visibility: 'hidden' }}
           ></iframe>
-        </noscript>
+        </noscript> */}
 
         <Main />
         <div>
           <div id="menu_portal" className="fixed top-0 left-0 right-0 z-[20]" />
           <div id="fixed_bottom_portal" />
-          <div id="modal_portal" className="relative z-[20]" />
+          <div id="modal_portal" className="relative z-[50]" />
+          <div id="modal_portal2" className="relative z-[50]" />
           <div id="error_modal_portal" className="relative z-[20]" />
-          <div id="notification_modal_portal" className="relative z-[20]" />
+          <div id="notification_modal_portal" className="relative z-[50]" />
         </div>
         <NextScript />
       </body>

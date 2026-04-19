@@ -9,8 +9,8 @@ import gregorian from "react-date-object/calendars/gregorian";
 import gregorian_en from "react-date-object/locales/gregorian_en";
 import ModalPortal from "./layout/ModalPortal";
 import { useAppDispatch } from "@/hooks/use-store";
-import { setBodiScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
-import { dateDiplayFormat, dateFormat } from "@/helpers";
+import { setBodyScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
+import { dateDisplayFormat, dateFormat } from "@/helpers";
 import CalendarIcon from "../icons/CalendarIcon";
 
 const Calendar = dynamic(
@@ -49,7 +49,7 @@ const DatePickerM: React.FC<Props> = props => {
         if (open) {
             setSlideIn(true);
             dispatch(setBodyScrollable(false));
-            dispatch(setBodiScrollPosition(window?.pageYOffset || 0));
+            dispatch(setBodyScrollPosition(window?.pageYOffset || 0));
         } else {
             dispatch(setBodyScrollable(true));
         }
@@ -76,14 +76,14 @@ const DatePickerM: React.FC<Props> = props => {
         let endString = " -- ";
         
         if(formatted[0]){
-            startString = dateDiplayFormat({
+            startString = dateDisplayFormat({
                 date: formatted[0],
                 format: "yyyy/mm/dd",
                 locale: localeFa ? "fa" : "en"
             });
 
             if(formatted[1]){
-                endString = dateDiplayFormat({
+                endString = dateDisplayFormat({
                     date: formatted[1],
                     format: "yyyy/mm/dd",
                     locale: localeFa ? "fa" : "en"

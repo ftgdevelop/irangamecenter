@@ -1,7 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { getAllForSiteMap } from "@/actions/commerce";
-import { dateDiplayFormat, escapeXml } from "@/helpers";
+import { dateDisplayFormat, escapeXml } from "@/helpers";
 
 type VideosData = {
   slug?: string;
@@ -47,7 +47,7 @@ function createSiteMap(items:VideosData){
           let timePart = "";
           if(video.creationTime){
             timePart = `
-              <video:publication_date>${dateDiplayFormat({
+              <video:publication_date>${dateDisplayFormat({
                 date: video.creationTime,
                 format:"ISO",
                 locale:"en"

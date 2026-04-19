@@ -70,14 +70,13 @@ export const Payment = {
   // MakeToken:"/api/services/app/ReserveBankGateway/MakeToken",
 };
 
-  export const Blog = {
-    getPosts: "//wp-json/wp/v2/posts",
-    getBestCategories: '/wp-json/wp/v2/best_category',
-    getCategoryName: '/wp-json/wp/v2/categories',
-    getUsers: "/wp-json/wp/v2/users",
-    getTagName: '/wp-json/wp/v2/tags'
-  }
-
+export const Blog = {
+  getPosts: "/api/services/app/Post/GetAll",
+  getPost: "/api/services/app/Post/GetBySlug",
+  getCategory:"/api/services/app/Category/GetBySlug",
+  getTag: "/api/services/app/Tag/GetBySlug",
+  getSimilarPosts:"/api/services/app/Post/GetSimilar",
+}
   export const Commerce = {
     GetAllProducts:"/api/services/app/Product/SearchWithFacets",
     GetBySlug:"/api/services/app/Product/GetBySlug",
@@ -101,7 +100,13 @@ export const Payment = {
     ExistInWishlist:"/api/services/app/Wishlist/Exists",
     GetAllWishlist:"/api/services/app/Wishlist/GetAll",
 
-    ProductNotificationUpsert:"/api/services/app/ProductNotification/Upsert"
+    ProductNotificationUpsert:"/api/services/app/ProductNotification/Upsert",
+
+
+    GetProductQuestions:"/api/services/app/ProductQuestion/GetAllQuestions",
+    CreateQuestion:"/api/services/app/ProductQuestion/CreateQuestion",
+    CreateAnswer:"/api/services/app/ProductQuestion/CreateAnswer",
+    VoteAnswer:"/api/services/app/ProductQuestion/VoteAnswer"
   }
 
   export const Discount = {

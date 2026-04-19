@@ -6,6 +6,7 @@ type Page = {
         logo?: boolean;
         title?: string;
         productId?: number;
+        variantId?:number;
         cart?: boolean;
         backLink?: string;
     }
@@ -21,6 +22,7 @@ type PayloadParams = {
         logo?: boolean;
         title?: string;
         productId?: number;
+        productVariantId?: number;
         cart?: boolean;
         backLink?: string;
     }

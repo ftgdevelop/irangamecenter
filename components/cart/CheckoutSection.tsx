@@ -211,131 +211,131 @@ const CheckoutSection = () => {
                     }, 100)
                 }
                 return (
-                    <Form className="mx-3 pb-1 pt-5" autoComplete="off">
-
-
-                        <FormikField
-                            showConfirmedBadge={!validateRequiedPersianAndEnglish(
-                                values.firstname,
-                                "requiredMessage",
-                                "inValidMessage"
-                            )}
-                            className='mb-6'
-                            setFieldValue={setFieldValue}
-                            errorText={errors.firstname as string}
-                            id="firstname"
-                            name="firstname"
-                            isTouched={touched.firstname}
-                            label="نام"
-                            validateFunction={(value: string) =>
-                                validateRequiedPersianAndEnglish(
-                                    value,
-                                    'لطفا نام خود را وارد کنید!',
-                                    'فقط حروف فارسی و انگلیسی مجاز است!',
-                                )
-                            }
-                            onChange={(value: string) => {
-                                setFieldValue('firstname', value, true)
-                            }}
-                            value={values.firstname}
-                            placeholder=" نام را وارد کنید "
-                        />
-
-                        <FormikField
-                            showConfirmedBadge={!validateRequiedPersianAndEnglish(
-                                values.lastname,
-                                "requiredMessage",
-                                "inValidMessage"
-                            )}
-                            className='mb-6'
-                            setFieldValue={setFieldValue}
-                            errorText={errors.lastname as string}
-                            id="lastname"
-                            name="lastname"
-                            isTouched={touched.lastname}
-                            label="نام خانوادگی"
-                            validateFunction={(value: string) =>
-                                validateRequiedPersianAndEnglish(
-                                    value,
-                                    'لطفا نام خود را وارد کنید!',
-                                    'فقط حروف فارسی و انگلیسی مجاز است!',
-                                )
-                            }
-                            onChange={(value: string) => {
-                                setFieldValue('lastname', value, true)
-                            }}
-                            value={values.lastname}
-                            placeholder="نام خانوادگی  را وارد کنید"
-                        />
-
-                        <div className="self-stretch ">
-                            <PhoneInput
-                                placeholder="شماره موبایل را وارد نمایید"
-                                label={
-                                    <div className="w-full flex justify-between items-center">
-                                        <div className="flex gap-3 items-center">
-                                            <span>موبایل</span>
-                                            <Image src={'/images/icons/check-gradient-green.svg'} width={28} height={28} alt="verified-mobile"/>
-                                        </div>
-                                        <p className="bg-gradient-to-b from-[#00B59C] to-[#9CFFAC] bg-clip-text text-transparent">
-                                            تایید شده
-                                        </p>
-                                    </div>
-                                }
-                                defaultCountry={
-                                    {
-                                        countryCode: "ir",
-                                        dialCode: "98",
-                                        format: "... ... ...."
-                                    }
-                                }
-                                onChange={(v: string) => {
-                                    setFieldValue('phoneNumber', v)
-                                }}
-                                value={values.phoneNumber}
-                                name='phoneNumber'
-                                isTouched={touched.phoneNumber}
-                                errorText={errors.phoneNumber}
-                                disabled
-                                className="mb-5 "
-                                initialValue={initialValues.phoneNumber}
-                            
-                            />
-    
-                        </div>
-                        <FormikField
-
-                                inputWarningIcon={!!(userInfo?.emailAddress && !userInfo.isEmailConfirmed)}
-                                showConfirmedBadge={!validateEmail({
-                                    value: values.emailAddress,
-                                    invalidMessage: "invalidMessage",
-                                    reqiredMessage: "reqiredMessage"
-                                })}
-                                showConfirmedText={!!(userInfo?.emailAddress && userInfo.isEmailConfirmed)}
-                                className='mb-5'
+                    <Form className="mx-3 pb-1 pt-5 lg:max-w-[1000px] lg:mx-auto lg:rounded-2xl lg:bg-gradient-to-t lg:from-[#eaeaea] lg:dark:from-[#182a38] lg:to-transparent lg:mb-10" autoComplete="off">
+                        <div className="lg:max-w-[500px] lg:mx-auto">
+                            <FormikField
+                                showConfirmedBadge={!validateRequiedPersianAndEnglish(
+                                    values.firstname,
+                                    "requiredMessage",
+                                    "inValidMessage"
+                                )}
+                                className='mb-6'
                                 setFieldValue={setFieldValue}
-                                errorText={errors.emailAddress as string}
-                                id="emailAddress"
-                                name="emailAddress"
-                                isTouched={touched.emailAddress}
-                                label="ایمیل (اختیاری)"
-                                validateFunction={(value: string) => validateEmail({ value: value, invalidMessage: "ایمیل وارد شده معتبر نیست" })}
+                                errorText={errors.firstname as string}
+                                id="firstname"
+                                name="firstname"
+                                isTouched={touched.firstname}
+                                label="نام"
+                                validateFunction={(value: string) =>
+                                    validateRequiedPersianAndEnglish(
+                                        value,
+                                        'لطفا نام خود را وارد کنید!',
+                                        'فقط حروف فارسی و انگلیسی مجاز است!',
+                                    )
+                                }
                                 onChange={(value: string) => {
-                                    setFieldValue('emailAddress', value, true)
+                                    setFieldValue('firstname', value, true)
                                 }}
-                            value={values.emailAddress}
-                            placeholder="ایمیل را وارد نمایید"
-
+                                value={values.firstname}
+                                placeholder=" نام را وارد کنید "
                             />
 
-                        <button
-                            type="submit"
-                            className="h-11 font-semibold px-8 rounded-full bg-[#aa3aff] text-white flex justify-center gap-2 items-center w-full mb-5"
-                            disabled={submitLoading}
-                        >
-                            ذخیره تغییرات
-                            {submitLoading ? <Loading className="fill-current w-5 h-5 animate-spin" /> : null}
-                        </button>
+                            <FormikField
+                                showConfirmedBadge={!validateRequiedPersianAndEnglish(
+                                    values.lastname,
+                                    "requiredMessage",
+                                    "inValidMessage"
+                                )}
+                                className='mb-6'
+                                setFieldValue={setFieldValue}
+                                errorText={errors.lastname as string}
+                                id="lastname"
+                                name="lastname"
+                                isTouched={touched.lastname}
+                                label="نام خانوادگی"
+                                validateFunction={(value: string) =>
+                                    validateRequiedPersianAndEnglish(
+                                        value,
+                                        'لطفا نام خود را وارد کنید!',
+                                        'فقط حروف فارسی و انگلیسی مجاز است!',
+                                    )
+                                }
+                                onChange={(value: string) => {
+                                    setFieldValue('lastname', value, true)
+                                }}
+                                value={values.lastname}
+                                placeholder="نام خانوادگی  را وارد کنید"
+                            />
+
+                            <div className="self-stretch ">
+                                <PhoneInput
+                                    placeholder="شماره موبایل را وارد نمایید"
+                                    label={
+                                        <div className="w-full flex justify-between items-center">
+                                            <div className="flex gap-3 items-center">
+                                                <span>موبایل</span>
+                                                <Image src={'/images/icons/check-gradient-green.svg'} width={28} height={28} alt="verified-mobile"/>
+                                            </div>
+                                            <p className="bg-gradient-to-b from-[#00B59C] to-[#9CFFAC] bg-clip-text text-transparent">
+                                                تایید شده
+                                            </p>
+                                        </div>
+                                    }
+                                    defaultCountry={
+                                        {
+                                            countryCode: "ir",
+                                            dialCode: "98",
+                                            format: "... ... ...."
+                                        }
+                                    }
+                                    onChange={(v: string) => {
+                                        setFieldValue('phoneNumber', v)
+                                    }}
+                                    value={values.phoneNumber}
+                                    name='phoneNumber'
+                                    isTouched={touched.phoneNumber}
+                                    errorText={errors.phoneNumber}
+                                    disabled
+                                    className="mb-5 "
+                                    initialValue={initialValues.phoneNumber}
+                                
+                                />
+        
+                            </div>
+                            <FormikField
+
+                                    inputWarningIcon={!!(userInfo?.emailAddress && !userInfo.isEmailConfirmed)}
+                                    showConfirmedBadge={!validateEmail({
+                                        value: values.emailAddress,
+                                        invalidMessage: "invalidMessage",
+                                        reqiredMessage: "reqiredMessage"
+                                    })}
+                                    showConfirmedText={!!(userInfo?.emailAddress && userInfo.isEmailConfirmed)}
+                                    className='mb-5'
+                                    setFieldValue={setFieldValue}
+                                    errorText={errors.emailAddress as string}
+                                    id="emailAddress"
+                                    name="emailAddress"
+                                    isTouched={touched.emailAddress}
+                                    label="ایمیل (اختیاری)"
+                                    validateFunction={(value: string) => validateEmail({ value: value, invalidMessage: "ایمیل وارد شده معتبر نیست" })}
+                                    onChange={(value: string) => {
+                                        setFieldValue('emailAddress', value, true)
+                                    }}
+                                value={values.emailAddress}
+                                placeholder="ایمیل را وارد نمایید"
+
+                                />
+
+                            <button
+                                type="submit"
+                                className="h-11 font-semibold px-8 rounded-full bg-[#aa3aff] text-white flex justify-center gap-2 items-center w-full mb-5"
+                                disabled={submitLoading}
+                            >
+                                ذخیره تغییرات
+                                {submitLoading ? <Loading className="fill-current w-5 h-5 animate-spin" /> : null}
+                            </button>
+                        </div>
 
                     </Form>
                 )

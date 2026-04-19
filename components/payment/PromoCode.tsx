@@ -10,6 +10,7 @@ type Props = {
   onRemoveAddedCode : () => void;
   loading?: boolean;
   removeDiscountLoading?: boolean;
+  orderTotalDiscountPrice?: any;
   data: any;
 };
 
@@ -20,29 +21,38 @@ const PromoCode: React.FC<Props> = (props) => {
   let isError: boolean = false;
 
   let discountAdded = false;
-  if (props.data?.code) {
-    isError = true;
 
-    switch (props.data.code) {
-      case 6101:
-        resultStatus = "این کد تخفیف وجود ندارد";
-        break;
-      case 6102:
-        resultStatus = "این کد تخفیف برای این سرویس نیست";
-        break;
-      case 6103:
-        resultStatus = "این کد تخفیف شروع نشده است";
-        break;
-      case 6104:
-        resultStatus = "این کد تخفیف به اتمام رسیده است";
-        break;
-      case 6105:
-        resultStatus = "این کد تخفیف را دیگر نمی توانید استفاده کنید";
-        break;
-      default:
-        resultStatus = null;
+  if(props.data){
+    if(props.data.message){
+      isError = true;
+      resultStatus = props.data.message;
+    }else if (props.data.code){
+      isError = true;
+      switch (props.data.code) {
+        case 6101:
+          resultStatus = "این کد تخفیف وجود ندارد";
+          break;
+        case 6102:
+          resultStatus = "این کد تخفیف برای این سرویس نیست";
+          break;
+        case 6103:
+          resultStatus = "این کد تخفیف شروع نشده است";
+          break;
+        case 6104:
+          resultStatus = "این کد تخفیف به اتمام رسیده است";
+          break;
+        case 6105:
+          resultStatus = "این کد تخفیف را دیگر نمی توانید استفاده کنید";
+          break;
+        default:
+          resultStatus = null;
+      }
+    }else if(props.data.discountPrice){
+      resultStatus = "کد تخفیف اضافه گردید";
+      discountAdded= true;
     }
-  } else if (props.data?.isValid) {
+
+  }else if(props.orderTotalDiscountPrice){
     resultStatus = "کد تخفیف اضافه گردید";
     discountAdded= true;
   }
@@ -59,12 +69,13 @@ const PromoCode: React.FC<Props> = (props) => {
           <div className="flex gap-3">
             <div className="grow relative">
               <input
+                dir="ltr"
                 type="text"
                 onChange={(e) => {
                   setText(e.target.value);
                   props.onChangeText();
                 }}
-                className="p-3.5 disabled:opacity-40 tracking-[4px] outline-none text-sm rounded-full px-5 w-full bg-white border border-[#cccccc] dark:bg-[#192a39] dark:border-[#192a39]"
+                className="text-right p-3.5 disabled:opacity-40 tracking-[4px] outline-none text-sm rounded-full px-5 w-full bg-white border border-[#cccccc] dark:bg-[#192a39] dark:border-[#192a39]"
                 value={text}
                 placeholder="کد تخفیف را وارد نمایید"
                 disabled={discountAdded}
@@ -96,7 +107,7 @@ const PromoCode: React.FC<Props> = (props) => {
           </div>
 
           {resultStatus && (
-            <p className={`text-xs my-2 ${isError?"text-red-600":"text-green-500"}`}>
+            <p className={`text-sm my-2 ${isError?"text-red-600":"text-green-500"}`}>
               {resultStatus}
             </p>
           )}

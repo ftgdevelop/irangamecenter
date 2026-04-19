@@ -11,6 +11,7 @@ import LoadingFull from "@/components/shared/LoadingFull";
 import { ServerAddress } from "@/enum/url";
 import { numberWithCommas } from "@/helpers";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-store";
 import { setReduxError } from "@/redux/errorSlice";
 import { setHeaderParams } from "@/redux/pages";
@@ -21,6 +22,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function PaymentPage() {
+
+  const isDesktop = useIsDesktop();
 
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
@@ -49,6 +52,10 @@ export default function PaymentPage() {
     tenantId: number;
     totalItemsPrice: number;
     totalQuantity: number;
+    totalBasePrice?: number;
+    totalTaxPrice?: number;
+    totalServicePrice?: number;
+    
   }
   const [orderData, setOrderData] = useState<OrderDetail>();
 
@@ -190,7 +197,6 @@ export default function PaymentPage() {
           
         const errorMessage = response?.response?.data?.error?.message;
         dispatch(setReduxError({
-            status: 'error',
             message: errorMessage || "ارسال اطلاعات ناموفق",
             isVisible: true
         }));
@@ -270,91 +276,134 @@ export default function PaymentPage() {
 
       <Steps activeStepKey="payment" />
 
-      <div className="p-4">
-        <h2 className="text-lg font-semibold my-4 text-[#fd7e14] dark:text-[#ffefb2]">
-          انتخاب روش پرداخت
-        </h2>
+      <div className="p-4 xl:p-5 grid grid-cols-1 lg:grid-cols-3 gap-x-5 relative max-w-[1000px] mx-auto lg:px-4">
+        <div className="lg:col-span-2">
+          <h2 className="text-lg font-semibold my-4 text-[#fd7e14] dark:text-[#ffefb2]">
+            انتخاب روش پرداخت
+          </h2>
 
-        {!!(orderId && orderNumber) && (
-          <Gateways 
-            gateways={gateways}
-            getGatewaysLoading={getGatewaysLoading}
-            selectedGatewayId={selectedGatewayId}
-            onSelectGateway={setSelectedGatewayId}
-           />
-        )}
+          {!!(orderId && orderNumber) && (
+            <Gateways 
+              gateways={gateways}
+              getGatewaysLoading={getGatewaysLoading}
+              selectedGatewayId={selectedGatewayId}
+              onSelectGateway={setSelectedGatewayId}
+            />
+          )}
 
-        {(orderData && !getUserLoading && !balanceLoading) ? (
-          <PaymentByDeposit 
-            onSelect={()=>{setDepositIsSelected(prevState => !prevState)}} 
-            isSelected={depositIsSelected} 
-          /> 
-        ):(
-          <div>
-            <Skeleton className="w-24 h-4 mb-6" />
+          {(orderData && !getUserLoading && !balanceLoading) ? (
+            <PaymentByDeposit 
+              onSelect={()=>{setDepositIsSelected(prevState => !prevState)}} 
+              isSelected={depositIsSelected} 
+            /> 
+          ):(
+            <div>
+              <Skeleton className="w-24 h-4 mb-6" />
+            </div>
+          )}
+          
+          <PromoCode 
+            onRemoveAddedCode={removeDiscountHandle}
+            onSubmit={submitDiscountCode}
+            loading={discountLoading}
+            data={discountData}
+            orderTotalDiscountPrice = {orderData?.totalDiscountPrice}
+            onChangeText={()=>{setDiscountData(undefined)}}
+            removeDiscountLoading={removeDiscountLoading}
+          />
+
+          {!!orderData?.totalBasePrice && (
+            <div className="text-sm flex gap-3 items-center justify-between mt-5">
+              <label className="text-xs">
+                قیمت پایه
+              </label>
+              <span className="font-semibold">
+                {numberWithCommas(orderData.totalBasePrice)} ریال
+              </span>
+            </div>
+          )}
+          
+          {!!orderData?.totalTaxPrice && (
+            <div className="text-sm flex gap-3 items-center justify-between mt-5">
+              <label className="text-xs">
+                مالیات
+              </label>
+              <span className="font-semibold">
+                {numberWithCommas(orderData.totalTaxPrice)} ریال
+              </span>
+            </div>
+          )}
+
+          {!!orderData?.totalServicePrice && (
+            <div className="text-sm flex gap-3 items-center justify-between mt-5">
+              <label className="text-xs">
+                هزینه خدمات
+              </label>
+              <span className="font-semibold">
+                {numberWithCommas(orderData.totalServicePrice)} ریال
+              </span>
+            </div>
+          )}
+
+          {!!orderData?.totalItemsPrice && <div className="text-sm flex gap-3 items-center justify-between mt-5">
+            <label className="text-xs">
+              قیمت کالاها ({orderData?.totalQuantity})
+            </label>
+            <span className="font-semibold">
+              {numberWithCommas(orderData?.totalItemsPrice || 0)} ریال
+            </span>
+          </div>}
+
+          {!!withdrawFromWallet && (
+          <div className="text-sm flex gap-3 items-center justify-between mt-5">
+            <label className="text-xs"> پرداخت از کیف پول </label>
+            <span className="font-semibold">
+              {numberWithCommas(withdrawFromWallet)} ریال
+            </span>
           </div>
-        )}
-        
-        <PromoCode 
-          onRemoveAddedCode={removeDiscountHandle}
-          onSubmit={submitDiscountCode}
-          loading={discountLoading}
-          data={discountData || orderData?.totalDiscountPrice ? {
-            isValid: true
-          } : undefined}
-          onChangeText={()=>{setDiscountData(undefined);}}
-          removeDiscountLoading={removeDiscountLoading}
-        />
+          )}
 
-        {!!orderData?.totalItemsPrice && <div className="text-sm flex gap-3 items-center justify-between mt-5">
-          <label className="text-xs">
-            قیمت کالاها ({orderData?.totalQuantity})
-          </label>
-          <span className="font-semibold">
-            {numberWithCommas(orderData?.totalItemsPrice || 0)} ریال
-          </span>
-        </div>}
+          {!!orderData?.totalDiscountPrice && <div className="text-sm flex gap-3 items-center justify-between mt-5">
+            <label className="text-xs"> کد تخفیف </label>
+            <span className="font-semibold">
+              {numberWithCommas(Math.abs(orderData.totalDiscountPrice))} ریال
+            </span>
+          </div>}
 
-        {!!withdrawFromWallet && (
-        <div className="text-sm flex gap-3 items-center justify-between mt-5">
-          <label className="text-xs"> پرداخت از کیف پول </label>
-          <span className="font-semibold">
-            {numberWithCommas(withdrawFromWallet)} ریال
-          </span>
-        </div>
-        )}
+          <div className="text-sm flex gap-3 items-center justify-between mt-5">
+            <label className="text-xs"> مبلغ قابل پرداخت </label>
+            <span className="font-semibold">
+              {numberWithCommas(requiredAmount || 0) } ریال
+            </span>
+          </div>
 
-        {!!orderData?.totalDiscountPrice && <div className="text-sm flex gap-3 items-center justify-between mt-5">
-          <label className="text-xs"> کد تخفیف </label>
-          <span className="font-semibold">
-            {numberWithCommas(Math.abs(orderData.totalDiscountPrice))} ریال
-          </span>
-        </div>}
 
-        <div className="text-sm flex gap-3 items-center justify-between mt-5">
-          <label className="text-xs"> مبلغ قابل پرداخت </label>
-          <span className="font-semibold">
-            {numberWithCommas(requiredAmount || 0) } ریال
-          </span>
+          {!!(orderData?.profitAmount || orderData?.totalDiscountPrice) && <div className="text-sm flex gap-3 items-center justify-between mt-5">
+            <label className="font-semibold bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent">
+              سود شما از خرید
+            </label>
+            <span className="font-semibold bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent">
+              {numberWithCommas((orderData?.profitAmount || 0) + (Math.abs(orderData?.totalDiscountPrice || 0)))} ریال
+            </span>
+          </div>}
+
         </div>
 
-
-        {!!(orderData?.profitAmount || orderData?.totalDiscountPrice) && <div className="text-sm flex gap-3 items-center justify-between mt-5">
-          <label className="font-semibold bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent">
-            سود شما از خرید
-          </label>
-          <span className="font-semibold bg-gradient-to-t from-[#FD5900] to-[#FFDE00] bg-clip-text text-transparent">
-            {numberWithCommas((orderData?.profitAmount || 0) + (Math.abs(orderData?.totalDiscountPrice || 0)))} ریال
-          </span>
-        </div>}
-
+        <div 
+          className='max-lg:hidden relative' 
+        >
+          <div id="payment-footer-desktop-modal" className="flex flex-col p-4 xl:p-5 rounded-2xl bg-gradient-to-t from-[#eaeaea] dark:from-[#182a38] to-transparent sticky top-24 min-h-60 justify-end"  />
+        </div>
       </div>
 
-      <div className="h-[104px]" />
 
-      <SimplePortal selector="fixed_bottom_portal">
-        <footer className="min-h-20 fixed bottom-0 left-0 md:right-1/2 md:translate-x-1/2 bg-[#192a39] px-4 py-3 w-full md:max-w-lg">
-          <div className="flex justify-between text-white mb-2">
+
+
+      <div className="h-[104px] lg:hidden" />
+
+      <SimplePortal selector={isDesktop?"payment-footer-desktop-modal":"fixed_bottom_portal"}>
+        <footer className="min-h-20 max-lg:fixed max-lg:bottom-0 max-lg:z-10 max-lg:left-0 max-lg:right-0 max-lg:bg-white max-lg:dark:bg-[#192a39] max-lg:px-4 max-lg:py-3 flex flex-wrap justify-between gap-3 lg:flex-col max-lg:items-center w-full transition-all duration-200">
+          <div className="flex w-full justify-between dark:text-white mb-2">
             <label className="text-sm"> {!requiredAmount && withdrawFromWallet ? "پرداخت از کیف پول" : "مبلغ قابل پرداخت"} </label>
             <span className="font-semibold">
               {numberWithCommas(!requiredAmount && withdrawFromWallet ? withdrawFromWallet : requiredAmount || 0)} ریال
@@ -369,7 +418,7 @@ export default function PaymentPage() {
             {`پرداخت ${numberWithCommas(orderData?.payableAmount || 0)} ${getCurrencyLabelFa(orderData?.currencyType)}`}
           </button>
         </footer>
-        <div className="h-20" />
+        <div className="h-20 lg:hidden" />
       </SimplePortal>
     </>
   );

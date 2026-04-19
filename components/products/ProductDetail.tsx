@@ -1,14 +1,13 @@
 import { ProductDetailData } from "@/types/commerce";
 import Tab from "../shared/Tab"
 import { TabItem } from "@/types";
-import { dateDiplayFormat } from "@/helpers";
-import Link from "next/link";
 import parse from 'html-react-parser';
 import { useEffect, useState } from "react";
 import ModalPortal from "../shared/layout/ModalPortal";
 import ArrowTopLeft from "../icons/ArrowTopLeft";
 import { useAppDispatch } from "@/hooks/use-store";
-import { setBodiScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
+import { setBodyScrollPosition, setBodyScrollable } from "@/redux/stylesSlice";
+import ProductSpecification from "./ProductSpecification";
 
 type Props = {
     productData?: ProductDetailData;
@@ -38,7 +37,7 @@ const ProductDetail: React.FC<Props> = props => {
     useEffect(() => {
         if (openDetails) {
             dispatch(setBodyScrollable(false));
-            dispatch(setBodiScrollPosition(window?.pageYOffset || 0));
+            dispatch(setBodyScrollPosition(window?.pageYOffset || 0));
             setSlideInDetails(true);
         } else {
             dispatch(setBodyScrollable(true));
@@ -65,80 +64,16 @@ const ProductDetail: React.FC<Props> = props => {
         })
     }
 
-
     tabItems.push({
         key: "details",
         label: "مشخصات",
         children: (
             <>
-
                 <h4 className="text-sm my-4 font-semibold"> مشخصات بازی</h4>
 
-                {!!productData.genres?.[0]?.name && (
-                    <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5 last:border-0" >
-                        <div className="whitespace-nowrap"> سبک بازی </div>
-                        <div className="text-left text-[#099268] dark:text-teal-500">
-                            {productData.genres.map(item => item.name).join("، ")}
-                        </div>
-                    </div>
-                )}
-
-                {!!productData.developer?.name && (
-                    <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5" >
-                        <div className="whitespace-nowrap"> شرکت توسعه دهنده </div>
-                        <Link prefetch={false} href={`/brand/${productData.developer.slug || "unknown"}`} className="text-left text-[#099268] dark:text-teal-500 last:border-0">
-                            {productData.developer.name}
-                        </Link>
-                    </div>
-                )}
-                {!!productData.publisher?.name && (
-                    <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5" >
-                        <div className="whitespace-nowrap"> شرکت انتشار دهنده </div>
-                        <Link prefetch={false} href={`/brand/${productData.publisher.slug || "unknown"}`} className="text-left text-[#099268] dark:text-teal-500 last:border-0">
-                            {productData.publisher.name}
-                        </Link>
-                    </div>
-                )}
-
-                {!!productData.gameplay?.length && (
-                    <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5 last:border-0" >
-                        <div className="whitespace-nowrap"> حالت بازی </div>
-                        <div className="text-left text-[#099268] dark:text-teal-500">
-                            {productData.gameplay.map(item => item.name).join("، ")}
-                        </div>
-                    </div>
-                )}
-                {!!productData.playerPerspective?.length && (
-                    <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5 last:border-0" >
-                        <div className="whitespace-nowrap"> زاویه دید </div>
-                        <div className="text-left text-[#099268] dark:text-teal-500">
-                            {productData.playerPerspective.map(item => item.name).join("، ")}
-                        </div>
-                    </div>
-                )}
-
-
-                {!!productData.theme?.length && (
-                    <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5 last:border-0" >
-                        <div className="whitespace-nowrap"> تم بازی </div>
-                        <div className="text-left text-[#099268] dark:text-teal-500">
-                            {productData.theme.map(item => item.name).join("، ")}
-                        </div>
-                    </div>
-                )}
-
-                {!!productData.releaseDate && (
-                    <div className="flex justify-between py-4 border-b border-neutral-300 dark:border-white/15 text-sm gap-5 last:border-0" >
-                        <div className="whitespace-nowrap"> تاریخ انتشار </div>
-                        <div className="text-left text-[#099268] dark:text-teal-500">
-                            {dateDiplayFormat({
-                                date: productData.releaseDate,
-                                locale: "fa",
-                                format: "dd mm yyyy"
-                            })}
-                        </div>
-                    </div>
-                )}
+                <ProductSpecification 
+                    productData={productData}
+                />
             </>
         )
     });

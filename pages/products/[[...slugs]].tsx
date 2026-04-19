@@ -1,8 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { NextPage } from "next";
-import Contacts from "@/components/shared/Contacts";
-import BreadCrumpt from "@/components/shared/BreadCrumpt";
+import Breadcrumb from "@/components/shared/Breadcrumb";
 import { useEffect, useRef, useState } from "react";
 import Skeleton from "@/components/shared/Skeleton";
 import { getProducts, ProductSortKeywords } from "@/actions/commerce";
@@ -15,10 +14,11 @@ import { useAppDispatch } from "@/hooks/use-store";
 import { openFilter } from "@/redux/productsSlice";
 import Filter from "@/components/icons/Filter";
 import { DownCaretThick } from "@/components/icons/DownCaretThick";
-import ProductsFliter from "@/components/products/ProductsFliter";
+import ProductsFilter from "@/components/products/ProductsFilter";
 import { groupByPrefix } from "@/helpers";
 import AvailableFilterTag from "@/components/products/AvailableFilterTag";
 import BackOrderFilterTag from "@/components/products/BackOrderFilterTag";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
 
 type Props = {
     productsData?: GetProductsDataType;
@@ -30,6 +30,8 @@ const Products: NextPage<Props> = props => {
 
     const router = useRouter();
 
+    const isDesktop = useIsDesktop();
+
     const dispatch = useAppDispatch();
 
     const [products, setProducts] = useState<ProductItem[]>(props.productsData?.pagedResult?.items || []);
@@ -37,14 +39,14 @@ const Products: NextPage<Props> = props => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        const fetchDatas = async () => {
+        const fetchData = async () => {
             const parameters = { ...props.parameters };
             const res:any = await getProducts(parameters);
             if(!products.length && res?.data?.result?.pagedResult?.items){
                 setProducts(res.data.result.pagedResult.items);
             }
         }
-        fetchDatas();
+        fetchData();
     }, []);
 
     useEffect(() => {
@@ -88,7 +90,7 @@ const Products: NextPage<Props> = props => {
 
     useEffect(() => {
         if (fetchMode) {
-            if (products.length < 50 && !props.page) {
+            if (products.length < 100 && !props.page) {
                 addItems();
             } else {
                 removeListener();
@@ -98,7 +100,7 @@ const Products: NextPage<Props> = props => {
 
     const addItems = async () => {
 
-        const page = Math.ceil(products.length / 10) + 1;
+        const page = Math.ceil(products.length / 20) + 1;
 
         if (props.productsData?.pagedResult?.totalCount && products.length >= props.productsData.pagedResult.totalCount) {
             removeListener();
@@ -107,7 +109,7 @@ const Products: NextPage<Props> = props => {
         setLoading(true);
 
         const parameters = { ...props.parameters };
-        parameters.skipCount = (page - 1) * 10;
+        parameters.skipCount = (page - 1) * 20;
 
         const productsResponse: GetProductsResponseType = await getProducts(parameters);
 
@@ -157,9 +159,8 @@ const Products: NextPage<Props> = props => {
                 }}
             />
 
-            <BreadCrumpt
-                wrapperClassName="bg-[#e8ecf0] dark:bg-[#192a39] px-4 py-3 mb-4"
-                textColorClass="text-neutral-800 dark:text-neutral-300"
+            <Breadcrumb
+                wrapperClassName="mb-4"
                 items={[{ label: "محصولات", link: "" }]}
             />
 
@@ -207,31 +208,35 @@ const Products: NextPage<Props> = props => {
 
             <div className="px-4 mb-12">
 
-                {products?.map(item => <ProductListItem product={item} key={item.id} />)}
+                <div className="max-w-[1000px] mx-auto lg:py-10 grid grid-cols-1 gap-3 md:gap-5 md:grid-cols-2">
+                    {products?.map(item => <ProductListItem product={item} key={item.id} bgClass={isDesktop?"bg-[#fafafa] dark:bg-[#0d1f2f]":"bg-[#fafafa] dark:bg-[#011425]"} />)}
 
-                {!!loading && [1, 2, 3, 4, 5].map(item => (
-                    <div className="flex gap-3 mb-4" key={item}>
-                        <Skeleton
-                            dark
-                            type="image"
-                            className="w-18 h-18 block shrink-0 rounded-2xl"
-                        />
-                        <div className="w-full">
-                            <Skeleton className="h-4 w-full mt-2 mb-4" dark />
-                            <Skeleton className="w-1/2" dark />
+                    {!!loading && [1, 2, 3, 4, 5].map(item => (
+                        <div className="flex gap-3 mb-4" key={item}>
+                            <Skeleton
+                                dark
+                                type="image"
+                                className="w-18 h-18 block shrink-0 rounded-2xl"
+                            />
+                            <div className="w-full">
+                                <Skeleton className="h-4 w-full mt-2 mb-4" dark />
+                                <Skeleton className="w-1/2" dark />
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
+
 
                 {!!(props.productsData?.pagedResult?.totalCount && products.length < props.productsData.pagedResult.totalCount) && (
                     <div ref={loadMoreWrapper}>
-                        {products.length < 50 && !selectedPage ? (
-                            <br />
+                        {products.length < 100 && !selectedPage ? (
+                            <div className="h-40" />
                         ) : (
                             <Pagination2
+                                wrapperClassName="max-w-[450px] mx-auto mt-6"
                                 onChange={e => { changePageHandel(e) }}
                                 totalItems={props.productsData.pagedResult.totalCount}
-                                itemsPerPage={10}
+                                itemsPerPage={20}
                                 currentPage={selectedPage || 5}
                             />
                         )}
@@ -240,9 +245,7 @@ const Products: NextPage<Props> = props => {
 
             </div>
 
-            <Contacts />
-
-            {!!(props.productsData?.facets?.length) && <ProductsFliter filters={props.productsData?.facets} />}
+            {!!(props.productsData?.facets?.length) && <ProductsFilter filters={props.productsData?.facets} />}
 
         </>
     )
@@ -275,8 +278,8 @@ export async function getServerSideProps(context: any) {
 
 
     const parameters: GetAllProductsParams = {
-        skipCount: selectedPage ? (selectedPage - 1) * 10 : 0,
-        maxResultCount: 10
+        skipCount: selectedPage ? (selectedPage - 1) * 20 : 0,
+        maxResultCount: 20
     }
 
     if (selectedSort) {

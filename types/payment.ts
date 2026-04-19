@@ -12,6 +12,7 @@ export type GatewayItem = {
   id: number;
   name?: string;
   displayName?: string;
+  subtitle?: string;
   isEnabled: boolean;
   image?: {
     path?: string;

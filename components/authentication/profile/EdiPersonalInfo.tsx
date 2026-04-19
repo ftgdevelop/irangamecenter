@@ -138,7 +138,7 @@ const EdiPersonalInfo = () => {
                     }, 100)
                 }
                 return (
-                    <Form className="mx-3 pb-1 pt-5" autoComplete="off">
+                    <Form className="pb-1 pt-5" autoComplete="off">
                         <label className="flex gap-2 items-center text-sm mb-3 px-5">
                             جنسیت
                             {(gender === true || gender === false) ? (

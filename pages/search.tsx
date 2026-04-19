@@ -74,7 +74,7 @@ export default function SearchResult() {
     ];
 
   return (
-    <>
+    <div className='lg:max-w-[500px] lg:mx-auto'>
       <Search />
 
       <div className="p-3">
@@ -128,6 +128,6 @@ export default function SearchResult() {
         </button>
       </div>
 
-    </>
+    </div>
   );
 }

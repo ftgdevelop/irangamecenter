@@ -11,15 +11,15 @@ import { NextPage } from "next";
 import { ServerAddress } from "@/enum/url";
 import Highlights from "@/components/home/highlights";
 import { HighlightItemType } from "@/types/highlight";
-import Contacts from "@/components/shared/Contacts";
-import { getBlogs } from "@/actions/blog";
-import { BlogItemType } from "@/types/blog";
+import { getBlogsList } from "@/actions/blog";
+import { BlogListItemType } from "@/types/blog";
 import BlogsCarousel from "@/components/blog/BlogsCarousel";
 import {getProducts } from "@/actions/commerce";
 import { GetProductsDataType, StrapiSeoData } from "@/types/commerce";
 import ProductsCarousel from "@/components/products/ProductsCarousel";
 import BannerLinks from "@/components/home/BannerLinks";
 import Head from "next/head";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
 
 type HomeAboutDataType = {
   Keyword: "about_intro" | "icons" | "faq" | "telNumber" | "email";
@@ -87,7 +87,7 @@ type Props = {
   homeSections?: HomeSections[];
   homeHighlights?: HighlightItemType[];
   homeAboutData?: HomeAboutDataType;
-  recentBlogs?: BlogItemType[];
+  recentBlogs?: BlogListItemType[];
   playstation5Data?: GetProductsDataType;
   playstation4Data?: GetProductsDataType;
   steamData?: GetProductsDataType;
@@ -98,6 +98,8 @@ type Props = {
 }
 
 const Home: NextPage<Props> = props => {
+
+  const isDesktop = useIsDesktop();
 
   const {homeAboutData, homeHighlights, homeSections,recentBlogs, playstation4Data, playstation5Data, steamData, xboxOneData, xboxSeriesXsData, nintendoSwitch2Data} = props;
 
@@ -115,11 +117,6 @@ const Home: NextPage<Props> = props => {
 
   const FAQ_items = homeAboutData?.find(item => item.Keyword === "faq")?.Items;
   
-  const SupportNumber = homeAboutData?.find(item => item.Keyword === "telNumber")?.Description;
-  const SupportNumberUrl = homeAboutData?.find(item => item.Keyword === "telNumber")?.Url;
-  const SupportNumberSubtitle = homeAboutData?.find(item => item.Keyword === "telNumber")?.Subtitle;
-  const emailAddress = homeAboutData?.find(item => item.Keyword === "email")?.Description; 
-
   return (
     <>
       <Head>
@@ -137,7 +134,12 @@ const Home: NextPage<Props> = props => {
         )}
       </Head>
 
-      <div className="p-3">
+      <div className="p-3 px-5 lg:border-b lg:border-neutral-300 dark:lg:border-white/10 lg:pb-5 lg:mb-2">
+        {isDesktop && <div className="pb-3 text-center">
+          <h1 className="mb-2 text-2xl font-semibold"> ایران گیم سنتر </h1>
+          <h2 className="text-sm"> فروشگاه آنلاین اکانت بازی </h2>
+        </div>}
+
         <Search />
       </div>
 
@@ -167,6 +169,7 @@ const Home: NextPage<Props> = props => {
       {!!(props.backOrderProductsData?.pagedResult?.items?.length) && <ProductsCarousel 
         products={props.backOrderProductsData?.pagedResult?.items}
         title="پیش خرید"
+        numberOfSlides={isDesktop? 4 : undefined}
       />}
       <br/>
 
@@ -196,14 +199,7 @@ const Home: NextPage<Props> = props => {
 
       {!!FAQ_items?.length && <FAQ items={FAQ_items} answerParse="markDown" />}
 
-      {<Contacts 
-        data={{
-          emailAddress:emailAddress,
-          supportNUmberUrl : SupportNumberUrl,
-          supportNumber:SupportNumber,
-          supportNumberSubtitle:SupportNumberSubtitle
-        }}
-      />}
+      {isDesktop && <div className="h-14" />}
 
     </>
   );
@@ -215,14 +211,14 @@ export const getStaticProps = async (context: any) => {
     getStrapiPages('filters[Page][$eq]=Home&locale=fa&populate[Sections][on][shared.repeter][populate][Items][populate]=*'),
     getStrapiHighlight('locale=fa&populate[Item][populate]=*'),
     getStrapiPages('filters[Page][$eq]=aboutUs&locale=fa&populate[Sections][populate]=*'),
-    getBlogs({page:1,per_page:5}),
-    getProducts({skipCount:0, maxResultCount:10, variants:["playstation-5"]}),
-    getProducts({skipCount:0, maxResultCount:10, variants:["playstation-4"]}),
-    getProducts({skipCount:0, maxResultCount:10, variants:["steam"]}),
-    getProducts({skipCount:0, maxResultCount:10, variants:["xbox-one"]}),
-    getProducts({skipCount:0, maxResultCount:10, variants:["xbox-series-xs"]}),
-    getProducts({skipCount:0, maxResultCount:10, variants:["nintendo-switch-2"]}),
-    getProducts({maxResultCount:9,skipCount:0,status : "OnBackOrder"}),
+    getBlogsList({MaxResultCount:5,SkipCount:0}),
+    getProducts({skipCount:0, maxResultCount:12, variants:["playstation-5"]}),
+    getProducts({skipCount:0, maxResultCount:12, variants:["playstation-4"]}),
+    getProducts({skipCount:0, maxResultCount:12, variants:["steam"]}),
+    getProducts({skipCount:0, maxResultCount:12, variants:["xbox-one"]}),
+    getProducts({skipCount:0, maxResultCount:12, variants:["xbox-series-xs"]}),
+    getProducts({skipCount:0, maxResultCount:12, variants:["nintendo-switch-2"]}),
+    getProducts({maxResultCount:18,skipCount:0,status : "OnBackOrder"}),
     getStrapiPages('filters[Page][$eq]=Home&locale=fa&populate[Seo][populate]=*')
   ]);
 
@@ -234,7 +230,7 @@ export const getStaticProps = async (context: any) => {
       homeSections: strapiSectionResponse?.data?.data?.[0]?.Sections || null,
       homeHighlights: strapiHighlightsResponse?.data?.data || null,
       homeAboutData: strapiAboutSectionResponse?.data?.data?.[0]?.Sections || null,
-      recentBlogs:blogResponse?.data || null,
+      recentBlogs:blogResponse?.data?.result?.items || null,
       playstation5Data: playstation5DataResponse?.data?.result || null ,
       playstation4Data: playstation4DataResponse?.data?.result || null ,
       steamData: steamDataResponse?.data?.result || null ,

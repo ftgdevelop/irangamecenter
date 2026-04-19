@@ -5,6 +5,7 @@ import HourGlass from "@/components/icons/HourGlass";
 import ModalPortal from "@/components/shared/layout/ModalPortal";
 import { numberWithCommas, toPersianDigits } from "@/helpers";
 import { getCurrencyLabelFa } from "@/helpers/currencyLabel";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
 import { OrderDetailItemType } from "@/types/commerce";
 import Image from "next/image";
 import Link from "next/link";
@@ -18,6 +19,8 @@ type Props = {
 const OrderDetailItem : React.FC<Props> = props => {
     
     const {itemData: data} = props;
+
+    const isDesktop = useIsDesktop();
 
     const [open, setOpen] = useState<boolean>(false);
     const [slideIn, setSlideIn] = useState<boolean>(false);
@@ -40,6 +43,12 @@ const OrderDetailItem : React.FC<Props> = props => {
     }
     if(data.variant?.attributes?.length){
         subtitleItems.push(...data.variant.attributes);
+    }
+
+    let modalWrapperClass = `bg-white dark:bg-[#192a39] text-neutral-800 dark:text-white rounded-t-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full safePadding-b transition-all left-0 right-0 ${slideIn ? "bottom-0" : "-bottom-[80vh]"}`
+
+    if (isDesktop) {
+        modalWrapperClass = `bg-white dark:bg-[#192a39] text-neutral-800 dark:text-white rounded-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full max-w-md transition-all top-1/2 right-1/2 translate-x-1/2 ${slideIn ? "-translate-y-1/2 opacity-100" : "translate-y-0 opacity-0"}`
     }
 
     return(
@@ -101,50 +110,56 @@ const OrderDetailItem : React.FC<Props> = props => {
             >
                 <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen">
 
-                    <div className="relative w-full md:max-w-lg md:mx-auto h-screen">
+                    <div className="relative w-full h-screen">
 
                         <div className="bg-[#cccccc]/50 dark:bg-black/50 backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0" onClick={() => { setSlideIn(false) }} />
 
-                        <div className={`flex flex-col gap-6 items-center p-5 py-7 bg-white dark:bg-[#192a39] text-[#666666] dark:text-white rounded-2xl absolute transition-all left-5 right-5 ${slideIn ? "bottom-5" : "-bottom-[80vh]"}`}>
+                        <div className={modalWrapperClass}>                            
+                            <div className="flex flex-col gap-6 items-center p-5 py-7">
 
-                            <div className="self-stretch flex items-center justify-between">
-                                <label className="font-semibold text-sm"> وضعیت سفارش </label>
-                                <button
-                                    type="button"
-                                    onClick={()=>{setSlideIn(false)}}
-                                >
-                                    <CloseSimple className="w-7 h-7 fill-current" />
-                                </button>
-                            </div>
+                                <div className="self-stretch flex items-center justify-between">
+                                    <label className="font-semibold text-sm"> وضعیت سفارش </label>
+                                    <button
+                                        type="button"
+                                        onClick={()=>{setSlideIn(false)}}
+                                    >
+                                        <CloseSimple className="w-7 h-7 fill-current" />
+                                    </button>
+                                </div>
 
-                            <div className="self-stretch flex gap-3 items-center">
-                                <Image src={data.variant?.filePath || data.product?.filePath || "/images/default-game.png"} alt={data.product.name} className="aspect-square shrink-0 grow-0 w-1/4 max-w-20 rounded-2xl" width={96} height={96} />
-                                <h6 className="text-sm font-semibold"> {data.product.name} </h6>
-                            </div>
-                            <div className="flex flex-col gap-5 items-stretch self-stretch">
-                                <div className="bg-[#eeeeee] dark:bg-[#011425] p-5 rounded-2xl self-stretch">
-                                    {data.timeLines?.map((t, i)=>(
-                                        <div key={t.id} className="text-sm flex gap-4">
-                                            <div className="flex flex-col gap-2 items-center mb-2">
-                                                <div className="w-7 h-7 rounded-full bg-gradient-violet flex justify-center items-center">
-                                                    <CheckIcon className="w-5 h-5 fill-white" />
+                                <div className="self-stretch flex gap-3 items-center">
+                                    <Image src={data.variant?.filePath || data.product?.filePath || "/images/default-game.png"} alt={data.product.name} className="aspect-square shrink-0 grow-0 w-1/4 max-w-20 rounded-2xl" width={96} height={96} />
+                                    <h6 className="text-sm font-semibold"> {data.product.name} </h6>
+                                </div>
+                                <div className="flex flex-col gap-5 items-stretch self-stretch">
+                                    <div className="bg-[#eeeeee] dark:bg-[#011425] p-5 rounded-2xl self-stretch">
+                                        {data.timeLines?.map((t, i)=>(
+                                            <div key={t.id} className="text-sm flex gap-4">
+                                                <div className="flex flex-col gap-2 items-center mb-2">
+                                                    {t.isDone ? (
+                                                        <div className="w-7 h-7 rounded-full bg-gradient-violet flex justify-center items-center">
+                                                            <CheckIcon className="w-5 h-5 fill-white" />
+                                                        </div>
+                                                    ):(
+                                                        <div className="w-7 h-7 text-neutral-800 pt-1 rounded-full bg-gradient-gray flex justify-center items-center">
+                                                            {toPersianDigits((i+1).toString())}
+                                                        </div>
+                                                    )}
+                                                    { i < data.timeLines!.length-1 ? <div className="w-[2px] grow bg-neutral-400 dark:bg-white/50" /> : null}
                                                 </div>
-                                                { i < data.timeLines!.length-1 ? <div className="w-[2px] grow bg-neutral-400 dark:bg-white/50" /> : null}
+                                                <div className="pb-5">
+                                                    <b className="font-semibold block my-1">
+                                                        {t.stepStr}
+                                                    </b>
+                                                    <p className="text-xs">
+                                                        {t.description}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div className="pb-5">
-                                                <b className="font-semibold block my-1">
-                                                    {t.stepStr}
-                                                </b>
-                                                <p className="text-xs">
-                                                    {t.description}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    ))}
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
 

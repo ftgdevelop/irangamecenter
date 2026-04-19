@@ -2,15 +2,13 @@
 
 import { NextPage } from 'next';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
-import { getProductBySlug, getProductGallries, getProductVariants, getVariantById } from '@/actions/commerce';
-import { PlatformSlugTypes, ProductDetailData, ProductGalleryItem, ProductVariant, SingleVariant } from '@/types/commerce';
-import BreadCrumpt from '@/components/shared/BreadCrumpt';
+import { getProductBySlug, getProductGalleries, getProductQuestions, getProductVariants, getVariantById } from '@/actions/commerce';
+import { QuestionItemType, PlatformSlugTypes, ProductDetailData, ProductGalleryItem, ProductVariant, SingleVariant } from '@/types/commerce';
 import FAQ from '@/components/shared/FAQ';
-import Contacts from '@/components/shared/Contacts';
 import parse from 'html-react-parser';
 import Image from 'next/image';
 import RatingItem from '@/components/products/RatingItem';
-import { dateDiplayFormat} from '@/helpers';
+import { dateDisplayFormat} from '@/helpers';
 import Link from 'next/link';
 import ProductDetail from '@/components/products/ProductDetail';
 import AgeRatingDetail from '@/components/products/AgeRatingDetail';
@@ -23,28 +21,64 @@ import Star from '@/components/icons/Star';
 import SimilarProducts from '@/components/products/SimilarProducts';
 import { useRouter } from 'next/router';
 import Skeleton from '@/components/shared/Skeleton';
-import VariantFooter from '@/components/products/VariantFooter';
-import { useAppDispatch } from '@/hooks/use-store';
+import { useAppDispatch, useAppSelector } from '@/hooks/use-store';
 import { setHeaderParams } from '@/redux/pages';
+import Breadcrumb from '@/components/shared/Breadcrumb';
+import { useIsDesktop } from '@/hooks/use-is-desktop';
+import MoreWrapper from '@/components/shared/layout/header/MoreWrapper';
+import ProductSpecificationSection from '@/components/products/productDetailDesktop/ProductSpecificationSection';
+import ProductDescriptionSection from '@/components/products/productDetailDesktop/ProductDescriptionSection';
+import ProductRatingSection from '@/components/products/productDetailDesktop/ProductRatingSection';
+import ProductAwardsSection from '@/components/products/productDetailDesktop/ProductAwardsSection';
+import ProductFAQSection from '@/components/products/productDetailDesktop/ProductFAQSection';
+import UserQuestionAnswer from '@/components/products/userQuestions/UserQuestionAnswer';
+import ModalPortal from '@/components/shared/layout/ModalPortal';
+import Otp from '@/components/authentication/profile/OTP';
+import LoginWithPassword from '@/components/authentication/LoginWithPassword';
 
-const DetailProduct: NextPage<any> = ({
-  serversideProductData,
-  slug,
-  serversideGalleryData,
-  serversideVariants,
-  serversideVariant
-}: {
-  serversideProductData?: ProductDetailData;
+type Props = {
+  serverSideProductData?: ProductDetailData;
   slug?: string;
-  serversideGalleryData?: ProductGalleryItem[];
-  serversideVariants?:ProductVariant[];
-  serversideVariant?:SingleVariant;
-}) => {
+  serverSideGalleryData?: ProductGalleryItem[];
+  serverSideVariants?:ProductVariant[];
+  serverSideVariant?:SingleVariant;
+  serverSideQuestions?: {items:QuestionItemType[], totalCount: number};
+}
+
+const DetailProduct: NextPage<Props> = props => {
+
+  const {serverSideGalleryData, serverSideProductData, serverSideVariant, serverSideVariants, slug} = props;
+
+  const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
+  const getUserLoading = useAppSelector(state => state.authentication.getUserLoading);
+
   const [detailActiveTab, setDetailActiveTab] = useState<string>('');
 
-  const [productData, setProductData] = useState<ProductDetailData | undefined>(serversideProductData);
+  const [productData, setProductData] = useState<ProductDetailData | undefined>(serverSideProductData);
 
+  const [hasSimilar, setHasSimilar] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const isDesktop = useIsDesktop();
+
+  const router = useRouter();
+
+  const {query} = router;
+
+  const queryVariant = query.variant as string|undefined;
+  const queryPlatform = query.platform as PlatformSlugTypes | undefined;  
+
+  const queryTorob = query.utm_source === "Torob";
+
+  const [loginType, setLoginType] = useState<"otp" | "password">("otp");
+  const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
+
+  useEffect(()=>{
+    if(!isAuthenticated && !getUserLoading && queryTorob){
+      setShowLoginModal(true);
+    }else{
+      setShowLoginModal(false);
+    }
+  },[isAuthenticated,getUserLoading,queryTorob ]);
 
   useEffect(()=>{
 
@@ -53,7 +87,8 @@ const DetailProduct: NextPage<any> = ({
         logo: true,
         cart: true,
         productId: productData?.id,
-        share: true 
+        share: true,
+        productVariantId: queryVariant? +queryVariant : undefined
       }
     }));
 
@@ -67,16 +102,9 @@ const DetailProduct: NextPage<any> = ({
   },[]);
 
   useEffect(()=>{
-    setProductData(serversideProductData);
-  },[serversideProductData?.id]);
+    setProductData(serverSideProductData);
+  },[serverSideProductData?.id]);
 
-  const router = useRouter();
-
-  const {query} = router;
-
-  const queryVariant = query.variant;
-  const queryPlatform = query.platform as PlatformSlugTypes || undefined;
-  
   const breadcrumbsItems: {
     label: string;
     link?: string;
@@ -89,7 +117,7 @@ const DetailProduct: NextPage<any> = ({
   const [variantLoading, setVariantLoading] = useState<boolean>(true);
 
   useEffect(()=>{
-    const fetchProductDatainClientForDebugging = async (s:string) => {
+    const fetchProductDataInClientForDebugging = async (s:string) => {
       const response: any = await getProductBySlug({
         acceptLanguage:"fa-IR",
         slug: s,
@@ -102,7 +130,7 @@ const DetailProduct: NextPage<any> = ({
     }
     
     if(slug){
-      fetchProductDatainClientForDebugging(slug);
+      fetchProductDataInClientForDebugging(slug);
     }
 
   },[slug]);
@@ -130,20 +158,19 @@ const DetailProduct: NextPage<any> = ({
     if(slug){
       if(queryVariant){
         fetchVariant(+queryVariant)
-      }else{
-        fetchVariants(slug);
       }
+      fetchVariants(slug);
     }
 
   },[slug, queryVariant]);
 
   const sortedGalleryItems = useMemo(() => {
-    if (!serversideGalleryData) return [];
-    return [...serversideGalleryData].sort((a, b) => {
+    if (!serverSideGalleryData) return [];
+    return [...serverSideGalleryData].sort((a, b) => {
       if (a.mediaType === 'Image' && b.mediaType === 'Video') return 1;
       return -1;
     });
-  }, [serversideGalleryData?.[0]?.filePath]);
+  }, [serverSideGalleryData?.[0]?.filePath]);
 
   const parsedShortDescription = useMemo(() => {
     if (!productData?.shortDescription) return null;
@@ -244,7 +271,7 @@ const DetailProduct: NextPage<any> = ({
     return leaves;
   }
 
-  const flatedVariants = getLeafNodes(serversideVariants||[]).filter(v => !!(v.items?.[0]?.sku && v.items?.[0]?.salePrice));
+  const flattedVariants = getLeafNodes(serverSideVariants||[]).filter(v => !!(v.items?.[0]?.sku && v.items?.[0]?.salePrice));
 
 
   let schemaOffers : {
@@ -259,8 +286,8 @@ const DetailProduct: NextPage<any> = ({
       }
   }[] = [];
 
-  if(flatedVariants?.length){
-    schemaOffers =  flatedVariants.map(v => {
+  if(flattedVariants?.length){
+    schemaOffers =  flattedVariants.map(v => {
       
       let availabilityStatus = ""
       switch(v.items?.[0]?.status){
@@ -296,9 +323,9 @@ const DetailProduct: NextPage<any> = ({
     })
   }
   
-  if(serversideVariant){
+  if(serverSideVariant){
     let availabilityStatus = ""
-    switch(serversideVariant.status){
+    switch(serverSideVariant.status){
       case "ComingSoon":
       case "OnBackOrder":
         availabilityStatus = "PreOrder";
@@ -307,26 +334,26 @@ const DetailProduct: NextPage<any> = ({
         availabilityStatus = "OutOfStock";
         break; 
       case "InStock":
-        if(serversideVariant.inventory === "Unlimited"){
+        if(serverSideVariant.inventory === "Unlimited"){
           availabilityStatus = "InStock";
         }else{
           availabilityStatus = "LimitedAvailability";
         }
         break;
       default :
-        availabilityStatus = serversideVariant.status || "";
+        availabilityStatus = serverSideVariant.status || "";
     }
 
     schemaOffers = [{
       "@type":"Offer",
-      sku: serversideVariant.sku||"no-data",
-      price: serversideVariant.salePrice || 0,
+      sku: serverSideVariant.sku||"no-data",
+      price: serverSideVariant.salePrice || 0,
       seller:{
         "@type":"Organization",
         "name":"Iran Game Center"
       },
       availability:availabilityStatus,
-      priceCurrency:serversideVariant.currencyType || "IRR"
+      priceCurrency:serverSideVariant.currencyType || "IRR"
     }]
   }
 
@@ -358,27 +385,27 @@ const DetailProduct: NextPage<any> = ({
     }
   ];
 
-  const schemaVideoItems = serversideGalleryData?.filter(g => g.mediaType === "Video");
+  const schemaVideoItems = serverSideGalleryData?.filter(g => g.mediaType === "Video");
 
   if(schemaVideoItems?.length){
     for (const v of schemaVideoItems){
-      let formatedDuration = "";
+      let formattedDuration = "";
       if(v.duration && v.duration > 0){
                       
         const H = Math.floor(v.duration/3600);            
         const M = Math.floor((v.duration % 3600) / 60);              
         const S = Math.floor(v.duration%60 );
         
-        formatedDuration = "PT";
+        formattedDuration = "PT";
 
         if(H){
-          formatedDuration += `${H}H`;
+          formattedDuration += `${H}H`;
         }
         if(M){
-          formatedDuration += `${M}M`;
+          formattedDuration += `${M}M`;
         }
         if(S){
-          formatedDuration += `${S}S`;
+          formattedDuration += `${S}S`;
         }
         
       }
@@ -389,7 +416,7 @@ const DetailProduct: NextPage<any> = ({
           "description": v.fileTitleAttribute ||"",
           "thumbnailUrl": v.thumbnail || "",
           "uploadDate": v.creationTime ? new Date(v.creationTime).toISOString() : "",
-          "duration": formatedDuration,
+          "duration": formattedDuration,
           "contentUrl": v.filePath,
           "embedUrl": v.cdnPath
         }
@@ -441,72 +468,42 @@ const DetailProduct: NextPage<any> = ({
     )
   }
 
-  return (
+  const breadcrumb = !!breadcrumbsItems.length && (
+    <Breadcrumb
+      items={breadcrumbsItems}
+      wrapperClassName="max-lg:mb-4"
+    />
+  );
+
+  const intro = (
     <>
-      <Head>
+      <h2 className="text-lg lg:text-2xl font-semibold block pt-3">
+        {productData?.name}
+      </h2>
+      {!!variantData?.subTitle && <h3 className="font-semibold block mb-2">
+        {variantData.subTitle}
+      </h3>}
+      {firstRatingTag}
+      {brandTag}
+    </>
+  );
 
-        
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(
-              {
-                "@context": "https://schema.org",
-                "@graph": schemaGraphs
-              }              
-            )
-          }}
-        />  
+  const productTab = (
+    <ProductTabs
+      tabs={[
+        { id: 'specs', label: 'مشخصات', isActive: !!productData },
+        { id: 'description', label: 'توضیحات', isActive: !!productData?.shortDescription },
+        { id: 'ratings', label: 'امتیازها', isActive: !!productData?.rating?.length },
+        { id: 'awards', label: 'جوایز', isActive: !!productData?.awards?.length },
+        { id: 'faq', label: 'سوالات متداول', isActive: !!productData?.faqs?.length },
+        { id: 'similar', label: 'محصولات مشابه', isActive: hasSimilar },
+        { id: 'userQuestions', label: 'پرسش ها', isActive: hasSimilar },
+      ]}
+    />
+  )
 
-        {productData?.page?.title && <title> {productData.page.title} </title>}
-
-        {metas?.map((meta, index) => (
-          <meta key={index} property={meta.property} content={meta.content} />
-        ))}
-        
-        {/* {productData?.page?.richSnippet && (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(JSON.parse(productData.page.richSnippet)),
-            }}
-          />
-        )} */}
-
-      </Head>
-      <ProductTabs
-          tabs={[
-            { id: 'specs', label: 'مشخصات', isActive: !!productData },
-            { id: 'description', label: 'توضیحات', isActive: !!productData?.shortDescription },
-            { id: 'ratings', label: 'امتیازها', isActive: !!productData?.rating?.length },
-            { id: 'awards', label: 'جوایز', isActive: !!productData?.awards?.length },
-            { id: 'faq', label: 'سوالات متداول', isActive: !!productData?.faqs?.length },
-            { id: 'similar', label: 'محصولات مشابه', isActive: !!productData?.similar?.length },
-          ]}
-        />
-
-      {!!breadcrumbsItems.length && (
-        <BreadCrumpt
-          items={breadcrumbsItems}
-          wrapperClassName="bg-[#e8ecf0] dark:bg-[#192a39] px-4 py-3 mb-4"
-          textColorClass="text-neutral-800 dark:text-neutral-300"
-        />
-      )}
-
-      <div className="flex gap-4 p-4">
-      {mainImage}
-        <div>
-          <h2 className="text-lg font-semibold block pt-3">
-            {productData?.name}
-          </h2>
-          {!!variantData?.subTitle && <h3 className="font-semibold block mb-2">
-            {variantData.subTitle}
-          </h3>}
-          {firstRatingTag}
-          {brandTag}
-        </div>
-      </div>
-
+  const specs = (
+    <>
       <div id="specs" className="px-4">
         <div className="flex justify-between items-top mb-5">
           <strong className="text-sm"> مشخصات بازی </strong>
@@ -609,7 +606,7 @@ const DetailProduct: NextPage<any> = ({
                 <ArrowTopLeft className="w-3.5 h-3.5 fill-current" />
               </div>
               <b className="block font-semibold mt-2 text-xs h-8 overflow-hidden">
-                {dateDiplayFormat({
+                {dateDisplayFormat({
                   date: productData.releaseDate,
                   locale: 'fa',
                   format: 'dd mm yyyy',
@@ -621,32 +618,33 @@ const DetailProduct: NextPage<any> = ({
           <div className="w-1 shrink-0" />
         </div>
       </div>
+    </>
+  );
 
-      {!!serversideGalleryData?.length && sortedGalleryItems && (
-        <ProductGalleryCarousel galleries={sortedGalleryItems} galleryLoading={false} />
-      )}
+  const mobileGallery = (serverSideGalleryData?.length && sortedGalleryItems) ? (
+    <ProductGalleryCarousel galleries={sortedGalleryItems} galleryLoading={false} />
+  ) : null;
 
-      {!!productData?.shortDescription && (
-        <div id="description" className="pt-2 px-4">
-          <h3 className="text-lg font-semibold mb-4"> {productData.name}</h3>
-          <div className="inserted-content">
-            {parsedShortDescription}
+  const description = productData?.shortDescription ? (
+    <>
+      <div id="description" className="pt-2 px-4">
+        <h3 className="text-lg font-semibold mb-4"> {productData.name}</h3>
+        <div className="inserted-content">
+          {parsedShortDescription}
 
-            {!!productData.description && (
-              <button
-                type="button"
-                className="text-violet-500 inline-block text-sm font-semibold"
-                onClick={() => {
-                  setDetailActiveTab('descriptions');
-                }}
-              >
-                بیشتر
-              </button>
-            )}
-          </div>
+          {!!productData.description && (
+            <button
+              type="button"
+              className="text-violet-500 inline-block text-sm font-semibold"
+              onClick={() => {
+                setDetailActiveTab('descriptions');
+              }}
+            >
+              بیشتر
+            </button>
+          )}
         </div>
-      )}
-
+      </div>
       <div className="px-4">
         <div
           className={`mt-6 bg-[#dddddd] dark:bg-[#192a39] p-2.5 rounded-xl ${
@@ -716,89 +714,303 @@ const DetailProduct: NextPage<any> = ({
           )}
         </div>
 
-        <AgeRatingDetail productData={productData} />
-      </div>
+        <AgeRatingDetail esrb={productData.esrb} pegi={productData.pegi} />
+      </div>      
+    </>
+  ) : null;
 
-      {!!variantsData?.length && !variantsLoading && (
+  let variant : ReactNode = null;
+
+  if(variantsData?.length && !variantsLoading){
+    variant = (
         <VariantSection 
           productId={productData.id} 
           productVariants={variantsData} 
           platform={queryPlatform || undefined}
         />
-      )}
+    )
+  }
+  if(variantsLoading){
+    variant = (
+      <div className='max-lg:px-4'>
+        <Skeleton className='w-24 h-5 mb-3 mt-7' dark />
+        <div className='flex mb-5 gap-4'>
+          {[1,2,3].map(x => (
+          <Skeleton className='w-36 h-16 rounded-xl grow-0' dark type='button' key={x} />
+          ))}
+        </div>
 
-      {!!variantData?.salePrice && (
-        <VariantFooter 
-          productId={productData.id}
-          currentVariant={{
-            id:variantData.id,
-            name: productData.name,
-            items:[variantData]
+        <Skeleton className='w-24 h-5 mb-3 mt-10' dark />
+        <div className='flex mb-5 gap-4'>
+          {[1,2].map(x => (
+          <Skeleton className='w-36 h-16 rounded-xl grow-0' dark type='button' key={x} />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  const rating = !!productData?.rating?.length && (
+    <section id="ratings" className='pt-8'>
+      <strong  className="px-4 text-lg font-semibold mb-0 text-[#fd7e14] dark:text-[#ffefb2] block">
+        امتیاز در وبسایت های معتبر
+      </strong>
+      <div className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip py-3 pl-3">
+        <div className="flex gap-3 pr-4">
+          {productData.rating.map((rating, index) => (
+            <RatingItem key={rating.id} rating={rating} index={index} />
+          ))}
+          <div className="h-2 w-1 shrink-0" />
+        </div>
+      </div>
+    </section>
+  )
+
+  const awards = !!productData?.awards?.length && (
+    <section id="awards" className="px-4 pt-8">
+        <strong className="text-lg font-semibold mb-3  text-[#fd7e14] dark:text-[#ffefb2] block">
+          جوایز و دستاوردها
+        </strong>
+        {productData.awards.map((award) => (
+          <div className="flex items-center gap-2 mb-2 text-sm" key={award}>
+            <Image
+              src="/images/icons/award.svg"
+              alt="award"
+              className="w-7 h-7 "
+              width={28}
+              height={28}
+            />
+            {award}
+          </div>
+        ))}
+    </section>
+  )
+  const faq = !!productData?.faqs?.length && (
+  <section id="faq">
+      <h5  className="px-4 text-lg font-semibold mb-4 mt-8 text-[#fd7e14] dark:text-[#ffefb2]">
+        سوالات متداول درباره {productData.name}
+      </h5>
+      <FAQ
+        answerParse="parse"
+        items={productData.faqs.map((faq) => ({
+          id: faq.id,
+          Answer: faq.answer,
+          Question: faq.questions,
+        }))}
+      />
+    </section>
+  )
+
+  const similar = !!slug && <SimilarProducts productSlug={slug} onHasSimilarItems={()=>{setHasSimilar(true)}} />;
+
+  const head = (
+    <Head>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            {
+              "@context": "https://schema.org",
+              "@graph": schemaGraphs
+            }              
+          )
+        }}
+      />  
+      {productData?.page?.title && <title> {productData.page.title} </title>}
+
+      {metas?.map((meta, index) => (
+        <meta key={index} property={meta.property} content={meta.content} />
+      ))}
+      
+      {/* {productData?.page?.richSnippet && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(JSON.parse(productData.page.richSnippet)),
           }}
         />
-      )}
+      )} */}
 
-      {!!productData?.rating?.length && (
-        <section id="ratings" className='pt-8'>
-          <strong  className="px-4 text-lg font-semibold mb-0 text-[#fd7e14] dark:text-[#ffefb2] block">
-            امتیاز در وبسایت های معتبر
-          </strong>
-          <div className="max-lg:hidden-scrollbar lg:styled-scrollbar lg:pb-2 overflow-x-auto overflow-y-clip py-3 pl-3">
-            <div className="flex gap-3 pr-4">
-              {productData.rating.map((rating, index) => (
-                <RatingItem key={rating.id} rating={rating} index={index} />
-              ))}
-              <div className="h-2 w-1 shrink-0" />
+    </Head>
+  );
+
+  const userQuestionAnswer = (
+    <UserQuestionAnswer 
+      productId={productData.id} 
+      items={props.serverSideQuestions?.items} 
+      total={props.serverSideQuestions?.totalCount} 
+    />
+  );
+
+
+  const loginModalWrapperClass = `max-sm:w-[90vw] lg:bg-white/75 dark:lg:bg-[#011425]/60 z-[50] text-neutral-800 pb-5 dark:text-white rounded-2xl max-h-95-screen hidden-scrollbar overflow-y-auto fixed w-full max-w-lg transition-all top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 ${showLoginModal ? "-translate-y-1/2 opacity-100" : "translate-y-0 opacity-0"}`;
+  const loginModal = (
+    <ModalPortal
+        show={showLoginModal}
+        selector='modal_portal'
+    >
+        <div className="bg-white/65 dark:bg-black/50 lg:bg-white/25 lg:dark:bg-black/25 backdrop-blur-sm fixed top-0 left-0 right-0 bottom-0" />
+
+        <div className={loginModalWrapperClass}>
+            <div className="lg:pt-8">
+              <div className="pt-10">
+                {loginType === "otp" ? (
+                  <Otp
+                    toggleLoginType={() => {
+                      setLoginType("password");
+                    }}
+                    title={
+                      <h3 className="font-semibold text-lg lg:text-xl text-[#ff7189] text-center mb-10 px-5">
+                        فقط یه قدم تا دسترسی کامل! <br/>  شماره موبایلت رو وارد کن.
+                      </h3>
+                    }
+                    onLoginSuccess={() => {
+                      setShowLoginModal(false);
+                    }}
+                    hideAllLinks
+                  />
+                ) : (
+                  <LoginWithPassword
+                    onLoginSuccess={() => {
+                      setShowLoginModal(false);
+                    }}
+                    toggleLoginType={() => {
+                      setLoginType("otp");
+                    }}
+                    title={
+                      <h3 className="font-semibold text-lg lg:text-xl text-[#ff7189] text-center mb-10 px-5">
+                        فقط یه قدم تا دسترسی کامل! <br/>  شماره موبایلت رو وارد کن.
+                      </h3>
+                    }
+                    hideAllLinks
+                  />
+                )}
+              </div>
+            </div>
+        </div>
+    </ModalPortal>
+  )
+
+  if(isDesktop){
+    return(
+      <>
+      {head}
+      {loginModal}
+      {breadcrumb}
+
+      <div
+        style={{ backgroundImage: serverSideProductData?.filePath ? `url(${serverSideProductData.filePath})` : "linear-gradient(45deg, transparent, #ffe1e37a, transparent)" }}
+        className='bg-green-200 bg-cover bg-center relative'
+      >
+        <div className='backdrop-blur-xl absolute top-0 left-0 right-0 bottom-0' />
+        <div className='p-4 2xl:p-10 bg-black/45 grid grid-cols-12 gap-3 2xl:gap-5 relative'>
+          
+          <div className='col-span-3 self-start sticky top-100'>
+            <div className='relative'>
+              <Image
+                src={serverSideProductData?.filePath || "/images/default-game.png"}
+                alt={serverSideProductData?.fileAltAttribute || ""}
+                title={serverSideProductData?.fileTitleAttribute || ""}
+                className='w-full h-auto aspect-square rounded-3xl'
+                width={550}
+                height={550}
+              />
+              <MoreWrapper             
+                productId={productData.id}
+              />
             </div>
           </div>
-        </section>
-      )}
-      {!!productData?.awards?.length && (
-        <section id="awards" className="px-4 pt-8">
-            <strong className="text-lg font-semibold mb-3  text-[#fd7e14] dark:text-[#ffefb2] block">
-              جوایز و دستاوردها
-            </strong>
-            {productData.awards.map((award) => (
-              <div className="flex items-center gap-2 mb-2 text-sm" key={award}>
-                <Image
-                  src="/images/icons/award.svg"
-                  alt="award"
-                  className="w-7 h-7 "
-                  width={28}
-                  height={28}
-                />
-                {award}
-              </div>
-            ))}
-        </section>
-      )}
 
-      {!!productData?.faqs?.length && (
-          <section id="faq">
+          <div className='col-span-6 2xl:col-span-7 text-white min-h-480'>
+            {intro}
 
-          <h5  className="px-4 text-lg font-semibold mb-4 mt-8 text-[#fd7e14] dark:text-[#ffefb2]">
-            سوالات متداول درباره {productData.name}
-          </h5>
-          <FAQ
-            answerParse="parse"
-            items={productData.faqs.map((faq) => ({
-              id: faq.id,
-              Answer: faq.answer,
-              Question: faq.questions,
-            }))}
-          />
-        </section>
-      )}
+            {variant}
+          </div>
 
-      {!!slug && <SimilarProducts productSlug={slug} />}
+          <div 
+            id="variant-footer-desktop-modal" 
+            className='flex flex-col justify-end p-4 2xl:p-6 rounded-2xl col-span-3 2xl:col-span-2 bg-gradient-to-t from-[#011426] to-transparent' 
+          >
+            {variantsLoading && (
+              <>
+                <div className='text-left'>
+                  <Skeleton className='h-4 mb-4 w-17 inline-block' dark />
+                </div>
+                <Skeleton className='h-11 rounded-full' dark type='button' />
+              </>
+            )}
 
-      <Contacts />
+          </div>
+
+        </div>
+        
+      </div>
+      
+      {productTab}
+
+      <ProductSpecificationSection
+        productData={productData}
+      />
+
+      <ProductDescriptionSection 
+        description={productData.description} 
+        shortDescription={productData.shortDescription} 
+        esrb={productData.esrb}
+        pegi={productData.pegi}
+      />
+
+      {!!productData.rating?.length && <ProductRatingSection rating={productData.rating} />}
+
+      {!!productData.awards?.length && <ProductAwardsSection awards={productData.awards} />}
+
+      <ProductFAQSection faqs={productData.faqs} />
+
+      {similar}
+
+      {userQuestionAnswer}
+
+      </>
+    )
+  }
+
+  return (
+    <>
+      {head}
+      {loginModal}
+      {breadcrumb}
+
+      <div className="flex gap-4 p-4">
+        {mainImage}
+        <div>
+            {intro}
+        </div>
+      </div>
+      
+      {productTab}
+
+      {specs}
+
+      {mobileGallery}
+
+      {description}
+
+      {variant}
+
+      {rating}
+
+      {awards}
+
+      {faq}
+
+      {similar}
+
+      {userQuestionAnswer}
+      
     </>
   );
 };
 
 export async function getServerSideProps(context: any) {
-
 
   const [response, galleryResponse, variantsResponse, variantResponse] = await Promise.all<any>([
     getProductBySlug({
@@ -807,23 +1019,28 @@ export async function getServerSideProps(context: any) {
       platform: context?.query?.platform,
       variantId:context?.query?.variant
     }),
-    context?.query?.slug ? getProductGallries(context.query.slug): undefined,
-    (!context?.query?.variant && context?.query?.slug) ? getProductVariants(context.query.slug) : undefined,
-    context?.query?.variant ? getVariantById(context.query.variant) : undefined,
+    context?.query?.slug ? getProductGalleries(context.query.slug): undefined,
+    getProductVariants(context.query.slug),
+    getVariantById(context.query.variant)
   ]);
 
-
-
+  const QuestionsResponse : any = await getProductQuestions({
+    MaxResultCount:5,
+    SkipCount:0,
+    ProductId: response.data?.result?.id,
+    SortType:"Newest"
+  });
 
   return {
     props: {
-      serversideProductData: response.data?.result || null,
-      serversideGalleryData: galleryResponse?.data?.result || null,
-      serversideVariants:variantsResponse?.data?.result || null,
-      serversideVariant:variantResponse?.data?.result || null,
+      serverSideProductData: response.data?.result || null,
+      serverSideGalleryData: galleryResponse?.data?.result || null,
+      serverSideVariants:variantsResponse?.data?.result || null,
+      serverSideVariant:variantResponse?.data?.result || null,
       slug: context?.query?.slug || null,
       platform : context?.query?.platform || null,
-      variantId : context?.query?.variant || null
+      variantId : context?.query?.variant || null,
+      serverSideQuestions: QuestionsResponse?.data?.result || null
     },
   };
 }

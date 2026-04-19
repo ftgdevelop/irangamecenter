@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type Error = {
     title?: string;
@@ -14,11 +14,19 @@ const initialState: Error = {
     isVisible: false
 };
 
+type PayloadParams = {
+    message?: string;
+    isVisible: boolean;
+    title?: string;
+    closeErrorLink?: string;
+    closeButtonText?: string;
+}
+
 export const errorSlice = createSlice({
     name:"error",
     initialState,
     reducers:{
-        setReduxError:(state, action) =>{
+        setReduxError:(state, action: PayloadAction<PayloadParams>) =>{
             state.title = action.payload.title || "";
             state.message = action.payload.message;
             state.isVisible = action.payload.isVisible;

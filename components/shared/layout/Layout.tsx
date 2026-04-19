@@ -18,6 +18,8 @@ import { GetCookieDeviceId } from "@/helpers/order";
 import { useCartApi } from "@/actions/cart";
 import { GetCookieMode } from "@/helpers";
 import { setReduxNotification } from "@/redux/notificationSlice";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
+import DesktopFooter from "./footer/DesktopFooter";
 
 type Props = {
     className?: string;
@@ -26,6 +28,8 @@ type Props = {
 const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
     const router = useRouter();
+
+    const isDesktop = useIsDesktop();
 
     const dispatch = useAppDispatch();
 
@@ -50,8 +54,6 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             expDate.setTime(expDate.getTime() + (20 * 60 * 1000)); //save in cookie only 20 minutes.    
 
             const loginByUtm = async () => {
-                
-                debugger;
 
                 const response: any = await loginUtm({
                     utmName:"basa",
@@ -212,105 +214,112 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }, [router.asPath]);
 
     let showHeader = true;
-    let showFooter = true;
+    let showMobileFooter = true;
+    let showDesktopFooter = true;
     let showFixedNav = true;
     let hasInternalFixedFooter = false;
 
     if (
         [
             "/login",
-            "/profile/edit",
+            "/forget-password"
+        ].includes(router.pathname)) {
+        showMobileFooter = false;
+        showHeader = false;
+        showDesktopFooter = false;
+        showFixedNav = false;
+    }
+
+    if([
             "/profile/change-password",
-            "/profile/forget-password",
+            "/profile//profile/edit",
             "/profile/wallet",
             "/profile/wallet/charge",
             "/profile/wallet/faq",
             "/profile/wallet/transactions"
-        ].includes(router.pathname)) {
-        showFooter = false;
-        showHeader = false;
+        ].includes(router.pathname)){
+        showMobileFooter = false;
         showFixedNav = false;
     }
 
     if (router.pathname === "/profile") {
-        showHeader = false;
-        showFooter = false;
+        showMobileFooter = false;
     }
 
     if (router.pathname === "/terms") {
-        showFooter = false;
+        showMobileFooter = false;
         showFixedNav = false;
     }
     if (router.pathname === "/about") {
         showHeader = true;
-        showFooter = true;
+        showMobileFooter = true;
         showFixedNav = false;
     }
     if (router.pathname === "/contact") {
         showHeader = true;
-        showFooter = false;
+        showMobileFooter = false;
         showFixedNav = false;
     }
 
     if (router.pathname.startsWith("/faq")) {
-        showFooter = false;
+        showMobileFooter = false;
         showFixedNav = false;
     }
     if (router.pathname === "/profile/wishlist") {
-        showFooter = false;
+        showMobileFooter = false;
         showFixedNav = true;
     }
 
     if (router.pathname.includes("/orders")) {
-        showFooter = false;
+        showMobileFooter = false;
         showFixedNav = true;
     }
 
     if (router.pathname.startsWith("/blog/")) {
-        showFooter = true;
+        showMobileFooter = true;
         showHeader = true;
         showFixedNav = false;
     }
 
     if (router.pathname === "/blogs") {
-        showFooter = true;
+        showMobileFooter = true;
         showHeader = true;
         showFixedNav = false;
     }
 
     if (router.pathname.startsWith("/product/")) {
-        showFooter = true;
+        showMobileFooter = true;
         showHeader = true;
         showFixedNav = false;
         hasInternalFixedFooter = true;
     }
 
     if (router.pathname === "/categories"){
-        showFooter = false;
+        showMobileFooter = false;
         showHeader = true;
         showFixedNav = true;
     }
     if (router.pathname === '/cart') {
-        showFooter = false;
+        showMobileFooter = false;
         showHeader = true;
         showFixedNav = false;
         hasInternalFixedFooter = true;
     }
     if (router.pathname === '/payment') {
-        showFooter = false;
+        showMobileFooter = false;
         showHeader = true;
         showFixedNav = false;
         hasInternalFixedFooter = true;
     }
     if (router.pathname === '/confirm') {
-        showFooter = false;
+        showMobileFooter = false;
         showHeader = true;
         showFixedNav = false;
         hasInternalFixedFooter = false;
     }
     
     if (router.pathname === '/checkout') {
-        showFooter = false;
+        showMobileFooter = false;
         showHeader = true;
         showFixedNav = false;
         hasInternalFixedFooter = false;
@@ -318,9 +327,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
     useEffect(() => {
 
-        function getToken() {
-            
-            debugger;
+        function getToken() {        
 
             const user_token = localStorage?.getItem('Token');
             const user_expireTime = localStorage?.getItem('TokenExpire');
@@ -400,7 +407,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }, [isAuthenticated]);
 
     let mainHeightClass : string = "";
-    if(showFooter){
+    if(showMobileFooter){
          mainHeightClass = "";
     }else if (showFixedNav || hasInternalFixedFooter){
         if(showHeader){
@@ -413,18 +420,27 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }else{
           mainHeightClass = "min-h-screen";
     }
+
+    let footerElement = null;
+
+    if(isDesktop && showDesktopFooter){
+        footerElement =  <DesktopFooter />;
+    }else if (showMobileFooter){
+        footerElement = <Footer />;
+    }
+
     return (
         <>
             <Error />
             <Notification />
-            <div className={`bg-[#fafafa] text-[#333333] dark:bg-[#011425] dark:text-white md:max-w-lg mx-auto ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`}>
+            <div className={`bg-[#fafafa] text-[#333333] dark:bg-[#011425] dark:text-white lg:min-h-screen ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`}>
                 <PageLoadingBar active={loading} />
                 {showHeader && <>
                     <Header />
-                    <div className="mt-[84px]" />
+                    <div className="pt-[84px]" />
                 </>}
                 <main 
-                    className={mainHeightClass}
+                    className={isDesktop ? "mainDesktopHeightClass": mainHeightClass}
                     style={{
                         position: (!isBodyScrollable && lastScrollPosition) ?"relative": "static",
                         top: -lastScrollPosition+"px"
@@ -432,8 +448,10 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
                 >
                     {props.children}
                 </main>
-                {showFooter && <Footer />}
-                {showFixedNav && <FooterNavigation />}
+                
+                {footerElement}
+
+                {showFixedNav && !isDesktop && <FooterNavigation />}
             </div>
         </>
 

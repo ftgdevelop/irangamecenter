@@ -50,7 +50,7 @@ export const useCartApi = () => {
   const handleError = (error: unknown, label: string) => {
     const err = error as AxiosError<ApiError>;
     console.error(`${label} error:`, err.response?.data || err.message);
-    throw err;
+    //throw err;
   };
 
   const getCart = async () => {

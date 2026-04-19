@@ -124,7 +124,6 @@ const VerifyForgetPassword: React.FC<Props> = props => {
             const errorMessage = response?.response?.data?.error?.message;
 
             dispatch(setReduxError({
-                status: 'error',
                 message: errorMessage || "ارسال اطلاعات ناموفق",
                 isVisible: true
             }));
@@ -177,7 +176,7 @@ const VerifyForgetPassword: React.FC<Props> = props => {
         <>
             <h3 className="font-semibold text-[#ca54ff] text-sm text-center mb-10"> کد تایید برای شماره موبایل شما ارسال گردید.</h3>
 
-            <div className="flex justify-between px-4 text-xs mb-12">
+            <div className="flex justify-between text-xs mb-12">
                 <div>
                     شماره موبایل دریافت کد
                     <div className="mt-2 text-lg font-semibold tracking-widest" dir="ltr"> {toPersianDigits(props.phoneNumber.replace("+98", "0"))} </div>
@@ -192,7 +191,7 @@ const VerifyForgetPassword: React.FC<Props> = props => {
             </div>
 
 
-            <div className="px-5 text-center">
+            <div className="text-center">
 
                 <PinInput
                     inputMode="numeric"
@@ -245,7 +244,7 @@ const VerifyForgetPassword: React.FC<Props> = props => {
                     }}
                     disabled={!codeIsEntered || verificationLoading}
                     type="button"
-                    className={`flex gap-4 items-center justify-center mb-5 h-14 w-full text-center rounded-full text-sm ${codeIsEntered ? "bg-[#aa3aff]" : "bg-[#231c50]"}`}
+                    className="flex gap-4 items-center justify-center mb-5 h-14 w-full text-center rounded-full text-white text-sm bg-[#aa3aff]"
                 >
                     تایید
 

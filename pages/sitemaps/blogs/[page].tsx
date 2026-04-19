@@ -1,8 +1,9 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { getBlogs } from "@/actions/blog";
+import { getBlogsList } from "@/actions/blog";
+import { BlogListItemType } from "@/types/blog";
 
-function createSiteMap(postsData:any){
+function createSiteMap(postsData?:BlogListItemType[]){
   let latestPost = 0;
   let postsXML = "";
   
@@ -10,7 +11,7 @@ function createSiteMap(postsData:any){
     for (let i = 0; i < postsData.length; i++) {
       const post = postsData[i];
 
-      const postDate = Date.parse(post.modified);
+      const postDate = Date.parse(post.lastModificationTime || post.creationTime);
       if (!latestPost || postDate > latestPost) {
         latestPost = postDate;
       }
@@ -19,7 +20,7 @@ function createSiteMap(postsData:any){
       postsXML += `
         <url>
           <loc>${postUrl}</loc>
-          <lastmod>${post.modified.substring(0, 10)}</lastmod>
+          <lastmod>${(post.lastModificationTime || post.creationTime).substring(0, 10)}</lastmod>
           <changefreq>Daily</changefreq>
           <priority>0.7</priority>
         </url>`;
@@ -49,12 +50,12 @@ export const getServerSideProps = async ({ res, query }:{res:any, query:any}) =>
 
   if(process.env.PROJECT_SERVER_BLOG){
     
-    const postsResponse: any = await getBlogs({
-      per_page:100,
-      page:+pageQuery
+    const postsResponse: any = await getBlogsList({
+      MaxResultCount:100,
+      SkipCount: (+pageQuery-1)*100
     });
 
-    sitemap = createSiteMap(postsResponse?.data );
+    sitemap = createSiteMap(postsResponse?.data?.result?.items );
   }else{
     sitemap = createSiteMap(undefined);
   }

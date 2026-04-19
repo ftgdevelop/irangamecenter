@@ -89,67 +89,74 @@ const Contact: NextPage = ({ contacts, faq, strapiSeoData }: { contacts?: Contac
         )}
       </Head>
 
-      <div className="px-5 mb-5">
+      <div className="lg:max-w-[1000px] lg:mx-auto">
+        <div className="px-5 mb-5 lg:py-5">
 
-          <h3 className="text-[#ca54ff] font-bold text-sm mb-4">
-            ارتباط با پشتیبانی
-          </h3>
+            <h3 className="text-[#ca54ff] font-bold text-sm mb-4">
+              ارتباط با پشتیبانی
+            </h3>
 
-          <Ticketing 
-            icon={ticketingData?.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${ticketingData.icon.url}` : ""}
-            label={ticketingData?.Title}
-            url={ticketingData?.Url}
-          />
+            <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-3 lg:mt-10">
 
-          <OnlineSupport 
-            icon={onlineSupportData?.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${onlineSupportData.icon.url}` : ""}
-            label={onlineSupportData?.Title}
-            items = {onlineSupportData?.Items}
-          />
+              <Ticketing 
+                icon={ticketingData?.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${ticketingData.icon.url}` : ""}
+                label={ticketingData?.Title}
+                url={ticketingData?.Url}
+              />
 
-          <Call 
-            icon={callData?.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${callData.icon.url}` : ""}
-            label={callData?.Title}    
-            description={callData?.Subtitle} 
-            InnerData={callData?.Items?.[0]}     
-          />
+              <OnlineSupport 
+                icon={onlineSupportData?.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${onlineSupportData.icon.url}` : ""}
+                label={onlineSupportData?.Title}
+                items = {onlineSupportData?.Items}
+              />
+
+              <Call 
+                icon={callData?.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${callData.icon.url}` : ""}
+                label={callData?.Title}    
+                description={callData?.Subtitle} 
+                InnerData={callData?.Items?.[0]}     
+              />
 
 
-        <div
-            className="mb-3 text-white py-4 min-h-20 px-5 bg-gradient-to-t from-[#01212e] to-[#102c33] rounded-xl"
-        >
-          <div className="text-sm font-semibold flex gap-4 items-center mb-3">
-            <Image 
-                src={addressData?.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${addressData.icon.url}` : ""}
-                alt={addressData?.Title ||""}
-                width={36}
-                height={36}
-                className="w-9 h-9"
-            />            
-            {addressData?.Title}
-          </div>
+              <div
+                  className="mb-3 dark:text-white py-4 min-h-20 px-5 bg-gradient-to-t from-[#eeeeee] to-[#e1e1e1] dark:from-[#01212e] dark:to-[#102c33] rounded-xl"
+              >
+                <div className="text-sm font-semibold flex gap-4 items-center mb-3">
+                  <Image 
+                      src={addressData?.icon?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}/${addressData.icon.url}` : ""}
+                      alt={addressData?.Title ||""}
+                      width={36}
+                      height={36}
+                      className="w-9 h-9"
+                  />            
+                  {addressData?.Title}
+                </div>
 
-          <p className="text-xs w-full"> {addressData?.Subtitle} </p>
+                <p className="text-xs w-full"> {addressData?.Subtitle} </p>
+
+              </div>
+            </div>
+
+
+
 
         </div>
 
-
-
+          {!!faq?.Items?.length && (<div className="px-5 py-5">
+              <h3 className="text-[#ca54ff] font-bold text-sm mb-4">
+                {faq.Title || "سوالات متداول"}
+              </h3>
+              {faq.Items.map((item, index) => (
+                <Accordion
+                    key={item.id}
+                    title={item.Question}
+                    content={<Markdown>{item.Answer}</Markdown>}
+                    WrapperClassName={`border-b border-neutral-300 dark:border-white/15 py-2 ${index ? "" : "border-t"}`}
+                />
+              ))}
+          </div>)}
       </div>
 
-        {!!faq?.Items?.length && (<div className="px-5 py-5">
-            <h3 className="text-[#ca54ff] font-bold text-sm mb-4">
-              {faq.Title || "سوالات متداول"}
-            </h3>
-            {faq.Items.map((item, index) => (
-              <Accordion
-                  key={item.id}
-                  title={item.Question}
-                  content={<Markdown>{item.Answer}</Markdown>}
-                  WrapperClassName={`border-b border-neutral-300 dark:border-white/15 py-2 ${index ? "" : "border-t"}`}
-              />
-            ))}
-        </div>)}
       
     </>
   );

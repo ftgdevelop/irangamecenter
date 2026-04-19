@@ -120,7 +120,7 @@ const MainMenu: React.FC = () => {
                                     <CloseSimple className=" w-9 h-9 fill-red-500 dark:fill-neutral-300" />
                                 </button>
                             </div>
-                            <div className="grow h-screen bg-[#fafafa] text-[#333333] dark:bg-[#192b39] dark:text-white">
+                            <div className="grow h-screen overflow-y-auto bg-[#fafafa] text-[#333333] dark:bg-[#192b39] dark:text-white">
                                 <div className="h-svh flex flex-col safePadding-b">
                                     {userLoading ?(
                                         <div className="relative flex items-center justify-between bg-[#e5e5e5] dark:bg-[#2b2f4c] p-5 rounded-b-2xl">

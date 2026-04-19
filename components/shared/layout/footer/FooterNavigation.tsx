@@ -25,7 +25,7 @@ const FooterNavigation = () => {
     <>
       <div className="pb-20" />
       <div className="text-black dark:text-white fixed bottom-0 left-0 right-0 z-10">
-        <nav className="md:max-w-lg md:mx-auto min-h-20 flex rounded-t-xl bg-white dark:bg-[#192b39]">
+        <nav className="min-h-20 flex rounded-t-xl bg-white dark:bg-[#192b39]">
           {items.map(item => (
             <Link
               prefetch={false}
