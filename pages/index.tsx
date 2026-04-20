@@ -57,18 +57,18 @@ type HomeSections = {
   IsActive: boolean;
 }
 
-type SliderItemType = {
-  Url?: string;
-  Title?: string;
-  ImageAlternative?: string;
-  ImageTitle?: string;
-  id: number;
-  Description?: string;
-  Subtitle?: string;
-  Image: {
-    url: string;
-  }
-}
+// type SliderItemType = {
+//   Url?: string;
+//   Title?: string;
+//   ImageAlternative?: string;
+//   ImageTitle?: string;
+//   id: number;
+//   Description?: string;
+//   Subtitle?: string;
+//   Image: {
+//     url: string;
+//   }
+// }
 
 type BannerItemType = {
   Url?: string;
@@ -106,7 +106,81 @@ const Home: NextPage<Props> = props => {
 
   const categoris = homeSections?.find(section => section.Keyword === "category");
 
-  const sliderItems = homeSections?.find(section => section.Keyword === "banner")?.Items?.filter(item => item.Image?.url) as SliderItemType[] || [];
+  //laterTOdo: restore commented code and use Strapi data; 
+  //const sliderItems = homeSections?.find(section => section.Keyword === "banner")?.Items?.filter(item => item.Image?.url) as SliderItemType[] || [];
+  const sliderItems :{
+    Url?: string;
+    Title?: string;
+    ImageAlternative?: string;
+    ImageTitle?: string;
+    id: number;
+    Description?: string;
+    Subtitle?: string;
+    Image: {
+        url: string;
+    }
+  }[]
+  = [
+    {
+      id:1,
+      Image:{
+        url:"/dummyStrapiImages/banner-01.jpg",
+      },
+      Description:"شارژ در سریعترین زمان",
+      ImageAlternative:"",
+      ImageTitle:"",
+      Title:"شارژ سی پی کالاف دیوتی موبایل",
+      Subtitle:"بهترین و پرطرفدارترین بازی موبایلی",
+      Url:"/product/call-of-duty-mobile"
+    },
+    {
+      id:2,
+      Image:{
+        url:"/dummyStrapiImages/banner-02.jpg",
+      },
+      Description:"خرید قسطی با اسنپ پی",
+      ImageAlternative:"",
+      ImageTitle:"",
+      Title:"پرداخت قسطی با اسنپ پی",
+      Subtitle:"پرداخت آخر ماه یا ۴ قسطه"
+    },
+    {
+      id:3,
+      Image:{
+        url:"/dummyStrapiImages/banner-03.jpg",
+      },
+      Description:"تجربه فوتبال مدرن",
+      ImageAlternative:"",
+      ImageTitle:"",
+      Title:"فیفا EA Sports FC 26",
+      Subtitle:"ایکس‌باکس، پلی‌استیشن ۴، ۵ و PC",
+      Url:"/product/ea-sports-fc-26"
+    },
+    {
+      id:4,
+      Image:{
+        url:"/dummyStrapiImages/banner-04.jpg",
+      },
+      Description:"رانندگی جهان‌باز در مکزیک",
+      ImageAlternative:"",
+      ImageTitle:"",
+      Title:"بازی Forza Horizon 5",
+      Subtitle:"پلی‌استیشن ۴ و ۵",
+      Url:"/product/forza-horizon-5"
+    },
+    {
+      id:5,
+      Image:{
+        url:"/dummyStrapiImages/banner-05.jpg",
+      },
+      Description:"جنگجویی قدرتمند از گری‌مین‌ها",
+      ImageAlternative:"",
+      ImageTitle:"",
+      Title:"بازی Crimson Desert",
+      Subtitle:"پلی‌استیشن ۴ و ۵",
+      Url:"/product/crimson-desert"
+    },
+  ];
 
   const banner2Items = homeSections?.find(section => section.Keyword === "banner2")?.Items?.filter(item => item.Image?.url) as BannerItemType[] || [];
 
