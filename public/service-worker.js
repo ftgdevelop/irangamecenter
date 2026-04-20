@@ -64,8 +64,6 @@ self.addEventListener("fetch", event => {
   if (
     url.origin === location.origin &&
     (
-      request.destination === "style" ||
-      request.destination === "script" ||
       request.destination === "image" ||
       request.destination === "font"
     )
